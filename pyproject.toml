@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "llm-reliability-platform"
+version = "0.1.0"
+description = "A research and engineering platform for systematic LLM reliability evaluation and diagnostics."
+readme = "README.md"
+requires-python = ">=3.13"
+# No runtime dependencies at this stage. Dependencies will be added incrementally
+# as specific, justified requirements are identified through research and experimentation.
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "ruff>=0.0.280",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+# Target Python 3.13.
+target-version = "py313"
+line-length = 100
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # Pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+]
+ignore = []
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "*.egg-info",
+    "learning/",   # Educational code is exempt from strict linting.
+]

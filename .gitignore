@@ -1,0 +1,183 @@
+# =============================================================================
+# Python
+# =============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+MANIFEST
+
+# =============================================================================
+# Virtual environments
+# =============================================================================
+.venv/
+venv/
+env/
+ENV/
+.env/
+.virtualenv/
+virtualenv/
+.python-version
+
+# =============================================================================
+# Distribution and packaging
+# =============================================================================
+*.whl
+*.tar.gz
+
+# =============================================================================
+# Testing and coverage
+# =============================================================================
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+nosetests.xml
+test-results/
+junit*.xml
+
+# =============================================================================
+# Type checking
+# =============================================================================
+.mypy_cache/
+.pytype/
+.pyre/
+.pyright/
+
+# =============================================================================
+# Linting and formatting caches
+# =============================================================================
+.ruff_cache/
+
+# =============================================================================
+# Jupyter notebooks - output cells and checkpoints
+# =============================================================================
+.ipynb_checkpoints/
+
+# =============================================================================
+# Environment and secrets
+# =============================================================================
+.env
+.env.*
+!.env.example
+*.env
+secrets/
+credentials/
+*.pem
+*.key
+*.p12
+*.pfx
+api_keys.txt
+secrets.json
+credentials.json
+
+# =============================================================================
+# Experiment outputs and generated artifacts
+# =============================================================================
+# Large generated outputs should not be committed. Curated results belong
+# in research/experiments/ as human-authored documents, not raw dumps.
+outputs/
+runs/
+artifacts/
+checkpoints/
+saved_models/
+*.ckpt
+*.pt
+*.pth
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.bin
+
+# =============================================================================
+# Logs
+# =============================================================================
+*.log
+logs/
+log/
+
+# =============================================================================
+# Local databases and caches
+# =============================================================================
+*.db
+*.sqlite
+*.sqlite3
+*.duckdb
+cache/
+.cache/
+chroma/
+faiss_index/
+vector_store/
+
+# =============================================================================
+# IDE and editor metadata
+# =============================================================================
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.netrwhist
+*.sublime-workspace
+
+# =============================================================================
+# Operating system metadata
+# =============================================================================
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+.fuse_hidden*
+.directory
+.Trash-*
+
+# =============================================================================
+# Temporary files
+# =============================================================================
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+
+# =============================================================================
+# Documentation build outputs
+# =============================================================================
+docs/_build/
+site/
+
+# =============================================================================
+# Data - large files
+# =============================================================================
+# Small benchmark metadata files in data/ are intentionally tracked.
+# Large datasets, downloaded corpora, and generated evaluation data are not.
+data/raw/
+data/processed/
+data/generated/
+data/downloads/
+*.jsonl.gz
+*.csv.gz
