@@ -21,9 +21,19 @@ data/
   README.md                    This file.
   benchmarks/                  Metadata and references for external benchmark datasets.
   eval_sets/                   Small, hand-curated evaluation sets committed directly.
+    evaluation_methodology_baseline_v1.json
+                                24 hand-written test cases (exact factual questions,
+                                paraphrasable answers, and ambiguous/insufficient-reference
+                                questions) used to validate the evaluation layer's
+                                methodology -- exact match, semantic similarity, and
+                                LLM-as-a-judge. This is not a representative benchmark of
+                                general LLM capability; it exists only to exercise the
+                                evaluation infrastructure against varied, deliberately
+                                small, hand-auditable cases. Load with
+                                ``llm_reliability.evaluation.load_dataset_from_json``.
 ```
 
-These subdirectories will be created when the first dataset is formally introduced.
+`benchmarks/` will be created when an external benchmark dataset is formally introduced.
 
 ## Large File Policy
 

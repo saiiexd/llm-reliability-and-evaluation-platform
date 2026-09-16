@@ -4,7 +4,9 @@ import json
 
 from llm_reliability.evaluation import (
     Dataset,
+    EvaluationResult,
     EvaluationRunner,
+    EvaluationStatus,
     ExactMatchEvaluator,
     MockAdapter,
     ModelConfig,
@@ -74,3 +76,53 @@ class TestRunResultDeserialization:
         config = ModelConfig(model_id="mock-adapter-v1", temperature=0.5)
         reloaded_config = ModelConfig.from_dict({"model_id": "mock-adapter-v1", "temperature": 0.5})
         assert reloaded_config == config
+
+
+class TestEvaluationResultBackwardCompatibility:
+    """EvaluationResult.from_dict must load records written before ``status``,
+    ``criterion``, and ``evaluator_config`` existed (Prompt 1/2 era)."""
+
+    def test_old_style_successful_match_defaults_to_success(self):
+        old_style = {
+            "evaluator_name": "exact_match",
+            "test_case_id": "t1",
+            "score": 1.0,
+            "passed": True,
+            "label": "match",
+        }
+        result = EvaluationResult.from_dict(old_style)
+        assert result.status == EvaluationStatus.SUCCESS
+
+    def test_old_style_no_reference_result_is_inferred_as_skipped(self):
+        old_style = {
+            "evaluator_name": "exact_match",
+            "test_case_id": "t1",
+            "label": "no_reference",
+        }
+        result = EvaluationResult.from_dict(old_style)
+        assert result.status == EvaluationStatus.SKIPPED
+
+    def test_old_style_error_result_is_inferred_as_execution_error(self):
+        old_style = {
+            "evaluator_name": "raising_evaluator",
+            "test_case_id": "t1",
+            "error": "RuntimeError: boom",
+        }
+        result = EvaluationResult.from_dict(old_style)
+        assert result.status == EvaluationStatus.EXECUTION_ERROR
+
+    def test_old_style_result_has_empty_config_and_no_criterion(self):
+        old_style = {"evaluator_name": "exact_match", "test_case_id": "t1", "label": "match"}
+        result = EvaluationResult.from_dict(old_style)
+        assert result.evaluator_config == {}
+        assert result.criterion is None
+
+    def test_new_style_explicit_status_is_respected_over_inference(self):
+        new_style = {
+            "evaluator_name": "exact_match",
+            "test_case_id": "t1",
+            "status": "invalid_configuration",
+            "error": "some backend error",
+        }
+        result = EvaluationResult.from_dict(new_style)
+        assert result.status == EvaluationStatus.INVALID_CONFIGURATION

@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import asdict, dataclass, field
+from enum import StrEnum
 from typing import Any
 
 
@@ -188,24 +189,62 @@ class ModelResponse:
         )
 
 
+class EvaluationStatus(StrEnum):
+    """Categorical outcome of attempting to run one evaluator on one test case.
+
+    ``SUCCESS``: the evaluator produced a definitive judgment.
+    ``SKIPPED``: the evaluator could not run because required input was
+    unavailable for this specific test case (for example, a
+    reference-based metric with no reference answer). This is not a
+    failing judgment about the answer -- it means no judgment was made,
+    and must never be interpreted as evidence the answer is wrong.
+    ``INVALID_CONFIGURATION``: the evaluator, as configured, cannot
+    function in the current environment (for example, a similarity
+    backend whose model dependency is not installed). Distinct from
+    ``SKIPPED``, which is about the test case, not the evaluator's setup.
+    ``EXECUTION_ERROR``: the evaluator (or something it depends on, such
+    as a judge model call) raised an unexpected error while attempting to
+    evaluate.
+    ``OUTPUT_VALIDATION_ERROR``: the evaluator received output it could
+    not parse or validate into a structured judgment. This arises for
+    evaluators that consume free-form output from another system, such as
+    an LLM-as-a-judge evaluator receiving a malformed judge response.
+    """
+
+    SUCCESS = "success"
+    SKIPPED = "skipped"
+    INVALID_CONFIGURATION = "invalid_configuration"
+    EXECUTION_ERROR = "execution_error"
+    OUTPUT_VALIDATION_ERROR = "output_validation_error"
+
+
 @dataclass
 class EvaluationResult:
     """Structured output from a single evaluator run against a single test case.
 
-    Only ``score`` (numeric), ``passed`` (boolean judgment), and
-    ``label`` (categorical outcome) are populated as applicable to a
-    given evaluator; the others are left ``None``. ``error`` is set only
-    when the evaluator itself failed to produce a judgment, which is
-    distinct from a low or negative score.
+    ``status`` always describes what actually happened (see
+    ``EvaluationStatus``); ``score``, ``passed``, and ``label`` are
+    populated only when applicable to a given evaluator and outcome, and
+    are left ``None`` otherwise -- a ``None`` score must never be read as
+    a zero or a failing score. ``criterion`` names what is being assessed
+    (see ``llm_reliability.evaluation.criteria``), independent of which
+    evaluator assessed it. ``evaluator_config`` is a snapshot of the
+    configuration that produced this specific result, so the result is
+    interpretable on its own without cross-referencing the experiment
+    that produced it. ``error`` holds a diagnostic message and is set
+    whenever ``status`` is not ``SUCCESS`` or ``SKIPPED``.
     """
 
     evaluator_name: str
     test_case_id: str
+    status: EvaluationStatus = EvaluationStatus.SUCCESS
+    criterion: str | None = None
     score: float | None = None
     passed: bool | None = None
     label: str | None = None
     explanation: str | None = None
     details: dict[str, Any] = field(default_factory=dict)
+    evaluator_config: dict[str, Any] = field(default_factory=dict)
     error: str | None = None
 
     @classmethod
@@ -213,18 +252,45 @@ class EvaluationResult:
         return cls(
             evaluator_name=data["evaluator_name"],
             test_case_id=data["test_case_id"],
+            status=_parse_evaluation_status(data),
+            criterion=data.get("criterion"),
             score=data.get("score"),
             passed=data.get("passed"),
             label=data.get("label"),
             explanation=data.get("explanation"),
             details=dict(data.get("details", {})),
+            evaluator_config=dict(data.get("evaluator_config", {})),
             error=data.get("error"),
         )
+
+
+def _parse_evaluation_status(data: dict[str, Any]) -> EvaluationStatus:
+    """Determine an ``EvaluationResult``'s status from persisted data.
+
+    Records written before ``status`` existed have no such key. For those,
+    infer the closest equivalent from the fields that do exist, rather than
+    defaulting every old record to ``SUCCESS`` regardless of what actually
+    happened: a record with an ``error`` was an execution failure, and a
+    record with neither a score nor a passed judgment (but a descriptive
+    label, as the pre-status ``ExactMatchEvaluator`` produced for a missing
+    reference) was effectively skipped.
+    """
+    if "status" in data:
+        return EvaluationStatus(data["status"])
+    if data.get("error") is not None:
+        return EvaluationStatus.EXECUTION_ERROR
+    if data.get("score") is None and data.get("passed") is None and data.get("label") is not None:
+        return EvaluationStatus.SKIPPED
+    return EvaluationStatus.SUCCESS
 
 
 @dataclass
 class TestCaseResult:
     """The complete, per-test-case outcome of an evaluation run."""
+
+    # Tells pytest not to try to collect this domain class as a test class;
+    # it is unrelated to pytest, but its name starts with "Test".
+    __test__ = False
 
     test_case_id: str
     input_text: str

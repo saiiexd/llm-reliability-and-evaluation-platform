@@ -32,6 +32,13 @@ Scripts here automate clearly defined, repeatable tasks that support the researc
   local JSON persistence, and reload). Persists to a temporary directory removed on exit,
   so it leaves nothing behind; it takes no command-line arguments and requires no network
   access or API credentials. Run with `python scripts/run_experiment_example.py`.
+- `run_evaluation_layer_example.py` -- a minimal demonstration of the Evaluation and
+  Reliability Layer: loads `data/eval_sets/evaluation_methodology_baseline_v1.json`,
+  evaluates deterministic mock responses with exact match, semantic similarity (fake
+  backend), and LLM-as-a-judge (fake judge) at once, including an intentional
+  disagreement between evaluators, then persists, reloads, and prints an evaluation
+  summary and reliability findings. Requires no network access or API credentials. Run
+  with `python scripts/run_evaluation_layer_example.py`.
 
 ## Script Requirements
 

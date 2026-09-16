@@ -150,6 +150,68 @@ ExperimentDefinition (DatasetVersion + ModelConfig + EvaluatorConfig(s), fingerp
 See `research/notes/experiment_reproducibility_model.md` for the full reproducibility
 model, and `scripts/run_experiment_example.py` for a runnable example.
 
+## Current Implementation: Evaluation and Reliability Layer
+
+`src/llm_reliability/evaluation/` now supports multiple, complementary evaluation
+methods for the same generated answer, and `src/llm_reliability/reliability/` aggregates
+and classifies their results without collapsing them into a single score:
+
+```
+ModelResponse -> Evaluator(s): ExactMatchEvaluator, SemanticSimilarityEvaluator, LLMJudgeEvaluator
+    -> EvaluationResult(s) (status, criterion, score/label where applicable, own configuration)
+    -> summarize_run() -> EvaluationSummary (per-evaluator statistics, no overall score)
+    -> analyze_reliability() -> ReliabilityFinding(s) (disagreement, missing evidence,
+                                 evaluator failure, incorrect-per-evaluator)
+```
+
+**What it currently supports:**
+
+- `EvaluationStatus`: an explicit, five-way status on every `EvaluationResult`
+  (`success`, `skipped`, `invalid_configuration`, `execution_error`,
+  `output_validation_error`), so "no judgment was possible" is never confused with "the
+  answer failed."
+- Evaluation criteria (`llm_reliability.evaluation.criteria`): stable identifiers for
+  *what* is assessed (currently `correctness`), separate from evaluators, which describe
+  *how*. The same criterion can be assessed by several evaluators.
+- `ExactMatchEvaluator`: unchanged baseline, now with explicit, configurable
+  normalization (`case_sensitive`, `collapse_whitespace`; see
+  `llm_reliability.evaluation.normalization`) instead of fixed behavior.
+- `SemanticSimilarityEvaluator`: a BERTScore-following complementary evaluator (Zhang et
+  al., 2020) behind a pluggable `SimilarityBackend`. The real backend
+  (`BertScoreBackend`) requires the optional `semantic` dependency group and is never
+  exercised by the standard test suite (no model download in unit tests); a deterministic
+  `FakeSimilarityBackend` validates the evaluator's contract instead.
+- `LLMJudgeEvaluator`: asks a judge model to apply an explicit, versioned `JudgeRubric`
+  (correctness against a reference, following Zheng et al., 2023), reusing the existing
+  `ModelAdapter` interface as the judge-model abstraction -- no parallel adapter
+  interface was introduced. Judge output is strictly parsed and validated; an invalid or
+  unparseable response produces an explicit error, never a fabricated score. Any
+  `ModelAdapter` (including `MockAdapter`) can serve as a deterministic fake judge in
+  tests.
+- `llm_reliability.reliability.summarize_run` / `analyze_reliability`: read-only
+  aggregation and per-test-case flagging over an existing `RunResult`, identifying
+  evaluator disagreement, missing evaluation evidence, evaluator failures, and
+  per-evaluator incorrect results -- never a hallucination determination.
+- A small, hand-curated benchmark (`data/eval_sets/evaluation_methodology_baseline_v1.json`,
+  24 test cases) for validating this evaluation methodology, not for measuring real model
+  capability.
+- Evaluator configuration (normalization settings, similarity threshold/backend, judge
+  model/rubric) is automatically part of the experiment configuration fingerprint from
+  Prompt 2, with no change to `llm_reliability.experiments` required.
+
+**What it deliberately does not support yet:**
+
+- No hallucination detection, faithfulness, or groundedness evaluation (these require
+  context-grounded evaluation, not yet implemented).
+- No validation of LLM-as-a-judge's reliability against human annotation.
+- No RAG execution or retrieval evaluation.
+- No reliability/statistical analysis across multiple runs of the same experiment (only
+  within a single run, so far).
+- No real LLM provider or judge-model integration (only deterministic fakes).
+
+See `research/notes/evaluation_and_reliability_layer.md` for the full conceptual model,
+and `scripts/run_evaluation_layer_example.py` for a runnable example.
+
 **Setup:**
 
 ```
@@ -157,6 +219,12 @@ pip install -e ".[dev]"
 pytest
 python scripts/run_core_engine_example.py
 python scripts/run_experiment_example.py
+python scripts/run_evaluation_layer_example.py
+
+# Optional: real BERTScore backend and its integration test (not required for the
+# standard test suite; downloads a pretrained model on first use).
+pip install -e ".[semantic]"
+pytest tests/evaluation/test_semantic_similarity_integration.py
 ```
 
 ## Repository Structure
@@ -170,13 +238,17 @@ learning/           Temporary educational implementations for concept understand
   neural_network_from_scratch/
   transformer_from_scratch/
 src/                Platform source code.
-  llm_reliability/evaluation/   Core Evaluation Engine (see "Current Implementation" above).
+  llm_reliability/evaluation/   Core Evaluation Engine and evaluation methods
+                                 (see "Current Implementation" above).
   llm_reliability/experiments/  Experiment System (see "Current Implementation" above).
+  llm_reliability/reliability/  Reliability analysis layer (see "Current Implementation" above).
 tests/              Test suite.
-  evaluation/       Tests for the Core Evaluation Engine.
+  evaluation/       Tests for the Core Evaluation Engine and evaluators.
   experiments/      Tests for the Experiment System.
+  reliability/      Tests for the reliability analysis layer.
 configs/            Reproducible experiment and system configuration.
 data/               Benchmark metadata (small, curated, version-controlled).
+  eval_sets/        Small, hand-curated evaluation sets (see data/README.md).
 scripts/            Reproducible utility scripts.
 ```
 

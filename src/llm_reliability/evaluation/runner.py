@@ -17,6 +17,7 @@ from llm_reliability.evaluation.evaluators import Evaluator
 from llm_reliability.evaluation.models import (
     Dataset,
     EvaluationResult,
+    EvaluationStatus,
     ExecutionRequest,
     ModelConfig,
     ModelResponse,
@@ -93,5 +94,7 @@ class EvaluationRunner:
             return EvaluationResult(
                 evaluator_name=getattr(evaluator, "name", evaluator.__class__.__name__),
                 test_case_id=test_case.id,
+                status=EvaluationStatus.EXECUTION_ERROR,
+                criterion=getattr(evaluator, "criterion", None),
                 error=f"{type(exc).__name__}: {exc}",
             )

@@ -17,6 +17,15 @@ dev = [
     "pytest>=7.4",
     "ruff>=0.5",
 ]
+# Required only for SemanticSimilarityEvaluator's real BertScoreBackend
+# (llm_reliability.evaluation.semantic_similarity). Not required by the
+# standard test suite or any other component: BertScoreBackend imports
+# bert-score lazily, and the fake backend used for testing needs no
+# dependency at all. Install this extra only to run real BERTScore scoring
+# or the opt-in semantic similarity integration test.
+semantic = [
+    "bert-score>=0.3.13",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]

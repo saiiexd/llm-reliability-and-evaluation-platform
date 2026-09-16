@@ -1,0 +1,167 @@
+{
+  "name": "evaluation-methodology-baseline-v1",
+  "test_cases": [
+    {
+      "id": "fact-001",
+      "input": "What is the capital of France?",
+      "reference_answer": "Paris",
+      "metadata": {"category": "exact_factual"}
+    },
+    {
+      "id": "fact-002",
+      "input": "What is the chemical symbol for gold?",
+      "reference_answer": "Au",
+      "metadata": {"category": "exact_factual"}
+    },
+    {
+      "id": "fact-003",
+      "input": "How many continents are there on Earth?",
+      "reference_answer": "7",
+      "metadata": {"category": "exact_factual"}
+    },
+    {
+      "id": "fact-004",
+      "input": "What is the boiling point of water in Celsius at sea level?",
+      "reference_answer": "100",
+      "metadata": {"category": "exact_factual"}
+    },
+    {
+      "id": "fact-005",
+      "input": "Who wrote the play Romeo and Juliet?",
+      "reference_answer": "William Shakespeare",
+      "metadata": {"category": "exact_factual"}
+    },
+    {
+      "id": "fact-006",
+      "input": "What is the square root of 64?",
+      "reference_answer": "8",
+      "metadata": {"category": "exact_factual"}
+    },
+    {
+      "id": "fact-007",
+      "input": "What is the largest planet in the solar system?",
+      "reference_answer": "Jupiter",
+      "metadata": {"category": "exact_factual"}
+    },
+    {
+      "id": "fact-008",
+      "input": "What is the currency of Japan?",
+      "reference_answer": "Yen",
+      "metadata": {"category": "exact_factual"}
+    },
+    {
+      "id": "fact-009",
+      "input": "In which year did World War II end?",
+      "reference_answer": "1945",
+      "metadata": {"category": "exact_factual"}
+    },
+    {
+      "id": "fact-010",
+      "input": "What is the freezing point of water in Celsius?",
+      "reference_answer": "0",
+      "metadata": {"category": "exact_factual"}
+    },
+    {
+      "id": "para-001",
+      "input": "What is photosynthesis?",
+      "reference_answer": "The process by which plants use sunlight to convert carbon dioxide and water into glucose and oxygen.",
+      "metadata": {"category": "paraphrasable"}
+    },
+    {
+      "id": "para-002",
+      "input": "Why is the sky blue?",
+      "reference_answer": "Because shorter blue wavelengths of sunlight are scattered more than other colors by the gases in Earth's atmosphere.",
+      "metadata": {"category": "paraphrasable"}
+    },
+    {
+      "id": "para-003",
+      "input": "What does the term 'inflation' mean in economics?",
+      "reference_answer": "A general increase in prices and a fall in the purchasing value of money over time.",
+      "metadata": {"category": "paraphrasable"}
+    },
+    {
+      "id": "para-004",
+      "input": "Explain what a firewall does in computer networking.",
+      "reference_answer": "It monitors and controls incoming and outgoing network traffic based on predetermined security rules.",
+      "metadata": {"category": "paraphrasable"}
+    },
+    {
+      "id": "para-005",
+      "input": "What is the main function of the human liver?",
+      "reference_answer": "It filters toxins from the blood and helps with digestion by producing bile.",
+      "metadata": {"category": "paraphrasable"}
+    },
+    {
+      "id": "para-006",
+      "input": "What is machine learning?",
+      "reference_answer": "A field of artificial intelligence where systems learn patterns from data rather than being explicitly programmed.",
+      "metadata": {"category": "paraphrasable"}
+    },
+    {
+      "id": "para-007",
+      "input": "Why do objects fall to the ground?",
+      "reference_answer": "Because gravity pulls objects with mass toward one another, and Earth's gravity pulls them toward its center.",
+      "metadata": {"category": "paraphrasable"}
+    },
+    {
+      "id": "para-008",
+      "input": "What is the purpose of a thesis statement in an essay?",
+      "reference_answer": "It states the essay's main argument or claim so the reader knows what the essay will argue.",
+      "metadata": {"category": "paraphrasable"}
+    },
+    {
+      "id": "amb-001",
+      "input": "What is the best programming language?",
+      "reference_answer": null,
+      "metadata": {
+        "category": "ambiguous_or_insufficient_reference",
+        "note": "Subjective; no single correct answer. Included to exercise reference-free evaluation."
+      }
+    },
+    {
+      "id": "amb-002",
+      "input": "Name a country in Europe.",
+      "reference_answer": "France",
+      "metadata": {
+        "category": "ambiguous_or_insufficient_reference",
+        "note": "The reference is only one of many valid correct answers; exact match against this single reference will incorrectly penalize other valid countries."
+      }
+    },
+    {
+      "id": "amb-003",
+      "input": "What is a good hobby to take up?",
+      "reference_answer": null,
+      "metadata": {
+        "category": "ambiguous_or_insufficient_reference",
+        "note": "Open-ended and subjective; no reference answer is meaningful."
+      }
+    },
+    {
+      "id": "amb-004",
+      "input": "Describe your favorite season and why you like it.",
+      "reference_answer": null,
+      "metadata": {
+        "category": "ambiguous_or_insufficient_reference",
+        "note": "Purely subjective; the platform has no 'favorite' to reference."
+      }
+    },
+    {
+      "id": "amb-005",
+      "input": "List a mammal.",
+      "reference_answer": "Dog",
+      "metadata": {
+        "category": "ambiguous_or_insufficient_reference",
+        "note": "The reference is only one of many valid correct answers, like amb-002."
+      }
+    },
+    {
+      "id": "amb-006",
+      "input": "What time is it right now?",
+      "reference_answer": null,
+      "metadata": {
+        "category": "ambiguous_or_insufficient_reference",
+        "note": "Cannot be answered without real-time context; included to test evaluator behavior on unanswerable questions."
+      }
+    }
+  ]
+}
