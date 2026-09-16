@@ -39,6 +39,13 @@ Scripts here automate clearly defined, repeatable tasks that support the researc
   disagreement between evaluators, then persists, reloads, and prints an evaluation
   summary and reliability findings. Requires no network access or API credentials. Run
   with `python scripts/run_evaluation_layer_example.py`.
+- `run_rag_example.py` -- a minimal demonstration of the RAG execution and retrieval
+  evaluation layer: builds a tiny document corpus and chunk index, retrieves with a
+  deterministic fake embedding model, generates with the deterministic mock adapter, and
+  produces an evidence-based diagnosis (successful grounded execution, retrieval failure,
+  or generation failure despite relevant context) for each of three controlled test
+  cases, after persisting and reloading the experiment. Requires no network access or API
+  credentials. Run with `python scripts/run_rag_example.py`.
 
 ## Script Requirements
 

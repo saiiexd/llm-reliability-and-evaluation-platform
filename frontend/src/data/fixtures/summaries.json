@@ -1,0 +1,139 @@
+{
+  "31f14f05e5c74fbcbae31ddc6df0556f": {
+    "evaluation_summary": {
+      "dataset_name": "baseline-non-rag-demo",
+      "disagreement_count": 0,
+      "model_id": "mock-adapter-v1",
+      "num_execution_failed": 0,
+      "num_execution_succeeded": 2,
+      "num_test_cases": 2,
+      "per_evaluator": {
+        "exact_match": {
+          "criterion": "correctness",
+          "evaluator_name": "exact_match",
+          "num_error": 0,
+          "num_evaluated": 2,
+          "num_failed": 1,
+          "num_passed": 1,
+          "num_skipped": 0,
+          "num_success": 2,
+          "score_count": 2,
+          "score_max": 1.0,
+          "score_mean": 0.5,
+          "score_min": 0.0
+        }
+      }
+    },
+    "reliability_findings": [],
+    "retrieval_summary": {}
+  },
+  "4522d237b3ff4768b11e2decc62c9f76": {
+    "evaluation_summary": {
+      "dataset_name": "reliability-console-demo",
+      "disagreement_count": 0,
+      "model_id": "mock-adapter-v1",
+      "num_execution_failed": 0,
+      "num_execution_succeeded": 7,
+      "num_test_cases": 7,
+      "per_evaluator": {
+        "exact_match": {
+          "criterion": "correctness",
+          "evaluator_name": "exact_match",
+          "num_error": 0,
+          "num_evaluated": 7,
+          "num_failed": 4,
+          "num_passed": 3,
+          "num_skipped": 0,
+          "num_success": 7,
+          "score_count": 7,
+          "score_max": 1.0,
+          "score_mean": 0.42857142857142855,
+          "score_min": 0.0
+        },
+        "llm_faithfulness_judge": {
+          "criterion": "faithfulness",
+          "evaluator_name": "llm_faithfulness_judge",
+          "num_error": 1,
+          "num_evaluated": 7,
+          "num_failed": 3,
+          "num_passed": 3,
+          "num_skipped": 0,
+          "num_success": 6,
+          "score_count": 0,
+          "score_max": null,
+          "score_mean": null,
+          "score_min": null
+        }
+      }
+    },
+    "reliability_findings": [
+      {
+        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
+        "evaluator_names": [
+          "exact_match",
+          "llm_faithfulness_judge"
+        ],
+        "flag_type": "incorrect_per_evaluator",
+        "test_case_id": "correct-context-unsupported-answer"
+      },
+      {
+        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
+        "evaluator_names": [
+          "exact_match",
+          "llm_faithfulness_judge"
+        ],
+        "flag_type": "incorrect_per_evaluator",
+        "test_case_id": "correct-context-contradictory-answer"
+      },
+      {
+        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
+        "evaluator_names": [
+          "exact_match",
+          "llm_faithfulness_judge"
+        ],
+        "flag_type": "incorrect_per_evaluator",
+        "test_case_id": "relevant-context-incorrect-answer"
+      },
+      {
+        "detail": "1 evaluator(s) failed to produce a result.",
+        "evaluator_names": [
+          "llm_faithfulness_judge"
+        ],
+        "flag_type": "evaluator_failure",
+        "test_case_id": "missing-context"
+      },
+      {
+        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
+        "evaluator_names": [
+          "exact_match"
+        ],
+        "flag_type": "incorrect_per_evaluator",
+        "test_case_id": "missing-context"
+      }
+    ],
+    "retrieval_summary": {
+      "hit_at_1": {
+        "evaluator_name": "hit_at_1",
+        "metric_name": "hit_at_k",
+        "num_error": 0,
+        "num_evaluated": 7,
+        "num_skipped": 1,
+        "num_success": 6,
+        "score_max": 1.0,
+        "score_mean": 0.8333333333333334,
+        "score_min": 0.0
+      },
+      "recall_at_1": {
+        "evaluator_name": "recall_at_1",
+        "metric_name": "recall_at_k",
+        "num_error": 0,
+        "num_evaluated": 7,
+        "num_skipped": 1,
+        "num_success": 6,
+        "score_max": 1.0,
+        "score_mean": 0.8333333333333334,
+        "score_min": 0.0
+      }
+    }
+  }
+}

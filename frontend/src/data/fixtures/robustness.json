@@ -1,0 +1,21 @@
+{
+  "4522d237b3ff4768b11e2decc62c9f76": {
+    "comparisons": [
+      {
+        "baseline_category": "correct",
+        "baseline_test_case_id": "correct-context-correct-answer",
+        "failure_category_transition": null,
+        "outcome_changed": false,
+        "perturbation_type": "question_rewording",
+        "perturbed_category": "correct",
+        "perturbed_test_case_id": "correct-context-correct-answer-reworded"
+      }
+    ],
+    "consistency": {
+      "num_comparisons": 1,
+      "num_unchanged": 1,
+      "outcome_consistency_rate": 1.0,
+      "transition_counts": {}
+    }
+  }
+}

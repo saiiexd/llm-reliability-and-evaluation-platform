@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+/*
+ * Editorial research-instrument design tokens.
+ *
+ * Palette: off-white/light-gray surfaces, near-black ink and section
+ * backgrounds, one restrained coral accent used only for the few things
+ * that must draw the eye (a live selection, a contradiction/failure
+ * marker). No gradients, no glassmorphism, no glow. Corners are mostly
+ * square (rounded-sm at most); shadows are avoided in favor of 1px
+ * dividers, which is what actually reads as "research report" rather
+ * than "SaaS dashboard."
+ */
+@theme {
+  --font-serif: "Source Serif 4", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --color-paper: #faf9f6;
+  --color-paper-dim: #f1efe9;
+  --color-ink: #14130f;
+  --color-ink-soft: #4a4740;
+  --color-line: #ddd8cd;
+  --color-accent: #d8552c;
+  --color-accent-soft: #f6ded3;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Focus visibility: never rely on color alone. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background-color: var(--color-accent-soft);
+}

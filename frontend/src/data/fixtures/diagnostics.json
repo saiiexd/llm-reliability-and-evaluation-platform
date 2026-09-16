@@ -1,0 +1,243 @@
+{
+  "4522d237b3ff4768b11e2decc62c9f76": {
+    "correct-context-contradictory-answer": {
+      "claim_assessments": [
+        {
+          "assessment": {
+            "confidence": null,
+            "explanation": "0.83 word overlap with retrieved context (threshold 0.5). Literal overlap only -- this method cannot detect contradiction.",
+            "method": "lexical_overlap_baseline",
+            "status": "supported",
+            "supporting_evidence": [
+              "Paris is the capital of France."
+            ]
+          },
+          "statement": "Lyon is the capital of France."
+        }
+      ],
+      "confidence": null,
+      "contributing_evaluators": [
+        "exact_match",
+        "hit_at_1",
+        "llm_faithfulness_judge",
+        "recall_at_1"
+      ],
+      "error": null,
+      "explanation": "A faithfulness evaluator found the answer contradicted by retrieved context.",
+      "failure_category": "contradicted",
+      "generated_answer": "Lyon is the capital of France.",
+      "question": "What is the capital of France?",
+      "reference_answer": "Paris",
+      "retrieved_context": [
+        "Paris is the capital of France."
+      ],
+      "status": "determined",
+      "supporting_evidence": [],
+      "test_case_id": "correct-context-contradictory-answer"
+    },
+    "correct-context-correct-answer": {
+      "claim_assessments": [
+        {
+          "assessment": {
+            "confidence": null,
+            "explanation": "1.00 word overlap with retrieved context (threshold 0.5). Literal overlap only -- this method cannot detect contradiction.",
+            "method": "lexical_overlap_baseline",
+            "status": "supported",
+            "supporting_evidence": [
+              "Paris is the capital of France."
+            ]
+          },
+          "statement": "Paris"
+        }
+      ],
+      "confidence": null,
+      "contributing_evaluators": [
+        "exact_match",
+        "hit_at_1",
+        "llm_faithfulness_judge",
+        "recall_at_1"
+      ],
+      "error": null,
+      "explanation": "The answer was judged correct, and no retrieval or faithfulness evidence contradicts that.",
+      "failure_category": "correct",
+      "generated_answer": "Paris",
+      "question": "What is the capital of France?",
+      "reference_answer": "Paris",
+      "retrieved_context": [
+        "Paris is the capital of France."
+      ],
+      "status": "determined",
+      "supporting_evidence": [],
+      "test_case_id": "correct-context-correct-answer"
+    },
+    "correct-context-correct-answer-reworded": {
+      "claim_assessments": [
+        {
+          "assessment": {
+            "confidence": null,
+            "explanation": "1.00 word overlap with retrieved context (threshold 0.5). Literal overlap only -- this method cannot detect contradiction.",
+            "method": "lexical_overlap_baseline",
+            "status": "supported",
+            "supporting_evidence": [
+              "Paris is the capital of France."
+            ]
+          },
+          "statement": "Paris"
+        }
+      ],
+      "confidence": null,
+      "contributing_evaluators": [
+        "exact_match",
+        "hit_at_1",
+        "llm_faithfulness_judge",
+        "recall_at_1"
+      ],
+      "error": null,
+      "explanation": "The answer was judged correct, and no retrieval or faithfulness evidence contradicts that.",
+      "failure_category": "correct",
+      "generated_answer": "Paris",
+      "question": "Which city serves as the capital of France?",
+      "reference_answer": "Paris",
+      "retrieved_context": [
+        "Paris is the capital of France."
+      ],
+      "status": "determined",
+      "supporting_evidence": [],
+      "test_case_id": "correct-context-correct-answer-reworded"
+    },
+    "correct-context-unsupported-answer": {
+      "claim_assessments": [
+        {
+          "assessment": {
+            "confidence": null,
+            "explanation": "0.25 word overlap with retrieved context (threshold 0.5). Literal overlap only -- this method cannot detect contradiction.",
+            "method": "lexical_overlap_baseline",
+            "status": "unsupported",
+            "supporting_evidence": []
+          },
+          "statement": "Paris, which has a population of 30 million."
+        }
+      ],
+      "confidence": null,
+      "contributing_evaluators": [
+        "exact_match",
+        "hit_at_1",
+        "llm_faithfulness_judge",
+        "recall_at_1"
+      ],
+      "error": null,
+      "explanation": "A faithfulness evaluator found the answer contains claims the retrieved context does not address.",
+      "failure_category": "unsupported",
+      "generated_answer": "Paris, which has a population of 30 million.",
+      "question": "What is the capital of France?",
+      "reference_answer": "Paris",
+      "retrieved_context": [
+        "Paris is the capital of France."
+      ],
+      "status": "determined",
+      "supporting_evidence": [],
+      "test_case_id": "correct-context-unsupported-answer"
+    },
+    "missing-context": {
+      "claim_assessments": [
+        {
+          "assessment": {
+            "confidence": null,
+            "explanation": "0.00 word overlap with retrieved context (threshold 0.5). Literal overlap only -- this method cannot detect contradiction.",
+            "method": "lexical_overlap_baseline",
+            "status": "unsupported",
+            "supporting_evidence": []
+          },
+          "statement": "I do not know."
+        }
+      ],
+      "confidence": null,
+      "contributing_evaluators": [
+        "exact_match",
+        "hit_at_1",
+        "llm_faithfulness_judge",
+        "recall_at_1"
+      ],
+      "error": null,
+      "explanation": "Ground-truth-relevant evidence was not retrieved, and the answer was judged incorrect: consistent with a retrieval failure.",
+      "failure_category": "retrieval_failure",
+      "generated_answer": "I do not know.",
+      "question": "What is the capital of a country not in this corpus?",
+      "reference_answer": "Unknown",
+      "retrieved_context": [
+        "Bananas are a good source of potassium."
+      ],
+      "status": "determined",
+      "supporting_evidence": [],
+      "test_case_id": "missing-context"
+    },
+    "no-ground-truth": {
+      "claim_assessments": [
+        {
+          "assessment": {
+            "confidence": null,
+            "explanation": "1.00 word overlap with retrieved context (threshold 0.5). Literal overlap only -- this method cannot detect contradiction.",
+            "method": "lexical_overlap_baseline",
+            "status": "supported",
+            "supporting_evidence": [
+              "Paris is the capital of France."
+            ]
+          },
+          "statement": "Paris"
+        }
+      ],
+      "confidence": null,
+      "contributing_evaluators": [
+        "exact_match",
+        "hit_at_1",
+        "llm_faithfulness_judge",
+        "recall_at_1"
+      ],
+      "error": null,
+      "explanation": "The answer was judged correct, and no retrieval or faithfulness evidence contradicts that.",
+      "failure_category": "correct",
+      "generated_answer": "Paris",
+      "question": "What is the capital of France?",
+      "reference_answer": "Paris",
+      "retrieved_context": [
+        "Paris is the capital of France."
+      ],
+      "status": "determined",
+      "supporting_evidence": [],
+      "test_case_id": "no-ground-truth"
+    },
+    "relevant-context-incorrect-answer": {
+      "claim_assessments": [
+        {
+          "assessment": {
+            "confidence": null,
+            "explanation": "0.00 word overlap with retrieved context (threshold 0.5). Literal overlap only -- this method cannot detect contradiction.",
+            "method": "lexical_overlap_baseline",
+            "status": "unsupported",
+            "supporting_evidence": []
+          },
+          "statement": "Berlin"
+        }
+      ],
+      "confidence": null,
+      "contributing_evaluators": [
+        "exact_match",
+        "hit_at_1",
+        "llm_faithfulness_judge",
+        "recall_at_1"
+      ],
+      "error": null,
+      "explanation": "A faithfulness evaluator found the answer contradicted by retrieved context.",
+      "failure_category": "contradicted",
+      "generated_answer": "Berlin",
+      "question": "What is the capital of France?",
+      "reference_answer": "Paris",
+      "retrieved_context": [
+        "Paris is the capital of France."
+      ],
+      "status": "determined",
+      "supporting_evidence": [],
+      "test_case_id": "relevant-context-incorrect-answer"
+    }
+  }
+}

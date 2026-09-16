@@ -204,13 +204,73 @@ ModelResponse -> Evaluator(s): ExactMatchEvaluator, SemanticSimilarityEvaluator,
 - No hallucination detection, faithfulness, or groundedness evaluation (these require
   context-grounded evaluation, not yet implemented).
 - No validation of LLM-as-a-judge's reliability against human annotation.
-- No RAG execution or retrieval evaluation.
 - No reliability/statistical analysis across multiple runs of the same experiment (only
   within a single run, so far).
 - No real LLM provider or judge-model integration (only deterministic fakes).
 
 See `research/notes/evaluation_and_reliability_layer.md` for the full conceptual model,
 and `scripts/run_evaluation_layer_example.py` for a runnable example.
+
+## Current Implementation: RAG Execution and Retrieval Evaluation
+
+`src/llm_reliability/rag/` implements a controlled RAG pipeline as an explicit,
+inspectable sequence of stages, and evaluates retrieval quality independently from
+answer quality:
+
+```
+Question -> Retriever (embed + rank chunks) -> Retrieved Context
+    -> Generation (existing ModelAdapter) -> Answer
+        -> RetrievalEvaluator(s): Hit@K, Recall@K, MRR (against explicit ground truth)
+        -> ContextSupportBaseline (answer-quality family; literal overlap, not faithfulness)
+        -> diagnose_rag_execution -> retrieval_failure / generation_failure_despite_relevant_context
+                                      / successful_grounded_execution / retrieval_evidence_unavailable
+                                      / undetermined
+```
+
+**What it currently supports:**
+
+- `Document` / `Chunk` / `FixedSizeChunker`: a deterministic, character-window chunking
+  baseline with explicit, validated `chunk_size`/`chunk_overlap` configuration.
+- `EmbeddingModel`: separates retrieval from any specific embedding provider.
+  `FakeEmbeddingModel` is deterministic and dependency-free for tests;
+  `SentenceTransformerEmbeddingModel` is the one real backend (Sentence Transformers was
+  already available in this environment), loaded lazily so importing/configuring it never
+  requires a model download.
+- `Retriever`: embeds a fixed chunk corpus once, ranks it against each query by cosine
+  similarity (`llm_reliability.rag.similarity`, no vector database), and returns the top-k
+  in ranked order with stable chunk/document identifiers and real similarity scores.
+- `RagPipeline`: composes retrieval with generation. It implements the existing
+  `ModelAdapter` interface, so it runs through the unmodified `EvaluationRunner` and
+  `ExperimentManager` with no changes to either. Retrieval evidence travels through
+  `ModelResponse.provider_metadata["rag"]`; retrieval ground truth travels through the
+  existing `TestCase.metadata["relevant_chunk_ids"]`. No persisted schema changed.
+- `RetrievalEvaluator` / `RetrievalEvaluationResult`: a type entirely separate from
+  answer-quality `EvaluationResult`, so retrieval and answer scores are never mixed.
+  `HitAtKEvaluator`, `RecallAtKEvaluator`, and `MeanReciprocalRankEvaluator` are scored
+  only when ground truth and retrieval evidence are both available; otherwise `SKIPPED`.
+- `ContextSupportBaseline`: a narrow, literal word-overlap check between an answer and its
+  retrieved context (answer-quality family, reusing the existing `Evaluator` interface
+  unchanged) -- explicitly not a faithfulness or hallucination determination.
+- `diagnose_rag_execution`: an evidence-based decision table combining a retrieval
+  hit/miss signal with an answer-correctness signal into one of five categories, reporting
+  `undetermined` rather than guessing when the evidence does not clearly support one.
+- RAG configuration (embedding model, chunk size/overlap, top-k, corpus content
+  fingerprint) is embedded in the experiment's `ModelConfig.extra_params`, which already
+  participates in the Prompt 2 configuration fingerprint -- no fingerprinting changes
+  were needed.
+
+**What it deliberately does not support yet:**
+
+- No semantic, hierarchical, or recursive chunking -- fixed-size only.
+- No vector database or approximate nearest-neighbor index.
+- No NLI-based faithfulness verification, claim extraction, or LLM-as-a-judge
+  faithfulness rubric.
+- No hallucination detection as a generic classifier.
+- No document ingestion system, multiple embedding providers, or plugin architecture.
+
+See `research/notes/rag_execution_model.md` for the full conceptual model, and
+`tests/rag/test_end_to_end.py` for a runnable, fully controlled RAG experiment covering
+every diagnosis category.
 
 **Setup:**
 
@@ -224,7 +284,11 @@ python scripts/run_evaluation_layer_example.py
 # Optional: real BERTScore backend and its integration test (not required for the
 # standard test suite; downloads a pretrained model on first use).
 pip install -e ".[semantic]"
-pytest tests/evaluation/test_semantic_similarity_integration.py
+LLM_RELIABILITY_RUN_INTEGRATION_TESTS=1 pytest tests/evaluation/test_semantic_similarity_integration.py
+
+# Optional: real Sentence Transformers embedding integration test (requires network
+# access on first use to download a pretrained model; not part of the standard suite).
+LLM_RELIABILITY_RUN_INTEGRATION_TESTS=1 pytest tests/rag/test_embeddings_integration.py
 ```
 
 ## Repository Structure
@@ -242,10 +306,13 @@ src/                Platform source code.
                                  (see "Current Implementation" above).
   llm_reliability/experiments/  Experiment System (see "Current Implementation" above).
   llm_reliability/reliability/  Reliability analysis layer (see "Current Implementation" above).
+  llm_reliability/rag/          RAG execution and retrieval evaluation
+                                 (see "Current Implementation" above).
 tests/              Test suite.
   evaluation/       Tests for the Core Evaluation Engine and evaluators.
   experiments/      Tests for the Experiment System.
   reliability/      Tests for the reliability analysis layer.
+  rag/              Tests for RAG execution and retrieval evaluation.
 configs/            Reproducible experiment and system configuration.
 data/               Benchmark metadata (small, curated, version-controlled).
   eval_sets/        Small, hand-curated evaluation sets (see data/README.md).
