@@ -15,11 +15,14 @@ dependencies = []
 [project.optional-dependencies]
 dev = [
     "pytest>=7.4",
-    "ruff>=0.0.280",
+    "ruff>=0.5",
 ]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+llm_reliability = ["py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -29,6 +32,15 @@ addopts = "-v --tb=short"
 # Target Python 3.13.
 target-version = "py313"
 line-length = 100
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "*.egg-info",
+    "learning/",   # Educational code is exempt from strict linting.
+]
+
+[tool.ruff.lint]
 select = [
     "E",   # pycodestyle errors
     "W",   # pycodestyle warnings
@@ -38,10 +50,3 @@ select = [
     "UP",  # pyupgrade
 ]
 ignore = []
-exclude = [
-    ".git",
-    ".venv",
-    "__pycache__",
-    "*.egg-info",
-    "learning/",   # Educational code is exempt from strict linting.
-]

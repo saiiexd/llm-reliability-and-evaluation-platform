@@ -22,7 +22,16 @@ Scripts here automate clearly defined, repeatable tasks that support the researc
 
 ## Current Status
 
-No scripts exist yet. Scripts will be added when a specific, reproducible task requires automation.
+- `run_core_engine_example.py` -- a minimal, read-through API demonstration of the Core
+  Evaluation Engine (dataset, deterministic mock adapter, baseline evaluator, structured
+  run result). It is a fixed example, not a parameterized automation script, so it takes
+  no command-line arguments; it requires no network access or API credentials. Run with
+  `python scripts/run_core_engine_example.py`.
+- `run_experiment_example.py` -- a minimal, read-through API demonstration of the
+  Experiment System (experiment definition, execution via the existing evaluation engine,
+  local JSON persistence, and reload). Persists to a temporary directory removed on exit,
+  so it leaves nothing behind; it takes no command-line arguments and requires no network
+  access or API credentials. Run with `python scripts/run_experiment_example.py`.
 
 ## Script Requirements
 

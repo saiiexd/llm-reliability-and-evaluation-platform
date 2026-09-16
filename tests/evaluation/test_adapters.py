@@ -2,7 +2,7 @@
 
 import pytest
 
-from llm_reliability.evaluation import AdapterError, ExecutionRequest, ModelConfig, MockAdapter
+from llm_reliability.evaluation import AdapterError, ExecutionRequest, MockAdapter, ModelConfig
 
 
 def _request(test_case_id: str, input_text: str) -> ExecutionRequest:

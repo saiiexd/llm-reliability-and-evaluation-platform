@@ -63,6 +63,10 @@ class MockAdapter(ModelAdapter):
         self._errors = dict(errors) if errors else {}
         self._model_id = model_id
 
+    @property
+    def model_id(self) -> str:
+        return self._model_id
+
     def generate(self, request: ExecutionRequest) -> ModelResponse:
         if request.test_case_id in self._errors:
             raise AdapterError(self._errors[request.test_case_id])

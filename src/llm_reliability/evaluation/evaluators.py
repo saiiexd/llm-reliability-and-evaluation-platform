@@ -10,6 +10,7 @@ can be run over the same response independently.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from typing import Any
 
 from llm_reliability.evaluation.models import EvaluationResult, ModelResponse, TestCase
 
@@ -26,6 +27,18 @@ class Evaluator(ABC):
     @abstractmethod
     def evaluate(self, test_case: TestCase, response: ModelResponse) -> EvaluationResult:
         raise NotImplementedError
+
+    def get_config(self) -> dict[str, Any]:
+        """Serializable configuration for this evaluator instance.
+
+        Used to build a reproducibility record of what was actually run
+        (see ``llm_reliability.experiments``), without serializing the
+        evaluator object itself. The base implementation returns an empty
+        mapping, which is correct for parameterless evaluators; an evaluator
+        with constructor parameters that affect its behavior must override
+        this to report them.
+        """
+        return {}
 
 
 class ExactMatchEvaluator(Evaluator):

@@ -50,7 +50,9 @@ class EvaluationRunner:
             test_case_results=test_case_results,
         )
 
-    def _run_single_test_case(self, test_case: TestCase, model_config: ModelConfig) -> TestCaseResult:
+    def _run_single_test_case(
+        self, test_case: TestCase, model_config: ModelConfig
+    ) -> TestCaseResult:
         request = ExecutionRequest(
             test_case_id=test_case.id,
             input_text=test_case.input,
@@ -69,7 +71,8 @@ class EvaluationRunner:
             )
 
         evaluation_results = [
-            self._run_single_evaluator(evaluator, test_case, response) for evaluator in self._evaluators
+            self._run_single_evaluator(evaluator, test_case, response)
+            for evaluator in self._evaluators
         ]
         return TestCaseResult(
             test_case_id=test_case.id,

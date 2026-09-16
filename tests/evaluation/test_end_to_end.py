@@ -8,8 +8,8 @@ from llm_reliability.evaluation import (
     Dataset,
     EvaluationRunner,
     ExactMatchEvaluator,
-    ModelConfig,
     MockAdapter,
+    ModelConfig,
     TestCase,
 )
 
@@ -18,8 +18,16 @@ def test_dataset_through_mock_adapter_and_evaluator_produces_structured_results(
     dataset = Dataset(
         name="capitals",
         test_cases=[
-            TestCase(id="capital-france", input="What is the capital of France?", reference_answer="Paris"),
-            TestCase(id="capital-japan", input="What is the capital of Japan?", reference_answer="Tokyo"),
+            TestCase(
+                id="capital-france",
+                input="What is the capital of France?",
+                reference_answer="Paris",
+            ),
+            TestCase(
+                id="capital-japan",
+                input="What is the capital of Japan?",
+                reference_answer="Tokyo",
+            ),
             TestCase(id="open-ended", input="Describe the weather today."),
         ],
     )

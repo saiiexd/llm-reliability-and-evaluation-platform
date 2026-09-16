@@ -13,6 +13,13 @@ later in the pipeline. Validation is applied to the models a user
 actually authors (``TestCase``, ``Dataset``, ``ModelConfig``); models
 produced internally by the engine (``ModelResponse``, ``EvaluationResult``,
 ``TestCaseResult``, ``RunResult``) are not re-validated.
+
+Every model also provides ``from_dict`` (and, where ``to_json`` exists,
+``from_json``) so that JSON previously produced by this module can be
+loaded back into validated objects rather than being treated as an
+unvalidated dictionary. Reconstruction reuses each dataclass's own
+``__post_init__`` validation, so malformed persisted data raises the same
+explicit errors as malformed data supplied directly by a caller.
 """
 
 from __future__ import annotations
@@ -46,6 +53,15 @@ class TestCase:
             raise ValueError("TestCase.id must be a non-empty string.")
         if not self.input or not self.input.strip():
             raise ValueError(f"TestCase '{self.id}': input must be a non-empty string.")
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> TestCase:
+        return cls(
+            id=data["id"],
+            input=data["input"],
+            reference_answer=data.get("reference_answer"),
+            metadata=dict(data.get("metadata", {})),
+        )
 
 
 @dataclass
@@ -82,6 +98,13 @@ class Dataset:
     def __iter__(self):
         return iter(self.test_cases)
 
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> Dataset:
+        return cls(
+            name=data["name"],
+            test_cases=[TestCase.from_dict(test_case) for test_case in data["test_cases"]],
+        )
+
 
 @dataclass
 class ModelConfig:
@@ -106,6 +129,15 @@ class ModelConfig:
             raise ValueError("ModelConfig.temperature must be non-negative if specified.")
         if self.max_tokens is not None and self.max_tokens <= 0:
             raise ValueError("ModelConfig.max_tokens must be a positive integer if specified.")
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> ModelConfig:
+        return cls(
+            model_id=data["model_id"],
+            temperature=data.get("temperature"),
+            max_tokens=data.get("max_tokens"),
+            extra_params=dict(data.get("extra_params", {})),
+        )
 
 
 @dataclass
@@ -142,6 +174,19 @@ class ModelResponse:
     total_tokens: int | None = None
     provider_metadata: dict[str, Any] = field(default_factory=dict)
 
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> ModelResponse:
+        return cls(
+            test_case_id=data["test_case_id"],
+            output_text=data["output_text"],
+            model_id=data["model_id"],
+            latency_ms=data.get("latency_ms"),
+            prompt_tokens=data.get("prompt_tokens"),
+            completion_tokens=data.get("completion_tokens"),
+            total_tokens=data.get("total_tokens"),
+            provider_metadata=dict(data.get("provider_metadata", {})),
+        )
+
 
 @dataclass
 class EvaluationResult:
@@ -163,6 +208,19 @@ class EvaluationResult:
     details: dict[str, Any] = field(default_factory=dict)
     error: str | None = None
 
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> EvaluationResult:
+        return cls(
+            evaluator_name=data["evaluator_name"],
+            test_case_id=data["test_case_id"],
+            score=data.get("score"),
+            passed=data.get("passed"),
+            label=data.get("label"),
+            explanation=data.get("explanation"),
+            details=dict(data.get("details", {})),
+            error=data.get("error"),
+        )
+
 
 @dataclass
 class TestCaseResult:
@@ -179,6 +237,24 @@ class TestCaseResult:
     def succeeded(self) -> bool:
         """True if generation completed without error and produced a response."""
         return self.execution_error is None and self.model_response is not None
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> TestCaseResult:
+        model_response_data = data.get("model_response")
+        return cls(
+            test_case_id=data["test_case_id"],
+            input_text=data["input_text"],
+            reference_answer=data.get("reference_answer"),
+            model_response=(
+                ModelResponse.from_dict(model_response_data)
+                if model_response_data is not None
+                else None
+            ),
+            evaluation_results=[
+                EvaluationResult.from_dict(result) for result in data.get("evaluation_results", [])
+            ],
+            execution_error=data.get("execution_error"),
+        )
 
 
 @dataclass
@@ -214,3 +290,18 @@ class RunResult:
         experiment results.
         """
         return json.dumps(self.to_dict(), indent=indent, sort_keys=True)
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> RunResult:
+        return cls(
+            dataset_name=data["dataset_name"],
+            model_id=data["model_id"],
+            evaluator_names=list(data["evaluator_names"]),
+            test_case_results=[
+                TestCaseResult.from_dict(result) for result in data["test_case_results"]
+            ],
+        )
+
+    @classmethod
+    def from_json(cls, text: str) -> RunResult:
+        return cls.from_dict(json.loads(text))
