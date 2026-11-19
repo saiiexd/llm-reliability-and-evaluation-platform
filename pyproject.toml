@@ -46,6 +46,9 @@ llm_reliability = ["py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# tests/api/conftest.py imports scripts.seed_live_experiments, so the repo root
+# must be importable; without this a plain `pytest` fails at collection.
+pythonpath = ["."]
 addopts = "-v --tb=short"
 
 [tool.ruff]
