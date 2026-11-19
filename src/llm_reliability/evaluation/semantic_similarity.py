@@ -90,9 +90,10 @@ class BertScoreBackend(SimilarityBackend):
     - ``model_type`` / ``num_layers``: the encoder and the hidden layer
       whose token embeddings are compared. ``num_layers`` defaults to
       bert-score's recommended layer for the default model; for any other
-      model it should be passed explicitly (``None`` then means "the
+      model it should be passed explicitly. ``None`` then means "the
       installed bert-score's default for that model", which is recorded as
-      ``None`` and is therefore less reproducible).
+      ``None`` and is therefore less reproducible; a model with no such
+      default is an invalid configuration (see ``compute_similarity``).
     - ``idf`` is always ``False`` (no inverse-document-frequency weighting:
       a single pair has no corpus to estimate it from).
     - ``rescale_with_baseline`` is always ``False``. Baseline rescaling is a
@@ -158,6 +159,12 @@ class BertScoreBackend(SimilarityBackend):
                     idf=False,
                     rescale_with_baseline=False,
                 )
+            except KeyError as exc:
+                # bert-score has no default layer for this model and none was given.
+                raise SimilarityBackendError(
+                    f"bert-score has no default layer for model '{self._model_type}'; "
+                    "pass num_layers explicitly."
+                ) from exc
             except OSError as exc:
                 # Model files missing and not downloadable (offline, bad id).
                 raise SimilarityBackendError(

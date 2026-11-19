@@ -184,3 +184,25 @@ class TestBertScoreBackendWithoutTheRealModel:
         assert result.status == EvaluationStatus.SUCCESS
         assert result.score == 0.0
         assert result.passed is False
+
+    @pytest.mark.parametrize(
+        ("load_error", "message"),
+        [
+            (OSError("couldn't connect to the model hub"), "Could not load BERTScore model"),
+            (KeyError("some-other-model"), "pass num_layers explicitly"),
+        ],
+    )
+    def test_model_load_failure_is_an_invalid_configuration(self, monkeypatch, load_error, message):
+        def _failing_scorer(*args, **kwargs):
+            raise load_error
+
+        monkeypatch.setitem(
+            sys.modules, "bert_score", types.SimpleNamespace(BERTScorer=_failing_scorer)
+        )
+        evaluator = SemanticSimilarityEvaluator(
+            backend=BertScoreBackend(model_type="some-other-model")
+        )
+        result = evaluator.evaluate(_test_case(), _response(PARAPHRASE))
+        assert result.status == EvaluationStatus.INVALID_CONFIGURATION
+        assert result.passed is None
+        assert message in (result.error or "")
