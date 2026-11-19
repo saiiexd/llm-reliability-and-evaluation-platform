@@ -26,13 +26,13 @@ from __future__ import annotations
 
 import argparse
 import json
-import math
 import statistics
 from collections import Counter
 from pathlib import Path
 from typing import Any
 
 from llm_reliability.analytics.agreement import compute_all_pairwise_agreements
+from llm_reliability.analytics.proportions import mcnemar_exact, wilson
 from llm_reliability.api.services import _run_top_k
 from llm_reliability.diagnostics.diagnosis import build_reliability_diagnostic
 from llm_reliability.evaluation.models import EvaluationStatus, TestCaseResult
@@ -57,26 +57,6 @@ CONTRASTS = [
     ("gemma-rag-k3", "qwen-rag-k3", "Model effect with top-3 retrieval (gemma3:1b vs qwen3:4b)"),
 ]
 ABSTAIN = "i dont know"
-
-
-def wilson(k: int, n: int, z: float = 1.96) -> tuple[float | None, float | None, float | None]:
-    if n == 0:
-        return None, None, None
-    p = k / n
-    denom = 1 + z * z / n
-    center = (p + z * z / (2 * n)) / denom
-    half = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / denom
-    return p, max(0.0, center - half), min(1.0, center + half)
-
-
-def mcnemar_exact(b: int, c: int) -> float:
-    """Two-sided exact McNemar p-value (binomial test on the discordant pairs)."""
-    n = b + c
-    if n == 0:
-        return 1.0
-    k = min(b, c)
-    tail = sum(math.comb(n, i) for i in range(k + 1)) / 2**n
-    return min(1.0, 2 * tail)
 
 
 def verdict(tc: TestCaseResult, evaluator: str) -> bool | None:

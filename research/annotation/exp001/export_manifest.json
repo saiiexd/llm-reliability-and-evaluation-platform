@@ -1,0 +1,77 @@
+{
+ "seed": 2026,
+ "overlap_fraction": 0.25,
+ "experiment_ids": [
+  "exp001-gemma-closed",
+  "exp001-gemma-rag-k3",
+  "exp001-qwen-closed",
+  "exp001-qwen-rag-k1",
+  "exp001-qwen-rag-k3",
+  "exp001-qwen-rag-k3-t08"
+ ],
+ "run_ids": [
+  "966c6d32f8094650952e95695ea2df36",
+  "eaa542685e1c4ae3854895e245c203b0",
+  "5641557249174e219ccaf5115f4fd0c0",
+  "cb26774d080748058610dc75d085e8ce",
+  "ed81e245a23947e694503e8146c90383",
+  "08415f8558ed49bc8837f80f7c220039",
+  "fd56d9902936458a8a8f8a0a5dc2b648",
+  "3b4a8c918b1a45ffa6fae1fa1eb83f69",
+  "e725d4d891bb43e7b7943a0a6beccd3d"
+ ],
+ "runs_without_result": [],
+ "cases_without_response": 0,
+ "instances": 540,
+ "rows": 238,
+ "overlap_rows": 60,
+ "distinct_questions": 60,
+ "rows_by_instance_count": {
+  "1": 158,
+  "2": 20,
+  "3": 4,
+  "4": 4,
+  "5": 17,
+  "6": 19,
+  "7": 14,
+  "8": 1,
+  "9": 1
+ },
+ "per_experiment": {
+  "exp001-gemma-closed": {
+   "runs": 1,
+   "instances": 60,
+   "distinct_rows": 60
+  },
+  "exp001-gemma-rag-k3": {
+   "runs": 1,
+   "instances": 60,
+   "distinct_rows": 60
+  },
+  "exp001-qwen-closed": {
+   "runs": 1,
+   "instances": 60,
+   "distinct_rows": 60
+  },
+  "exp001-qwen-rag-k1": {
+   "runs": 1,
+   "instances": 60,
+   "distinct_rows": 60
+  },
+  "exp001-qwen-rag-k3": {
+   "runs": 2,
+   "instances": 120,
+   "distinct_rows": 63
+  },
+  "exp001-qwen-rag-k3-t08": {
+   "runs": 3,
+   "instances": 180,
+   "distinct_rows": 70
+  }
+ },
+ "files": {
+  "sheet": "annotation_sheet.csv",
+  "overlap_sheet": "annotation_sheet_overlap.csv",
+  "key": "annotation_key.csv"
+ }
+}
