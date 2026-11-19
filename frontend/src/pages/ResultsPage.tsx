@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FixtureNotice } from "../components/FixtureNotice";
+import { ReplayNotice } from "../components/ReplayNotice";
 import { ReproducibilityRecord } from "../components/ReproducibilityRecord";
 import { SimulatedNotice } from "../components/SimulatedNotice";
 import { EvaluatorAgreement } from "../components/EvaluatorAgreement";
@@ -183,6 +184,7 @@ export function ResultsPage() {
                   <VerdictBar counts={counts} />
                 </div>
                 <SimulatedNotice run={run} />
+                <ReplayNotice run={run} />
                 <ReproducibilityRecord run={run} />
               </div>
               <div className="lg:col-span-2 lg:border-l lg:border-line lg:pl-6">

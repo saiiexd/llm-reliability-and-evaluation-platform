@@ -111,6 +111,7 @@ export function NewExperimentForm({
   const [topK, setTopK] = useState(3);
   const [questionLimit, setQuestionLimit] = useState(60);
   const [judgeModelId, setJudgeModelId] = useState("");
+  const [judgeRubric, setJudgeRubric] = useState<"v1" | "v2">("v1");
   const [evaluators, setEvaluators] = useState<string[]>(["exact_match"]);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [temperature, setTemperature] = useState(0.0);
@@ -161,6 +162,7 @@ export function NewExperimentForm({
             dataset_limit: questionLimit < 60 ? questionLimit : undefined,
             retrieval_top_k: retrieval === "topk" ? topK : undefined,
             judge_model_id: judge,
+            judge_rubric_version: judge ? judgeRubric : undefined,
             model_config: modelConfig,
             evaluator_names: evaluators,
             metadata: {},
@@ -174,6 +176,7 @@ export function NewExperimentForm({
             dataset_name: dataset.name,
             test_cases: dataset.testCases,
             judge_model_id: judge,
+            judge_rubric_version: judge ? judgeRubric : undefined,
             model_config: modelConfig,
             evaluator_names: evaluators,
             metadata: {},
@@ -415,6 +418,20 @@ export function NewExperimentForm({
             <span className="text-xs text-ink-soft">
               A judge that is also the answering model may favour its own answers; a different judge is safer.
             </span>
+          </label>
+        )}
+        {usesJudge && judgeModelId.trim() && (
+          <label className="block max-w-md text-sm">
+            <span className="mb-1 block text-ink-soft">Judge rubric</span>
+            <select
+              id="judge-rubric"
+              value={judgeRubric}
+              onChange={(e) => setJudgeRubric(e.target.value as "v1" | "v2")}
+              className={inputClass}
+            >
+              <option value="v1">v1 (used in EXP-001 and EXP-002)</option>
+              <option value="v2">v2 (all accepted answers; abstentions are "no claim")</option>
+            </select>
           </label>
         )}
       </Step>
