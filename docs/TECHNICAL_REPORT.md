@@ -80,7 +80,7 @@ Main design decisions, each **[Verified]**:
 | 10. Persistence | `LocalFileExperimentRepository.save_run` | Run stores a full config snapshot. **[Verified, new]** It also stores `adapter_id`. |
 | 11. Post-hoc analysis | `api/services.py:DiagnosticsService` | Retrieval metrics (at the run's own K, **new**), consolidated diagnosis, lexical sentence evidence, robustness pairs. Computed on read and cached in memory, never persisted. |
 | 12. Serialization | `to_run_detail` / `to_run_summary` | Secrets redacted for display. Adds `executed_model_ids` and `simulated_components` (**new**). |
-| 13. UI | `frontend/src/pages/ResultsPage.tsx` | Per-run verdict bar (passed / wrong / not scored / crashed), cause list, per-question evidence (answers, checks, diagnosis, passages, sentence support, telemetry), "Do the checks agree?" (**new**), simulated-run notice (**new**). |
+| 13. UI | `frontend/src/pages/ResultsPage.tsx` | Per-run verdict bar (passed / checks disagree (**new**) / wrong / not scored / crashed), cause list, per-question evidence (answers, checks, diagnosis, passages, sentence support, telemetry), "Do the checks agree?" (**new**), simulated-run notice (**new**). |
 
 ## D. Metrics and their exact semantics
 
@@ -150,7 +150,7 @@ Previously faithfulness came before retrieval, so a wrong answer after a retriev
 - Evidence is retained end to end: the prompt, retrieved chunks with scores, and evaluator config and explanation.
 - Compatibility checks before comparing runs (different dataset versions are refused).
 - Allowlisted execution, opt-in external inference, secrets redacted in responses.
-- A large offline test suite: 468 backend tests, 50 frontend tests.
+- A large offline test suite: 472 backend tests, 52 frontend tests.
 
 **Weaknesses found and fixed on this branch [Verified; each has a regression test]**
 
@@ -175,7 +175,7 @@ Previously faithfulness came before retrieval, so a wrong answer after a retriev
 - **In the API, the only real evaluators are exact match and squad_match.** The judge and similarity entries in the registry are fakes (now labelled as such). Real judges are wired only in the study script, because judge calls need an opt-in and a model choice that the API does not yet expose.
 - **Synchronous execution.** A real 60-question run takes minutes inside one HTTP request.
 - **List endpoints parse every run file on each request.** That is fine at tens of runs and slow at thousands. SQLite would be the next step, not Postgres.
-- **The case pass rate uses one strict any-fail policy** across evaluators measuring different things. The UI's 4-state breakdown and per-evaluator rates mitigate this, but the headline number is still dominated by the strictest evaluator.
+- **The case pass rate uses one strict any-fail policy** across evaluators measuring different things, so the headline number is dominated by the strictest evaluator. Mitigation on this branch: the console shows "checks disagree" as its own state (22 of 60 in EXP-001 qwen top-3), alongside per-evaluator rates and kappa. Open: let an experiment declare a primary correctness evaluator.
 - **Robustness covers only hand-labelled perturbation pairs inside a dataset.** There is no generator of perturbations.
 - **Frontend fixtures are regenerated with random ids** (large diffs).
 
@@ -202,6 +202,7 @@ Previously faithfulness came before retrieval, so a wrong answer after a retriev
 | Retrieval Hit/Recall/MRR, diagnosis, robustness pairs, comparison, trends, agreement + kappa | Working [Verified by tests and sweep] |
 | Precision@K, context relevance, NLI faithfulness, claim extraction, human annotation, perturbation generation | Not implemented |
 | Benchmarks (multi-adapter, repetitions) | Working [Verified]; synchronous |
+| Compare any two runs in the console (compatibility check + side by side) | Working [Verified in browser on EXP-001 runs] |
 
 ### EXP-001 in one paragraph [Verified, n = 60 per arm]
 

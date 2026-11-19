@@ -380,7 +380,7 @@ pip install -e ".[semantic]"
 Run the complete test suite and code quality checks across the backend:
 
 ```bash
-# Full Python test suite: 468 passed, 3 skipped (opt-in integration tests), ~2 seconds.
+# Full Python test suite: 472 passed, 3 skipped (opt-in integration tests), ~2 seconds.
 # Tests never touch ./experiments (each API test uses a temporary store).
 pytest
 
@@ -482,7 +482,7 @@ cd frontend
 # Install dependencies
 npm install
 
-# Frontend test suite: 50 Vitest tests (works on any Node version; no extra flags)
+# Frontend test suite: 52 Vitest tests (works on any Node version; no extra flags)
 npm test
 
 # Run frontend linter (ESLint 9)
