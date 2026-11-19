@@ -67,6 +67,14 @@ class SimilarityBackend(ABC):
         raise NotImplementedError
 
 
+# bert-score's own recommended layer for the default model
+# (``bert_score.utils.model2layers["distilbert-base-uncased"]`` in bert-score
+# 0.3.13). Pinned here so the layer actually used is explicit in every
+# evaluator config instead of depending on the installed package's table.
+_DEFAULT_MODEL_TYPE = "distilbert-base-uncased"
+_DEFAULT_NUM_LAYERS = {_DEFAULT_MODEL_TYPE: 5}
+
+
 class BertScoreBackend(SimilarityBackend):
     """Computes BERTScore F1 as the similarity score, via the ``bert-score`` package.
 
@@ -76,28 +84,90 @@ class BertScoreBackend(SimilarityBackend):
     already cached locally, which requires network access; this backend
     must therefore only ever be exercised by an explicitly opt-in
     integration test, never by the standard test suite.
+
+    Scoring settings, all recorded by ``get_config``:
+
+    - ``model_type`` / ``num_layers``: the encoder and the hidden layer
+      whose token embeddings are compared. ``num_layers`` defaults to
+      bert-score's recommended layer for the default model; for any other
+      model it should be passed explicitly (``None`` then means "the
+      installed bert-score's default for that model", which is recorded as
+      ``None`` and is therefore less reproducible).
+    - ``idf`` is always ``False`` (no inverse-document-frequency weighting:
+      a single pair has no corpus to estimate it from).
+    - ``rescale_with_baseline`` is always ``False``. Baseline rescaling is a
+      linear transform of the raw score, so it cannot change which answers
+      rank higher; it only moves the numbers, and rescaled scores can be
+      negative, which would break the ``[0, 1]`` contract of
+      ``SimilarityBackend``. Raw scores are compressed towards the top of
+      the range (unrelated English sentences commonly score 0.6-0.7), so a
+      threshold on them must be read with that in mind.
+
+    The scorer (and its model) is built once, on the first call, and reused.
     """
 
-    def __init__(self, model_type: str = "distilbert-base-uncased", lang: str = "en") -> None:
+    def __init__(
+        self,
+        model_type: str = _DEFAULT_MODEL_TYPE,
+        lang: str = "en",
+        num_layers: int | None = None,
+    ) -> None:
+        if num_layers is not None and num_layers <= 0:
+            raise ValueError("BertScoreBackend.num_layers must be a positive integer.")
         self._model_type = model_type
         self._lang = lang
+        self._num_layers = (
+            num_layers if num_layers is not None else _DEFAULT_NUM_LAYERS.get(model_type)
+        )
+        self._scorer: Any = None
 
     def get_config(self) -> dict[str, Any]:
-        return {"backend": "bert_score", "model_type": self._model_type, "lang": self._lang}
+        return {
+            "backend": "bert_score",
+            "model_type": self._model_type,
+            "lang": self._lang,
+            "num_layers": self._num_layers,
+            "idf": False,
+            "rescale_with_baseline": False,
+            "score": "f1",
+        }
 
     def compute_similarity(self, candidate: str, reference: str) -> float:
         try:
-            import bert_score  # type: ignore[import-not-found]
+            import bert_score
         except ImportError as exc:
             raise SimilarityBackendError(
                 "The 'bert-score' package is required to compute real semantic "
                 "similarity but is not installed in this environment. Install the "
                 "'semantic' optional dependency group to enable it."
             ) from exc
-        _, _, f1 = bert_score.score(
-            [candidate], [reference], model_type=self._model_type, lang=self._lang, verbose=False
-        )
-        return float(f1[0])
+        # bert-score's documented behavior for an empty (or whitespace-only)
+        # sentence is a raw score of 0 ("Empty candidate sentence detected;
+        # setting raw BERTscores to 0."), but with transformers 5.x its empty-
+        # input code path raises AttributeError instead. Apply the documented
+        # behavior directly: an empty answer shares nothing with the reference,
+        # so it scores 0.0 and fails any threshold -- it is never a pass.
+        if not candidate.strip() or not reference.strip():
+            return 0.0
+        if self._scorer is None:
+            try:
+                self._scorer = bert_score.BERTScorer(
+                    model_type=self._model_type,
+                    num_layers=self._num_layers,
+                    lang=self._lang,
+                    idf=False,
+                    rescale_with_baseline=False,
+                )
+            except OSError as exc:
+                # Model files missing and not downloadable (offline, bad id).
+                raise SimilarityBackendError(
+                    f"Could not load BERTScore model '{self._model_type}': {exc}"
+                ) from exc
+        _, _, f1 = self._scorer.score([candidate], [reference], verbose=False)
+        # Clamp to the [0, 1] contract. In practice this only removes float32
+        # rounding (identical texts can come out as 1.0000001); raw F1 is an
+        # average of cosine similarities and is not negative for real text.
+        return min(1.0, max(0.0, float(f1[0])))
 
 
 class FakeSimilarityBackend(SimilarityBackend):
