@@ -207,17 +207,18 @@ class EvaluatorRegistry:
     # the answer, and are computed automatically for every RAG run by
     # DiagnosticsService. Accepting them here used to persist a run whose
     # aggregation then crashed with an AttributeError (HTTP 500).
-    RETRIEVAL_METRIC_NAMES = frozenset({"hit_at_1", "recall_at_1", "mrr"})
+    RETRIEVAL_METRIC_NAMES = frozenset({"mrr"})
+    RETRIEVAL_METRIC_PREFIXES = ("hit_at_", "recall_at_", "precision_at_")
 
     def list_available(self) -> list[str]:
         return sorted(self._factories.keys())
 
     def get(self, name: str) -> Any:
-        if name in self.RETRIEVAL_METRIC_NAMES:
+        if name in self.RETRIEVAL_METRIC_NAMES or name.startswith(self.RETRIEVAL_METRIC_PREFIXES):
             raise ValueError(
                 f"'{name}' is a retrieval metric, not an answer evaluator. Retrieval metrics "
-                "(Hit@K, Recall@K, MRR) are computed automatically for every RAG run and "
-                "shown under retrieval results; remove it from evaluator_names."
+                "(Hit@K, Recall@K, Precision@K, MRR) are computed automatically for every RAG "
+                "run and shown under retrieval results; remove it from evaluator_names."
             )
         if name not in self._factories:
             available = ", ".join(self.list_available())

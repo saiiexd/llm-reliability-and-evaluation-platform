@@ -22,6 +22,7 @@ export function RagDiagnosticsPage() {
     hitScore: number | null;
     mrrScore: number | null;
     recallScore: number | null;
+    precisionScore: number | null;
     category: FailureCategory | null;
     secondaryCount: number;
     hasContext: boolean;
@@ -50,12 +51,14 @@ export function RagDiagnosticsPage() {
             let hit: number | null = null;
             let mrr: number | null = null;
             let recall: number | null = null;
+            let precision: number | null = null;
 
             for (const r of retResults) {
               if (r.status === "success" && r.score !== null) {
                 if (r.metric_name === "hit_at_k") hit = r.score;
                 else if (r.metric_name === "mrr") mrr = r.score;
                 else if (r.metric_name === "recall_at_k") recall = r.score;
+                else if (r.metric_name === "precision_at_k") precision = r.score;
               }
             }
 
@@ -66,6 +69,7 @@ export function RagDiagnosticsPage() {
               hitScore: hit,
               mrrScore: mrr,
               recallScore: recall,
+              precisionScore: precision,
               category: diag?.failure_category ?? null,
               secondaryCount: diag?.secondary_findings?.length ?? 0,
               hasContext: Boolean(diag?.retrieved_context?.length),
@@ -111,12 +115,14 @@ export function RagDiagnosticsPage() {
             let hit: number | null = null;
             let mrr: number | null = null;
             let recall: number | null = null;
+            let precision: number | null = null;
 
             for (const r of retResults) {
               if (r.status === "success" && r.score !== null) {
                 if (r.metric_name === "hit_at_k") hit = r.score;
                 else if (r.metric_name === "mrr") mrr = r.score;
                 else if (r.metric_name === "recall_at_k") recall = r.score;
+                else if (r.metric_name === "precision_at_k") precision = r.score;
               }
             }
 
@@ -127,6 +133,7 @@ export function RagDiagnosticsPage() {
               hitScore: hit,
               mrrScore: mrr,
               recallScore: recall,
+              precisionScore: precision,
               category: diag?.failure_category ?? null,
               secondaryCount: diag?.secondary_findings?.length ?? 0,
               hasContext: Boolean(diag?.retrieved_context?.length),
@@ -147,6 +154,9 @@ export function RagDiagnosticsPage() {
   const hitScores = items.map((i) => i.hitScore).filter((s): s is number => s !== null);
   const mrrScores = items.map((i) => i.mrrScore).filter((s): s is number => s !== null);
   const recallScores = items.map((i) => i.recallScore).filter((s): s is number => s !== null);
+  const precisionScores = items
+    .map((i) => i.precisionScore)
+    .filter((s): s is number => s !== null);
 
   const categoryCounts = new Map<FailureCategory, number>();
   for (const item of items) {
@@ -166,12 +176,17 @@ export function RagDiagnosticsPage() {
       <SectionHeading title="Did the search step find the right passage?" description="Only runs that look up passages before answering (RAG) appear here. Scores are averages from 0 to 1; higher is better." />
 
       <DataStateView loading={loading} error={error} onRetry={refetch}>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
           <Stat label="Answers from RAG runs" value={items.length} />
-          <Stat label="Right passage ranked first" value={mean(hitScores)} />
+          <Stat label="Right passage in top K (Hit@K)" value={mean(hitScores)} />
+          <Stat label="Needed passages found (Recall@K)" value={mean(recallScores)} />
+          <Stat label="Retrieved passages that are relevant (Precision@K)" value={mean(precisionScores)} />
           <Stat label="Average rank score (MRR)" value={mean(mrrScores)} />
-          <Stat label="Needed passages found (top 1)" value={mean(recallScores)} />
         </div>
+        <p className="mt-2 text-xs text-ink-soft">
+          K is each run's own retrieval depth. With one labelled passage per question, Precision@K
+          can be at most 1/K, so read it together with Recall@K.
+        </p>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
           <Card>
@@ -239,6 +254,7 @@ export function RagDiagnosticsPage() {
                       <th className="px-3 py-2">Ranked first</th>
                       <th className="px-3 py-2">MRR</th>
                       <th className="px-3 py-2">Found</th>
+                      <th className="px-3 py-2">Precision</th>
                       <th className="px-3 py-2">Diagnosis</th>
                       <th className="px-3 py-2">Extra findings</th>
                       <th className="px-3 py-2 text-right"><span className="sr-only">Open</span></th>
@@ -266,6 +282,7 @@ export function RagDiagnosticsPage() {
                         <td className="px-3 py-2 font-mono text-xs">{formatScore(item.hitScore)}</td>
                         <td className="px-3 py-2 font-mono text-xs">{formatScore(item.mrrScore)}</td>
                         <td className="px-3 py-2 font-mono text-xs">{formatScore(item.recallScore)}</td>
+                        <td className="px-3 py-2 font-mono text-xs">{formatScore(item.precisionScore)}</td>
                         <td className="px-3 py-2">
                           {item.category ? (
                             <Tag tone={toneForFailureCategory(item.category)}>{item.category}</Tag>

@@ -52,6 +52,7 @@ from llm_reliability.experiments.models import ExperimentDefinition, ExperimentR
 from llm_reliability.rag.evaluators import (
     HitAtKEvaluator,
     MeanReciprocalRankEvaluator,
+    PrecisionAtKEvaluator,
     RecallAtKEvaluator,
     RetrievalEvaluationResult,
     evaluate_retrieval,
@@ -114,7 +115,12 @@ class DiagnosticsService:
         res = evaluate_retrieval(
             run.dataset_version.dataset.test_cases,
             responses,
-            [HitAtKEvaluator(k=k), RecallAtKEvaluator(k=k), MeanReciprocalRankEvaluator()],
+            [
+                HitAtKEvaluator(k=k),
+                RecallAtKEvaluator(k=k),
+                PrecisionAtKEvaluator(k=k),
+                MeanReciprocalRankEvaluator(),
+            ],
         )
         self._ret_cache[run.run_id] = res
         return res
@@ -362,6 +368,7 @@ def to_run_detail(run: ExperimentRun, include_test_cases: bool = True) -> RunDet
         adapter_id=run.adapter_id,
         executed_model_ids=run.executed_model_ids,
         simulated_components=run.simulated_components,
+        environment=run.environment,
     )
 
 

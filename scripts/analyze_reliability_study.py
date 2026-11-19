@@ -42,6 +42,7 @@ from llm_reliability.experiments.models import ExperimentRun
 from llm_reliability.rag.evaluators import (
     HitAtKEvaluator,
     MeanReciprocalRankEvaluator,
+    PrecisionAtKEvaluator,
     RecallAtKEvaluator,
     evaluate_retrieval,
 )
@@ -163,7 +164,12 @@ def summarize_run(run: ExperimentRun) -> dict[str, Any]:
         retrieval_by_case = evaluate_retrieval(
             cases,
             responses,
-            [HitAtKEvaluator(k_run), RecallAtKEvaluator(k_run), MeanReciprocalRankEvaluator()],
+            [
+                HitAtKEvaluator(k_run),
+                RecallAtKEvaluator(k_run),
+                PrecisionAtKEvaluator(k_run),
+                MeanReciprocalRankEvaluator(),
+            ],
         )
         metric_scores: dict[str, list[float]] = {}
         for res_list in retrieval_by_case.values():
@@ -449,8 +455,8 @@ def render_tables(report: dict[str, Any]) -> str:
         "",
         "## Retrieval (scored at each run's own K)",
         "",
-        "| Arm | K | Hit@K strict | Recall@K strict | MRR strict | Hit@K lenient | Judge correct given hit | given miss |",
-        "|---|---|---|---|---|---|---|---|",
+        "| Arm | K | Hit@K strict | Recall@K strict | Precision@K strict | MRR strict | Hit@K lenient | Judge correct given hit | given miss |",
+        "|---|---|---|---|---|---|---|---|---|",
     ]
     for arm, summaries in report["arms"].items():
         r = summaries[0].get("retrieval")
@@ -460,6 +466,7 @@ def render_tables(report: dict[str, Any]) -> str:
         gh, gm = r["judge_correct_given_hit"], r["judge_correct_given_miss"]
         lines.append(
             f"| {arm} | {r['k']} | {pct(sm.get('hit_at_k'))} | {pct(sm.get('recall_at_k'))} | "
+            f"{pct(sm.get('precision_at_k'))} | "
             f"{sm.get('mrr', 0):.3f} | {pct(r['lenient_answer_containment_hit_rate'])} | "
             f"{pct(gh[0])} (n={r['n_hit']}) | {pct(gm[0])} (n={r['n_miss']}) |"
         )

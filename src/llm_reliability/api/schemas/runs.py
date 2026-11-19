@@ -92,6 +92,7 @@ class RunDetailResponse(BaseApiSchema):
     adapter_id: str | None = None
     executed_model_ids: list[str] = Field(default_factory=list)
     simulated_components: list[str] = Field(default_factory=list)
+    environment: dict[str, Any] | None = None
 
 
 class RunSummariesResponse(BaseApiSchema):

@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FixtureNotice } from "../components/FixtureNotice";
+import { ReproducibilityRecord } from "../components/ReproducibilityRecord";
 import { SimulatedNotice } from "../components/SimulatedNotice";
 import { EvaluatorAgreement } from "../components/EvaluatorAgreement";
 import { PageHeader } from "../components/Card";
@@ -182,6 +183,7 @@ export function ResultsPage() {
                   <VerdictBar counts={counts} />
                 </div>
                 <SimulatedNotice run={run} />
+                <ReproducibilityRecord run={run} />
               </div>
               <div className="lg:col-span-2 lg:border-l lg:border-line lg:pl-6">
                 <p className="text-sm font-medium">Why answers didn't pass</p>

@@ -277,6 +277,11 @@ class ExperimentRun:
     # an execution condition (the same experiment may be benchmarked against
     # several adapters). ``None`` for runs persisted before this field existed.
     adapter_id: str | None = None
+    # Software that executed the run (platform version, git commit, Python,
+    # key dependency versions); see ``experiments.environment``. Like
+    # ``adapter_id`` it is an execution condition, not part of the
+    # fingerprint. ``None`` for runs persisted before this field existed.
+    environment: dict[str, Any] | None = None
 
     def __post_init__(self) -> None:
         if not self.run_id or not self.run_id.strip():
@@ -365,6 +370,7 @@ class ExperimentRun:
             "benchmark_id": self.benchmark_id,
             "repetition_index": self.repetition_index,
             "adapter_id": self.adapter_id,
+            "environment": self.environment,
         }
 
     def to_json(self) -> str:
@@ -394,6 +400,7 @@ class ExperimentRun:
             benchmark_id=data.get("benchmark_id"),
             repetition_index=int(data.get("repetition_index", 0)),
             adapter_id=data.get("adapter_id"),
+            environment=data.get("environment"),
         )
         expected_fingerprint = compute_experiment_fingerprint(
             dataset_version.version_id,

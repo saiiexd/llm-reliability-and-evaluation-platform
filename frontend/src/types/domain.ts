@@ -160,6 +160,19 @@ export interface ExperimentRun {
   executed_model_ids?: string[];
   /** Server-detected simulated parts (mock generation, fake judge, ...). Empty = none. */
   simulated_components?: string[];
+  /** Software that executed the run (null for runs recorded before this was captured). */
+  environment?: RunEnvironment | null;
+}
+
+export interface RunEnvironment {
+  platform_version?: string | null;
+  git_commit?: string | null;
+  git_dirty_src?: boolean | null;
+  python?: string | null;
+  implementation?: string | null;
+  os?: string | null;
+  machine?: string | null;
+  dependencies?: Record<string, string>;
 }
 
 export type RetrievalEvaluationStatus = "success" | "skipped" | "execution_error";

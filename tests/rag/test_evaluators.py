@@ -6,6 +6,7 @@ from llm_reliability.evaluation import ModelResponse, TestCase
 from llm_reliability.rag.evaluators import (
     HitAtKEvaluator,
     MeanReciprocalRankEvaluator,
+    PrecisionAtKEvaluator,
     RecallAtKEvaluator,
     RetrievalEvaluationStatus,
     evaluate_retrieval,
@@ -190,3 +191,48 @@ class TestEvaluateRetrieval:
         results = evaluate_retrieval(test_cases, responses, [RaisingEvaluator(k=1)])
         assert results["t1"][0].status == RetrievalEvaluationStatus.EXECUTION_ERROR
         assert "boom" in results["t1"][0].error
+
+
+class TestPrecisionAtKEvaluator:
+    def test_requires_positive_k(self):
+        with pytest.raises(ValueError, match="k"):
+            PrecisionAtKEvaluator(k=0)
+
+    def test_fraction_of_top_k_that_is_relevant(self):
+        evaluator = PrecisionAtKEvaluator(k=3)
+        tc = _test_case(relevant_chunk_ids=["c1", "c3", "c9"])
+        result = evaluator.evaluate(tc, _rag_response("t1", ["c1", "c2", "c3", "c4"]))
+        assert result.status == RetrievalEvaluationStatus.SUCCESS
+        assert result.score == pytest.approx(2 / 3)
+        assert result.metric_name == "precision_at_k"
+        assert result.retrieved_ids == ["c1", "c2", "c3"]
+
+    def test_single_label_caps_precision_at_one_over_k(self):
+        evaluator = PrecisionAtKEvaluator(k=3)
+        tc = _test_case(relevant_chunk_ids=["c2"])
+        result = evaluator.evaluate(tc, _rag_response("t1", ["c1", "c2", "c3"]))
+        assert result.score == pytest.approx(1 / 3)
+
+    def test_denominator_is_number_retrieved_when_corpus_smaller_than_k(self):
+        evaluator = PrecisionAtKEvaluator(k=5)
+        tc = _test_case(relevant_chunk_ids=["c1"])
+        result = evaluator.evaluate(tc, _rag_response("t1", ["c1", "c2"]))
+        assert result.score == pytest.approx(0.5)
+
+    def test_zero_when_nothing_relevant_retrieved(self):
+        evaluator = PrecisionAtKEvaluator(k=2)
+        tc = _test_case(relevant_chunk_ids=["c9"])
+        assert evaluator.evaluate(tc, _rag_response("t1", ["c1", "c2"])).score == 0.0
+
+    def test_skipped_without_ground_truth_or_rag_evidence(self):
+        evaluator = PrecisionAtKEvaluator(k=2)
+        no_labels = evaluator.evaluate(_test_case(), _rag_response("t1", ["c1"]))
+        not_rag = evaluator.evaluate(_test_case(relevant_chunk_ids=["c1"]), _plain_response())
+        assert no_labels.status == RetrievalEvaluationStatus.SKIPPED
+        assert not_rag.status == RetrievalEvaluationStatus.SKIPPED
+        assert no_labels.score is None and not_rag.score is None
+
+    def test_skipped_when_nothing_retrieved(self):
+        evaluator = PrecisionAtKEvaluator(k=2)
+        result = evaluator.evaluate(_test_case(relevant_chunk_ids=["c1"]), _rag_response("t1", []))
+        assert result.status == RetrievalEvaluationStatus.SKIPPED

@@ -32,20 +32,16 @@ const VERDICT: Record<ComparisonCompatibility, { title: string; body: string }> 
 };
 
 const METRIC_LABEL: Record<string, string> = {
-  hit_at_k_k1: "Right passage found in top 1",
-  hit_at_k_k2: "Right passage found in top 2",
-  recall_at_k_k1: "Share of needed passages found (top 1)",
-  recall_at_k_k2: "Share of needed passages found (top 2)",
   mrr: "How high the right passage ranked (MRR)",
 };
 
 function metricLabel(metric: string): string {
   if (METRIC_LABEL[metric]) return METRIC_LABEL[metric];
-  const m = /^(hit|recall)_at_k_k(\d+)$/.exec(metric);
+  const m = /^(hit|recall|precision)_at_k_k(\d+)$/.exec(metric);
   if (!m) return metric;
-  return m[1] === "hit"
-    ? `Right passage found in top ${m[2]}`
-    : `Share of needed passages found (top ${m[2]})`;
+  if (m[1] === "hit") return `Right passage found in top ${m[2]}`;
+  if (m[1] === "recall") return `Share of needed passages found (top ${m[2]})`;
+  return `Share of top ${m[2]} passages that are relevant`;
 }
 
 /** Flatten nested config values to dotted paths so we can diff leaf settings. */

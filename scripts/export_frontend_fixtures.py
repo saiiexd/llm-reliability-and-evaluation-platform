@@ -49,6 +49,7 @@ from llm_reliability.rag.embeddings import FakeEmbeddingModel
 from llm_reliability.rag.evaluators import (
     HitAtKEvaluator,
     MeanReciprocalRankEvaluator,
+    PrecisionAtKEvaluator,
     RecallAtKEvaluator,
     evaluate_retrieval,
 )
@@ -328,6 +329,7 @@ def main() -> int:
                     [
                         HitAtKEvaluator(k=_run_top_k(r_responses_by_id.values())),
                         RecallAtKEvaluator(k=_run_top_k(r_responses_by_id.values())),
+                        PrecisionAtKEvaluator(k=_run_top_k(r_responses_by_id.values())),
                         MeanReciprocalRankEvaluator(),
                     ],
                 )

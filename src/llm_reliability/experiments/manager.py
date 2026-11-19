@@ -16,11 +16,13 @@ from __future__ import annotations
 import uuid
 from collections.abc import Sequence
 from datetime import UTC, datetime
+from typing import Any
 
 from llm_reliability.evaluation.adapters import ModelAdapter
 from llm_reliability.evaluation.evaluators import Evaluator
 from llm_reliability.evaluation.models import Dataset, ModelConfig, RunResult
 from llm_reliability.evaluation.runner import EvaluationRunner
+from llm_reliability.experiments.environment import capture_environment
 from llm_reliability.experiments.models import (
     DatasetVersion,
     EvaluatorConfig,
@@ -174,6 +176,7 @@ class ExperimentManager:
         benchmark_id: str | None = None,
         repetition_index: int = 0,
         adapter_id: str | None = None,
+        environment: dict[str, Any] | None = None,
     ) -> ExperimentRun:
         """Execute ``definition`` once via ``EvaluationRunner`` and persist the run.
 
@@ -189,6 +192,8 @@ class ExperimentManager:
         when their configuration is identical.
         """
         self.validate_execution(definition, adapter, evaluators)
+        if environment is None:
+            environment = capture_environment()
         if run_id is None:
             run_id = uuid.uuid4().hex
 
@@ -219,6 +224,7 @@ class ExperimentManager:
             benchmark_id=benchmark_id,
             repetition_index=repetition_index,
             adapter_id=adapter_id,
+            environment=environment,
         )
         self._repository.save_run(run)
         return run
