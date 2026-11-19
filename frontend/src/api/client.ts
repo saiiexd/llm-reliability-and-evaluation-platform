@@ -70,6 +70,35 @@ export interface RunExecutionResponse {
   created_at: string;
 }
 
+/** A bundled benchmark dataset the server can build experiments from (GET /datasets). */
+export interface DatasetPreset {
+  preset_id: string;
+  name: string;
+  description: string;
+  test_case_count: number;
+  document_count: number;
+  has_retrieval_labels: boolean;
+  license: string | null;
+  citation: string | null;
+  corpus_fingerprint: string;
+}
+
+/** Background execution state (POST /experiments/{id}/jobs, GET /jobs/{id}). */
+export interface ExecutionJob {
+  job_id: string;
+  experiment_id: string;
+  adapter_id: string;
+  status: "queued" | "running" | "succeeded" | "failed";
+  total: number;
+  completed: number;
+  created_at: string;
+  started_at: string | null;
+  finished_at: string | null;
+  run_id: string | null;
+  run_status: string | null;
+  error: string | null;
+}
+
 export class ApiError extends Error {
   readonly code: string;
   readonly status: number;
@@ -200,6 +229,21 @@ export class ApiClient {
       method: "POST",
       body: JSON.stringify(payload),
     });
+  }
+
+  async listDatasets(): Promise<DatasetPreset[]> {
+    return this.request<DatasetPreset[]>("/datasets");
+  }
+
+  async startExperimentJob(experimentId: string, payload: RunExecutionRequest): Promise<ExecutionJob> {
+    return this.request<ExecutionJob>(`/experiments/${encodeURIComponent(experimentId)}/jobs`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+  }
+
+  async getJob(jobId: string): Promise<ExecutionJob> {
+    return this.request<ExecutionJob>(`/jobs/${encodeURIComponent(jobId)}`);
   }
 
   async listExperimentRuns(

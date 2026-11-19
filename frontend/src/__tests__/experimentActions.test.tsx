@@ -77,9 +77,12 @@ describe("experiment actions send unchanged requests", () => {
     });
     vi.spyOn(client, "listRuns").mockResolvedValue({ items: [], pagination: {} } as never);
     vi.spyOn(client, "listProviders").mockResolvedValue({ providers: [] } as never);
-    const execute = vi.spyOn(client, "executeExperiment").mockResolvedValue({
+    const execute = vi.spyOn(client, "startExperimentJob").mockResolvedValue({
+      job_id: "job-1",
+      status: "succeeded",
       run_id: "run-1",
-      duration_seconds: 0.1,
+      total: 2,
+      completed: 2,
     } as never);
 
     render(
@@ -97,8 +100,64 @@ describe("experiment actions send unchanged requests", () => {
     expect(execute).toHaveBeenCalledWith("exp-x", {
       adapter_id: "mock-adapter-v1",
       allow_external_inference: false,
-      model_config: undefined,
     });
     expect(await screen.findByRole("link", { name: /See the results/ })).toBeDefined();
+  });
+
+  it("SQuAD preset sends a preset request with retrieval and a real judge", async () => {
+    const create = vi.spyOn(client, "createExperiment").mockResolvedValue({} as ExperimentDefinition);
+    const onCreated = vi.fn();
+    render(
+      <ConnectionProvider client={client}>
+        <NewExperimentForm onCreated={onCreated} onCancel={() => {}} />
+      </ConnectionProvider>,
+    );
+    fireEvent.change(screen.getByPlaceholderText("e.g. Geography baseline"), { target: { value: "Squad k3" } });
+    fireEvent.click(screen.getByRole("button", { name: /SQuAD v1.1 subset/ }));
+    fireEvent.change(screen.getByLabelText(/Use the first N questions/), { target: { value: "10" } });
+    fireEvent.click(screen.getByRole("button", { name: /Correctness \(LLM judge\)/ }));
+    fireEvent.change(screen.getByLabelText(/Judge model/), { target: { value: "gemma3:1b" } });
+    fireEvent.click(screen.getByRole("button", { name: "Save experiment" }));
+    await waitFor(() => expect(onCreated).toHaveBeenCalledWith("squad-k3"));
+    const payload = create.mock.calls[0][0] as Record<string, unknown>;
+    expect(payload).toMatchObject({
+      dataset_preset: "squad-v1.1-dev-subset-v1",
+      dataset_limit: 10,
+      retrieval_top_k: 3,
+      judge_model_id: "gemma3:1b",
+      model_config: { model_id: "qwen3:4b-instruct", temperature: 0, max_tokens: 64 },
+      evaluator_names: ["exact_match", "squad_match", "llm_judge"],
+    });
+    expect(payload.test_cases).toBeUndefined();
+  });
+
+  it("correctness judge without a judge model is caught before sending", async () => {
+    const create = vi.spyOn(client, "createExperiment").mockResolvedValue({} as ExperimentDefinition);
+    render(
+      <ConnectionProvider client={client}>
+        <NewExperimentForm onCreated={() => {}} onCancel={() => {}} />
+      </ConnectionProvider>,
+    );
+    fireEvent.change(screen.getByPlaceholderText("e.g. Geography baseline"), { target: { value: "No judge" } });
+    fireEvent.click(screen.getByRole("button", { name: /Correctness \(LLM judge\)/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Save experiment" }));
+    expect(await screen.findByText(/needs a judge model/)).toBeDefined();
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it("ID follows the whole name as it is typed, until the ID is edited", () => {
+    render(
+      <ConnectionProvider client={client}>
+        <NewExperimentForm onCreated={() => {}} onCancel={() => {}} />
+      </ConnectionProvider>,
+    );
+    const name = screen.getByPlaceholderText("e.g. Geography baseline");
+    const id = screen.getByPlaceholderText("e.g. geography-baseline") as HTMLInputElement;
+    fireEvent.change(name, { target: { value: "U" } });
+    fireEvent.change(name, { target: { value: "UI squad k3" } });
+    expect(id.value).toBe("ui-squad-k3");
+    fireEvent.change(id, { target: { value: "custom-id" } });
+    fireEvent.change(name, { target: { value: "Renamed" } });
+    expect(id.value).toBe("custom-id");
   });
 });

@@ -16,30 +16,46 @@ import {
 } from "../lib/derived";
 import { useExperiment, useRuns } from "../data/useData";
 import { useConnection } from "../context/ConnectionContext";
-import type { RunExecutionResponse } from "../api/client";
+import type { ExecutionJob } from "../api/client";
 import type { BenchmarkExecutionResponse, ExperimentDefinition, ProviderStatus } from "../types/domain";
 
-const ADAPTERS = [
-  { id: "rag-pipeline-v1", label: "RAG pipeline (top 1 passage)", isExternal: false },
-  { id: "rag-pipeline-topk-2", label: "RAG pipeline (top 2 passages)", isExternal: false },
-  { id: "mock-adapter-v1", label: "Mock model (offline)", isExternal: false },
-  { id: "echo-adapter", label: "Echo (repeats the question)", isExternal: false },
-  { id: "openai-gpt-4o-mini", label: "OpenAI GPT-4o mini", isExternal: true },
-  { id: "openai-gpt-4o", label: "OpenAI GPT-4o", isExternal: true },
-  { id: "openai-custom", label: "OpenAI-compatible server (vLLM, Ollama…)", isExternal: true },
+type AdapterKind = "simulated" | "hosted" | "local";
+
+const ADAPTERS: { id: string; label: string; kind: AdapterKind }[] = [
+  { id: "rag-pipeline-v1", label: "Demo RAG pipeline, top 1 passage (simulated)", kind: "simulated" },
+  { id: "rag-pipeline-topk-2", label: "Demo RAG pipeline, top 2 passages (simulated)", kind: "simulated" },
+  { id: "mock-adapter-v1", label: "Mock model (simulated, offline)", kind: "simulated" },
+  { id: "echo-adapter", label: "Echo, repeats the question (simulated)", kind: "simulated" },
+  { id: "openai-custom", label: "Local / OpenAI-compatible model, no retrieval", kind: "local" },
+  { id: "openai-custom-rag", label: "Local / OpenAI-compatible model + SQuAD passage retrieval", kind: "local" },
+  { id: "openai-gpt-4o-mini", label: "OpenAI GPT-4o mini (hosted, paid)", kind: "hosted" },
+  { id: "openai-gpt-4o", label: "OpenAI GPT-4o (hosted, paid)", kind: "hosted" },
 ];
 
-const isExternal = (id: string) => ADAPTERS.find((a) => a.id === id)?.isExternal ?? false;
+const adapterKind = (id: string): AdapterKind => ADAPTERS.find((a) => a.id === id)?.kind ?? "simulated";
+
+/** Real LLM judges an experiment declares (a judge model that is not a fake). */
+export function liveJudgeModels(experiment: ExperimentDefinition | null | undefined): string[] {
+  const models = (experiment?.evaluator_configs ?? [])
+    .map((e) => (e.parameters as Record<string, unknown> | undefined)?.judge_model_id)
+    .filter((m): m is string => typeof m === "string" && !m.startsWith("fake-"));
+  return [...new Set(models)];
+}
 
 /**
  * Pick the adapter that matches how the experiment was defined. The backend
- * refuses a RAG pipeline whose top_k etc. differ from the experiment's
- * recorded retrieval settings, so the default should be the matching one.
+ * refuses an adapter whose retrieval settings or prompt template differ from
+ * the experiment's recorded configuration, so the default should match.
  */
-function defaultAdapterFor(experiment: ExperimentDefinition | null | undefined): string {
-  const rag = experiment?.model_config?.extra_params?.rag as { top_k?: number } | undefined;
-  if (!rag) return "mock-adapter-v1";
-  return rag.top_k === 2 ? "rag-pipeline-topk-2" : "rag-pipeline-v1";
+export function defaultAdapterFor(experiment: ExperimentDefinition | null | undefined): string {
+  const extra = experiment?.model_config?.extra_params ?? {};
+  const rag = extra.rag as { top_k?: number; embedding_model_id?: string } | undefined;
+  if (rag) {
+    if (rag.embedding_model_id && !rag.embedding_model_id.startsWith("fake-")) return "openai-custom-rag";
+    return rag.top_k === 2 ? "rag-pipeline-topk-2" : "rag-pipeline-v1";
+  }
+  if (extra.prompt_template_id || liveJudgeModels(experiment).length > 0) return "openai-custom";
+  return "mock-adapter-v1";
 }
 
 function Section({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
@@ -56,10 +72,14 @@ function ExternalConsent({
   checked,
   onChange,
   disabled,
+  parts,
+  hosted,
 }: {
   checked: boolean;
   onChange: (v: boolean) => void;
   disabled: boolean;
+  parts: string[];
+  hosted: boolean;
 }) {
   return (
     <label className="flex items-start gap-2 rounded-lg border border-line p-3 text-sm">
@@ -71,30 +91,40 @@ function ExternalConsent({
         className="mt-1 accent-ink"
       />
       <span className="text-ink-soft">
-        <span className="text-ink">This calls a paid external API.</span> The server needs{" "}
-        <code className="font-mono text-ink">OPENAI_API_KEY</code> set. Tick to allow it.
+        <span className="text-ink">This sends requests to a model server</span> ({parts.join("; ")}).{" "}
+        {hosted ? (
+          <>
+            Hosted OpenAI calls cost money and need <code className="font-mono text-ink">OPENAI_API_KEY</code> on the
+            server.
+          </>
+        ) : (
+          <>
+            The backend must be started with <code className="font-mono text-ink">LLM_RELIABILITY_OPENAI_BASE_URL</code>{" "}
+            (e.g. <code className="font-mono text-ink">http://localhost:11434/v1</code> for Ollama).
+          </>
+        )}{" "}
+        Tick to allow it.
       </span>
     </label>
   );
 }
 
 function RunControls({
-  experimentId,
-  defaultAdapter,
+  experiment,
   onRan,
 }: {
-  experimentId: string;
-  defaultAdapter: string;
+  experiment: ExperimentDefinition;
   onRan: () => void;
 }) {
-  const { dataMode, executeRun, executeBenchmark, client } = useConnection();
+  const experimentId = experiment.experiment_id;
+  const { dataMode, executeBenchmark, client } = useConnection();
   const [mode, setMode] = useState<"single" | "benchmark">("single");
-  const [adapter, setAdapter] = useState(defaultAdapter);
-  const [benchAdapters, setBenchAdapters] = useState<string[]>(["mock-adapter-v1", "echo-adapter"]);
+  const [adapter, setAdapter] = useState(() => defaultAdapterFor(experiment));
+  const [benchAdapters, setBenchAdapters] = useState<string[]>(() => [defaultAdapterFor(experiment)]);
   const [repetitions, setRepetitions] = useState(1);
   const [allowExternal, setAllowExternal] = useState(false);
   const [running, setRunning] = useState(false);
-  const [single, setSingle] = useState<RunExecutionResponse | null>(null);
+  const [job, setJob] = useState<ExecutionJob | null>(null);
   const [bench, setBench] = useState<BenchmarkExecutionResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [providers, setProviders] = useState<ProviderStatus[]>([]);
@@ -110,18 +140,42 @@ function RunControls({
     }
   }, [client, dataMode]);
 
-  const needsExternal = mode === "single" ? isExternal(adapter) : benchAdapters.some(isExternal);
+  const chosen = mode === "single" ? [adapter] : benchAdapters;
+  const judges = liveJudgeModels(experiment);
+  const externalParts = [
+    ...chosen.filter((a) => adapterKind(a) !== "simulated").map((a) => `model via ${a}`),
+    ...judges.map((m) => `judge ${m}`),
+  ];
+  const needsExternal = externalParts.length > 0;
+  const hosted = chosen.some((a) => adapterKind(a) === "hosted");
   const openAiReady = providers.find((p) => p.provider_id === "openai")?.is_configured ?? false;
   const live = dataMode === "live";
 
+  const pollJob = async (started: ExecutionJob) => {
+    let current = started;
+    setJob(current);
+    while (current.status === "queued" || current.status === "running") {
+      await new Promise((r) => setTimeout(r, 1000));
+      current = await client.getJob(current.job_id);
+      setJob(current);
+    }
+    if (current.status === "failed") throw new Error(current.error ?? "The run failed.");
+  };
+
   const run = async () => {
     setRunning(true);
-    setSingle(null);
+    setJob(null);
     setBench(null);
     setError(null);
     try {
       if (mode === "single") {
-        setSingle(await executeRun(experimentId, adapter, allowExternal));
+        if (!live) throw new Error("Running needs the live backend.");
+        await pollJob(
+          await client.startExperimentJob(experimentId, {
+            adapter_id: adapter,
+            allow_external_inference: allowExternal,
+          }),
+        );
       } else {
         setBench(
           await executeBenchmark({
@@ -142,6 +196,7 @@ function RunControls({
 
   const disabled =
     running || !live || (mode === "benchmark" && benchAdapters.length === 0) || (needsExternal && !allowExternal);
+  const pct = job && job.total > 0 ? Math.round((100 * job.completed) / job.total) : 0;
 
   return (
     <Section title="Run it" hint="Ask the model every question in this experiment and check the answers.">
@@ -161,7 +216,7 @@ function RunControls({
               mode === m ? "bg-paper-raised font-medium" : "text-ink-soft hover:text-ink"
             }`}
           >
-            {m === "single" ? "One model" : "Compare models"}
+            {m === "single" ? "One model" : "Compare models / repeat"}
           </button>
         ))}
       </div>
@@ -182,6 +237,9 @@ function RunControls({
               </option>
             ))}
           </select>
+          <span className="mt-1 block text-xs text-ink-soft">
+            The server refuses a model whose retrieval or prompt settings differ from this experiment's.
+          </span>
         </label>
       ) : (
         <div className="space-y-4">
@@ -221,17 +279,26 @@ function RunControls({
               disabled={running || !live}
               className="w-16 rounded-md border border-line bg-paper px-2 py-1"
             />
-            <span className="text-xs text-ink-soft">times. Repeats show whether answers change between runs.</span>
+            <span className="text-xs text-ink-soft">
+              times. Repeats show whether answers change between runs. With real models this waits until all runs
+              finish.
+            </span>
           </label>
         </div>
       )}
 
       {needsExternal && (
         <div className="mt-4 space-y-2">
-          {live && !openAiReady && (
+          {live && hosted && !openAiReady && (
             <p className="text-sm text-accent">The server has no OpenAI key configured, so this will fail.</p>
           )}
-          <ExternalConsent checked={allowExternal} onChange={setAllowExternal} disabled={running} />
+          <ExternalConsent
+            checked={allowExternal}
+            onChange={setAllowExternal}
+            disabled={running}
+            parts={externalParts}
+            hosted={hosted}
+          />
         </div>
       )}
 
@@ -248,10 +315,22 @@ function RunControls({
             : `Run ${benchAdapters.length * repetitions} runs`}
       </button>
 
-      {single && (
+      {job && (job.status === "queued" || job.status === "running") && (
+        <div className="mt-4 max-w-md text-sm" role="status">
+          <p className="text-ink-soft">
+            {job.status === "queued"
+              ? "Waiting for the previous run to finish…"
+              : `Answered ${job.completed} of ${job.total} questions…`}
+          </p>
+          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-paper-raised">
+            <div className="h-full bg-ink transition-all" style={{ width: `${pct}%` }} />
+          </div>
+        </div>
+      )}
+      {job && job.status === "succeeded" && job.run_id && (
         <p className="mt-4 text-sm">
-          Done in {single.duration_seconds.toFixed(1)}s.{" "}
-          <Link to={`/results/${single.run_id}`} className="font-medium underline underline-offset-4">
+          Done.{" "}
+          <Link to={`/results/${job.run_id}`} className="font-medium underline underline-offset-4">
             See the results →
           </Link>
         </p>
@@ -371,8 +450,8 @@ export function ExperimentDetailPage() {
 
             <div className="space-y-6">
               <RunControls
-                experimentId={experimentId}
-                defaultAdapter={defaultAdapterFor(experiment)}
+                key={experiment.experiment_id}
+                experiment={experiment}
                 onRan={() => void refetchRuns()}
               />
 

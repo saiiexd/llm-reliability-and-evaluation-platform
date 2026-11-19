@@ -30,17 +30,22 @@ const PRESET_DATASETS = [
   },
 ];
 
+const SQUAD_PRESET = "squad-v1.1-dev-subset-v1";
+
 const AVAILABLE_MODELS = [
-  { id: "mock-adapter-v1", name: "Mock model", desc: "Fixed, offline answers. No API key needed. Good for trying things out." },
-  { id: "rag-pipeline-v1", name: "RAG pipeline", desc: "Looks up passages in a local corpus, then answers from them." },
-  { id: "echo-adapter", name: "Echo", desc: "Repeats the question back. Useful as a baseline that should fail." },
-  { id: "openai-gpt-4o-mini", name: "OpenAI GPT-4o mini", desc: "A real hosted model. Needs an OpenAI API key on the backend." },
+  { id: "mock-adapter-v1", name: "Mock model (simulated)", desc: "Fixed, offline answers for the demo questions. Exercises the platform; its scores say nothing about real models." },
+  { id: "rag-pipeline-v1", name: "Demo RAG pipeline (simulated)", desc: "Looks up passages in a two-document toy corpus with fake embeddings, then gives canned answers." },
+  { id: "echo-adapter", name: "Echo (simulated)", desc: "Repeats the question back. A baseline that should fail every check." },
+  { id: "local", name: "Local or self-hosted model", desc: "A real model on an OpenAI-compatible server (Ollama, vLLM, LM Studio). Type its served name below." },
+  { id: "openai-gpt-4o-mini", name: "OpenAI GPT-4o mini (hosted)", desc: "A real hosted model. Costs money; needs OPENAI_API_KEY on the backend." },
 ];
 
 const AVAILABLE_EVALUATORS = [
-  { id: "exact_match", name: "Exact match", desc: "The answer must match the expected answer (ignoring case and spacing)." },
-  { id: "semantic_similarity", name: "Similar meaning", desc: "Gives credit for paraphrases, using text embeddings." },
-  { id: "llm_faithfulness_judge", name: "Faithfulness (LLM judge)", desc: "A second model checks the answer is backed by the looked-up passages." },
+  { id: "exact_match", name: "Exact match", desc: "The answer must equal the expected answer (ignoring case and spacing). Strict." },
+  { id: "squad_match", name: "SQuAD match", desc: "Official SQuAD normalisation (articles, punctuation) against every accepted answer; score is token F1." },
+  { id: "semantic_similarity", name: "Similar meaning (simulated)", desc: "Credit for paraphrases. The API uses a fake similarity backend, so treat its scores as a demo." },
+  { id: "llm_judge", name: "Correctness (LLM judge)", desc: "A judge model compares the answer with the expected answer. Needs a judge model below." },
+  { id: "llm_faithfulness_judge", name: "Faithfulness (LLM judge)", desc: "A judge model checks the answer is backed by the retrieved passages. Without a judge model it is a canned demo judge." },
 ];
 
 const inputClass =
@@ -96,15 +101,26 @@ export function NewExperimentForm({
   const { dataMode, client } = useConnection();
   const [expName, setExpName] = useState("");
   const [expId, setExpId] = useState("");
+  // The ID follows the name until the user edits the ID themselves.
+  const [idEdited, setIdEdited] = useState(false);
   const [expDesc, setExpDesc] = useState("");
   const [datasetIndex, setDatasetIndex] = useState(0);
   const [targetModel, setTargetModel] = useState("mock-adapter-v1");
+  const [localModelId, setLocalModelId] = useState("qwen3:4b-instruct");
+  const [retrieval, setRetrieval] = useState<"none" | "topk">("topk");
+  const [topK, setTopK] = useState(3);
+  const [questionLimit, setQuestionLimit] = useState(60);
+  const [judgeModelId, setJudgeModelId] = useState("");
   const [evaluators, setEvaluators] = useState<string[]>(["exact_match"]);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [temperature, setTemperature] = useState(0.0);
   const [maxTokens, setMaxTokens] = useState(100);
+  const [seed, setSeed] = useState("42");
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const usingSquad = datasetIndex === PRESET_DATASETS.length;
+  const usesJudge = evaluators.includes("llm_judge") || evaluators.includes("llm_faithfulness_judge");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,26 +132,53 @@ export function NewExperimentForm({
       setError("Pick at least one check.");
       return;
     }
+    if (evaluators.includes("llm_judge") && !judgeModelId.trim()) {
+      setError("The correctness judge needs a judge model (for example qwen3:4b-instruct).");
+      return;
+    }
+    if (targetModel === "local" && !localModelId.trim()) {
+      setError("Type the served name of the local model.");
+      return;
+    }
     setCreating(true);
     setError(null);
-    const dataset = PRESET_DATASETS[datasetIndex];
     const id = expId.trim();
+    const modelConfig = {
+      model_id: targetModel === "local" ? localModelId.trim() : targetModel,
+      temperature: showAdvanced ? temperature : 0.0,
+      max_tokens: showAdvanced ? maxTokens : usingSquad ? 64 : 100,
+      extra_params: showAdvanced && seed.trim() ? { seed: parseInt(seed, 10) } : {},
+    };
+    const judge = judgeModelId.trim() || undefined;
     try {
       if (dataMode === "live") {
-        await client.createExperiment({
-          experiment_id: id,
-          name: expName.trim(),
-          description: expDesc.trim() || undefined,
-          dataset_name: dataset.name,
-          test_cases: dataset.testCases,
-          model_config: {
-            model_id: targetModel,
-            temperature: showAdvanced ? temperature : 0.0,
-            max_tokens: showAdvanced ? maxTokens : 100,
-          },
-          evaluator_names: evaluators,
-          metadata: {},
-        });
+        if (usingSquad) {
+          await client.createExperiment({
+            experiment_id: id,
+            name: expName.trim(),
+            description: expDesc.trim() || undefined,
+            dataset_preset: SQUAD_PRESET,
+            dataset_limit: questionLimit < 60 ? questionLimit : undefined,
+            retrieval_top_k: retrieval === "topk" ? topK : undefined,
+            judge_model_id: judge,
+            model_config: modelConfig,
+            evaluator_names: evaluators,
+            metadata: {},
+          });
+        } else {
+          const dataset = PRESET_DATASETS[datasetIndex];
+          await client.createExperiment({
+            experiment_id: id,
+            name: expName.trim(),
+            description: expDesc.trim() || undefined,
+            dataset_name: dataset.name,
+            test_cases: dataset.testCases,
+            judge_model_id: judge,
+            model_config: modelConfig,
+            evaluator_names: evaluators,
+            metadata: {},
+          });
+        }
       }
       onCreated(id);
     } catch (err: unknown) {
@@ -149,7 +192,10 @@ export function NewExperimentForm({
     <form onSubmit={handleSubmit} className="space-y-6 rounded-xl border border-line bg-paper-dim p-6">
       <div>
         <h2 className="text-lg font-semibold">New experiment</h2>
-        <p className="text-sm text-ink-soft">Three choices. You can run it right after saving.</p>
+        <p className="text-sm text-ink-soft">
+          Three choices. Everything you pick is saved with the experiment and fingerprinted; you can run it right
+          after saving.
+        </p>
       </div>
 
       {error && (
@@ -166,7 +212,7 @@ export function NewExperimentForm({
             value={expName}
             onChange={(e) => {
               setExpName(e.target.value);
-              if (!expId) {
+              if (!idEdited) {
                 setExpId(e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""));
               }
             }}
@@ -180,7 +226,10 @@ export function NewExperimentForm({
             required
             placeholder="e.g. geography-baseline"
             value={expId}
-            onChange={(e) => setExpId(e.target.value)}
+            onChange={(e) => {
+              setIdEdited(true);
+              setExpId(e.target.value);
+            }}
             className={`${inputClass} font-mono`}
           />
         </label>
@@ -208,7 +257,63 @@ export function NewExperimentForm({
               {ds.description}
             </Choice>
           ))}
+          <Choice
+            selected={usingSquad}
+            onClick={() => {
+              setDatasetIndex(PRESET_DATASETS.length);
+              if (targetModel !== "local" && !targetModel.startsWith("openai")) setTargetModel("local");
+              setEvaluators((prev) => (prev.includes("squad_match") ? prev : [...prev, "squad_match"]));
+            }}
+            title="SQuAD v1.1 subset · 60 questions"
+          >
+            Real reading-comprehension questions over 266 Wikipedia paragraphs, with passage labels so
+            retrieval can be scored. CC BY-SA 4.0 (Rajpurkar et al., 2016). The dataset EXP-001 used.
+          </Choice>
         </div>
+        {usingSquad && (
+          <div className="grid gap-4 rounded-lg border border-line p-4 sm:grid-cols-2">
+            <label className="block text-sm">
+              <span className="mb-1 block text-ink-soft">Use the first N questions</span>
+              <input
+                id="question-limit"
+                type="number"
+                min={1}
+                max={60}
+                value={questionLimit}
+                onChange={(e) => setQuestionLimit(Math.max(1, Math.min(60, parseInt(e.target.value) || 60)))}
+                className={inputClass}
+              />
+              <span className="text-xs text-ink-soft">10 is enough to try it; 60 for a real comparison.</span>
+            </label>
+            <div className="text-sm">
+              <span className="mb-1 block text-ink-soft">Retrieval</span>
+              <div className="flex gap-2">
+                <label className="flex items-center gap-1.5">
+                  <input type="radio" checked={retrieval === "none"} onChange={() => setRetrieval("none")} className="accent-ink" />
+                  None (closed book)
+                </label>
+                <label className="flex items-center gap-1.5">
+                  <input type="radio" checked={retrieval === "topk"} onChange={() => setRetrieval("topk")} className="accent-ink" />
+                  Top
+                  <input
+                    id="top-k-input"
+                    type="number"
+                    min={1}
+                    max={20}
+                    value={topK}
+                    disabled={retrieval !== "topk"}
+                    onChange={(e) => setTopK(Math.max(1, Math.min(20, parseInt(e.target.value) || 3)))}
+                    className="w-14 rounded-md border border-line bg-paper px-2 py-1"
+                  />
+                  passages
+                </label>
+              </div>
+              <span className="mt-1 block text-xs text-ink-soft">
+                Retrieval uses nomic-embed-text on the same server; run it with the "+ SQuAD passage retrieval" model.
+              </span>
+            </div>
+          </div>
+        )}
       </Step>
 
       <Step n={2} title="Model" hint="The model that will answer the questions.">
@@ -219,6 +324,18 @@ export function NewExperimentForm({
             </Choice>
           ))}
         </div>
+        {targetModel === "local" && (
+          <label className="block max-w-md text-sm">
+            <span className="mb-1 block text-ink-soft">Served model name</span>
+            <input
+              id="local-model-id"
+              value={localModelId}
+              onChange={(e) => setLocalModelId(e.target.value)}
+              placeholder="e.g. qwen3:4b-instruct"
+              className={`${inputClass} font-mono`}
+            />
+          </label>
+        )}
         <button
           type="button"
           onClick={() => setShowAdvanced(!showAdvanced)}
@@ -254,6 +371,18 @@ export function NewExperimentForm({
                 className={inputClass}
               />
             </label>
+            <label className="block text-sm">
+              <span className="mb-1 block text-ink-soft">Seed (blank for none)</span>
+              <input
+                id="seed-input"
+                value={seed}
+                onChange={(e) => setSeed(e.target.value.replace(/[^0-9]/g, ""))}
+                className={`${inputClass} font-mono`}
+              />
+              <span className="text-xs text-ink-soft">
+                Sent to the server; with temperature above 0, leave it blank to measure run-to-run variation.
+              </span>
+            </label>
           </div>
         )}
       </Step>
@@ -273,6 +402,21 @@ export function NewExperimentForm({
             </Choice>
           ))}
         </div>
+        {usesJudge && (
+          <label className="block max-w-md text-sm">
+            <span className="mb-1 block text-ink-soft">Judge model (served by the same OpenAI-compatible server)</span>
+            <input
+              id="judge-model-id"
+              value={judgeModelId}
+              onChange={(e) => setJudgeModelId(e.target.value)}
+              placeholder="e.g. qwen3:4b-instruct"
+              className={`${inputClass} font-mono`}
+            />
+            <span className="text-xs text-ink-soft">
+              A judge that is also the answering model may favour its own answers; a different judge is safer.
+            </span>
+          </label>
+        )}
       </Step>
 
       <div className="flex justify-end gap-2 border-t border-line pt-5">
