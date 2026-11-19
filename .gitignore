@@ -185,3 +185,6 @@ data/downloads/
 # EXP-001 raw runs: deliberately versioned (0.6 MB) so results are reproducible
 # from the repository alone; see research/experiments/EXP-001_local_rag_reliability/results.md
 !research/experiments/EXP-001_local_rag_reliability/runs.tar.gz
+# Same for later studies (small; needed to reproduce their results)
+!research/experiments/EXP-*/**/runs.tar.gz
+!research/experiments/EXP-*/runs.tar.gz
