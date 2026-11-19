@@ -82,7 +82,9 @@ export function RagDiagnosticsPage() {
       setDetailError(null);
       try {
         const liveItems: RagItem[] = [];
-        for (const run of runs) {
+        for (const summary of runs) {
+          // The runs list returns summaries without per-case results; fetch the full run.
+          const run = summary.result ? summary : await client.getRun(summary.run_id, true);
           if (!run.result) continue;
           const ragCases = run.result.test_case_results.filter(isRagExecution);
           if (ragCases.length === 0) continue;
