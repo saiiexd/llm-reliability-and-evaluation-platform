@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { FixtureNotice } from "../components/FixtureNotice";
+import { SimulatedTag } from "../components/SimulatedNotice";
 import { PageHeader } from "../components/Card";
 import { DataStateView } from "../components/DataStateView";
 import { EmptyState } from "../components/EmptyState";
@@ -128,8 +129,11 @@ export function OverviewPage() {
                   <p className="mt-1 text-lg font-semibold">
                     {nameOf.get(latest.experiment_id) ?? latest.experiment_id}
                   </p>
-                  <p className="text-sm text-ink-soft">
-                    Model <span className="font-mono text-ink">{latest.model_config?.model_id}</span>
+                  <p className="flex flex-wrap items-center gap-2 text-sm text-ink-soft">
+                    <span>
+                      Model <span className="font-mono text-ink">{latest.model_config?.model_id}</span>
+                    </span>
+                    <SimulatedTag run={latest} />
                   </p>
                   <p className="mt-4 text-sm">{verdictSentence(latestCounts)}</p>
                   <div className="mt-3">

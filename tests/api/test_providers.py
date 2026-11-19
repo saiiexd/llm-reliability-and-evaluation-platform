@@ -48,4 +48,3 @@ def test_list_providers_endpoint(client: TestClient) -> None:
     resp_text = resp.text.lower()
     assert "sk-" not in resp_text
     assert "api_key" not in resp.json()["providers"][0]  # Only 'requires_api_key'
-

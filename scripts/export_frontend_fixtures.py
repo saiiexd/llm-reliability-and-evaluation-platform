@@ -462,7 +462,19 @@ def main() -> int:
             )
 
         write("experiments.json", [d.to_dict() for d in all_defs])
-        write("runs.json", {r.run_id: r.to_dict() for r in all_runs})
+        # Mirror the API's derived provenance fields so fixture mode shows the
+        # same "simulated" labelling as live mode.
+        write(
+            "runs.json",
+            {
+                r.run_id: {
+                    **r.to_dict(),
+                    "executed_model_ids": r.executed_model_ids,
+                    "simulated_components": r.simulated_components,
+                }
+                for r in all_runs
+            },
+        )
         write("diagnostics.json", diagnostics_map)
         write("retrieval_results.json", retrieval_map)
         write("robustness.json", robustness_map)

@@ -60,6 +60,7 @@ class RunSummaryResponse(BaseApiSchema):
     error: str | None = None
     adapter_id: str | None = None
     executed_model_ids: list[str] = Field(default_factory=list)
+    simulated_components: list[str] = Field(default_factory=list)
 
 
 class RunDetailResponse(BaseApiSchema):
@@ -82,6 +83,7 @@ class RunDetailResponse(BaseApiSchema):
     error: str | None = None
     adapter_id: str | None = None
     executed_model_ids: list[str] = Field(default_factory=list)
+    simulated_components: list[str] = Field(default_factory=list)
 
 
 class RunSummariesResponse(BaseApiSchema):

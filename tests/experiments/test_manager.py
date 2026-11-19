@@ -120,6 +120,22 @@ class TestExecuteExperiment:
         with pytest.raises(ValueError, match="Evaluator mismatch"):
             manager.execute_experiment(definition, adapter, [OtherEvaluator()])
 
+    def test_evaluator_config_mismatch_is_rejected(self, manager):
+        """Same evaluator name but different configuration must not be recorded as declared."""
+        definition = manager.create_experiment(
+            experiment_id="exp-1",
+            name="exp",
+            dataset=_dataset("t1"),
+            model_config=ModelConfig(model_id="mock-adapter-v1"),
+            evaluators=[ExactMatchEvaluator(case_sensitive=False)],
+        )
+        adapter = MockAdapter(responses={"t1": "t1"})
+        with pytest.raises(ValueError, match="configuration mismatch"):
+            manager.execute_experiment(
+                definition, adapter, [ExactMatchEvaluator(case_sensitive=True)]
+            )
+        assert manager._repository.list_run_ids("exp-1") == []
+
     def test_two_runs_of_same_experiment_have_distinct_run_ids(self, manager):
         definition = manager.create_experiment(
             experiment_id="exp-1",

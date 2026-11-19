@@ -106,3 +106,13 @@ def test_reference_free_case_is_accepted_and_skipped_not_failed(api_client: Test
     evaluation = detail["test_case_results"][0]["evaluations"][0]
     assert evaluation["status"] == "skipped"
     assert evaluation["passed"] is None
+
+
+def test_seeded_runs_are_labelled_simulated(api_client: TestClient) -> None:
+    run = api_client.get(f"{API}/runs/run-rag-baseline-001").json()
+    joined = " ".join(run["simulated_components"])
+    assert "mock adapter" in joined
+    assert "fake embedding" in joined
+    assert "canned judge" in joined
+    summary = api_client.get(f"{API}/runs?limit=50").json()["items"]
+    assert all(r["simulated_components"] for r in summary)

@@ -154,6 +154,12 @@ export interface ExperimentRun {
   pass_rate?: number;
   benchmark_id?: string | null;
   repetition_index?: number;
+  /** Allowlisted adapter that actually executed this run (null for older records). */
+  adapter_id?: string | null;
+  /** Model ids reported by the responses themselves. */
+  executed_model_ids?: string[];
+  /** Server-detected simulated parts (mock generation, fake judge, ...). Empty = none. */
+  simulated_components?: string[];
 }
 
 export type RetrievalEvaluationStatus = "success" | "skipped" | "execution_error";

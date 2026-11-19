@@ -289,6 +289,50 @@ class ExperimentRun:
         return self.status == RunStatus.SUCCEEDED
 
     @property
+    def simulated_components(self) -> list[str]:
+        """Parts of this run that were simulated rather than real, in plain words.
+
+        Empty means nothing simulated was detected. Detection uses explicit
+        markers the fakes write about themselves, never heuristics on outputs:
+
+        - ``MockAdapter`` responses carry ``provider_metadata["adapter"] == "mock"``
+          (preserved through ``RagPipeline``).
+        - ``FakeSimilarityBackend`` reports ``{"backend": "fake"}`` in its config.
+        - Canned/fake judges and fake embedding models use model ids starting
+          with ``fake-`` (the platform's naming convention for fakes).
+
+        A run with any simulated component must not be used to draw
+        conclusions about real model behaviour.
+        """
+        found: list[str] = []
+        responses = (
+            [tc.model_response for tc in self.result.test_case_results if tc.model_response]
+            if self.result is not None
+            else []
+        )
+        if any(r.provider_metadata.get("adapter") == "mock" for r in responses):
+            found.append("generation: deterministic mock adapter (canned answers)")
+        embedding_ids = {
+            ((r.provider_metadata.get("rag") or {}).get("pipeline_config") or {}).get(
+                "embedding_model_id"
+            )
+            for r in responses
+        }
+        if any(isinstance(e, str) and e.startswith("fake-") for e in embedding_ids):
+            found.append("retrieval: fake embedding model (hand-set vectors)")
+        for ec in self.evaluator_configs:
+            params = ec.parameters
+            if params.get("backend") == "fake":
+                found.append(
+                    f"{ec.evaluator_name}: fake similarity backend "
+                    "(exact string equality, not embeddings)"
+                )
+            judge = params.get("judge_model_id")
+            if isinstance(judge, str) and judge.startswith("fake-"):
+                found.append(f"{ec.evaluator_name}: canned judge replies, not a real judge model")
+        return found
+
+    @property
     def executed_model_ids(self) -> list[str]:
         """Distinct model ids reported by the responses actually produced in this run.
 

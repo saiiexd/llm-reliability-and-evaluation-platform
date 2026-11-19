@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
+import { SimulatedTag } from "../components/SimulatedNotice";
 import { FixtureNotice } from "../components/FixtureNotice";
 import { PageHeader } from "../components/Card";
 import { EmptyState } from "../components/EmptyState";
@@ -367,9 +368,13 @@ export function ExperimentDetailPage() {
                             <p className="text-sm sm:col-span-4">
                               {formatTimestamp(run.started_at)}{" "}
                               <span className="font-mono text-xs text-ink-soft">{run.run_id.slice(0, 8)}</span>
+                              {run.adapter_id && (
+                                <span className="font-mono text-xs text-ink-soft"> · {run.adapter_id}</span>
+                              )}
                               {run.benchmark_id && (
                                 <span className="text-ink-soft"> · repeat {run.repetition_index ?? 1}</span>
-                              )}
+                              )}{" "}
+                              <SimulatedTag run={run} />
                             </p>
                             <div className="sm:col-span-6">
                               <PassBar passed={c.passed} total={c.total} />

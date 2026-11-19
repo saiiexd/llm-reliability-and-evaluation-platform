@@ -245,6 +245,7 @@ def to_run_summary(run: ExperimentRun) -> RunSummaryResponse:
         error=run.error,
         adapter_id=run.adapter_id,
         executed_model_ids=run.executed_model_ids,
+        simulated_components=run.simulated_components,
     )
 
 
@@ -336,6 +337,7 @@ def to_run_detail(run: ExperimentRun, include_test_cases: bool = True) -> RunDet
         error=run.error,
         adapter_id=run.adapter_id,
         executed_model_ids=run.executed_model_ids,
+        simulated_components=run.simulated_components,
     )
 
 

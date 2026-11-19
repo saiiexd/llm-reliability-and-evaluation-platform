@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FixtureNotice } from "../components/FixtureNotice";
+import { SimulatedNotice } from "../components/SimulatedNotice";
 import { PageHeader } from "../components/Card";
 import { EmptyState } from "../components/EmptyState";
 import { Tag } from "../components/Tag";
@@ -156,14 +157,20 @@ export function ResultsPage() {
                 </p>
                 <h2 className="mt-1 text-xl font-semibold">{nameOf.get(run.experiment_id) ?? run.experiment_id}</h2>
                 <p className="mt-1 text-sm text-ink-soft">
-                  Model <span className="font-mono text-ink">{run.model_config?.model_id}</span> ·{" "}
-                  {counts.total} questions
+                  Model <span className="font-mono text-ink">{run.model_config?.model_id}</span>
+                  {run.adapter_id && (
+                    <>
+                      {" "}via <span className="font-mono text-ink">{run.adapter_id}</span>
+                    </>
+                  )}{" "}
+                  · {counts.total} questions
                   {run.duration_seconds != null && ` · took ${run.duration_seconds.toFixed(1)}s`}
                 </p>
                 <p className="mt-5 text-base">{verdictSentence(counts)}</p>
                 <div className="mt-3 max-w-xl">
                   <VerdictBar counts={counts} />
                 </div>
+                <SimulatedNotice run={run} />
               </div>
               <div className="lg:col-span-2 lg:border-l lg:border-line lg:pl-6">
                 <p className="text-sm font-medium">Why answers didn't pass</p>

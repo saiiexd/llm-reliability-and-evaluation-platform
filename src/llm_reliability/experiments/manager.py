@@ -114,6 +114,20 @@ class ExperimentManager:
                 "supplied for execution."
             )
 
+        # Names alone are not enough: the same evaluator name can be configured
+        # differently (e.g. a canned fake judge vs a real judge model, or a
+        # different threshold). Executing with a different configuration than
+        # the definition declares would record the run against settings that
+        # did not produce it, so it is refused.
+        for declared, supplied in zip(definition.evaluator_configs, evaluators, strict=True):
+            supplied_config = EvaluatorConfig.from_evaluator(supplied).parameters
+            if supplied_config != declared.parameters:
+                raise ValueError(
+                    f"Evaluator configuration mismatch for '{declared.evaluator_name}' in "
+                    f"experiment '{definition.experiment_id}': the experiment declares "
+                    f"{declared.parameters!r} but the supplied evaluator is configured as "
+                    f"{supplied_config!r}. Define a new experiment for the new configuration."
+                )
         if run_id is None:
             run_id = uuid.uuid4().hex
 
