@@ -48,8 +48,12 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from llm_reliability.diagnostics.evidence import ClaimAssessment
-from llm_reliability.diagnostics.taxonomy import DiagnosticStatus, FailureCategory
+from llm_reliability.diagnostics.evidence import ClaimAssessment, assess_statements_lexically
+from llm_reliability.diagnostics.taxonomy import (
+    ClaimSupportStatus,
+    DiagnosticStatus,
+    FailureCategory,
+)
 from llm_reliability.evaluation.criteria import CORRECTNESS, FAITHFULNESS
 from llm_reliability.evaluation.models import EvaluationStatus, TestCase, TestCaseResult
 from llm_reliability.rag.evaluators import RetrievalEvaluationResult, RetrievalEvaluationStatus
@@ -73,6 +77,7 @@ class ReliabilityDiagnostic:
     explanation: str = ""
     claim_assessments: list[ClaimAssessment] = field(default_factory=list)
     error: str | None = None
+    secondary_findings: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -89,6 +94,7 @@ class ReliabilityDiagnostic:
             "explanation": self.explanation,
             "claim_assessments": [c.to_dict() for c in self.claim_assessments],
             "error": self.error,
+            "secondary_findings": self.secondary_findings,
         }
 
     @classmethod
@@ -110,6 +116,7 @@ class ReliabilityDiagnostic:
                 ClaimAssessment.from_dict(c) for c in data.get("claim_assessments", [])
             ],
             error=data.get("error"),
+            secondary_findings=list(data.get("secondary_findings", [])),
         )
 
 
@@ -191,85 +198,129 @@ def build_reliability_diagnostic(
         | {r.evaluator_name for r in retrieval_results}
     )
 
-    def _finding(
-        status: DiagnosticStatus, category: FailureCategory | None, explanation: str
-    ) -> ReliabilityDiagnostic:
-        return ReliabilityDiagnostic(
-            test_case_id=test_case.id,
-            question=test_case.input,
-            generated_answer=generated_answer,
-            reference_answer=test_case.reference_answer,
-            retrieved_context=retrieved_context,
-            status=status,
-            failure_category=category,
-            contributing_evaluators=contributing,
-            explanation=explanation,
-        )
+    claim_assessments: list[ClaimAssessment] = []
+    if generated_answer and retrieved_context:
+        claim_assessments = assess_statements_lexically(generated_answer, retrieved_context)
+
+    has_disagreement = len(correctness_judgments) >= 2 and correctness is None
+    has_contradiction = faithfulness == "contradicted" or any(
+        c.assessment.status == ClaimSupportStatus.CONTRADICTED for c in claim_assessments
+    )
+    has_unsupported = faithfulness == "unsupported" or any(
+        c.assessment.status == ClaimSupportStatus.UNSUPPORTED for c in claim_assessments
+    )
+    has_retrieval_miss = retrieval_hit is False
+    has_generation_failure = retrieval_hit is True and correctness is False
+    has_insufficient_evidence = any(
+        r.status == EvaluationStatus.SKIPPED for r in correctness_results + faithfulness_results
+    ) or any(r.status == RetrievalEvaluationStatus.SKIPPED for r in retrieval_results)
+
+    primary_status = DiagnosticStatus.DETERMINED
+    primary_category: FailureCategory | None = None
+    explanation = ""
 
     if not correctness_results and not faithfulness_results and not retrieval_results:
-        return _finding(
-            DiagnosticStatus.INSUFFICIENT_EVIDENCE,
-            FailureCategory.INSUFFICIENT_EVIDENCE,
-            "No evaluator or retrieval evaluator produced usable evidence for this test case.",
+        primary_status = DiagnosticStatus.INSUFFICIENT_EVIDENCE
+        primary_category = FailureCategory.INSUFFICIENT_EVIDENCE
+        explanation = (
+            "No evaluator or retrieval evaluator produced usable evidence for this test case."
         )
-
-    if len(correctness_judgments) >= 2 and correctness is None:
-        return _finding(
-            DiagnosticStatus.DETERMINED,
-            FailureCategory.EVALUATOR_DISAGREEMENT,
+    elif has_disagreement:
+        primary_category = FailureCategory.EVALUATOR_DISAGREEMENT
+        explanation = (
             "Correctness evaluators disagreed on whether this answer passed; no single "
-            "evaluator's verdict is treated as authoritative.",
+            "evaluator's verdict is treated as authoritative."
         )
-
-    if faithfulness == "contradicted":
-        return _finding(
-            DiagnosticStatus.DETERMINED,
-            FailureCategory.CONTRADICTED,
-            "A faithfulness evaluator found the answer contradicted by retrieved context.",
-        )
-
-    if faithfulness == "unsupported":
-        return _finding(
-            DiagnosticStatus.DETERMINED,
-            FailureCategory.UNSUPPORTED,
+    elif faithfulness == "contradicted":
+        primary_category = FailureCategory.CONTRADICTED
+        explanation = "A faithfulness evaluator found the answer contradicted by retrieved context."
+    elif faithfulness == "unsupported":
+        primary_category = FailureCategory.UNSUPPORTED
+        explanation = (
             "A faithfulness evaluator found the answer contains claims the retrieved "
-            "context does not address.",
+            "context does not address."
         )
-
-    if retrieval_hit is False and correctness is False:
-        return _finding(
-            DiagnosticStatus.DETERMINED,
-            FailureCategory.RETRIEVAL_FAILURE,
+    elif retrieval_hit is False and correctness is False:
+        primary_category = FailureCategory.RETRIEVAL_FAILURE
+        explanation = (
             "Ground-truth-relevant evidence was not retrieved, and the answer was judged "
-            "incorrect: consistent with a retrieval failure.",
+            "incorrect: consistent with a retrieval failure."
         )
-
-    if retrieval_hit is True and correctness is False:
-        return _finding(
-            DiagnosticStatus.DETERMINED,
-            FailureCategory.GENERATION_FAILURE,
+    elif retrieval_hit is True and correctness is False:
+        primary_category = FailureCategory.GENERATION_FAILURE
+        explanation = (
             "Relevant evidence was retrieved, but the answer was judged incorrect: "
-            "consistent with a generation/context-use failure, not a retrieval failure.",
+            "consistent with a generation/context-use failure, not a retrieval failure."
         )
-
-    if correctness is True:
-        return _finding(
-            DiagnosticStatus.DETERMINED,
-            FailureCategory.CORRECT,
+    elif correctness is True:
+        primary_category = FailureCategory.CORRECT
+        explanation = (
             "The answer was judged correct, and no retrieval or faithfulness evidence "
-            "contradicts that.",
+            "contradicts that."
         )
-
-    if correctness is False:
-        return _finding(
-            DiagnosticStatus.DETERMINED,
-            FailureCategory.INCORRECT,
+    elif correctness is False:
+        primary_category = FailureCategory.INCORRECT
+        explanation = (
             "The answer was judged incorrect; no retrieval evidence is available to "
-            "attribute the cause further.",
+            "attribute the cause further."
         )
+    else:
+        primary_status = DiagnosticStatus.UNDETERMINED
+        primary_category = FailureCategory.UNDETERMINED
+        explanation = "The available evidence does not clearly support any single category."
 
-    return _finding(
-        DiagnosticStatus.UNDETERMINED,
-        FailureCategory.UNDETERMINED,
-        "The available evidence does not clearly support any single category.",
+    secondary_findings: list[str] = []
+    if primary_status != DiagnosticStatus.INSUFFICIENT_EVIDENCE:
+        if has_disagreement and primary_category != FailureCategory.EVALUATOR_DISAGREEMENT:
+            secondary_findings.append(
+                "evaluator_disagreement: Correctness evaluators disagreed on whether "
+                "this answer passed."
+            )
+        if has_contradiction and primary_category != FailureCategory.CONTRADICTED:
+            secondary_findings.append(
+                "contradiction: Answer contains statements contradicting retrieved context."
+            )
+        if has_unsupported and primary_category != FailureCategory.UNSUPPORTED:
+            secondary_findings.append(
+                "unsupported_claims: Answer contains claims not directly supported by "
+                "retrieved context."
+            )
+        if (
+            has_retrieval_miss
+            and correctness is False
+            and primary_category != FailureCategory.RETRIEVAL_FAILURE
+        ):
+            secondary_findings.append(
+                "retrieval_failure: Ground-truth-relevant evidence was not retrieved."
+            )
+        elif (
+            has_retrieval_miss
+            and correctness is not False
+            and primary_category != FailureCategory.RETRIEVAL_FAILURE
+        ):
+            secondary_findings.append(
+                "retrieval_miss: Ground-truth-relevant evidence was not retrieved."
+            )
+        if has_generation_failure and primary_category != FailureCategory.GENERATION_FAILURE:
+            secondary_findings.append(
+                "generation_failure: Relevant context was retrieved, but generation was incorrect."
+            )
+        if has_insufficient_evidence and primary_category != FailureCategory.INSUFFICIENT_EVIDENCE:
+            secondary_findings.append(
+                "insufficient_evidence: One or more evaluators were skipped or lacked "
+                "required evidence."
+            )
+
+    return ReliabilityDiagnostic(
+        test_case_id=test_case.id,
+        question=test_case.input,
+        generated_answer=generated_answer,
+        reference_answer=test_case.reference_answer,
+        retrieved_context=retrieved_context,
+        status=primary_status,
+        failure_category=primary_category,
+        contributing_evaluators=contributing,
+        explanation=explanation,
+        claim_assessments=claim_assessments,
+        secondary_findings=secondary_findings,
     )

@@ -7,10 +7,12 @@ export function Card({ children, className = "" }: { children: ReactNode; classN
 export function SectionHeading({
   eyebrow,
   title,
+  description,
   action,
 }: {
   eyebrow?: string;
   title: string;
+  description?: ReactNode;
   action?: ReactNode;
 }) {
   return (
@@ -20,17 +22,27 @@ export function SectionHeading({
           <p className="font-mono text-xs tracking-wide text-ink-soft uppercase">{eyebrow}</p>
         )}
         <h2 className="font-serif text-xl">{title}</h2>
+        {description && <p className="mt-1 text-xs text-ink-soft">{description}</p>}
       </div>
       {action}
     </div>
   );
 }
 
-export function Stat({ label, value }: { label: string; value: ReactNode }) {
+export function Stat({
+  label,
+  value,
+  subtext,
+}: {
+  label: string;
+  value: ReactNode;
+  subtext?: ReactNode;
+}) {
   return (
     <div className="border border-line px-4 py-3">
       <p className="font-mono text-xs tracking-wide text-ink-soft uppercase">{label}</p>
       <p className="font-serif text-2xl">{value}</p>
+      {subtext && <p className="mt-1 text-[11px] text-ink-soft">{subtext}</p>}
     </div>
   );
 }

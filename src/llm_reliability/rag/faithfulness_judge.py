@@ -13,9 +13,11 @@ class and prompt renderer rather than being force-fit into
 ``LLMJudgeEvaluator``.
 
 As with the correctness judge, this is an evaluation *method*, not ground
-truth: its output reflects the judge model's own behavior and biases, and
-its agreement with human judgment must be established separately before
-its verdicts can be trusted as a substitute for human review.
+truth: its output reflects the judge model's own behavior and biases (including
+position bias, verbosity bias, and judge hallucination), and its agreement with
+human judgment must be established separately before its verdicts can be trusted
+as a substitute for human review. It is explicitly NOT a universal hallucination
+detector, but an evidence-gathering evaluator that reports a structured verdict.
 
 Distinguishes four outcomes, precisely:
 

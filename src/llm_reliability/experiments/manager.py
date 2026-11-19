@@ -88,6 +88,8 @@ class ExperimentManager:
         adapter: ModelAdapter,
         evaluators: Sequence[Evaluator],
         run_id: str | None = None,
+        benchmark_id: str | None = None,
+        repetition_index: int = 0,
     ) -> ExperimentRun:
         """Execute ``definition`` once via ``EvaluationRunner`` and persist the run.
 
@@ -138,6 +140,8 @@ class ExperimentManager:
             config_fingerprint=definition.config_fingerprint,
             result=result,
             error=error,
+            benchmark_id=benchmark_id,
+            repetition_index=repetition_index,
         )
         self._repository.save_run(run)
         return run

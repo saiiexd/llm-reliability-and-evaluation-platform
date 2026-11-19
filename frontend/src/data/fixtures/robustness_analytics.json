@@ -1,0 +1,48 @@
+{
+  "347857f544194fc0b87d7748dd6abcaa": {
+    "by_perturbation": {
+      "question_rewording": {
+        "changed": 0,
+        "rate": 1.0,
+        "total": 1,
+        "unchanged": 1
+      }
+    },
+    "consistency_rate": 1.0,
+    "num_changed": 0,
+    "num_unchanged": 1,
+    "total_pairs": 1,
+    "transition_counts": {}
+  },
+  "350b690a337d4462a4253bd31d0112d7": {
+    "by_perturbation": {
+      "question_rewording": {
+        "changed": 0,
+        "rate": 1.0,
+        "total": 1,
+        "unchanged": 1
+      }
+    },
+    "consistency_rate": 1.0,
+    "num_changed": 0,
+    "num_unchanged": 1,
+    "total_pairs": 1,
+    "transition_counts": {}
+  },
+  "664f791bd61b4b708116b67c22569afa": null,
+  "a489deaac753435f9976783b06cbb994": {
+    "by_perturbation": {
+      "question_rewording": {
+        "changed": 0,
+        "rate": 1.0,
+        "total": 1,
+        "unchanged": 1
+      }
+    },
+    "consistency_rate": 1.0,
+    "num_changed": 0,
+    "num_unchanged": 1,
+    "total_pairs": 1,
+    "transition_counts": {}
+  }
+}

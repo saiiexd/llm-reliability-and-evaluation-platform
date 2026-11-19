@@ -1,0 +1,181 @@
+{
+  "347857f544194fc0b87d7748dd6abcaa": {
+    "aggregates": {
+      "exact_match": {
+        "criterion": "correctness",
+        "criterion_outcomes": {
+          "match": 3,
+          "mismatch": 4
+        },
+        "evaluator_name": "exact_match",
+        "num_evaluated": 7,
+        "num_execution_error": 0,
+        "num_failed": 4,
+        "num_invalid_config": 0,
+        "num_output_validation_error": 0,
+        "num_passed": 3,
+        "num_skipped": 0,
+        "num_success": 7,
+        "pass_rate": 0.42857142857142855,
+        "pass_rate_denominator": 7,
+        "pass_rate_numerator": 3,
+        "score_count": 7,
+        "score_max": 1.0,
+        "score_mean": 0.42857142857142855,
+        "score_min": 0.0,
+        "total_cases": 7
+      },
+      "llm_faithfulness_judge": {
+        "criterion": "faithfulness",
+        "criterion_outcomes": {},
+        "evaluator_name": "llm_faithfulness_judge",
+        "num_evaluated": 7,
+        "num_execution_error": 0,
+        "num_failed": 0,
+        "num_invalid_config": 0,
+        "num_output_validation_error": 7,
+        "num_passed": 0,
+        "num_skipped": 0,
+        "num_success": 0,
+        "pass_rate": null,
+        "pass_rate_denominator": 0,
+        "pass_rate_numerator": 0,
+        "score_count": 0,
+        "score_max": null,
+        "score_mean": null,
+        "score_min": null,
+        "total_cases": 7
+      }
+    },
+    "agreements": []
+  },
+  "350b690a337d4462a4253bd31d0112d7": {
+    "aggregates": {
+      "exact_match": {
+        "criterion": "correctness",
+        "criterion_outcomes": {
+          "match": 3,
+          "mismatch": 4
+        },
+        "evaluator_name": "exact_match",
+        "num_evaluated": 7,
+        "num_execution_error": 0,
+        "num_failed": 4,
+        "num_invalid_config": 0,
+        "num_output_validation_error": 0,
+        "num_passed": 3,
+        "num_skipped": 0,
+        "num_success": 7,
+        "pass_rate": 0.42857142857142855,
+        "pass_rate_denominator": 7,
+        "pass_rate_numerator": 3,
+        "score_count": 7,
+        "score_max": 1.0,
+        "score_mean": 0.42857142857142855,
+        "score_min": 0.0,
+        "total_cases": 7
+      },
+      "llm_faithfulness_judge": {
+        "criterion": "faithfulness",
+        "criterion_outcomes": {},
+        "evaluator_name": "llm_faithfulness_judge",
+        "num_evaluated": 7,
+        "num_execution_error": 0,
+        "num_failed": 0,
+        "num_invalid_config": 0,
+        "num_output_validation_error": 7,
+        "num_passed": 0,
+        "num_skipped": 0,
+        "num_success": 0,
+        "pass_rate": null,
+        "pass_rate_denominator": 0,
+        "pass_rate_numerator": 0,
+        "score_count": 0,
+        "score_max": null,
+        "score_mean": null,
+        "score_min": null,
+        "total_cases": 7
+      }
+    },
+    "agreements": []
+  },
+  "664f791bd61b4b708116b67c22569afa": {
+    "aggregates": {
+      "exact_match": {
+        "criterion": "correctness",
+        "criterion_outcomes": {
+          "match": 1,
+          "mismatch": 1
+        },
+        "evaluator_name": "exact_match",
+        "num_evaluated": 2,
+        "num_execution_error": 0,
+        "num_failed": 1,
+        "num_invalid_config": 0,
+        "num_output_validation_error": 0,
+        "num_passed": 1,
+        "num_skipped": 0,
+        "num_success": 2,
+        "pass_rate": 0.5,
+        "pass_rate_denominator": 2,
+        "pass_rate_numerator": 1,
+        "score_count": 2,
+        "score_max": 1.0,
+        "score_mean": 0.5,
+        "score_min": 0.0,
+        "total_cases": 2
+      }
+    },
+    "agreements": []
+  },
+  "a489deaac753435f9976783b06cbb994": {
+    "aggregates": {
+      "exact_match": {
+        "criterion": "correctness",
+        "criterion_outcomes": {
+          "match": 3,
+          "mismatch": 4
+        },
+        "evaluator_name": "exact_match",
+        "num_evaluated": 7,
+        "num_execution_error": 0,
+        "num_failed": 4,
+        "num_invalid_config": 0,
+        "num_output_validation_error": 0,
+        "num_passed": 3,
+        "num_skipped": 0,
+        "num_success": 7,
+        "pass_rate": 0.42857142857142855,
+        "pass_rate_denominator": 7,
+        "pass_rate_numerator": 3,
+        "score_count": 7,
+        "score_max": 1.0,
+        "score_mean": 0.42857142857142855,
+        "score_min": 0.0,
+        "total_cases": 7
+      },
+      "llm_faithfulness_judge": {
+        "criterion": "faithfulness",
+        "criterion_outcomes": {},
+        "evaluator_name": "llm_faithfulness_judge",
+        "num_evaluated": 7,
+        "num_execution_error": 0,
+        "num_failed": 0,
+        "num_invalid_config": 0,
+        "num_output_validation_error": 7,
+        "num_passed": 0,
+        "num_skipped": 0,
+        "num_success": 0,
+        "pass_rate": null,
+        "pass_rate_denominator": 0,
+        "pass_rate_numerator": 0,
+        "score_count": 0,
+        "score_max": null,
+        "score_mean": null,
+        "score_min": null,
+        "total_cases": 7
+      }
+    },
+    "agreements": []
+  }
+}

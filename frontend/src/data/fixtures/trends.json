@@ -1,0 +1,46 @@
+{
+  "exp-reliability-console-demo": {
+    "configuration_transitions": [],
+    "experiment_id": "exp-reliability-console-demo",
+    "has_trend": true,
+    "is_repeated_run_trend": true,
+    "metric_series": {
+      "exact_match_mean_score": [
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "exact_match_pass_rate": [
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "llm_faithfulness_judge_mean_score": [
+        null,
+        null
+      ],
+      "llm_faithfulness_judge_pass_rate": [
+        null,
+        null
+      ],
+      "per_case_mean_seconds": [
+        null,
+        null
+      ],
+      "wall_clock_seconds": [
+        0.000303,
+        0.00027
+      ]
+    },
+    "run_ids": [
+      "347857f544194fc0b87d7748dd6abcaa",
+      "a489deaac753435f9976783b06cbb994"
+    ],
+    "sample_sizes": [
+      7,
+      7
+    ],
+    "timestamps": [
+      "2026-11-01T19:24:06.522970+00:00",
+      "2026-11-01T19:24:06.528041+00:00"
+    ]
+  }
+}

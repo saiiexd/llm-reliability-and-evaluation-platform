@@ -1,0 +1,492 @@
+{
+  "identical": {
+    "compatibility": "identical_configuration",
+    "compatibility_reasons": [
+      "All 2 runs share identical configuration fingerprint ('0780e4b8...'). Variations represent stochasticity, system latency fluctuations, or repeated trial consistency."
+    ],
+    "configuration_diffs": {
+      "config_fingerprints": {
+        "347857f544194fc0b87d7748dd6abcaa": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28",
+        "a489deaac753435f9976783b06cbb994": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28"
+      },
+      "dataset_versions": {
+        "347857f544194fc0b87d7748dd6abcaa": "a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77",
+        "a489deaac753435f9976783b06cbb994": "a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77"
+      },
+      "evaluators": {
+        "347857f544194fc0b87d7748dd6abcaa": [
+          "exact_match",
+          "llm_faithfulness_judge"
+        ],
+        "a489deaac753435f9976783b06cbb994": [
+          "exact_match",
+          "llm_faithfulness_judge"
+        ]
+      },
+      "model_configs": {
+        "347857f544194fc0b87d7748dd6abcaa": {
+          "extra_params": {
+            "rag": {
+              "chunk_overlap": 0,
+              "chunk_size": 200,
+              "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
+              "embedding_model_id": "fake-embedding-v1",
+              "prompt_template_id": "default_v1",
+              "similarity_metric": "cosine",
+              "top_k": 1
+            }
+          },
+          "max_tokens": null,
+          "model_id": "mock-adapter-v1",
+          "temperature": null
+        },
+        "a489deaac753435f9976783b06cbb994": {
+          "extra_params": {
+            "rag": {
+              "chunk_overlap": 0,
+              "chunk_size": 200,
+              "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
+              "embedding_model_id": "fake-embedding-v1",
+              "prompt_template_id": "default_v1",
+              "similarity_metric": "cosine",
+              "top_k": 1
+            }
+          },
+          "max_tokens": null,
+          "model_id": "mock-adapter-v1",
+          "temperature": null
+        }
+      }
+    },
+    "evaluation_comparisons": {
+      "exact_match": {
+        "denominators": {
+          "347857f544194fc0b87d7748dd6abcaa": 7,
+          "a489deaac753435f9976783b06cbb994": 7
+        },
+        "numerators": {
+          "347857f544194fc0b87d7748dd6abcaa": 3,
+          "a489deaac753435f9976783b06cbb994": 3
+        },
+        "pass_rates": {
+          "347857f544194fc0b87d7748dd6abcaa": 0.42857142857142855,
+          "a489deaac753435f9976783b06cbb994": 0.42857142857142855
+        },
+        "score_means": {
+          "347857f544194fc0b87d7748dd6abcaa": 0.42857142857142855,
+          "a489deaac753435f9976783b06cbb994": 0.42857142857142855
+        }
+      },
+      "llm_faithfulness_judge": {
+        "denominators": {
+          "347857f544194fc0b87d7748dd6abcaa": 0,
+          "a489deaac753435f9976783b06cbb994": 0
+        },
+        "numerators": {
+          "347857f544194fc0b87d7748dd6abcaa": 0,
+          "a489deaac753435f9976783b06cbb994": 0
+        },
+        "pass_rates": {
+          "347857f544194fc0b87d7748dd6abcaa": null,
+          "a489deaac753435f9976783b06cbb994": null
+        },
+        "score_means": {
+          "347857f544194fc0b87d7748dd6abcaa": null,
+          "a489deaac753435f9976783b06cbb994": null
+        }
+      }
+    },
+    "failure_distribution_comparisons": {
+      "contradicted": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "a489deaac753435f9976783b06cbb994": 0
+      },
+      "correct": {
+        "347857f544194fc0b87d7748dd6abcaa": 3,
+        "a489deaac753435f9976783b06cbb994": 3
+      },
+      "evaluator_disagreement": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "a489deaac753435f9976783b06cbb994": 0
+      },
+      "generation_failure": {
+        "347857f544194fc0b87d7748dd6abcaa": 3,
+        "a489deaac753435f9976783b06cbb994": 3
+      },
+      "incorrect": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "a489deaac753435f9976783b06cbb994": 0
+      },
+      "insufficient_evidence": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "a489deaac753435f9976783b06cbb994": 0
+      },
+      "retrieval_failure": {
+        "347857f544194fc0b87d7748dd6abcaa": 1,
+        "a489deaac753435f9976783b06cbb994": 1
+      },
+      "undetermined": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "a489deaac753435f9976783b06cbb994": 0
+      },
+      "unsupported": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "a489deaac753435f9976783b06cbb994": 0
+      }
+    },
+    "performance_comparisons": {
+      "per_case_mean_seconds": {
+        "347857f544194fc0b87d7748dd6abcaa": null,
+        "a489deaac753435f9976783b06cbb994": null
+      },
+      "wall_clock_seconds": {
+        "347857f544194fc0b87d7748dd6abcaa": 0.000303,
+        "a489deaac753435f9976783b06cbb994": 0.00027
+      }
+    },
+    "retrieval_comparisons": {
+      "hit_at_k_k1": {
+        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334,
+        "a489deaac753435f9976783b06cbb994": 0.8333333333333334
+      },
+      "mrr": {
+        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334,
+        "a489deaac753435f9976783b06cbb994": 0.8333333333333334
+      },
+      "recall_at_k_k1": {
+        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334,
+        "a489deaac753435f9976783b06cbb994": 0.8333333333333334
+      }
+    },
+    "robustness_comparisons": {
+      "347857f544194fc0b87d7748dd6abcaa": 1.0,
+      "a489deaac753435f9976783b06cbb994": 1.0
+    },
+    "source_run_ids": [
+      "347857f544194fc0b87d7748dd6abcaa",
+      "a489deaac753435f9976783b06cbb994"
+    ]
+  },
+  "incompatible": {
+    "compatibility": "materially_incompatible",
+    "compatibility_reasons": [
+      "Runs evaluate differing dataset versions (a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77, f3ea327bd852f20006803beb8666a2ad8ffe9cd72fdf09a8f8e09b4ea4b19335). Direct aggregate score comparisons are methodologically invalid; outcomes must be analyzed separately."
+    ],
+    "configuration_diffs": {
+      "config_fingerprints": {
+        "347857f544194fc0b87d7748dd6abcaa": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28",
+        "664f791bd61b4b708116b67c22569afa": "042023b17a261703cd58b5ddde29800b7e605486ee2cd57b7c6857c44022b33d"
+      },
+      "dataset_versions": {
+        "347857f544194fc0b87d7748dd6abcaa": "a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77",
+        "664f791bd61b4b708116b67c22569afa": "f3ea327bd852f20006803beb8666a2ad8ffe9cd72fdf09a8f8e09b4ea4b19335"
+      },
+      "evaluators": {
+        "347857f544194fc0b87d7748dd6abcaa": [
+          "exact_match",
+          "llm_faithfulness_judge"
+        ],
+        "664f791bd61b4b708116b67c22569afa": [
+          "exact_match"
+        ]
+      },
+      "model_configs": {
+        "347857f544194fc0b87d7748dd6abcaa": {
+          "extra_params": {
+            "rag": {
+              "chunk_overlap": 0,
+              "chunk_size": 200,
+              "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
+              "embedding_model_id": "fake-embedding-v1",
+              "prompt_template_id": "default_v1",
+              "similarity_metric": "cosine",
+              "top_k": 1
+            }
+          },
+          "max_tokens": null,
+          "model_id": "mock-adapter-v1",
+          "temperature": null
+        },
+        "664f791bd61b4b708116b67c22569afa": {
+          "extra_params": {},
+          "max_tokens": null,
+          "model_id": "mock-adapter-v1",
+          "temperature": null
+        }
+      }
+    },
+    "evaluation_comparisons": {
+      "exact_match": {
+        "denominators": {
+          "347857f544194fc0b87d7748dd6abcaa": 7,
+          "664f791bd61b4b708116b67c22569afa": 2
+        },
+        "numerators": {
+          "347857f544194fc0b87d7748dd6abcaa": 3,
+          "664f791bd61b4b708116b67c22569afa": 1
+        },
+        "pass_rates": {
+          "347857f544194fc0b87d7748dd6abcaa": 0.42857142857142855,
+          "664f791bd61b4b708116b67c22569afa": 0.5
+        },
+        "score_means": {
+          "347857f544194fc0b87d7748dd6abcaa": 0.42857142857142855,
+          "664f791bd61b4b708116b67c22569afa": 0.5
+        }
+      },
+      "llm_faithfulness_judge": {
+        "denominators": {
+          "347857f544194fc0b87d7748dd6abcaa": 0,
+          "664f791bd61b4b708116b67c22569afa": 0
+        },
+        "numerators": {
+          "347857f544194fc0b87d7748dd6abcaa": 0,
+          "664f791bd61b4b708116b67c22569afa": 0
+        },
+        "pass_rates": {
+          "347857f544194fc0b87d7748dd6abcaa": null,
+          "664f791bd61b4b708116b67c22569afa": null
+        },
+        "score_means": {
+          "347857f544194fc0b87d7748dd6abcaa": null,
+          "664f791bd61b4b708116b67c22569afa": null
+        }
+      }
+    },
+    "failure_distribution_comparisons": {
+      "contradicted": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "664f791bd61b4b708116b67c22569afa": 0
+      },
+      "correct": {
+        "347857f544194fc0b87d7748dd6abcaa": 3,
+        "664f791bd61b4b708116b67c22569afa": 1
+      },
+      "evaluator_disagreement": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "664f791bd61b4b708116b67c22569afa": 0
+      },
+      "generation_failure": {
+        "347857f544194fc0b87d7748dd6abcaa": 3,
+        "664f791bd61b4b708116b67c22569afa": 0
+      },
+      "incorrect": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "664f791bd61b4b708116b67c22569afa": 1
+      },
+      "insufficient_evidence": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "664f791bd61b4b708116b67c22569afa": 0
+      },
+      "retrieval_failure": {
+        "347857f544194fc0b87d7748dd6abcaa": 1,
+        "664f791bd61b4b708116b67c22569afa": 0
+      },
+      "undetermined": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "664f791bd61b4b708116b67c22569afa": 0
+      },
+      "unsupported": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "664f791bd61b4b708116b67c22569afa": 0
+      }
+    },
+    "performance_comparisons": {
+      "per_case_mean_seconds": {
+        "347857f544194fc0b87d7748dd6abcaa": null,
+        "664f791bd61b4b708116b67c22569afa": null
+      },
+      "wall_clock_seconds": {
+        "347857f544194fc0b87d7748dd6abcaa": 0.000303,
+        "664f791bd61b4b708116b67c22569afa": 4e-05
+      }
+    },
+    "retrieval_comparisons": {
+      "hit_at_k_k1": {
+        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334
+      },
+      "mrr": {
+        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334
+      },
+      "recall_at_k_k1": {
+        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334
+      }
+    },
+    "robustness_comparisons": {
+      "347857f544194fc0b87d7748dd6abcaa": 1.0,
+      "664f791bd61b4b708116b67c22569afa": null
+    },
+    "source_run_ids": [
+      "347857f544194fc0b87d7748dd6abcaa",
+      "664f791bd61b4b708116b67c22569afa"
+    ]
+  },
+  "intervention": {
+    "compatibility": "partially_different_configuration",
+    "compatibility_reasons": [
+      "All 2 runs evaluate identical dataset version ('a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77'), but vary in model parameters, prompt templates, or evaluator selections. Valid for controlled comparative analysis."
+    ],
+    "configuration_diffs": {
+      "config_fingerprints": {
+        "347857f544194fc0b87d7748dd6abcaa": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28",
+        "350b690a337d4462a4253bd31d0112d7": "0d85492573ceabb2943d4d50a85cc00ace51978396355fea601d831888400b94"
+      },
+      "dataset_versions": {
+        "347857f544194fc0b87d7748dd6abcaa": "a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77",
+        "350b690a337d4462a4253bd31d0112d7": "a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77"
+      },
+      "evaluators": {
+        "347857f544194fc0b87d7748dd6abcaa": [
+          "exact_match",
+          "llm_faithfulness_judge"
+        ],
+        "350b690a337d4462a4253bd31d0112d7": [
+          "exact_match",
+          "llm_faithfulness_judge"
+        ]
+      },
+      "model_configs": {
+        "347857f544194fc0b87d7748dd6abcaa": {
+          "extra_params": {
+            "rag": {
+              "chunk_overlap": 0,
+              "chunk_size": 200,
+              "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
+              "embedding_model_id": "fake-embedding-v1",
+              "prompt_template_id": "default_v1",
+              "similarity_metric": "cosine",
+              "top_k": 1
+            }
+          },
+          "max_tokens": null,
+          "model_id": "mock-adapter-v1",
+          "temperature": null
+        },
+        "350b690a337d4462a4253bd31d0112d7": {
+          "extra_params": {
+            "rag": {
+              "chunk_overlap": 0,
+              "chunk_size": 200,
+              "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
+              "embedding_model_id": "fake-embedding-v1",
+              "prompt_template_id": "default_v1",
+              "similarity_metric": "cosine",
+              "top_k": 2
+            }
+          },
+          "max_tokens": null,
+          "model_id": "mock-adapter-v1",
+          "temperature": null
+        }
+      }
+    },
+    "evaluation_comparisons": {
+      "exact_match": {
+        "denominators": {
+          "347857f544194fc0b87d7748dd6abcaa": 7,
+          "350b690a337d4462a4253bd31d0112d7": 7
+        },
+        "numerators": {
+          "347857f544194fc0b87d7748dd6abcaa": 3,
+          "350b690a337d4462a4253bd31d0112d7": 3
+        },
+        "pass_rates": {
+          "347857f544194fc0b87d7748dd6abcaa": 0.42857142857142855,
+          "350b690a337d4462a4253bd31d0112d7": 0.42857142857142855
+        },
+        "score_means": {
+          "347857f544194fc0b87d7748dd6abcaa": 0.42857142857142855,
+          "350b690a337d4462a4253bd31d0112d7": 0.42857142857142855
+        }
+      },
+      "llm_faithfulness_judge": {
+        "denominators": {
+          "347857f544194fc0b87d7748dd6abcaa": 0,
+          "350b690a337d4462a4253bd31d0112d7": 0
+        },
+        "numerators": {
+          "347857f544194fc0b87d7748dd6abcaa": 0,
+          "350b690a337d4462a4253bd31d0112d7": 0
+        },
+        "pass_rates": {
+          "347857f544194fc0b87d7748dd6abcaa": null,
+          "350b690a337d4462a4253bd31d0112d7": null
+        },
+        "score_means": {
+          "347857f544194fc0b87d7748dd6abcaa": null,
+          "350b690a337d4462a4253bd31d0112d7": null
+        }
+      }
+    },
+    "failure_distribution_comparisons": {
+      "contradicted": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "350b690a337d4462a4253bd31d0112d7": 0
+      },
+      "correct": {
+        "347857f544194fc0b87d7748dd6abcaa": 3,
+        "350b690a337d4462a4253bd31d0112d7": 3
+      },
+      "evaluator_disagreement": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "350b690a337d4462a4253bd31d0112d7": 0
+      },
+      "generation_failure": {
+        "347857f544194fc0b87d7748dd6abcaa": 3,
+        "350b690a337d4462a4253bd31d0112d7": 3
+      },
+      "incorrect": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "350b690a337d4462a4253bd31d0112d7": 1
+      },
+      "insufficient_evidence": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "350b690a337d4462a4253bd31d0112d7": 0
+      },
+      "retrieval_failure": {
+        "347857f544194fc0b87d7748dd6abcaa": 1,
+        "350b690a337d4462a4253bd31d0112d7": 0
+      },
+      "undetermined": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "350b690a337d4462a4253bd31d0112d7": 0
+      },
+      "unsupported": {
+        "347857f544194fc0b87d7748dd6abcaa": 0,
+        "350b690a337d4462a4253bd31d0112d7": 0
+      }
+    },
+    "performance_comparisons": {
+      "per_case_mean_seconds": {
+        "347857f544194fc0b87d7748dd6abcaa": null,
+        "350b690a337d4462a4253bd31d0112d7": null
+      },
+      "wall_clock_seconds": {
+        "347857f544194fc0b87d7748dd6abcaa": 0.000303,
+        "350b690a337d4462a4253bd31d0112d7": 0.000242
+      }
+    },
+    "retrieval_comparisons": {
+      "hit_at_k_k1": {
+        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334,
+        "350b690a337d4462a4253bd31d0112d7": 0.8333333333333334
+      },
+      "mrr": {
+        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334,
+        "350b690a337d4462a4253bd31d0112d7": 0.9166666666666666
+      },
+      "recall_at_k_k1": {
+        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334,
+        "350b690a337d4462a4253bd31d0112d7": 0.8333333333333334
+      }
+    },
+    "robustness_comparisons": {
+      "347857f544194fc0b87d7748dd6abcaa": 1.0,
+      "350b690a337d4462a4253bd31d0112d7": 1.0
+    },
+    "source_run_ids": [
+      "347857f544194fc0b87d7748dd6abcaa",
+      "350b690a337d4462a4253bd31d0112d7"
+    ]
+  }
+}

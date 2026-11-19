@@ -269,6 +269,8 @@ class ExperimentRun:
     config_fingerprint: str
     result: RunResult | None
     error: str | None = None
+    benchmark_id: str | None = None
+    repetition_index: int = 0
 
     def __post_init__(self) -> None:
         if not self.run_id or not self.run_id.strip():
@@ -294,6 +296,8 @@ class ExperimentRun:
             "config_fingerprint": self.config_fingerprint,
             "result": self.result.to_dict() if self.result is not None else None,
             "error": self.error,
+            "benchmark_id": self.benchmark_id,
+            "repetition_index": self.repetition_index,
         }
 
     def to_json(self) -> str:
@@ -320,6 +324,8 @@ class ExperimentRun:
             config_fingerprint=data["config_fingerprint"],
             result=RunResult.from_dict(result_data) if result_data is not None else None,
             error=data.get("error"),
+            benchmark_id=data.get("benchmark_id"),
+            repetition_index=int(data.get("repetition_index", 0)),
         )
         expected_fingerprint = compute_experiment_fingerprint(
             dataset_version.version_id,

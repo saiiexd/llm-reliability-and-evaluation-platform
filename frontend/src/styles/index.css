@@ -1,32 +1,28 @@
 @import "tailwindcss";
 
 /*
- * Editorial research-instrument design tokens.
+ * Editorial research-instrument design tokens (Dark Theme).
  *
- * Palette: off-white/light-gray surfaces, near-black ink and section
- * backgrounds, one restrained coral accent used only for the few things
- * that must draw the eye (a live selection, a contradiction/failure
- * marker). No gradients, no glassmorphism, no glow. Corners are mostly
- * square (rounded-sm at most); shadows are avoided in favor of 1px
- * dividers, which is what actually reads as "research report" rather
- * than "SaaS dashboard."
+ * Palette: refined deep slate/charcoal surfaces, high-contrast off-white ink,
+ * crisp 1px borders, and a warm coral accent for failures and active highlights.
+ * Scientific, restrained, high-legibility layout.
  */
 @theme {
   --font-serif: "Source Serif 4", Georgia, serif;
   --font-sans: "Inter", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 
-  --color-paper: #faf9f6;
-  --color-paper-dim: #f1efe9;
-  --color-ink: #14130f;
-  --color-ink-soft: #4a4740;
-  --color-line: #ddd8cd;
-  --color-accent: #d8552c;
-  --color-accent-soft: #f6ded3;
+  --color-paper: #0e1117;
+  --color-paper-dim: #161b22;
+  --color-ink: #f0f3f6;
+  --color-ink-soft: #8b949e;
+  --color-line: #30363d;
+  --color-accent: #f97316;
+  --color-accent-soft: #431c0e;
 }
 
 html {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 body {
@@ -43,4 +39,5 @@ body {
 
 ::selection {
   background-color: var(--color-accent-soft);
+  color: var(--color-ink);
 }

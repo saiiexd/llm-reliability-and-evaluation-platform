@@ -1,0 +1,58 @@
+{
+  "disagreement_count": 0,
+  "evaluator_coverage": {
+    "exact_match": 23,
+    "llm_faithfulness_judge": 21
+  },
+  "mean_retrieval_mrr": 0.8611111111111112,
+  "primary_failure_distribution": {
+    "contradicted": 0,
+    "correct": 10,
+    "evaluator_disagreement": 0,
+    "generation_failure": 9,
+    "incorrect": 2,
+    "insufficient_evidence": 0,
+    "retrieval_failure": 2,
+    "undetermined": 0,
+    "unsupported": 0
+  },
+  "recent_runs": [
+    {
+      "case_count": 2,
+      "config_fingerprint": "042023b17a261703cd58b5ddde29800b7e605486ee2cd57b7c6857c44022b33d",
+      "experiment_id": "exp-baseline-non-rag-demo",
+      "run_id": "664f791bd61b4b708116b67c22569afa",
+      "started_at": "2026-11-01T19:24:06.541952+00:00",
+      "status": "succeeded"
+    },
+    {
+      "case_count": 7,
+      "config_fingerprint": "0d85492573ceabb2943d4d50a85cc00ace51978396355fea601d831888400b94",
+      "experiment_id": "exp-reliability-topk2-demo",
+      "run_id": "350b690a337d4462a4253bd31d0112d7",
+      "started_at": "2026-11-01T19:24:06.534510+00:00",
+      "status": "succeeded"
+    },
+    {
+      "case_count": 7,
+      "config_fingerprint": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28",
+      "experiment_id": "exp-reliability-console-demo",
+      "run_id": "a489deaac753435f9976783b06cbb994",
+      "started_at": "2026-11-01T19:24:06.528041+00:00",
+      "status": "succeeded"
+    },
+    {
+      "case_count": 7,
+      "config_fingerprint": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28",
+      "experiment_id": "exp-reliability-console-demo",
+      "run_id": "347857f544194fc0b87d7748dd6abcaa",
+      "started_at": "2026-11-01T19:24:06.522970+00:00",
+      "status": "succeeded"
+    }
+  ],
+  "retrieval_runs_count": 3,
+  "total_evaluations": 44,
+  "total_experiments": 3,
+  "total_runs": 4,
+  "total_test_cases": 23
+}

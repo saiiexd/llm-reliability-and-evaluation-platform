@@ -22,14 +22,32 @@ import retrievalResultsData from "./fixtures/retrieval_results.json";
 import robustnessData from "./fixtures/robustness.json";
 import summariesData from "./fixtures/summaries.json";
 import metaData from "./fixtures/meta.json";
+import analyticsOverviewData from "./fixtures/analytics_overview.json";
+import comparisonsData from "./fixtures/comparisons.json";
+import evaluatorAnalyticsData from "./fixtures/evaluator_analytics.json";
+import failureAnalyticsData from "./fixtures/failure_analytics.json";
+import retrievalAnalyticsData from "./fixtures/retrieval_analytics.json";
+import robustnessAnalyticsData from "./fixtures/robustness_analytics.json";
+import performanceAnalyticsData from "./fixtures/performance_analytics.json";
+import trendsData from "./fixtures/trends.json";
+
 import type {
+  AnalyticsOverview,
+  EvaluationAggregate,
+  EvaluatorAgreementSummary,
+  ExecutionPerformanceSummary,
   ExperimentDefinition,
   ExperimentRun,
+  FailureDistribution,
   FixtureMeta,
   ReliabilityDiagnostic,
   RetrievalEvaluationResult,
+  RetrievalSummary,
+  RobustnessSummary,
+  RunComparison,
   RunRobustnessBundle,
   RunSummaryBundle,
+  TrendAnalysis,
 } from "../types/domain";
 
 const experiments = experimentsData as ExperimentDefinition[];
@@ -41,6 +59,24 @@ const retrievalResults = retrievalResultsData as Record<
 >;
 const robustness = robustnessData as Record<string, RunRobustnessBundle>;
 const summaries = summariesData as Record<string, RunSummaryBundle>;
+
+const analyticsOverview = analyticsOverviewData as AnalyticsOverview;
+const comparisons = comparisonsData as Record<string, RunComparison>;
+const evaluatorAnalytics = evaluatorAnalyticsData as Record<
+  string,
+  {
+    aggregates: Record<string, EvaluationAggregate>;
+    agreements: EvaluatorAgreementSummary[];
+  }
+>;
+const failureAnalytics = failureAnalyticsData as Record<string, FailureDistribution>;
+const retrievalAnalytics = retrievalAnalyticsData as Record<string, RetrievalSummary[]>;
+const robustnessAnalytics = robustnessAnalyticsData as Record<string, RobustnessSummary | null>;
+const performanceAnalytics = performanceAnalyticsData as Record<
+  string,
+  ExecutionPerformanceSummary
+>;
+const trends = trendsData as Record<string, TrendAnalysis>;
 
 export const fixtureMeta: FixtureMeta = metaData as FixtureMeta;
 
@@ -87,4 +123,47 @@ export function getRobustnessForRun(runId: string): RunRobustnessBundle | undefi
 
 export function getSummaryForRun(runId: string): RunSummaryBundle | undefined {
   return summaries[runId];
+}
+
+// --- Prompt 6 Analytics & Observability Layer ---
+
+export function getAnalyticsOverview(): AnalyticsOverview {
+  return analyticsOverview;
+}
+
+export function listComparisons(): Record<string, RunComparison> {
+  return comparisons;
+}
+
+export function getComparison(key: string): RunComparison | undefined {
+  return comparisons[key];
+}
+
+export function getEvaluatorAnalytics(runId: string):
+  | {
+      aggregates: Record<string, EvaluationAggregate>;
+      agreements: EvaluatorAgreementSummary[];
+    }
+  | undefined {
+  return evaluatorAnalytics[runId];
+}
+
+export function getFailureAnalytics(runId: string): FailureDistribution | undefined {
+  return failureAnalytics[runId];
+}
+
+export function getRetrievalAnalytics(runId: string): RetrievalSummary[] {
+  return retrievalAnalytics[runId] ?? [];
+}
+
+export function getRobustnessAnalytics(runId: string): RobustnessSummary | undefined {
+  return robustnessAnalytics[runId] ?? undefined;
+}
+
+export function getPerformanceAnalytics(runId: string): ExecutionPerformanceSummary | undefined {
+  return performanceAnalytics[runId];
+}
+
+export function getTrendForExperiment(experimentId: string): TrendAnalysis | undefined {
+  return trends[experimentId];
 }

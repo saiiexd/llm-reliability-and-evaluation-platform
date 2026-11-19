@@ -200,3 +200,44 @@ class TestBuildReliabilityDiagnostic:
     def test_never_uses_the_word_hallucination(self):
         for category in FailureCategory:
             assert "hallucination" not in category.value
+
+    def test_preserves_secondary_findings_when_primary_category_assigned(self):
+        # Case 1: Primary is CONTRADICTED, but correctness evaluators also disagreed
+        tc_result = _tc_result(
+            [
+                _correctness(True, "exact_match"),
+                _correctness(False, "semantic_similarity"),
+                _faithfulness("contradicted"),
+            ]
+        )
+        diagnosis = build_reliability_diagnostic(_test_case(), tc_result, [])
+        # Step 3 precedence: evaluator disagreement is primary
+        assert diagnosis.failure_category == FailureCategory.EVALUATOR_DISAGREEMENT
+        # Contradiction is preserved in secondary_findings!
+        assert any("contradiction" in f for f in diagnosis.secondary_findings)
+
+    def test_preserves_retrieval_and_unsupported_as_secondary_findings(self):
+        # Primary is RETRIEVAL_FAILURE, with unsupported statement in context
+        tc_result = _tc_result(
+            [_correctness(False), _faithfulness("unsupported")],
+            response=_response("Paris has 30 million people", with_rag=True),
+        )
+        diagnosis = build_reliability_diagnostic(
+            _test_case(relevant_chunk_ids=["c1"]), tc_result, [_hit(0.0)]
+        )
+        # Step 5: unsupported takes precedence as primary, retrieval miss is preserved as secondary
+        assert diagnosis.failure_category == FailureCategory.UNSUPPORTED
+        assert any("retrieval" in f for f in diagnosis.secondary_findings)
+
+    def test_preserves_insufficient_evidence_as_secondary_finding_when_correct(self):
+        # Case where correctness is True, but an evaluator was skipped
+        skipped = EvaluationResult(
+            evaluator_name="semantic_similarity",
+            test_case_id="t1",
+            status=EvaluationStatus.SKIPPED,
+            criterion=CORRECTNESS,
+        )
+        tc_result = _tc_result([_correctness(True, "exact_match"), skipped])
+        diagnosis = build_reliability_diagnostic(_test_case(), tc_result, [])
+        assert diagnosis.failure_category == FailureCategory.CORRECT
+        assert any("insufficient_evidence" in f for f in diagnosis.secondary_findings)
