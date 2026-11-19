@@ -125,7 +125,7 @@ export function ResultsPage() {
               >
                 {runList.map((r) => (
                   <option key={r.run_id} value={r.run_id}>
-                    {nameOf.get(r.experiment_id) ?? r.experiment_id} · {formatTimestamp(r.started_at)}
+                    {nameOf.get(r.experiment_id) ?? r.experiment_id} · {formatTimestamp(r.started_at)} · {r.run_id.slice(0, 6)}
                   </option>
                 ))}
               </select>
@@ -151,7 +151,9 @@ export function ResultsPage() {
             {/* Run summary */}
             <section className="grid gap-6 rounded-xl border border-line bg-paper-dim p-6 lg:grid-cols-5">
               <div className="min-w-0 lg:col-span-3">
-                <p className="text-sm text-ink-soft">{formatTimestamp(run.started_at)}</p>
+                <p className="text-sm text-ink-soft">
+                  {formatTimestamp(run.started_at)} · <span className="font-mono text-xs">run {run.run_id.slice(0, 8)}</span>
+                </p>
                 <h2 className="mt-1 text-xl font-semibold">{nameOf.get(run.experiment_id) ?? run.experiment_id}</h2>
                 <p className="mt-1 text-sm text-ink-soft">
                   Model <span className="font-mono text-ink">{run.model_config?.model_id}</span> ·{" "}

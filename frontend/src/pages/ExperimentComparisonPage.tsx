@@ -18,7 +18,7 @@ const VERDICT: Record<ComparisonCompatibility, { title: string; body: string }> 
     body: "Nothing was changed between these runs, so any difference in results is randomness, not a real effect.",
   },
   partially_different_configuration: {
-    title: "One thing changed",
+    title: "Some settings changed",
     body: "Only the settings listed under “What changed” differ, so differences in results can be attributed to them.",
   },
   materially_incompatible: {
@@ -42,7 +42,7 @@ function flatten(value: unknown, prefix: string, out: Record<string, string>) {
       flatten(v, prefix ? `${prefix}.${k}` : k, out);
     }
   } else {
-    out[prefix] = Array.isArray(value) ? value.join(", ") : String(value);
+    out[prefix] = value === undefined || value === null ? "not set" : Array.isArray(value) ? value.join(", ") : String(value);
   }
 }
 
@@ -60,8 +60,17 @@ function changedSettings(
   });
   const paths = new Set(perRun.flatMap((f) => Object.keys(f)));
   return [...paths]
-    .filter((p) => !/fingerprint|version/i.test(p)) // hashes change whenever anything changes
-    .map((path) => ({ path, values: perRun.map((f) => f[path] ?? "—") }))
+    // The config fingerprint is a hash of all the other settings, so it adds nothing.
+    .filter((p) => !/config_fingerprint/i.test(p))
+    .map((path) => ({
+      path,
+      // Dataset version IDs are long hashes; the first 8 characters are enough to tell them apart.
+      values: perRun.map((f) => {
+        const v = f[path] ?? "not set";
+        // Long hex hashes (versions, fingerprints): 8 characters are enough to tell them apart.
+        return /^[0-9a-f]{16,}$/i.test(v) ? v.slice(0, 8) : v;
+      }),
+    }))
     .filter((row) => new Set(row.values).size > 1);
 }
 
@@ -90,7 +99,7 @@ export function ExperimentComparisonPage() {
           format: (v: number | null | undefined) => (v == null ? "—" : v.toFixed(2)),
         })),
         {
-          label: "Same answer when question is reworded",
+          label: "Same verdict when the input is changed",
           values: runIds.map((id) => comparison.robustness_comparisons[id]),
           format: pct,
         },
@@ -129,8 +138,9 @@ export function ExperimentComparisonPage() {
                     <li key={id}>
                       <span className="text-ink-soft">Run {letter(i)}:</span>{" "}
                       <Link to={`/results/${id}`} className="underline underline-offset-4">
-                        {r ? formatTimestamp(r.started_at) : id.slice(0, 12)}
-                      </Link>
+                        {r ? formatTimestamp(r.started_at) : "run"}
+                      </Link>{" "}
+                      <span className="font-mono text-xs text-ink-soft">{/^[0-9a-f]{16,}$/i.test(id) ? id.slice(0, 8) : id}</span>
                     </li>
                   );
                 })}
@@ -196,7 +206,9 @@ export function ExperimentComparisonPage() {
                           ))}
                           {runIds.length === 2 && (
                             <td className="py-2 text-right tabular-nums text-ink-soft">
-                              {delta == null || Math.abs(delta) < 1e-9
+                              {a == null || b == null
+                                ? "—"
+                                : delta == null || Math.abs(delta) < 1e-9
                                 ? "same"
                                 : `${delta > 0 ? "+" : "−"}${row.format(Math.abs(delta))}`}
                             </td>

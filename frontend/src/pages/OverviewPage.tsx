@@ -165,7 +165,9 @@ export function OverviewPage() {
                           <p className="truncate font-medium">
                             {nameOf.get(run.experiment_id) ?? run.experiment_id}
                           </p>
-                          <p className="text-xs text-ink-soft">{formatTimestamp(run.started_at)}</p>
+                          <p className="text-xs text-ink-soft">
+                            {formatTimestamp(run.started_at)} · <span className="font-mono">{run.run_id.slice(0, 8)}</span>
+                          </p>
                         </div>
                         <div className="sm:col-span-5">
                           <PassBar passed={counts.passed} total={counts.total} />

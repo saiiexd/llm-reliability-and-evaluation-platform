@@ -365,7 +365,8 @@ export function ExperimentDetailPage() {
                             className="grid grid-cols-1 items-center gap-2 px-6 py-3 hover:bg-paper-dim sm:grid-cols-12 sm:gap-4"
                           >
                             <p className="text-sm sm:col-span-4">
-                              {formatTimestamp(run.started_at)}
+                              {formatTimestamp(run.started_at)}{" "}
+                              <span className="font-mono text-xs text-ink-soft">{run.run_id.slice(0, 8)}</span>
                               {run.benchmark_id && (
                                 <span className="text-ink-soft"> · repeat {run.repetition_index ?? 1}</span>
                               )}

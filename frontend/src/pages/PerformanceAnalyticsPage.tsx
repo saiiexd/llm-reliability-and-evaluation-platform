@@ -1,7 +1,6 @@
 import { formatTimestamp } from "../lib/derived";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { FixtureNotice } from "../components/FixtureNotice";
 import { Card, SectionHeading } from "../components/Card";
 import { Tag } from "../components/Tag";
 import { usePerformanceAnalytics, useRuns } from "../data/useData";
@@ -22,7 +21,6 @@ export function PerformanceAnalyticsPage() {
                 title="How long did it take, and how many tokens?"
         description="Pick a run to see its timing and token usage. These numbers describe speed and cost only, not answer quality."
       />
-      <FixtureNotice />
 
       {/* Run Selector */}
       <div className="mb-6 flex min-w-0 items-center gap-3">
@@ -56,43 +54,43 @@ export function PerformanceAnalyticsPage() {
               return (
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                   <Card>
-                    <div className="text-xs text-ink-soft">Wall-clock duration</div>
+                    <div className="text-xs text-ink-soft">Total run time</div>
                     <div className="mt-1 font-mono text-xl font-medium">
                       {perf.wall_clock_duration_seconds !== null
                         ? `${perf.wall_clock_duration_seconds.toFixed(2)}s`
                         : "Unavailable"}
                     </div>
-                    <div className="mt-1 text-xs text-ink-soft">From UTC start/finish timestamps</div>
+                    <div className="mt-1 text-xs text-ink-soft">From start to finish</div>
                   </Card>
 
                   <Card>
-                    <div className="text-xs text-ink-soft">Mean case latency</div>
+                    <div className="text-xs text-ink-soft">Average time per answer</div>
                     <div className="mt-1 font-mono text-xl font-medium">
                       {perf.per_case_duration_seconds_mean !== null
                         ? `${(perf.per_case_duration_seconds_mean * 1000).toFixed(0)}ms`
-                        : "Uninstrumented"}
+                        : "Not measured"}
                     </div>
-                    <div className="mt-1 text-xs text-ink-soft">Arithmetic mean across cases</div>
+                    <div className="mt-1 text-xs text-ink-soft">Averaged over all answers</div>
                   </Card>
 
                   <Card>
-                    <div className="text-xs text-ink-soft">Instrumentation status</div>
+                    <div className="text-xs text-ink-soft">Per-answer timing</div>
                     <div className="mt-2">
                       <Tag tone={durationsInstrumented ? "neutral" : "muted"}>
-                        {durationsInstrumented ? "Instrumented" : "Uninstrumented"}
+                        {durationsInstrumented ? "Instrumented" : "Not measured"}
                       </Tag>
                     </div>
-                    <div className="mt-1 text-xs text-ink-soft">Case-level timing capture</div>
+                    <div className="mt-1 text-xs text-ink-soft">Recorded for each answer?</div>
                   </Card>
 
                   <Card>
-                    <div className="text-xs text-ink-soft">Token usage telemetry</div>
+                    <div className="text-xs text-ink-soft">Token counts</div>
                     <div className="mt-2">
                       <Tag tone={perf.tokens_available ? "neutral" : "muted"}>
                         {perf.tokens_available ? "Reported" : "Unavailable"}
                       </Tag>
                     </div>
-                    <div className="mt-1 text-xs text-ink-soft">Provider token counts</div>
+                    <div className="mt-1 text-xs text-ink-soft">Reported by the model provider?</div>
                   </Card>
                 </div>
               );

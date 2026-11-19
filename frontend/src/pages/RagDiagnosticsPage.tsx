@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FixtureNotice } from "../components/FixtureNotice";
 import { Card, SectionHeading, Stat } from "../components/Card";
 import { EmptyState } from "../components/EmptyState";
 import { Tag } from "../components/Tag";
@@ -165,7 +164,6 @@ export function RagDiagnosticsPage() {
   return (
     <div>
       <SectionHeading title="Did the search step find the right passage?" description="Only runs that look up passages before answering (RAG) appear here. Scores are averages from 0 to 1; higher is better." />
-      <FixtureNotice />
 
       <DataStateView loading={loading} error={error} onRetry={refetch}>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -179,10 +177,7 @@ export function RagDiagnosticsPage() {
           <Card>
             <SectionHeading title="Search problem or answer problem?" />
             <p className="mb-4 text-xs text-ink-soft">
-              The platform decouples retrieval quality from generation faithfulness. A retrieval
-              miss and an incorrect answer indicate a <span className="font-mono">retrieval_failure</span>;
-              a retrieval hit and an incorrect answer indicate a <span className="font-mono">generation_failure</span>.
-            </p>
+              If the search step missed the passage, a wrong answer is a <strong className="text-ink">search problem</strong> (retrieval failure). If it found the passage and the answer was still wrong, it is an <strong className="text-ink">answer problem</strong> (generation failure).</p>
             {categoryCounts.size === 0 ? (
               <EmptyState title="No RAG failure categories recorded." />
             ) : (
@@ -235,7 +230,7 @@ export function RagDiagnosticsPage() {
             {items.length === 0 ? (
               <EmptyState title="No RAG executions recorded." />
             ) : (
-              <div className="overflow-x-auto border border-line">
+              <div className="relative overflow-x-auto border border-line">
                 <table className="w-full min-w-[800px] border-collapse text-sm">
                   <thead>
                     <tr className="border-b border-line bg-paper-dim text-left text-xs text-ink-soft font-normal">
@@ -246,7 +241,7 @@ export function RagDiagnosticsPage() {
                       <th className="px-3 py-2">Found</th>
                       <th className="px-3 py-2">Diagnosis</th>
                       <th className="px-3 py-2">Extra findings</th>
-                      <th className="px-3 py-2 text-right"></th>
+                      <th className="px-3 py-2 text-right"><span className="sr-only">Open</span></th>
                     </tr>
                   </thead>
                   <tbody>

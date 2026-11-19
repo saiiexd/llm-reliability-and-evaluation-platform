@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FixtureNotice } from "../components/FixtureNotice";
 import { Card, SectionHeading, Stat } from "../components/Card";
 import { EmptyState } from "../components/EmptyState";
 import { Tag } from "../components/Tag";
@@ -147,7 +146,6 @@ export function RobustnessPage() {
   return (
     <div>
       <SectionHeading title="Does rewording change the verdict?" description="Each pair is the same question asked two ways. A consistent model gets the same diagnosis for both." />
-      <FixtureNotice />
 
       <DataStateView loading={loading} error={error} onRetry={refetch}>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -190,10 +188,6 @@ export function RobustnessPage() {
 
           <Card>
             <SectionHeading title="How verdicts changed" description="Pairs where the change flipped the diagnosis, e.g. correct → wrong." />
-            <p className="mb-3 text-xs text-ink-soft">
-              Transitions where a perturbation caused the model output to shift from one failure
-              category to another.
-            </p>
             {Object.keys(transitionCounts).length === 0 ? (
               <EmptyState title="No verdict changed." />
             ) : (
