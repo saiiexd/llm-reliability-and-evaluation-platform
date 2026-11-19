@@ -72,13 +72,24 @@ def test_create_experiment_success_and_conflict(api_client: TestClient) -> None:
         "metadata": {"secret_token": "hidden-secret"},
     }
 
+    # Credentials must never be persisted in an experiment record: rejected.
+    secret_res = api_client.post("/api/v1/experiments", json=payload)
+    assert secret_res.status_code == 422
+    body = secret_res.json()["error"]
+    assert body["code"] == "CONFIGURATION_SECURITY_ERROR"
+    assert sorted(body["details"]["credential_keys"]) == [
+        "metadata.secret_token",
+        "model_config.metadata.api_key",
+    ]
+    assert "super-secret" not in secret_res.text
+    assert api_client.get("/api/v1/experiments/exp-custom-new-1").status_code == 404
+
+    payload["model_config"]["metadata"] = {"max_tokens_note": "harmless"}
+    payload["metadata"] = {"owner": "team"}
     create_res = api_client.post("/api/v1/experiments", json=payload)
     assert create_res.status_code == 201
     created = create_res.json()
     assert created["experiment_id"] == "exp-custom-new-1"
-    # Verify sensitive fields are redacted
-    assert created["model_config"]["metadata"]["api_key"] == "***REDACTED***"
-    assert created["metadata"]["secret_token"] == "***REDACTED***"
 
     # Verify duplicate creation triggers 409 Conflict
     conflict_res = api_client.post("/api/v1/experiments", json=payload)

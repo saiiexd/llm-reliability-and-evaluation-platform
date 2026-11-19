@@ -13,12 +13,17 @@ from llm_reliability.api.dependencies import (
     get_repository,
 )
 from llm_reliability.api.errors import (
+    ConfigurationSecurityError,
     ConflictError,
     ExecutionError,
     ResourceNotFoundError,
 )
 from llm_reliability.api.registry import AdapterRegistry, EvaluatorRegistry
-from llm_reliability.api.schemas.common import PaginatedResponse, PaginationMeta
+from llm_reliability.api.schemas.common import (
+    PaginatedResponse,
+    PaginationMeta,
+    find_credential_keys,
+)
 from llm_reliability.api.schemas.experiments import (
     CreateExperimentRequest,
     ExecuteExperimentRequest,
@@ -89,6 +94,20 @@ def create_experiment(
     eval_registry: EvaluatorRegistry = Depends(get_evaluator_registry),
 ) -> ExperimentDetailResponse:
     """Safely creates a new experiment definition with allowlisted evaluators."""
+    credential_keys = find_credential_keys(
+        {
+            "model_config.extra_params": req.model_config_req.extra_params or {},
+            "model_config.metadata": req.model_config_req.metadata or {},
+            "metadata": req.metadata or {},
+            "test_cases": [tc.metadata for tc in req.test_cases],
+        }
+    )
+    if credential_keys:
+        raise ConfigurationSecurityError(
+            "Experiment definitions are persisted to disk and must not contain credentials. "
+            "Configure provider keys as server environment variables instead.",
+            details={"credential_keys": credential_keys},
+        )
     try:
         evaluators = [eval_registry.get(name) for name in req.evaluator_names]
     except ValueError as exc:

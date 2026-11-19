@@ -12,6 +12,32 @@ from pydantic import BaseModel, ConfigDict, Field
 _SECRET_PATTERN = re.compile(r"(key|secret|token|password|auth|credential|bearer)", re.IGNORECASE)
 
 
+# Stricter than _SECRET_PATTERN (which is deliberately broad for *display*
+# redaction and would also match harmless keys such as "max_tokens"): these are
+# key names that can only plausibly hold a credential, so a request containing
+# them is rejected instead of being written to the experiment store.
+_CREDENTIAL_KEY_PATTERN = re.compile(
+    r"(^|[_-])(api[_-]?key|secret|password|passwd|credentials?|bearer|authorization|"
+    r"access[_-]?token|auth[_-]?token|token)$",
+    re.IGNORECASE,
+)
+
+
+def find_credential_keys(data: Any, path: str = "") -> list[str]:
+    """Return dotted paths of keys in ``data`` that look like credentials."""
+    found: list[str] = []
+    if isinstance(data, dict):
+        for k, v in data.items():
+            key_path = f"{path}.{k}" if path else str(k)
+            if _CREDENTIAL_KEY_PATTERN.search(str(k)):
+                found.append(key_path)
+            found.extend(find_credential_keys(v, key_path))
+    elif isinstance(data, list):
+        for i, item in enumerate(data):
+            found.extend(find_credential_keys(item, f"{path}[{i}]"))
+    return found
+
+
 def redact_sensitive_dict(data: dict[str, Any]) -> dict[str, Any]:
     """Recursively redacts sensitive keys such as api_key, tokens, or credentials."""
     redacted: dict[str, Any] = {}
