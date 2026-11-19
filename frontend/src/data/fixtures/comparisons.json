@@ -5,26 +5,30 @@
       "All 2 runs share identical configuration fingerprint ('0780e4b8...'). Variations represent stochasticity, system latency fluctuations, or repeated trial consistency."
     ],
     "configuration_diffs": {
+      "adapters": {
+        "bf188087f5ab4fff82af2338926c1e42": "rag-pipeline-v1",
+        "ffd9f406285f4040b5b99ef2aaf964fa": "rag-pipeline-v1"
+      },
       "config_fingerprints": {
-        "347857f544194fc0b87d7748dd6abcaa": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28",
-        "a489deaac753435f9976783b06cbb994": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28"
+        "bf188087f5ab4fff82af2338926c1e42": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28",
+        "ffd9f406285f4040b5b99ef2aaf964fa": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28"
       },
       "dataset_versions": {
-        "347857f544194fc0b87d7748dd6abcaa": "a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77",
-        "a489deaac753435f9976783b06cbb994": "a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77"
+        "bf188087f5ab4fff82af2338926c1e42": "a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77",
+        "ffd9f406285f4040b5b99ef2aaf964fa": "a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77"
       },
       "evaluators": {
-        "347857f544194fc0b87d7748dd6abcaa": [
+        "bf188087f5ab4fff82af2338926c1e42": [
           "exact_match",
           "llm_faithfulness_judge"
         ],
-        "a489deaac753435f9976783b06cbb994": [
+        "ffd9f406285f4040b5b99ef2aaf964fa": [
           "exact_match",
           "llm_faithfulness_judge"
         ]
       },
       "model_configs": {
-        "347857f544194fc0b87d7748dd6abcaa": {
+        "bf188087f5ab4fff82af2338926c1e42": {
           "extra_params": {
             "rag": {
               "chunk_overlap": 0,
@@ -40,7 +44,7 @@
           "model_id": "mock-adapter-v1",
           "temperature": null
         },
-        "a489deaac753435f9976783b06cbb994": {
+        "ffd9f406285f4040b5b99ef2aaf964fa": {
           "extra_params": {
             "rag": {
               "chunk_overlap": 0,
@@ -61,110 +65,110 @@
     "evaluation_comparisons": {
       "exact_match": {
         "denominators": {
-          "347857f544194fc0b87d7748dd6abcaa": 7,
-          "a489deaac753435f9976783b06cbb994": 7
+          "bf188087f5ab4fff82af2338926c1e42": 7,
+          "ffd9f406285f4040b5b99ef2aaf964fa": 7
         },
         "numerators": {
-          "347857f544194fc0b87d7748dd6abcaa": 3,
-          "a489deaac753435f9976783b06cbb994": 3
+          "bf188087f5ab4fff82af2338926c1e42": 3,
+          "ffd9f406285f4040b5b99ef2aaf964fa": 3
         },
         "pass_rates": {
-          "347857f544194fc0b87d7748dd6abcaa": 0.42857142857142855,
-          "a489deaac753435f9976783b06cbb994": 0.42857142857142855
+          "bf188087f5ab4fff82af2338926c1e42": 0.42857142857142855,
+          "ffd9f406285f4040b5b99ef2aaf964fa": 0.42857142857142855
         },
         "score_means": {
-          "347857f544194fc0b87d7748dd6abcaa": 0.42857142857142855,
-          "a489deaac753435f9976783b06cbb994": 0.42857142857142855
+          "bf188087f5ab4fff82af2338926c1e42": 0.42857142857142855,
+          "ffd9f406285f4040b5b99ef2aaf964fa": 0.42857142857142855
         }
       },
       "llm_faithfulness_judge": {
         "denominators": {
-          "347857f544194fc0b87d7748dd6abcaa": 0,
-          "a489deaac753435f9976783b06cbb994": 0
+          "bf188087f5ab4fff82af2338926c1e42": 7,
+          "ffd9f406285f4040b5b99ef2aaf964fa": 7
         },
         "numerators": {
-          "347857f544194fc0b87d7748dd6abcaa": 0,
-          "a489deaac753435f9976783b06cbb994": 0
+          "bf188087f5ab4fff82af2338926c1e42": 3,
+          "ffd9f406285f4040b5b99ef2aaf964fa": 3
         },
         "pass_rates": {
-          "347857f544194fc0b87d7748dd6abcaa": null,
-          "a489deaac753435f9976783b06cbb994": null
+          "bf188087f5ab4fff82af2338926c1e42": 0.42857142857142855,
+          "ffd9f406285f4040b5b99ef2aaf964fa": 0.42857142857142855
         },
         "score_means": {
-          "347857f544194fc0b87d7748dd6abcaa": null,
-          "a489deaac753435f9976783b06cbb994": null
+          "bf188087f5ab4fff82af2338926c1e42": null,
+          "ffd9f406285f4040b5b99ef2aaf964fa": null
         }
       }
     },
     "failure_distribution_comparisons": {
       "contradicted": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "a489deaac753435f9976783b06cbb994": 0
+        "bf188087f5ab4fff82af2338926c1e42": 1,
+        "ffd9f406285f4040b5b99ef2aaf964fa": 1
       },
       "correct": {
-        "347857f544194fc0b87d7748dd6abcaa": 3,
-        "a489deaac753435f9976783b06cbb994": 3
+        "bf188087f5ab4fff82af2338926c1e42": 3,
+        "ffd9f406285f4040b5b99ef2aaf964fa": 3
       },
       "evaluator_disagreement": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "a489deaac753435f9976783b06cbb994": 0
+        "bf188087f5ab4fff82af2338926c1e42": 0,
+        "ffd9f406285f4040b5b99ef2aaf964fa": 0
       },
       "generation_failure": {
-        "347857f544194fc0b87d7748dd6abcaa": 3,
-        "a489deaac753435f9976783b06cbb994": 3
+        "bf188087f5ab4fff82af2338926c1e42": 0,
+        "ffd9f406285f4040b5b99ef2aaf964fa": 0
       },
       "incorrect": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "a489deaac753435f9976783b06cbb994": 0
+        "bf188087f5ab4fff82af2338926c1e42": 0,
+        "ffd9f406285f4040b5b99ef2aaf964fa": 0
       },
       "insufficient_evidence": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "a489deaac753435f9976783b06cbb994": 0
+        "bf188087f5ab4fff82af2338926c1e42": 0,
+        "ffd9f406285f4040b5b99ef2aaf964fa": 0
       },
       "retrieval_failure": {
-        "347857f544194fc0b87d7748dd6abcaa": 1,
-        "a489deaac753435f9976783b06cbb994": 1
+        "bf188087f5ab4fff82af2338926c1e42": 0,
+        "ffd9f406285f4040b5b99ef2aaf964fa": 0
       },
       "undetermined": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "a489deaac753435f9976783b06cbb994": 0
+        "bf188087f5ab4fff82af2338926c1e42": 0,
+        "ffd9f406285f4040b5b99ef2aaf964fa": 0
       },
       "unsupported": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "a489deaac753435f9976783b06cbb994": 0
+        "bf188087f5ab4fff82af2338926c1e42": 3,
+        "ffd9f406285f4040b5b99ef2aaf964fa": 3
       }
     },
     "performance_comparisons": {
       "per_case_mean_seconds": {
-        "347857f544194fc0b87d7748dd6abcaa": null,
-        "a489deaac753435f9976783b06cbb994": null
+        "bf188087f5ab4fff82af2338926c1e42": null,
+        "ffd9f406285f4040b5b99ef2aaf964fa": null
       },
       "wall_clock_seconds": {
-        "347857f544194fc0b87d7748dd6abcaa": 0.000303,
-        "a489deaac753435f9976783b06cbb994": 0.00027
+        "bf188087f5ab4fff82af2338926c1e42": 0.000259,
+        "ffd9f406285f4040b5b99ef2aaf964fa": 0.000164
       }
     },
     "retrieval_comparisons": {
       "hit_at_k_k1": {
-        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334,
-        "a489deaac753435f9976783b06cbb994": 0.8333333333333334
+        "bf188087f5ab4fff82af2338926c1e42": 0.8333333333333334,
+        "ffd9f406285f4040b5b99ef2aaf964fa": 0.8333333333333334
       },
       "mrr": {
-        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334,
-        "a489deaac753435f9976783b06cbb994": 0.8333333333333334
+        "bf188087f5ab4fff82af2338926c1e42": 0.8333333333333334,
+        "ffd9f406285f4040b5b99ef2aaf964fa": 0.8333333333333334
       },
       "recall_at_k_k1": {
-        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334,
-        "a489deaac753435f9976783b06cbb994": 0.8333333333333334
+        "bf188087f5ab4fff82af2338926c1e42": 0.8333333333333334,
+        "ffd9f406285f4040b5b99ef2aaf964fa": 0.8333333333333334
       }
     },
     "robustness_comparisons": {
-      "347857f544194fc0b87d7748dd6abcaa": 1.0,
-      "a489deaac753435f9976783b06cbb994": 1.0
+      "bf188087f5ab4fff82af2338926c1e42": 1.0,
+      "ffd9f406285f4040b5b99ef2aaf964fa": 1.0
     },
     "source_run_ids": [
-      "347857f544194fc0b87d7748dd6abcaa",
-      "a489deaac753435f9976783b06cbb994"
+      "bf188087f5ab4fff82af2338926c1e42",
+      "ffd9f406285f4040b5b99ef2aaf964fa"
     ]
   },
   "incompatible": {
@@ -173,25 +177,35 @@
       "Runs evaluate differing dataset versions (a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77, f3ea327bd852f20006803beb8666a2ad8ffe9cd72fdf09a8f8e09b4ea4b19335). Direct aggregate score comparisons are methodologically invalid; outcomes must be analyzed separately."
     ],
     "configuration_diffs": {
+      "adapters": {
+        "ba5b1d40a20049d29b73693497743afd": "mock-adapter-v1",
+        "bf188087f5ab4fff82af2338926c1e42": "rag-pipeline-v1"
+      },
       "config_fingerprints": {
-        "347857f544194fc0b87d7748dd6abcaa": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28",
-        "664f791bd61b4b708116b67c22569afa": "042023b17a261703cd58b5ddde29800b7e605486ee2cd57b7c6857c44022b33d"
+        "ba5b1d40a20049d29b73693497743afd": "042023b17a261703cd58b5ddde29800b7e605486ee2cd57b7c6857c44022b33d",
+        "bf188087f5ab4fff82af2338926c1e42": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28"
       },
       "dataset_versions": {
-        "347857f544194fc0b87d7748dd6abcaa": "a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77",
-        "664f791bd61b4b708116b67c22569afa": "f3ea327bd852f20006803beb8666a2ad8ffe9cd72fdf09a8f8e09b4ea4b19335"
+        "ba5b1d40a20049d29b73693497743afd": "f3ea327bd852f20006803beb8666a2ad8ffe9cd72fdf09a8f8e09b4ea4b19335",
+        "bf188087f5ab4fff82af2338926c1e42": "a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77"
       },
       "evaluators": {
-        "347857f544194fc0b87d7748dd6abcaa": [
+        "ba5b1d40a20049d29b73693497743afd": [
+          "exact_match"
+        ],
+        "bf188087f5ab4fff82af2338926c1e42": [
           "exact_match",
           "llm_faithfulness_judge"
-        ],
-        "664f791bd61b4b708116b67c22569afa": [
-          "exact_match"
         ]
       },
       "model_configs": {
-        "347857f544194fc0b87d7748dd6abcaa": {
+        "ba5b1d40a20049d29b73693497743afd": {
+          "extra_params": {},
+          "max_tokens": null,
+          "model_id": "mock-adapter-v1",
+          "temperature": null
+        },
+        "bf188087f5ab4fff82af2338926c1e42": {
           "extra_params": {
             "rag": {
               "chunk_overlap": 0,
@@ -203,12 +217,6 @@
               "top_k": 1
             }
           },
-          "max_tokens": null,
-          "model_id": "mock-adapter-v1",
-          "temperature": null
-        },
-        "664f791bd61b4b708116b67c22569afa": {
-          "extra_params": {},
           "max_tokens": null,
           "model_id": "mock-adapter-v1",
           "temperature": null
@@ -218,151 +226,139 @@
     "evaluation_comparisons": {
       "exact_match": {
         "denominators": {
-          "347857f544194fc0b87d7748dd6abcaa": 7,
-          "664f791bd61b4b708116b67c22569afa": 2
+          "ba5b1d40a20049d29b73693497743afd": 2,
+          "bf188087f5ab4fff82af2338926c1e42": 7
         },
         "numerators": {
-          "347857f544194fc0b87d7748dd6abcaa": 3,
-          "664f791bd61b4b708116b67c22569afa": 1
+          "ba5b1d40a20049d29b73693497743afd": 1,
+          "bf188087f5ab4fff82af2338926c1e42": 3
         },
         "pass_rates": {
-          "347857f544194fc0b87d7748dd6abcaa": 0.42857142857142855,
-          "664f791bd61b4b708116b67c22569afa": 0.5
+          "ba5b1d40a20049d29b73693497743afd": 0.5,
+          "bf188087f5ab4fff82af2338926c1e42": 0.42857142857142855
         },
         "score_means": {
-          "347857f544194fc0b87d7748dd6abcaa": 0.42857142857142855,
-          "664f791bd61b4b708116b67c22569afa": 0.5
+          "ba5b1d40a20049d29b73693497743afd": 0.5,
+          "bf188087f5ab4fff82af2338926c1e42": 0.42857142857142855
         }
       },
       "llm_faithfulness_judge": {
         "denominators": {
-          "347857f544194fc0b87d7748dd6abcaa": 0,
-          "664f791bd61b4b708116b67c22569afa": 0
+          "ba5b1d40a20049d29b73693497743afd": 0,
+          "bf188087f5ab4fff82af2338926c1e42": 7
         },
         "numerators": {
-          "347857f544194fc0b87d7748dd6abcaa": 0,
-          "664f791bd61b4b708116b67c22569afa": 0
+          "ba5b1d40a20049d29b73693497743afd": 0,
+          "bf188087f5ab4fff82af2338926c1e42": 3
         },
         "pass_rates": {
-          "347857f544194fc0b87d7748dd6abcaa": null,
-          "664f791bd61b4b708116b67c22569afa": null
+          "ba5b1d40a20049d29b73693497743afd": null,
+          "bf188087f5ab4fff82af2338926c1e42": 0.42857142857142855
         },
         "score_means": {
-          "347857f544194fc0b87d7748dd6abcaa": null,
-          "664f791bd61b4b708116b67c22569afa": null
+          "ba5b1d40a20049d29b73693497743afd": null,
+          "bf188087f5ab4fff82af2338926c1e42": null
         }
       }
     },
     "failure_distribution_comparisons": {
       "contradicted": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "664f791bd61b4b708116b67c22569afa": 0
+        "ba5b1d40a20049d29b73693497743afd": 0,
+        "bf188087f5ab4fff82af2338926c1e42": 1
       },
       "correct": {
-        "347857f544194fc0b87d7748dd6abcaa": 3,
-        "664f791bd61b4b708116b67c22569afa": 1
+        "ba5b1d40a20049d29b73693497743afd": 1,
+        "bf188087f5ab4fff82af2338926c1e42": 3
       },
       "evaluator_disagreement": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "664f791bd61b4b708116b67c22569afa": 0
+        "ba5b1d40a20049d29b73693497743afd": 0,
+        "bf188087f5ab4fff82af2338926c1e42": 0
       },
       "generation_failure": {
-        "347857f544194fc0b87d7748dd6abcaa": 3,
-        "664f791bd61b4b708116b67c22569afa": 0
+        "ba5b1d40a20049d29b73693497743afd": 0,
+        "bf188087f5ab4fff82af2338926c1e42": 0
       },
       "incorrect": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "664f791bd61b4b708116b67c22569afa": 1
+        "ba5b1d40a20049d29b73693497743afd": 1,
+        "bf188087f5ab4fff82af2338926c1e42": 0
       },
       "insufficient_evidence": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "664f791bd61b4b708116b67c22569afa": 0
+        "ba5b1d40a20049d29b73693497743afd": 0,
+        "bf188087f5ab4fff82af2338926c1e42": 0
       },
       "retrieval_failure": {
-        "347857f544194fc0b87d7748dd6abcaa": 1,
-        "664f791bd61b4b708116b67c22569afa": 0
+        "ba5b1d40a20049d29b73693497743afd": 0,
+        "bf188087f5ab4fff82af2338926c1e42": 0
       },
       "undetermined": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "664f791bd61b4b708116b67c22569afa": 0
+        "ba5b1d40a20049d29b73693497743afd": 0,
+        "bf188087f5ab4fff82af2338926c1e42": 0
       },
       "unsupported": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "664f791bd61b4b708116b67c22569afa": 0
+        "ba5b1d40a20049d29b73693497743afd": 0,
+        "bf188087f5ab4fff82af2338926c1e42": 3
       }
     },
     "performance_comparisons": {
       "per_case_mean_seconds": {
-        "347857f544194fc0b87d7748dd6abcaa": null,
-        "664f791bd61b4b708116b67c22569afa": null
+        "ba5b1d40a20049d29b73693497743afd": null,
+        "bf188087f5ab4fff82af2338926c1e42": null
       },
       "wall_clock_seconds": {
-        "347857f544194fc0b87d7748dd6abcaa": 0.000303,
-        "664f791bd61b4b708116b67c22569afa": 4e-05
+        "ba5b1d40a20049d29b73693497743afd": 1.7e-05,
+        "bf188087f5ab4fff82af2338926c1e42": 0.000259
       }
     },
     "retrieval_comparisons": {
       "hit_at_k_k1": {
-        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334
+        "bf188087f5ab4fff82af2338926c1e42": 0.8333333333333334
       },
       "mrr": {
-        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334
+        "bf188087f5ab4fff82af2338926c1e42": 0.8333333333333334
       },
       "recall_at_k_k1": {
-        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334
+        "bf188087f5ab4fff82af2338926c1e42": 0.8333333333333334
       }
     },
     "robustness_comparisons": {
-      "347857f544194fc0b87d7748dd6abcaa": 1.0,
-      "664f791bd61b4b708116b67c22569afa": null
+      "ba5b1d40a20049d29b73693497743afd": null,
+      "bf188087f5ab4fff82af2338926c1e42": 1.0
     },
     "source_run_ids": [
-      "347857f544194fc0b87d7748dd6abcaa",
-      "664f791bd61b4b708116b67c22569afa"
+      "bf188087f5ab4fff82af2338926c1e42",
+      "ba5b1d40a20049d29b73693497743afd"
     ]
   },
   "intervention": {
     "compatibility": "partially_different_configuration",
     "compatibility_reasons": [
-      "All 2 runs evaluate identical dataset version ('a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77'), but vary in model parameters, prompt templates, or evaluator selections. Valid for controlled comparative analysis."
+      "Runs share the dataset version but were executed by different adapters (rag-pipeline-topk-2, rag-pipeline-v1). Differences reflect the systems under test, not run-to-run variation."
     ],
     "configuration_diffs": {
+      "adapters": {
+        "8c07d1c9f9b840b5b419a3e58351d287": "rag-pipeline-topk-2",
+        "bf188087f5ab4fff82af2338926c1e42": "rag-pipeline-v1"
+      },
       "config_fingerprints": {
-        "347857f544194fc0b87d7748dd6abcaa": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28",
-        "350b690a337d4462a4253bd31d0112d7": "0d85492573ceabb2943d4d50a85cc00ace51978396355fea601d831888400b94"
+        "8c07d1c9f9b840b5b419a3e58351d287": "0d85492573ceabb2943d4d50a85cc00ace51978396355fea601d831888400b94",
+        "bf188087f5ab4fff82af2338926c1e42": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28"
       },
       "dataset_versions": {
-        "347857f544194fc0b87d7748dd6abcaa": "a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77",
-        "350b690a337d4462a4253bd31d0112d7": "a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77"
+        "8c07d1c9f9b840b5b419a3e58351d287": "a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77",
+        "bf188087f5ab4fff82af2338926c1e42": "a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77"
       },
       "evaluators": {
-        "347857f544194fc0b87d7748dd6abcaa": [
+        "8c07d1c9f9b840b5b419a3e58351d287": [
           "exact_match",
           "llm_faithfulness_judge"
         ],
-        "350b690a337d4462a4253bd31d0112d7": [
+        "bf188087f5ab4fff82af2338926c1e42": [
           "exact_match",
           "llm_faithfulness_judge"
         ]
       },
       "model_configs": {
-        "347857f544194fc0b87d7748dd6abcaa": {
-          "extra_params": {
-            "rag": {
-              "chunk_overlap": 0,
-              "chunk_size": 200,
-              "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
-              "embedding_model_id": "fake-embedding-v1",
-              "prompt_template_id": "default_v1",
-              "similarity_metric": "cosine",
-              "top_k": 1
-            }
-          },
-          "max_tokens": null,
-          "model_id": "mock-adapter-v1",
-          "temperature": null
-        },
-        "350b690a337d4462a4253bd31d0112d7": {
+        "8c07d1c9f9b840b5b419a3e58351d287": {
           "extra_params": {
             "rag": {
               "chunk_overlap": 0,
@@ -377,116 +373,132 @@
           "max_tokens": null,
           "model_id": "mock-adapter-v1",
           "temperature": null
+        },
+        "bf188087f5ab4fff82af2338926c1e42": {
+          "extra_params": {
+            "rag": {
+              "chunk_overlap": 0,
+              "chunk_size": 200,
+              "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
+              "embedding_model_id": "fake-embedding-v1",
+              "prompt_template_id": "default_v1",
+              "similarity_metric": "cosine",
+              "top_k": 1
+            }
+          },
+          "max_tokens": null,
+          "model_id": "mock-adapter-v1",
+          "temperature": null
         }
       }
     },
     "evaluation_comparisons": {
       "exact_match": {
         "denominators": {
-          "347857f544194fc0b87d7748dd6abcaa": 7,
-          "350b690a337d4462a4253bd31d0112d7": 7
+          "8c07d1c9f9b840b5b419a3e58351d287": 7,
+          "bf188087f5ab4fff82af2338926c1e42": 7
         },
         "numerators": {
-          "347857f544194fc0b87d7748dd6abcaa": 3,
-          "350b690a337d4462a4253bd31d0112d7": 3
+          "8c07d1c9f9b840b5b419a3e58351d287": 3,
+          "bf188087f5ab4fff82af2338926c1e42": 3
         },
         "pass_rates": {
-          "347857f544194fc0b87d7748dd6abcaa": 0.42857142857142855,
-          "350b690a337d4462a4253bd31d0112d7": 0.42857142857142855
+          "8c07d1c9f9b840b5b419a3e58351d287": 0.42857142857142855,
+          "bf188087f5ab4fff82af2338926c1e42": 0.42857142857142855
         },
         "score_means": {
-          "347857f544194fc0b87d7748dd6abcaa": 0.42857142857142855,
-          "350b690a337d4462a4253bd31d0112d7": 0.42857142857142855
+          "8c07d1c9f9b840b5b419a3e58351d287": 0.42857142857142855,
+          "bf188087f5ab4fff82af2338926c1e42": 0.42857142857142855
         }
       },
       "llm_faithfulness_judge": {
         "denominators": {
-          "347857f544194fc0b87d7748dd6abcaa": 0,
-          "350b690a337d4462a4253bd31d0112d7": 0
+          "8c07d1c9f9b840b5b419a3e58351d287": 7,
+          "bf188087f5ab4fff82af2338926c1e42": 7
         },
         "numerators": {
-          "347857f544194fc0b87d7748dd6abcaa": 0,
-          "350b690a337d4462a4253bd31d0112d7": 0
+          "8c07d1c9f9b840b5b419a3e58351d287": 3,
+          "bf188087f5ab4fff82af2338926c1e42": 3
         },
         "pass_rates": {
-          "347857f544194fc0b87d7748dd6abcaa": null,
-          "350b690a337d4462a4253bd31d0112d7": null
+          "8c07d1c9f9b840b5b419a3e58351d287": 0.42857142857142855,
+          "bf188087f5ab4fff82af2338926c1e42": 0.42857142857142855
         },
         "score_means": {
-          "347857f544194fc0b87d7748dd6abcaa": null,
-          "350b690a337d4462a4253bd31d0112d7": null
+          "8c07d1c9f9b840b5b419a3e58351d287": null,
+          "bf188087f5ab4fff82af2338926c1e42": null
         }
       }
     },
     "failure_distribution_comparisons": {
       "contradicted": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "350b690a337d4462a4253bd31d0112d7": 0
+        "8c07d1c9f9b840b5b419a3e58351d287": 1,
+        "bf188087f5ab4fff82af2338926c1e42": 1
       },
       "correct": {
-        "347857f544194fc0b87d7748dd6abcaa": 3,
-        "350b690a337d4462a4253bd31d0112d7": 3
+        "8c07d1c9f9b840b5b419a3e58351d287": 3,
+        "bf188087f5ab4fff82af2338926c1e42": 3
       },
       "evaluator_disagreement": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "350b690a337d4462a4253bd31d0112d7": 0
+        "8c07d1c9f9b840b5b419a3e58351d287": 0,
+        "bf188087f5ab4fff82af2338926c1e42": 0
       },
       "generation_failure": {
-        "347857f544194fc0b87d7748dd6abcaa": 3,
-        "350b690a337d4462a4253bd31d0112d7": 3
+        "8c07d1c9f9b840b5b419a3e58351d287": 0,
+        "bf188087f5ab4fff82af2338926c1e42": 0
       },
       "incorrect": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "350b690a337d4462a4253bd31d0112d7": 1
+        "8c07d1c9f9b840b5b419a3e58351d287": 0,
+        "bf188087f5ab4fff82af2338926c1e42": 0
       },
       "insufficient_evidence": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "350b690a337d4462a4253bd31d0112d7": 0
+        "8c07d1c9f9b840b5b419a3e58351d287": 0,
+        "bf188087f5ab4fff82af2338926c1e42": 0
       },
       "retrieval_failure": {
-        "347857f544194fc0b87d7748dd6abcaa": 1,
-        "350b690a337d4462a4253bd31d0112d7": 0
+        "8c07d1c9f9b840b5b419a3e58351d287": 0,
+        "bf188087f5ab4fff82af2338926c1e42": 0
       },
       "undetermined": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "350b690a337d4462a4253bd31d0112d7": 0
+        "8c07d1c9f9b840b5b419a3e58351d287": 0,
+        "bf188087f5ab4fff82af2338926c1e42": 0
       },
       "unsupported": {
-        "347857f544194fc0b87d7748dd6abcaa": 0,
-        "350b690a337d4462a4253bd31d0112d7": 0
+        "8c07d1c9f9b840b5b419a3e58351d287": 3,
+        "bf188087f5ab4fff82af2338926c1e42": 3
       }
     },
     "performance_comparisons": {
       "per_case_mean_seconds": {
-        "347857f544194fc0b87d7748dd6abcaa": null,
-        "350b690a337d4462a4253bd31d0112d7": null
+        "8c07d1c9f9b840b5b419a3e58351d287": null,
+        "bf188087f5ab4fff82af2338926c1e42": null
       },
       "wall_clock_seconds": {
-        "347857f544194fc0b87d7748dd6abcaa": 0.000303,
-        "350b690a337d4462a4253bd31d0112d7": 0.000242
+        "8c07d1c9f9b840b5b419a3e58351d287": 0.000157,
+        "bf188087f5ab4fff82af2338926c1e42": 0.000259
       }
     },
     "retrieval_comparisons": {
       "hit_at_k_k1": {
-        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334,
-        "350b690a337d4462a4253bd31d0112d7": 0.8333333333333334
+        "8c07d1c9f9b840b5b419a3e58351d287": 0.8333333333333334,
+        "bf188087f5ab4fff82af2338926c1e42": 0.8333333333333334
       },
       "mrr": {
-        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334,
-        "350b690a337d4462a4253bd31d0112d7": 0.9166666666666666
+        "8c07d1c9f9b840b5b419a3e58351d287": 0.9166666666666666,
+        "bf188087f5ab4fff82af2338926c1e42": 0.8333333333333334
       },
       "recall_at_k_k1": {
-        "347857f544194fc0b87d7748dd6abcaa": 0.8333333333333334,
-        "350b690a337d4462a4253bd31d0112d7": 0.8333333333333334
+        "8c07d1c9f9b840b5b419a3e58351d287": 0.8333333333333334,
+        "bf188087f5ab4fff82af2338926c1e42": 0.8333333333333334
       }
     },
     "robustness_comparisons": {
-      "347857f544194fc0b87d7748dd6abcaa": 1.0,
-      "350b690a337d4462a4253bd31d0112d7": 1.0
+      "8c07d1c9f9b840b5b419a3e58351d287": 1.0,
+      "bf188087f5ab4fff82af2338926c1e42": 1.0
     },
     "source_run_ids": [
-      "347857f544194fc0b87d7748dd6abcaa",
-      "350b690a337d4462a4253bd31d0112d7"
+      "bf188087f5ab4fff82af2338926c1e42",
+      "8c07d1c9f9b840b5b419a3e58351d287"
     ]
   }
 }

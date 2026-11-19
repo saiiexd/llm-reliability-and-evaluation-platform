@@ -1,5 +1,6 @@
 {
-  "347857f544194fc0b87d7748dd6abcaa": {
+  "8c07d1c9f9b840b5b419a3e58351d287": {
+    "completion_tokens_total": null,
     "cost_available": false,
     "evaluator_duration_seconds_mean": null,
     "generation_duration_seconds_mean": null,
@@ -10,12 +11,15 @@
       "Monetary cost calculation is unavailable (no cost calculation or pricing table)."
     ],
     "per_case_duration_seconds_mean": null,
+    "prompt_tokens_total": null,
     "retrieval_duration_seconds_mean": null,
-    "run_id": "347857f544194fc0b87d7748dd6abcaa",
+    "run_id": "8c07d1c9f9b840b5b419a3e58351d287",
     "tokens_available": false,
-    "wall_clock_duration_seconds": 0.000303
+    "total_tokens": null,
+    "wall_clock_duration_seconds": 0.000157
   },
-  "350b690a337d4462a4253bd31d0112d7": {
+  "ba5b1d40a20049d29b73693497743afd": {
+    "completion_tokens_total": null,
     "cost_available": false,
     "evaluator_duration_seconds_mean": null,
     "generation_duration_seconds_mean": null,
@@ -26,12 +30,15 @@
       "Monetary cost calculation is unavailable (no cost calculation or pricing table)."
     ],
     "per_case_duration_seconds_mean": null,
+    "prompt_tokens_total": null,
     "retrieval_duration_seconds_mean": null,
-    "run_id": "350b690a337d4462a4253bd31d0112d7",
+    "run_id": "ba5b1d40a20049d29b73693497743afd",
     "tokens_available": false,
-    "wall_clock_duration_seconds": 0.000242
+    "total_tokens": null,
+    "wall_clock_duration_seconds": 1.7e-05
   },
-  "664f791bd61b4b708116b67c22569afa": {
+  "bf188087f5ab4fff82af2338926c1e42": {
+    "completion_tokens_total": null,
     "cost_available": false,
     "evaluator_duration_seconds_mean": null,
     "generation_duration_seconds_mean": null,
@@ -42,12 +49,15 @@
       "Monetary cost calculation is unavailable (no cost calculation or pricing table)."
     ],
     "per_case_duration_seconds_mean": null,
+    "prompt_tokens_total": null,
     "retrieval_duration_seconds_mean": null,
-    "run_id": "664f791bd61b4b708116b67c22569afa",
+    "run_id": "bf188087f5ab4fff82af2338926c1e42",
     "tokens_available": false,
-    "wall_clock_duration_seconds": 4e-05
+    "total_tokens": null,
+    "wall_clock_duration_seconds": 0.000259
   },
-  "a489deaac753435f9976783b06cbb994": {
+  "ffd9f406285f4040b5b99ef2aaf964fa": {
+    "completion_tokens_total": null,
     "cost_available": false,
     "evaluator_duration_seconds_mean": null,
     "generation_duration_seconds_mean": null,
@@ -58,9 +68,11 @@
       "Monetary cost calculation is unavailable (no cost calculation or pricing table)."
     ],
     "per_case_duration_seconds_mean": null,
+    "prompt_tokens_total": null,
     "retrieval_duration_seconds_mean": null,
-    "run_id": "a489deaac753435f9976783b06cbb994",
+    "run_id": "ffd9f406285f4040b5b99ef2aaf964fa",
     "tokens_available": false,
-    "wall_clock_duration_seconds": 0.00027
+    "total_tokens": null,
+    "wall_clock_duration_seconds": 0.000164
   }
 }

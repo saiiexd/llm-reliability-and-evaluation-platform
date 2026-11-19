@@ -1,37 +1,5 @@
 {
-  "347857f544194fc0b87d7748dd6abcaa": [
-    {
-      "evaluated_cases": 6,
-      "k": 1,
-      "max_score": 1.0,
-      "mean_score": 0.8333333333333334,
-      "metric_name": "hit_at_k",
-      "min_score": 0.0,
-      "skipped_cases": 1,
-      "total_cases": 7
-    },
-    {
-      "evaluated_cases": 6,
-      "k": null,
-      "max_score": 1.0,
-      "mean_score": 0.8333333333333334,
-      "metric_name": "mrr",
-      "min_score": 0.0,
-      "skipped_cases": 1,
-      "total_cases": 7
-    },
-    {
-      "evaluated_cases": 6,
-      "k": 1,
-      "max_score": 1.0,
-      "mean_score": 0.8333333333333334,
-      "metric_name": "recall_at_k",
-      "min_score": 0.0,
-      "skipped_cases": 1,
-      "total_cases": 7
-    }
-  ],
-  "350b690a337d4462a4253bd31d0112d7": [
+  "8c07d1c9f9b840b5b419a3e58351d287": [
     {
       "evaluated_cases": 6,
       "k": 1,
@@ -63,8 +31,40 @@
       "total_cases": 7
     }
   ],
-  "664f791bd61b4b708116b67c22569afa": [],
-  "a489deaac753435f9976783b06cbb994": [
+  "ba5b1d40a20049d29b73693497743afd": [],
+  "bf188087f5ab4fff82af2338926c1e42": [
+    {
+      "evaluated_cases": 6,
+      "k": 1,
+      "max_score": 1.0,
+      "mean_score": 0.8333333333333334,
+      "metric_name": "hit_at_k",
+      "min_score": 0.0,
+      "skipped_cases": 1,
+      "total_cases": 7
+    },
+    {
+      "evaluated_cases": 6,
+      "k": null,
+      "max_score": 1.0,
+      "mean_score": 0.8333333333333334,
+      "metric_name": "mrr",
+      "min_score": 0.0,
+      "skipped_cases": 1,
+      "total_cases": 7
+    },
+    {
+      "evaluated_cases": 6,
+      "k": 1,
+      "max_score": 1.0,
+      "mean_score": 0.8333333333333334,
+      "metric_name": "recall_at_k",
+      "min_score": 0.0,
+      "skipped_cases": 1,
+      "total_cases": 7
+    }
+  ],
+  "ffd9f406285f4040b5b99ef2aaf964fa": [
     {
       "evaluated_cases": 6,
       "k": 1,

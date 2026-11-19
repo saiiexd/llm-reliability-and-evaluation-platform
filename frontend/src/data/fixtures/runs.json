@@ -1,815 +1,7 @@
 {
-  "347857f544194fc0b87d7748dd6abcaa": {
-    "config_fingerprint": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28",
-    "dataset_version": {
-      "dataset_name": "reliability-console-demo",
-      "test_cases": [
-        {
-          "id": "correct-context-correct-answer",
-          "input": "What is the capital of France?",
-          "metadata": {
-            "category": "correct",
-            "relevant_chunk_ids": [
-              "doc-france::chunk-0"
-            ]
-          },
-          "reference_answer": "Paris"
-        },
-        {
-          "id": "correct-context-unsupported-answer",
-          "input": "What is the capital of France?",
-          "metadata": {
-            "category": "unsupported",
-            "relevant_chunk_ids": [
-              "doc-france::chunk-0"
-            ]
-          },
-          "reference_answer": "Paris"
-        },
-        {
-          "id": "correct-context-contradictory-answer",
-          "input": "What is the capital of France?",
-          "metadata": {
-            "category": "contradicted",
-            "relevant_chunk_ids": [
-              "doc-france::chunk-0"
-            ]
-          },
-          "reference_answer": "Paris"
-        },
-        {
-          "id": "relevant-context-incorrect-answer",
-          "input": "What is the capital of France?",
-          "metadata": {
-            "category": "generation_failure",
-            "relevant_chunk_ids": [
-              "doc-france::chunk-0"
-            ]
-          },
-          "reference_answer": "Paris"
-        },
-        {
-          "id": "missing-context",
-          "input": "What is the capital of a country not in this corpus?",
-          "metadata": {
-            "category": "retrieval_failure",
-            "relevant_chunk_ids": [
-              "doc-france::chunk-0"
-            ]
-          },
-          "reference_answer": "Unknown"
-        },
-        {
-          "id": "no-ground-truth",
-          "input": "What is the capital of France?",
-          "metadata": {
-            "category": "insufficient_evidence"
-          },
-          "reference_answer": "Paris"
-        },
-        {
-          "id": "correct-context-correct-answer-reworded",
-          "input": "Which city serves as the capital of France?",
-          "metadata": {
-            "category": "robustness",
-            "perturbation_of": "correct-context-correct-answer",
-            "perturbation_type": "question_rewording",
-            "relevant_chunk_ids": [
-              "doc-france::chunk-0"
-            ]
-          },
-          "reference_answer": "Paris"
-        }
-      ],
-      "version_id": "a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77"
-    },
-    "error": null,
-    "evaluator_configs": [
-      {
-        "evaluator_name": "exact_match",
-        "parameters": {
-          "case_sensitive": false,
-          "collapse_whitespace": true
-        }
-      },
-      {
-        "evaluator_name": "llm_faithfulness_judge",
-        "parameters": {
-          "judge_model_id": "fake-judge-v1",
-          "rubric": {
-            "criterion": "faithfulness",
-            "instructions": "You are evaluating whether a generated answer is faithful to a provided set of retrieved context passages -- not whether the answer is fluent, complete, or externally true. Judge only whether the context supports the answer's claims. Do not use outside knowledge to decide whether the answer is factually correct in general; judge strictly against the given context.\n\nChoose exactly one outcome from: contradicted, unsupported, undetermined, supported.\n- supported: the context contains information that backs the answer's claims.\n- unsupported: the context neither confirms nor denies the answer's claims (the information simply is not present).\n- contradicted: the context directly conflicts with a claim in the answer.\n- undetermined: the context and the answer are too ambiguous, fragmentary, or unrelated in scope for you to reach any of the above three judgments reliably.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the four values above>, \"reasoning\": <one or two sentences of justification>}.",
-            "rubric_id": "faithfulness_vs_context_v1",
-            "scale": [
-              "contradicted",
-              "unsupported",
-              "undetermined",
-              "supported"
-            ]
-          }
-        }
-      }
-    ],
-    "experiment_id": "exp-reliability-console-demo",
-    "finished_at": "2026-11-01T19:24:06.523273+00:00",
-    "model_config": {
-      "extra_params": {
-        "rag": {
-          "chunk_overlap": 0,
-          "chunk_size": 200,
-          "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
-          "embedding_model_id": "fake-embedding-v1",
-          "prompt_template_id": "default_v1",
-          "similarity_metric": "cosine",
-          "top_k": 1
-        }
-      },
-      "max_tokens": null,
-      "model_id": "mock-adapter-v1",
-      "temperature": null
-    },
-    "result": {
-      "dataset_name": "reliability-console-demo",
-      "duration_seconds": null,
-      "evaluator_names": [
-        "exact_match",
-        "llm_faithfulness_judge"
-      ],
-      "model_id": "mock-adapter-v1",
-      "test_case_results": [
-        {
-          "duration_seconds": null,
-          "evaluation_results": [
-            {
-              "criterion": "correctness",
-              "details": {},
-              "duration_seconds": null,
-              "error": null,
-              "evaluator_config": {
-                "case_sensitive": false,
-                "collapse_whitespace": true
-              },
-              "evaluator_name": "exact_match",
-              "explanation": "Generated output exactly matched the reference answer under the configured normalization (case_sensitive=False, collapse_whitespace=True).",
-              "label": "match",
-              "passed": true,
-              "score": 1.0,
-              "status": "success",
-              "test_case_id": "correct-context-correct-answer"
-            },
-            {
-              "criterion": "faithfulness",
-              "details": {
-                "raw_judge_output": "{\"verdict\": \"supported\", \"confidence\": 1.0, \"explanation\": \"Directly supported.\"}"
-              },
-              "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
-              "evaluator_config": {
-                "judge_model_id": "fake-judge-v1",
-                "rubric": {
-                  "criterion": "faithfulness",
-                  "instructions": "You are evaluating whether a generated answer is faithful to a provided set of retrieved context passages -- not whether the answer is fluent, complete, or externally true. Judge only whether the context supports the answer's claims. Do not use outside knowledge to decide whether the answer is factually correct in general; judge strictly against the given context.\n\nChoose exactly one outcome from: contradicted, unsupported, undetermined, supported.\n- supported: the context contains information that backs the answer's claims.\n- unsupported: the context neither confirms nor denies the answer's claims (the information simply is not present).\n- contradicted: the context directly conflicts with a claim in the answer.\n- undetermined: the context and the answer are too ambiguous, fragmentary, or unrelated in scope for you to reach any of the above three judgments reliably.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the four values above>, \"reasoning\": <one or two sentences of justification>}.",
-                  "rubric_id": "faithfulness_vs_context_v1",
-                  "scale": [
-                    "contradicted",
-                    "unsupported",
-                    "undetermined",
-                    "supported"
-                  ]
-                }
-              },
-              "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
-              "score": null,
-              "status": "output_validation_error",
-              "test_case_id": "correct-context-correct-answer"
-            }
-          ],
-          "execution_error": null,
-          "input_text": "What is the capital of France?",
-          "model_response": {
-            "completion_tokens": null,
-            "latency_ms": null,
-            "model_id": "fake-rag-generator",
-            "output_text": "Paris",
-            "prompt_tokens": null,
-            "provider_metadata": {
-              "adapter": "mock",
-              "note": "deterministic fake adapter; does not reflect real model behavior",
-              "rag": {
-                "pipeline_config": {
-                  "chunk_overlap": 0,
-                  "chunk_size": 200,
-                  "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
-                  "embedding_model_id": "fake-embedding-v1",
-                  "prompt_template_id": "default_v1",
-                  "similarity_metric": "cosine",
-                  "top_k": 1
-                },
-                "prompt": "Answer the question using only the context passages below. If the context does not contain the answer, say you do not know.\n\nContext:\n[1] (source: doc-france) Paris is the capital of France.\n\nQuestion: What is the capital of France?\n",
-                "query": "What is the capital of France?",
-                "retrieval_config": {
-                  "embedding_model_id": "fake-embedding-v1",
-                  "similarity_metric": "cosine",
-                  "top_k": 1
-                },
-                "retrieved_chunks": [
-                  {
-                    "chunk_id": "doc-france::chunk-0",
-                    "document_id": "doc-france",
-                    "rank": 1,
-                    "score": 1.0,
-                    "text": "Paris is the capital of France."
-                  }
-                ]
-              }
-            },
-            "test_case_id": "correct-context-correct-answer",
-            "total_tokens": null
-          },
-          "reference_answer": "Paris",
-          "test_case_id": "correct-context-correct-answer"
-        },
-        {
-          "duration_seconds": null,
-          "evaluation_results": [
-            {
-              "criterion": "correctness",
-              "details": {},
-              "duration_seconds": null,
-              "error": null,
-              "evaluator_config": {
-                "case_sensitive": false,
-                "collapse_whitespace": true
-              },
-              "evaluator_name": "exact_match",
-              "explanation": "Generated output did not exactly match the reference answer under the configured normalization (case_sensitive=False, collapse_whitespace=True).",
-              "label": "mismatch",
-              "passed": false,
-              "score": 0.0,
-              "status": "success",
-              "test_case_id": "correct-context-unsupported-answer"
-            },
-            {
-              "criterion": "faithfulness",
-              "details": {
-                "raw_judge_output": "{\"verdict\": \"unsupported\", \"confidence\": 0.9, \"explanation\": \"Context does not mention population.\"}"
-              },
-              "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
-              "evaluator_config": {
-                "judge_model_id": "fake-judge-v1",
-                "rubric": {
-                  "criterion": "faithfulness",
-                  "instructions": "You are evaluating whether a generated answer is faithful to a provided set of retrieved context passages -- not whether the answer is fluent, complete, or externally true. Judge only whether the context supports the answer's claims. Do not use outside knowledge to decide whether the answer is factually correct in general; judge strictly against the given context.\n\nChoose exactly one outcome from: contradicted, unsupported, undetermined, supported.\n- supported: the context contains information that backs the answer's claims.\n- unsupported: the context neither confirms nor denies the answer's claims (the information simply is not present).\n- contradicted: the context directly conflicts with a claim in the answer.\n- undetermined: the context and the answer are too ambiguous, fragmentary, or unrelated in scope for you to reach any of the above three judgments reliably.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the four values above>, \"reasoning\": <one or two sentences of justification>}.",
-                  "rubric_id": "faithfulness_vs_context_v1",
-                  "scale": [
-                    "contradicted",
-                    "unsupported",
-                    "undetermined",
-                    "supported"
-                  ]
-                }
-              },
-              "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
-              "score": null,
-              "status": "output_validation_error",
-              "test_case_id": "correct-context-unsupported-answer"
-            }
-          ],
-          "execution_error": null,
-          "input_text": "What is the capital of France?",
-          "model_response": {
-            "completion_tokens": null,
-            "latency_ms": null,
-            "model_id": "fake-rag-generator",
-            "output_text": "Paris, which has a population of 30 million.",
-            "prompt_tokens": null,
-            "provider_metadata": {
-              "adapter": "mock",
-              "note": "deterministic fake adapter; does not reflect real model behavior",
-              "rag": {
-                "pipeline_config": {
-                  "chunk_overlap": 0,
-                  "chunk_size": 200,
-                  "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
-                  "embedding_model_id": "fake-embedding-v1",
-                  "prompt_template_id": "default_v1",
-                  "similarity_metric": "cosine",
-                  "top_k": 1
-                },
-                "prompt": "Answer the question using only the context passages below. If the context does not contain the answer, say you do not know.\n\nContext:\n[1] (source: doc-france) Paris is the capital of France.\n\nQuestion: What is the capital of France?\n",
-                "query": "What is the capital of France?",
-                "retrieval_config": {
-                  "embedding_model_id": "fake-embedding-v1",
-                  "similarity_metric": "cosine",
-                  "top_k": 1
-                },
-                "retrieved_chunks": [
-                  {
-                    "chunk_id": "doc-france::chunk-0",
-                    "document_id": "doc-france",
-                    "rank": 1,
-                    "score": 1.0,
-                    "text": "Paris is the capital of France."
-                  }
-                ]
-              }
-            },
-            "test_case_id": "correct-context-unsupported-answer",
-            "total_tokens": null
-          },
-          "reference_answer": "Paris",
-          "test_case_id": "correct-context-unsupported-answer"
-        },
-        {
-          "duration_seconds": null,
-          "evaluation_results": [
-            {
-              "criterion": "correctness",
-              "details": {},
-              "duration_seconds": null,
-              "error": null,
-              "evaluator_config": {
-                "case_sensitive": false,
-                "collapse_whitespace": true
-              },
-              "evaluator_name": "exact_match",
-              "explanation": "Generated output did not exactly match the reference answer under the configured normalization (case_sensitive=False, collapse_whitespace=True).",
-              "label": "mismatch",
-              "passed": false,
-              "score": 0.0,
-              "status": "success",
-              "test_case_id": "correct-context-contradictory-answer"
-            },
-            {
-              "criterion": "faithfulness",
-              "details": {
-                "raw_judge_output": "{\"verdict\": \"contradicted\", \"confidence\": 1.0, \"explanation\": \"Context says Paris, answer says Lyon.\"}"
-              },
-              "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
-              "evaluator_config": {
-                "judge_model_id": "fake-judge-v1",
-                "rubric": {
-                  "criterion": "faithfulness",
-                  "instructions": "You are evaluating whether a generated answer is faithful to a provided set of retrieved context passages -- not whether the answer is fluent, complete, or externally true. Judge only whether the context supports the answer's claims. Do not use outside knowledge to decide whether the answer is factually correct in general; judge strictly against the given context.\n\nChoose exactly one outcome from: contradicted, unsupported, undetermined, supported.\n- supported: the context contains information that backs the answer's claims.\n- unsupported: the context neither confirms nor denies the answer's claims (the information simply is not present).\n- contradicted: the context directly conflicts with a claim in the answer.\n- undetermined: the context and the answer are too ambiguous, fragmentary, or unrelated in scope for you to reach any of the above three judgments reliably.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the four values above>, \"reasoning\": <one or two sentences of justification>}.",
-                  "rubric_id": "faithfulness_vs_context_v1",
-                  "scale": [
-                    "contradicted",
-                    "unsupported",
-                    "undetermined",
-                    "supported"
-                  ]
-                }
-              },
-              "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
-              "score": null,
-              "status": "output_validation_error",
-              "test_case_id": "correct-context-contradictory-answer"
-            }
-          ],
-          "execution_error": null,
-          "input_text": "What is the capital of France?",
-          "model_response": {
-            "completion_tokens": null,
-            "latency_ms": null,
-            "model_id": "fake-rag-generator",
-            "output_text": "Lyon is the capital of France.",
-            "prompt_tokens": null,
-            "provider_metadata": {
-              "adapter": "mock",
-              "note": "deterministic fake adapter; does not reflect real model behavior",
-              "rag": {
-                "pipeline_config": {
-                  "chunk_overlap": 0,
-                  "chunk_size": 200,
-                  "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
-                  "embedding_model_id": "fake-embedding-v1",
-                  "prompt_template_id": "default_v1",
-                  "similarity_metric": "cosine",
-                  "top_k": 1
-                },
-                "prompt": "Answer the question using only the context passages below. If the context does not contain the answer, say you do not know.\n\nContext:\n[1] (source: doc-france) Paris is the capital of France.\n\nQuestion: What is the capital of France?\n",
-                "query": "What is the capital of France?",
-                "retrieval_config": {
-                  "embedding_model_id": "fake-embedding-v1",
-                  "similarity_metric": "cosine",
-                  "top_k": 1
-                },
-                "retrieved_chunks": [
-                  {
-                    "chunk_id": "doc-france::chunk-0",
-                    "document_id": "doc-france",
-                    "rank": 1,
-                    "score": 1.0,
-                    "text": "Paris is the capital of France."
-                  }
-                ]
-              }
-            },
-            "test_case_id": "correct-context-contradictory-answer",
-            "total_tokens": null
-          },
-          "reference_answer": "Paris",
-          "test_case_id": "correct-context-contradictory-answer"
-        },
-        {
-          "duration_seconds": null,
-          "evaluation_results": [
-            {
-              "criterion": "correctness",
-              "details": {},
-              "duration_seconds": null,
-              "error": null,
-              "evaluator_config": {
-                "case_sensitive": false,
-                "collapse_whitespace": true
-              },
-              "evaluator_name": "exact_match",
-              "explanation": "Generated output did not exactly match the reference answer under the configured normalization (case_sensitive=False, collapse_whitespace=True).",
-              "label": "mismatch",
-              "passed": false,
-              "score": 0.0,
-              "status": "success",
-              "test_case_id": "relevant-context-incorrect-answer"
-            },
-            {
-              "criterion": "faithfulness",
-              "details": {
-                "raw_judge_output": "{\"verdict\": \"unsupported\", \"confidence\": 0.8, \"explanation\": \"Berlin is not Paris.\"}"
-              },
-              "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
-              "evaluator_config": {
-                "judge_model_id": "fake-judge-v1",
-                "rubric": {
-                  "criterion": "faithfulness",
-                  "instructions": "You are evaluating whether a generated answer is faithful to a provided set of retrieved context passages -- not whether the answer is fluent, complete, or externally true. Judge only whether the context supports the answer's claims. Do not use outside knowledge to decide whether the answer is factually correct in general; judge strictly against the given context.\n\nChoose exactly one outcome from: contradicted, unsupported, undetermined, supported.\n- supported: the context contains information that backs the answer's claims.\n- unsupported: the context neither confirms nor denies the answer's claims (the information simply is not present).\n- contradicted: the context directly conflicts with a claim in the answer.\n- undetermined: the context and the answer are too ambiguous, fragmentary, or unrelated in scope for you to reach any of the above three judgments reliably.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the four values above>, \"reasoning\": <one or two sentences of justification>}.",
-                  "rubric_id": "faithfulness_vs_context_v1",
-                  "scale": [
-                    "contradicted",
-                    "unsupported",
-                    "undetermined",
-                    "supported"
-                  ]
-                }
-              },
-              "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
-              "score": null,
-              "status": "output_validation_error",
-              "test_case_id": "relevant-context-incorrect-answer"
-            }
-          ],
-          "execution_error": null,
-          "input_text": "What is the capital of France?",
-          "model_response": {
-            "completion_tokens": null,
-            "latency_ms": null,
-            "model_id": "fake-rag-generator",
-            "output_text": "Berlin",
-            "prompt_tokens": null,
-            "provider_metadata": {
-              "adapter": "mock",
-              "note": "deterministic fake adapter; does not reflect real model behavior",
-              "rag": {
-                "pipeline_config": {
-                  "chunk_overlap": 0,
-                  "chunk_size": 200,
-                  "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
-                  "embedding_model_id": "fake-embedding-v1",
-                  "prompt_template_id": "default_v1",
-                  "similarity_metric": "cosine",
-                  "top_k": 1
-                },
-                "prompt": "Answer the question using only the context passages below. If the context does not contain the answer, say you do not know.\n\nContext:\n[1] (source: doc-france) Paris is the capital of France.\n\nQuestion: What is the capital of France?\n",
-                "query": "What is the capital of France?",
-                "retrieval_config": {
-                  "embedding_model_id": "fake-embedding-v1",
-                  "similarity_metric": "cosine",
-                  "top_k": 1
-                },
-                "retrieved_chunks": [
-                  {
-                    "chunk_id": "doc-france::chunk-0",
-                    "document_id": "doc-france",
-                    "rank": 1,
-                    "score": 1.0,
-                    "text": "Paris is the capital of France."
-                  }
-                ]
-              }
-            },
-            "test_case_id": "relevant-context-incorrect-answer",
-            "total_tokens": null
-          },
-          "reference_answer": "Paris",
-          "test_case_id": "relevant-context-incorrect-answer"
-        },
-        {
-          "duration_seconds": null,
-          "evaluation_results": [
-            {
-              "criterion": "correctness",
-              "details": {},
-              "duration_seconds": null,
-              "error": null,
-              "evaluator_config": {
-                "case_sensitive": false,
-                "collapse_whitespace": true
-              },
-              "evaluator_name": "exact_match",
-              "explanation": "Generated output did not exactly match the reference answer under the configured normalization (case_sensitive=False, collapse_whitespace=True).",
-              "label": "mismatch",
-              "passed": false,
-              "score": 0.0,
-              "status": "success",
-              "test_case_id": "missing-context"
-            },
-            {
-              "criterion": "faithfulness",
-              "details": {
-                "raw_judge_output": "{\"verdict\": \"unsupported\", \"confidence\": 0.5, \"explanation\": \"No relevant context.\"}"
-              },
-              "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
-              "evaluator_config": {
-                "judge_model_id": "fake-judge-v1",
-                "rubric": {
-                  "criterion": "faithfulness",
-                  "instructions": "You are evaluating whether a generated answer is faithful to a provided set of retrieved context passages -- not whether the answer is fluent, complete, or externally true. Judge only whether the context supports the answer's claims. Do not use outside knowledge to decide whether the answer is factually correct in general; judge strictly against the given context.\n\nChoose exactly one outcome from: contradicted, unsupported, undetermined, supported.\n- supported: the context contains information that backs the answer's claims.\n- unsupported: the context neither confirms nor denies the answer's claims (the information simply is not present).\n- contradicted: the context directly conflicts with a claim in the answer.\n- undetermined: the context and the answer are too ambiguous, fragmentary, or unrelated in scope for you to reach any of the above three judgments reliably.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the four values above>, \"reasoning\": <one or two sentences of justification>}.",
-                  "rubric_id": "faithfulness_vs_context_v1",
-                  "scale": [
-                    "contradicted",
-                    "unsupported",
-                    "undetermined",
-                    "supported"
-                  ]
-                }
-              },
-              "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
-              "score": null,
-              "status": "output_validation_error",
-              "test_case_id": "missing-context"
-            }
-          ],
-          "execution_error": null,
-          "input_text": "What is the capital of a country not in this corpus?",
-          "model_response": {
-            "completion_tokens": null,
-            "latency_ms": null,
-            "model_id": "fake-rag-generator",
-            "output_text": "I do not know.",
-            "prompt_tokens": null,
-            "provider_metadata": {
-              "adapter": "mock",
-              "note": "deterministic fake adapter; does not reflect real model behavior",
-              "rag": {
-                "pipeline_config": {
-                  "chunk_overlap": 0,
-                  "chunk_size": 200,
-                  "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
-                  "embedding_model_id": "fake-embedding-v1",
-                  "prompt_template_id": "default_v1",
-                  "similarity_metric": "cosine",
-                  "top_k": 1
-                },
-                "prompt": "Answer the question using only the context passages below. If the context does not contain the answer, say you do not know.\n\nContext:\n[1] (source: doc-fruit) Bananas are a good source of potassium.\n\nQuestion: What is the capital of a country not in this corpus?\n",
-                "query": "What is the capital of a country not in this corpus?",
-                "retrieval_config": {
-                  "embedding_model_id": "fake-embedding-v1",
-                  "similarity_metric": "cosine",
-                  "top_k": 1
-                },
-                "retrieved_chunks": [
-                  {
-                    "chunk_id": "doc-fruit::chunk-0",
-                    "document_id": "doc-fruit",
-                    "rank": 1,
-                    "score": 1.0,
-                    "text": "Bananas are a good source of potassium."
-                  }
-                ]
-              }
-            },
-            "test_case_id": "missing-context",
-            "total_tokens": null
-          },
-          "reference_answer": "Unknown",
-          "test_case_id": "missing-context"
-        },
-        {
-          "duration_seconds": null,
-          "evaluation_results": [
-            {
-              "criterion": "correctness",
-              "details": {},
-              "duration_seconds": null,
-              "error": null,
-              "evaluator_config": {
-                "case_sensitive": false,
-                "collapse_whitespace": true
-              },
-              "evaluator_name": "exact_match",
-              "explanation": "Generated output exactly matched the reference answer under the configured normalization (case_sensitive=False, collapse_whitespace=True).",
-              "label": "match",
-              "passed": true,
-              "score": 1.0,
-              "status": "success",
-              "test_case_id": "no-ground-truth"
-            },
-            {
-              "criterion": "faithfulness",
-              "details": {
-                "raw_judge_output": "{\"verdict\": \"supported\", \"confidence\": 1.0, \"explanation\": \"Supported by context.\"}"
-              },
-              "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
-              "evaluator_config": {
-                "judge_model_id": "fake-judge-v1",
-                "rubric": {
-                  "criterion": "faithfulness",
-                  "instructions": "You are evaluating whether a generated answer is faithful to a provided set of retrieved context passages -- not whether the answer is fluent, complete, or externally true. Judge only whether the context supports the answer's claims. Do not use outside knowledge to decide whether the answer is factually correct in general; judge strictly against the given context.\n\nChoose exactly one outcome from: contradicted, unsupported, undetermined, supported.\n- supported: the context contains information that backs the answer's claims.\n- unsupported: the context neither confirms nor denies the answer's claims (the information simply is not present).\n- contradicted: the context directly conflicts with a claim in the answer.\n- undetermined: the context and the answer are too ambiguous, fragmentary, or unrelated in scope for you to reach any of the above three judgments reliably.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the four values above>, \"reasoning\": <one or two sentences of justification>}.",
-                  "rubric_id": "faithfulness_vs_context_v1",
-                  "scale": [
-                    "contradicted",
-                    "unsupported",
-                    "undetermined",
-                    "supported"
-                  ]
-                }
-              },
-              "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
-              "score": null,
-              "status": "output_validation_error",
-              "test_case_id": "no-ground-truth"
-            }
-          ],
-          "execution_error": null,
-          "input_text": "What is the capital of France?",
-          "model_response": {
-            "completion_tokens": null,
-            "latency_ms": null,
-            "model_id": "fake-rag-generator",
-            "output_text": "Paris",
-            "prompt_tokens": null,
-            "provider_metadata": {
-              "adapter": "mock",
-              "note": "deterministic fake adapter; does not reflect real model behavior",
-              "rag": {
-                "pipeline_config": {
-                  "chunk_overlap": 0,
-                  "chunk_size": 200,
-                  "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
-                  "embedding_model_id": "fake-embedding-v1",
-                  "prompt_template_id": "default_v1",
-                  "similarity_metric": "cosine",
-                  "top_k": 1
-                },
-                "prompt": "Answer the question using only the context passages below. If the context does not contain the answer, say you do not know.\n\nContext:\n[1] (source: doc-france) Paris is the capital of France.\n\nQuestion: What is the capital of France?\n",
-                "query": "What is the capital of France?",
-                "retrieval_config": {
-                  "embedding_model_id": "fake-embedding-v1",
-                  "similarity_metric": "cosine",
-                  "top_k": 1
-                },
-                "retrieved_chunks": [
-                  {
-                    "chunk_id": "doc-france::chunk-0",
-                    "document_id": "doc-france",
-                    "rank": 1,
-                    "score": 1.0,
-                    "text": "Paris is the capital of France."
-                  }
-                ]
-              }
-            },
-            "test_case_id": "no-ground-truth",
-            "total_tokens": null
-          },
-          "reference_answer": "Paris",
-          "test_case_id": "no-ground-truth"
-        },
-        {
-          "duration_seconds": null,
-          "evaluation_results": [
-            {
-              "criterion": "correctness",
-              "details": {},
-              "duration_seconds": null,
-              "error": null,
-              "evaluator_config": {
-                "case_sensitive": false,
-                "collapse_whitespace": true
-              },
-              "evaluator_name": "exact_match",
-              "explanation": "Generated output exactly matched the reference answer under the configured normalization (case_sensitive=False, collapse_whitespace=True).",
-              "label": "match",
-              "passed": true,
-              "score": 1.0,
-              "status": "success",
-              "test_case_id": "correct-context-correct-answer-reworded"
-            },
-            {
-              "criterion": "faithfulness",
-              "details": {
-                "raw_judge_output": "{\"verdict\": \"supported\", \"confidence\": 1.0, \"explanation\": \"Directly supported.\"}"
-              },
-              "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
-              "evaluator_config": {
-                "judge_model_id": "fake-judge-v1",
-                "rubric": {
-                  "criterion": "faithfulness",
-                  "instructions": "You are evaluating whether a generated answer is faithful to a provided set of retrieved context passages -- not whether the answer is fluent, complete, or externally true. Judge only whether the context supports the answer's claims. Do not use outside knowledge to decide whether the answer is factually correct in general; judge strictly against the given context.\n\nChoose exactly one outcome from: contradicted, unsupported, undetermined, supported.\n- supported: the context contains information that backs the answer's claims.\n- unsupported: the context neither confirms nor denies the answer's claims (the information simply is not present).\n- contradicted: the context directly conflicts with a claim in the answer.\n- undetermined: the context and the answer are too ambiguous, fragmentary, or unrelated in scope for you to reach any of the above three judgments reliably.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the four values above>, \"reasoning\": <one or two sentences of justification>}.",
-                  "rubric_id": "faithfulness_vs_context_v1",
-                  "scale": [
-                    "contradicted",
-                    "unsupported",
-                    "undetermined",
-                    "supported"
-                  ]
-                }
-              },
-              "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
-              "score": null,
-              "status": "output_validation_error",
-              "test_case_id": "correct-context-correct-answer-reworded"
-            }
-          ],
-          "execution_error": null,
-          "input_text": "Which city serves as the capital of France?",
-          "model_response": {
-            "completion_tokens": null,
-            "latency_ms": null,
-            "model_id": "fake-rag-generator",
-            "output_text": "Paris",
-            "prompt_tokens": null,
-            "provider_metadata": {
-              "adapter": "mock",
-              "note": "deterministic fake adapter; does not reflect real model behavior",
-              "rag": {
-                "pipeline_config": {
-                  "chunk_overlap": 0,
-                  "chunk_size": 200,
-                  "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
-                  "embedding_model_id": "fake-embedding-v1",
-                  "prompt_template_id": "default_v1",
-                  "similarity_metric": "cosine",
-                  "top_k": 1
-                },
-                "prompt": "Answer the question using only the context passages below. If the context does not contain the answer, say you do not know.\n\nContext:\n[1] (source: doc-france) Paris is the capital of France.\n\nQuestion: Which city serves as the capital of France?\n",
-                "query": "Which city serves as the capital of France?",
-                "retrieval_config": {
-                  "embedding_model_id": "fake-embedding-v1",
-                  "similarity_metric": "cosine",
-                  "top_k": 1
-                },
-                "retrieved_chunks": [
-                  {
-                    "chunk_id": "doc-france::chunk-0",
-                    "document_id": "doc-france",
-                    "rank": 1,
-                    "score": 1.0,
-                    "text": "Paris is the capital of France."
-                  }
-                ]
-              }
-            },
-            "test_case_id": "correct-context-correct-answer-reworded",
-            "total_tokens": null
-          },
-          "reference_answer": "Paris",
-          "test_case_id": "correct-context-correct-answer-reworded"
-        }
-      ]
-    },
-    "run_id": "347857f544194fc0b87d7748dd6abcaa",
-    "schema_version": 1,
-    "started_at": "2026-11-01T19:24:06.522970+00:00",
-    "status": "succeeded"
-  },
-  "350b690a337d4462a4253bd31d0112d7": {
+  "8c07d1c9f9b840b5b419a3e58351d287": {
+    "adapter_id": "rag-pipeline-topk-2",
+    "benchmark_id": null,
     "config_fingerprint": "0d85492573ceabb2943d4d50a85cc00ace51978396355fea601d831888400b94",
     "dataset_version": {
       "dataset_name": "reliability-console-demo",
@@ -921,7 +113,7 @@
       }
     ],
     "experiment_id": "exp-reliability-topk2-demo",
-    "finished_at": "2026-11-01T19:24:06.534752+00:00",
+    "finished_at": "2026-11-19T12:31:40.676894+00:00",
     "model_config": {
       "extra_params": {
         "rag": {
@@ -938,6 +130,7 @@
       "model_id": "mock-adapter-v1",
       "temperature": null
     },
+    "repetition_index": 0,
     "result": {
       "dataset_name": "reliability-console-demo",
       "duration_seconds": null,
@@ -970,10 +163,10 @@
             {
               "criterion": "faithfulness",
               "details": {
-                "raw_judge_output": "{\"verdict\": \"supported\", \"confidence\": 1.0, \"explanation\": \"Directly supported.\"}"
+                "rubric_id": "faithfulness_vs_context_v1"
               },
               "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
+              "error": null,
               "evaluator_config": {
                 "judge_model_id": "fake-judge-v1",
                 "rubric": {
@@ -989,11 +182,11 @@
                 }
               },
               "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
+              "explanation": "Directly supported by the context.",
+              "label": "supported",
+              "passed": true,
               "score": null,
-              "status": "output_validation_error",
+              "status": "success",
               "test_case_id": "correct-context-correct-answer"
             }
           ],
@@ -1072,10 +265,10 @@
             {
               "criterion": "faithfulness",
               "details": {
-                "raw_judge_output": "{\"verdict\": \"unsupported\", \"confidence\": 0.9, \"explanation\": \"Context does not mention population.\"}"
+                "rubric_id": "faithfulness_vs_context_v1"
               },
               "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
+              "error": null,
               "evaluator_config": {
                 "judge_model_id": "fake-judge-v1",
                 "rubric": {
@@ -1091,11 +284,11 @@
                 }
               },
               "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
+              "explanation": "The context does not mention population.",
+              "label": "unsupported",
+              "passed": false,
               "score": null,
-              "status": "output_validation_error",
+              "status": "success",
               "test_case_id": "correct-context-unsupported-answer"
             }
           ],
@@ -1174,10 +367,10 @@
             {
               "criterion": "faithfulness",
               "details": {
-                "raw_judge_output": "{\"verdict\": \"contradicted\", \"confidence\": 1.0, \"explanation\": \"Context says Paris, answer says Lyon.\"}"
+                "rubric_id": "faithfulness_vs_context_v1"
               },
               "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
+              "error": null,
               "evaluator_config": {
                 "judge_model_id": "fake-judge-v1",
                 "rubric": {
@@ -1193,11 +386,11 @@
                 }
               },
               "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
+              "explanation": "The context says Paris; the answer says Lyon.",
+              "label": "contradicted",
+              "passed": false,
               "score": null,
-              "status": "output_validation_error",
+              "status": "success",
               "test_case_id": "correct-context-contradictory-answer"
             }
           ],
@@ -1276,10 +469,10 @@
             {
               "criterion": "faithfulness",
               "details": {
-                "raw_judge_output": "{\"verdict\": \"unsupported\", \"confidence\": 0.8, \"explanation\": \"Berlin is not Paris.\"}"
+                "rubric_id": "faithfulness_vs_context_v1"
               },
               "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
+              "error": null,
               "evaluator_config": {
                 "judge_model_id": "fake-judge-v1",
                 "rubric": {
@@ -1295,11 +488,11 @@
                 }
               },
               "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
+              "explanation": "Berlin is not Paris.",
+              "label": "unsupported",
+              "passed": false,
               "score": null,
-              "status": "output_validation_error",
+              "status": "success",
               "test_case_id": "relevant-context-incorrect-answer"
             }
           ],
@@ -1378,10 +571,10 @@
             {
               "criterion": "faithfulness",
               "details": {
-                "raw_judge_output": "{\"verdict\": \"unsupported\", \"confidence\": 0.5, \"explanation\": \"No relevant context.\"}"
+                "rubric_id": "faithfulness_vs_context_v1"
               },
               "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
+              "error": null,
               "evaluator_config": {
                 "judge_model_id": "fake-judge-v1",
                 "rubric": {
@@ -1397,11 +590,11 @@
                 }
               },
               "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
+              "explanation": "No relevant context was retrieved.",
+              "label": "unsupported",
+              "passed": false,
               "score": null,
-              "status": "output_validation_error",
+              "status": "success",
               "test_case_id": "missing-context"
             }
           ],
@@ -1480,10 +673,10 @@
             {
               "criterion": "faithfulness",
               "details": {
-                "raw_judge_output": "{\"verdict\": \"supported\", \"confidence\": 1.0, \"explanation\": \"Supported by context.\"}"
+                "rubric_id": "faithfulness_vs_context_v1"
               },
               "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
+              "error": null,
               "evaluator_config": {
                 "judge_model_id": "fake-judge-v1",
                 "rubric": {
@@ -1499,11 +692,11 @@
                 }
               },
               "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
+              "explanation": "Supported by the context.",
+              "label": "supported",
+              "passed": true,
               "score": null,
-              "status": "output_validation_error",
+              "status": "success",
               "test_case_id": "no-ground-truth"
             }
           ],
@@ -1582,10 +775,10 @@
             {
               "criterion": "faithfulness",
               "details": {
-                "raw_judge_output": "{\"verdict\": \"supported\", \"confidence\": 1.0, \"explanation\": \"Directly supported.\"}"
+                "rubric_id": "faithfulness_vs_context_v1"
               },
               "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
+              "error": null,
               "evaluator_config": {
                 "judge_model_id": "fake-judge-v1",
                 "rubric": {
@@ -1601,11 +794,11 @@
                 }
               },
               "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
+              "explanation": "Directly supported by the context.",
+              "label": "supported",
+              "passed": true,
               "score": null,
-              "status": "output_validation_error",
+              "status": "success",
               "test_case_id": "correct-context-correct-answer-reworded"
             }
           ],
@@ -1663,12 +856,14 @@
         }
       ]
     },
-    "run_id": "350b690a337d4462a4253bd31d0112d7",
+    "run_id": "8c07d1c9f9b840b5b419a3e58351d287",
     "schema_version": 1,
-    "started_at": "2026-11-01T19:24:06.534510+00:00",
+    "started_at": "2026-11-19T12:31:40.676737+00:00",
     "status": "succeeded"
   },
-  "664f791bd61b4b708116b67c22569afa": {
+  "ba5b1d40a20049d29b73693497743afd": {
+    "adapter_id": "mock-adapter-v1",
+    "benchmark_id": null,
     "config_fingerprint": "042023b17a261703cd58b5ddde29800b7e605486ee2cd57b7c6857c44022b33d",
     "dataset_version": {
       "dataset_name": "baseline-non-rag-demo",
@@ -1699,13 +894,14 @@
       }
     ],
     "experiment_id": "exp-baseline-non-rag-demo",
-    "finished_at": "2026-11-01T19:24:06.541992+00:00",
+    "finished_at": "2026-11-19T12:31:40.677445+00:00",
     "model_config": {
       "extra_params": {},
       "max_tokens": null,
       "model_id": "mock-adapter-v1",
       "temperature": null
     },
+    "repetition_index": 0,
     "result": {
       "dataset_name": "baseline-non-rag-demo",
       "duration_seconds": null,
@@ -1794,12 +990,14 @@
         }
       ]
     },
-    "run_id": "664f791bd61b4b708116b67c22569afa",
+    "run_id": "ba5b1d40a20049d29b73693497743afd",
     "schema_version": 1,
-    "started_at": "2026-11-01T19:24:06.541952+00:00",
+    "started_at": "2026-11-19T12:31:40.677428+00:00",
     "status": "succeeded"
   },
-  "a489deaac753435f9976783b06cbb994": {
+  "bf188087f5ab4fff82af2338926c1e42": {
+    "adapter_id": "rag-pipeline-v1",
+    "benchmark_id": null,
     "config_fingerprint": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28",
     "dataset_version": {
       "dataset_name": "reliability-console-demo",
@@ -1911,7 +1109,7 @@
       }
     ],
     "experiment_id": "exp-reliability-console-demo",
-    "finished_at": "2026-11-01T19:24:06.528311+00:00",
+    "finished_at": "2026-11-19T12:31:40.675365+00:00",
     "model_config": {
       "extra_params": {
         "rag": {
@@ -1928,6 +1126,7 @@
       "model_id": "mock-adapter-v1",
       "temperature": null
     },
+    "repetition_index": 0,
     "result": {
       "dataset_name": "reliability-console-demo",
       "duration_seconds": null,
@@ -1960,10 +1159,10 @@
             {
               "criterion": "faithfulness",
               "details": {
-                "raw_judge_output": "{\"verdict\": \"supported\", \"confidence\": 1.0, \"explanation\": \"Directly supported.\"}"
+                "rubric_id": "faithfulness_vs_context_v1"
               },
               "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
+              "error": null,
               "evaluator_config": {
                 "judge_model_id": "fake-judge-v1",
                 "rubric": {
@@ -1979,11 +1178,11 @@
                 }
               },
               "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
+              "explanation": "Directly supported by the context.",
+              "label": "supported",
+              "passed": true,
               "score": null,
-              "status": "output_validation_error",
+              "status": "success",
               "test_case_id": "correct-context-correct-answer"
             }
           ],
@@ -2055,10 +1254,10 @@
             {
               "criterion": "faithfulness",
               "details": {
-                "raw_judge_output": "{\"verdict\": \"unsupported\", \"confidence\": 0.9, \"explanation\": \"Context does not mention population.\"}"
+                "rubric_id": "faithfulness_vs_context_v1"
               },
               "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
+              "error": null,
               "evaluator_config": {
                 "judge_model_id": "fake-judge-v1",
                 "rubric": {
@@ -2074,11 +1273,11 @@
                 }
               },
               "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
+              "explanation": "The context does not mention population.",
+              "label": "unsupported",
+              "passed": false,
               "score": null,
-              "status": "output_validation_error",
+              "status": "success",
               "test_case_id": "correct-context-unsupported-answer"
             }
           ],
@@ -2150,10 +1349,10 @@
             {
               "criterion": "faithfulness",
               "details": {
-                "raw_judge_output": "{\"verdict\": \"contradicted\", \"confidence\": 1.0, \"explanation\": \"Context says Paris, answer says Lyon.\"}"
+                "rubric_id": "faithfulness_vs_context_v1"
               },
               "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
+              "error": null,
               "evaluator_config": {
                 "judge_model_id": "fake-judge-v1",
                 "rubric": {
@@ -2169,11 +1368,11 @@
                 }
               },
               "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
+              "explanation": "The context says Paris; the answer says Lyon.",
+              "label": "contradicted",
+              "passed": false,
               "score": null,
-              "status": "output_validation_error",
+              "status": "success",
               "test_case_id": "correct-context-contradictory-answer"
             }
           ],
@@ -2245,10 +1444,10 @@
             {
               "criterion": "faithfulness",
               "details": {
-                "raw_judge_output": "{\"verdict\": \"unsupported\", \"confidence\": 0.8, \"explanation\": \"Berlin is not Paris.\"}"
+                "rubric_id": "faithfulness_vs_context_v1"
               },
               "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
+              "error": null,
               "evaluator_config": {
                 "judge_model_id": "fake-judge-v1",
                 "rubric": {
@@ -2264,11 +1463,11 @@
                 }
               },
               "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
+              "explanation": "Berlin is not Paris.",
+              "label": "unsupported",
+              "passed": false,
               "score": null,
-              "status": "output_validation_error",
+              "status": "success",
               "test_case_id": "relevant-context-incorrect-answer"
             }
           ],
@@ -2340,10 +1539,10 @@
             {
               "criterion": "faithfulness",
               "details": {
-                "raw_judge_output": "{\"verdict\": \"unsupported\", \"confidence\": 0.5, \"explanation\": \"No relevant context.\"}"
+                "rubric_id": "faithfulness_vs_context_v1"
               },
               "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
+              "error": null,
               "evaluator_config": {
                 "judge_model_id": "fake-judge-v1",
                 "rubric": {
@@ -2359,11 +1558,11 @@
                 }
               },
               "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
+              "explanation": "No relevant context was retrieved.",
+              "label": "unsupported",
+              "passed": false,
               "score": null,
-              "status": "output_validation_error",
+              "status": "success",
               "test_case_id": "missing-context"
             }
           ],
@@ -2435,10 +1634,10 @@
             {
               "criterion": "faithfulness",
               "details": {
-                "raw_judge_output": "{\"verdict\": \"supported\", \"confidence\": 1.0, \"explanation\": \"Supported by context.\"}"
+                "rubric_id": "faithfulness_vs_context_v1"
               },
               "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
+              "error": null,
               "evaluator_config": {
                 "judge_model_id": "fake-judge-v1",
                 "rubric": {
@@ -2454,11 +1653,11 @@
                 }
               },
               "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
+              "explanation": "Supported by the context.",
+              "label": "supported",
+              "passed": true,
               "score": null,
-              "status": "output_validation_error",
+              "status": "success",
               "test_case_id": "no-ground-truth"
             }
           ],
@@ -2530,10 +1729,10 @@
             {
               "criterion": "faithfulness",
               "details": {
-                "raw_judge_output": "{\"verdict\": \"supported\", \"confidence\": 1.0, \"explanation\": \"Directly supported.\"}"
+                "rubric_id": "faithfulness_vs_context_v1"
               },
               "duration_seconds": null,
-              "error": "Judge output 'outcome' must be one of ('contradicted', 'unsupported', 'undetermined', 'supported'), got None.",
+              "error": null,
               "evaluator_config": {
                 "judge_model_id": "fake-judge-v1",
                 "rubric": {
@@ -2549,11 +1748,11 @@
                 }
               },
               "evaluator_name": "llm_faithfulness_judge",
-              "explanation": null,
-              "label": null,
-              "passed": null,
+              "explanation": "Directly supported by the context.",
+              "label": "supported",
+              "passed": true,
               "score": null,
-              "status": "output_validation_error",
+              "status": "success",
               "test_case_id": "correct-context-correct-answer-reworded"
             }
           ],
@@ -2604,9 +1803,822 @@
         }
       ]
     },
-    "run_id": "a489deaac753435f9976783b06cbb994",
+    "run_id": "bf188087f5ab4fff82af2338926c1e42",
     "schema_version": 1,
-    "started_at": "2026-11-01T19:24:06.528041+00:00",
+    "started_at": "2026-11-19T12:31:40.675106+00:00",
+    "status": "succeeded"
+  },
+  "ffd9f406285f4040b5b99ef2aaf964fa": {
+    "adapter_id": "rag-pipeline-v1",
+    "benchmark_id": null,
+    "config_fingerprint": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28",
+    "dataset_version": {
+      "dataset_name": "reliability-console-demo",
+      "test_cases": [
+        {
+          "id": "correct-context-correct-answer",
+          "input": "What is the capital of France?",
+          "metadata": {
+            "category": "correct",
+            "relevant_chunk_ids": [
+              "doc-france::chunk-0"
+            ]
+          },
+          "reference_answer": "Paris"
+        },
+        {
+          "id": "correct-context-unsupported-answer",
+          "input": "What is the capital of France?",
+          "metadata": {
+            "category": "unsupported",
+            "relevant_chunk_ids": [
+              "doc-france::chunk-0"
+            ]
+          },
+          "reference_answer": "Paris"
+        },
+        {
+          "id": "correct-context-contradictory-answer",
+          "input": "What is the capital of France?",
+          "metadata": {
+            "category": "contradicted",
+            "relevant_chunk_ids": [
+              "doc-france::chunk-0"
+            ]
+          },
+          "reference_answer": "Paris"
+        },
+        {
+          "id": "relevant-context-incorrect-answer",
+          "input": "What is the capital of France?",
+          "metadata": {
+            "category": "generation_failure",
+            "relevant_chunk_ids": [
+              "doc-france::chunk-0"
+            ]
+          },
+          "reference_answer": "Paris"
+        },
+        {
+          "id": "missing-context",
+          "input": "What is the capital of a country not in this corpus?",
+          "metadata": {
+            "category": "retrieval_failure",
+            "relevant_chunk_ids": [
+              "doc-france::chunk-0"
+            ]
+          },
+          "reference_answer": "Unknown"
+        },
+        {
+          "id": "no-ground-truth",
+          "input": "What is the capital of France?",
+          "metadata": {
+            "category": "insufficient_evidence"
+          },
+          "reference_answer": "Paris"
+        },
+        {
+          "id": "correct-context-correct-answer-reworded",
+          "input": "Which city serves as the capital of France?",
+          "metadata": {
+            "category": "robustness",
+            "perturbation_of": "correct-context-correct-answer",
+            "perturbation_type": "question_rewording",
+            "relevant_chunk_ids": [
+              "doc-france::chunk-0"
+            ]
+          },
+          "reference_answer": "Paris"
+        }
+      ],
+      "version_id": "a304353ad0e55b17272f25e4521f029519e0631d2aaefc9070ed22abee4cde77"
+    },
+    "error": null,
+    "evaluator_configs": [
+      {
+        "evaluator_name": "exact_match",
+        "parameters": {
+          "case_sensitive": false,
+          "collapse_whitespace": true
+        }
+      },
+      {
+        "evaluator_name": "llm_faithfulness_judge",
+        "parameters": {
+          "judge_model_id": "fake-judge-v1",
+          "rubric": {
+            "criterion": "faithfulness",
+            "instructions": "You are evaluating whether a generated answer is faithful to a provided set of retrieved context passages -- not whether the answer is fluent, complete, or externally true. Judge only whether the context supports the answer's claims. Do not use outside knowledge to decide whether the answer is factually correct in general; judge strictly against the given context.\n\nChoose exactly one outcome from: contradicted, unsupported, undetermined, supported.\n- supported: the context contains information that backs the answer's claims.\n- unsupported: the context neither confirms nor denies the answer's claims (the information simply is not present).\n- contradicted: the context directly conflicts with a claim in the answer.\n- undetermined: the context and the answer are too ambiguous, fragmentary, or unrelated in scope for you to reach any of the above three judgments reliably.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the four values above>, \"reasoning\": <one or two sentences of justification>}.",
+            "rubric_id": "faithfulness_vs_context_v1",
+            "scale": [
+              "contradicted",
+              "unsupported",
+              "undetermined",
+              "supported"
+            ]
+          }
+        }
+      }
+    ],
+    "experiment_id": "exp-reliability-console-demo",
+    "finished_at": "2026-11-19T12:31:40.676167+00:00",
+    "model_config": {
+      "extra_params": {
+        "rag": {
+          "chunk_overlap": 0,
+          "chunk_size": 200,
+          "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
+          "embedding_model_id": "fake-embedding-v1",
+          "prompt_template_id": "default_v1",
+          "similarity_metric": "cosine",
+          "top_k": 1
+        }
+      },
+      "max_tokens": null,
+      "model_id": "mock-adapter-v1",
+      "temperature": null
+    },
+    "repetition_index": 0,
+    "result": {
+      "dataset_name": "reliability-console-demo",
+      "duration_seconds": null,
+      "evaluator_names": [
+        "exact_match",
+        "llm_faithfulness_judge"
+      ],
+      "model_id": "mock-adapter-v1",
+      "test_case_results": [
+        {
+          "duration_seconds": null,
+          "evaluation_results": [
+            {
+              "criterion": "correctness",
+              "details": {},
+              "duration_seconds": null,
+              "error": null,
+              "evaluator_config": {
+                "case_sensitive": false,
+                "collapse_whitespace": true
+              },
+              "evaluator_name": "exact_match",
+              "explanation": "Generated output exactly matched the reference answer under the configured normalization (case_sensitive=False, collapse_whitespace=True).",
+              "label": "match",
+              "passed": true,
+              "score": 1.0,
+              "status": "success",
+              "test_case_id": "correct-context-correct-answer"
+            },
+            {
+              "criterion": "faithfulness",
+              "details": {
+                "rubric_id": "faithfulness_vs_context_v1"
+              },
+              "duration_seconds": null,
+              "error": null,
+              "evaluator_config": {
+                "judge_model_id": "fake-judge-v1",
+                "rubric": {
+                  "criterion": "faithfulness",
+                  "instructions": "You are evaluating whether a generated answer is faithful to a provided set of retrieved context passages -- not whether the answer is fluent, complete, or externally true. Judge only whether the context supports the answer's claims. Do not use outside knowledge to decide whether the answer is factually correct in general; judge strictly against the given context.\n\nChoose exactly one outcome from: contradicted, unsupported, undetermined, supported.\n- supported: the context contains information that backs the answer's claims.\n- unsupported: the context neither confirms nor denies the answer's claims (the information simply is not present).\n- contradicted: the context directly conflicts with a claim in the answer.\n- undetermined: the context and the answer are too ambiguous, fragmentary, or unrelated in scope for you to reach any of the above three judgments reliably.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the four values above>, \"reasoning\": <one or two sentences of justification>}.",
+                  "rubric_id": "faithfulness_vs_context_v1",
+                  "scale": [
+                    "contradicted",
+                    "unsupported",
+                    "undetermined",
+                    "supported"
+                  ]
+                }
+              },
+              "evaluator_name": "llm_faithfulness_judge",
+              "explanation": "Directly supported by the context.",
+              "label": "supported",
+              "passed": true,
+              "score": null,
+              "status": "success",
+              "test_case_id": "correct-context-correct-answer"
+            }
+          ],
+          "execution_error": null,
+          "input_text": "What is the capital of France?",
+          "model_response": {
+            "completion_tokens": null,
+            "latency_ms": null,
+            "model_id": "fake-rag-generator",
+            "output_text": "Paris",
+            "prompt_tokens": null,
+            "provider_metadata": {
+              "adapter": "mock",
+              "note": "deterministic fake adapter; does not reflect real model behavior",
+              "rag": {
+                "pipeline_config": {
+                  "chunk_overlap": 0,
+                  "chunk_size": 200,
+                  "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
+                  "embedding_model_id": "fake-embedding-v1",
+                  "prompt_template_id": "default_v1",
+                  "similarity_metric": "cosine",
+                  "top_k": 1
+                },
+                "prompt": "Answer the question using only the context passages below. If the context does not contain the answer, say you do not know.\n\nContext:\n[1] (source: doc-france) Paris is the capital of France.\n\nQuestion: What is the capital of France?\n",
+                "query": "What is the capital of France?",
+                "retrieval_config": {
+                  "embedding_model_id": "fake-embedding-v1",
+                  "similarity_metric": "cosine",
+                  "top_k": 1
+                },
+                "retrieved_chunks": [
+                  {
+                    "chunk_id": "doc-france::chunk-0",
+                    "document_id": "doc-france",
+                    "rank": 1,
+                    "score": 1.0,
+                    "text": "Paris is the capital of France."
+                  }
+                ]
+              }
+            },
+            "test_case_id": "correct-context-correct-answer",
+            "total_tokens": null
+          },
+          "reference_answer": "Paris",
+          "test_case_id": "correct-context-correct-answer"
+        },
+        {
+          "duration_seconds": null,
+          "evaluation_results": [
+            {
+              "criterion": "correctness",
+              "details": {},
+              "duration_seconds": null,
+              "error": null,
+              "evaluator_config": {
+                "case_sensitive": false,
+                "collapse_whitespace": true
+              },
+              "evaluator_name": "exact_match",
+              "explanation": "Generated output did not exactly match the reference answer under the configured normalization (case_sensitive=False, collapse_whitespace=True).",
+              "label": "mismatch",
+              "passed": false,
+              "score": 0.0,
+              "status": "success",
+              "test_case_id": "correct-context-unsupported-answer"
+            },
+            {
+              "criterion": "faithfulness",
+              "details": {
+                "rubric_id": "faithfulness_vs_context_v1"
+              },
+              "duration_seconds": null,
+              "error": null,
+              "evaluator_config": {
+                "judge_model_id": "fake-judge-v1",
+                "rubric": {
+                  "criterion": "faithfulness",
+                  "instructions": "You are evaluating whether a generated answer is faithful to a provided set of retrieved context passages -- not whether the answer is fluent, complete, or externally true. Judge only whether the context supports the answer's claims. Do not use outside knowledge to decide whether the answer is factually correct in general; judge strictly against the given context.\n\nChoose exactly one outcome from: contradicted, unsupported, undetermined, supported.\n- supported: the context contains information that backs the answer's claims.\n- unsupported: the context neither confirms nor denies the answer's claims (the information simply is not present).\n- contradicted: the context directly conflicts with a claim in the answer.\n- undetermined: the context and the answer are too ambiguous, fragmentary, or unrelated in scope for you to reach any of the above three judgments reliably.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the four values above>, \"reasoning\": <one or two sentences of justification>}.",
+                  "rubric_id": "faithfulness_vs_context_v1",
+                  "scale": [
+                    "contradicted",
+                    "unsupported",
+                    "undetermined",
+                    "supported"
+                  ]
+                }
+              },
+              "evaluator_name": "llm_faithfulness_judge",
+              "explanation": "The context does not mention population.",
+              "label": "unsupported",
+              "passed": false,
+              "score": null,
+              "status": "success",
+              "test_case_id": "correct-context-unsupported-answer"
+            }
+          ],
+          "execution_error": null,
+          "input_text": "What is the capital of France?",
+          "model_response": {
+            "completion_tokens": null,
+            "latency_ms": null,
+            "model_id": "fake-rag-generator",
+            "output_text": "Paris, which has a population of 30 million.",
+            "prompt_tokens": null,
+            "provider_metadata": {
+              "adapter": "mock",
+              "note": "deterministic fake adapter; does not reflect real model behavior",
+              "rag": {
+                "pipeline_config": {
+                  "chunk_overlap": 0,
+                  "chunk_size": 200,
+                  "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
+                  "embedding_model_id": "fake-embedding-v1",
+                  "prompt_template_id": "default_v1",
+                  "similarity_metric": "cosine",
+                  "top_k": 1
+                },
+                "prompt": "Answer the question using only the context passages below. If the context does not contain the answer, say you do not know.\n\nContext:\n[1] (source: doc-france) Paris is the capital of France.\n\nQuestion: What is the capital of France?\n",
+                "query": "What is the capital of France?",
+                "retrieval_config": {
+                  "embedding_model_id": "fake-embedding-v1",
+                  "similarity_metric": "cosine",
+                  "top_k": 1
+                },
+                "retrieved_chunks": [
+                  {
+                    "chunk_id": "doc-france::chunk-0",
+                    "document_id": "doc-france",
+                    "rank": 1,
+                    "score": 1.0,
+                    "text": "Paris is the capital of France."
+                  }
+                ]
+              }
+            },
+            "test_case_id": "correct-context-unsupported-answer",
+            "total_tokens": null
+          },
+          "reference_answer": "Paris",
+          "test_case_id": "correct-context-unsupported-answer"
+        },
+        {
+          "duration_seconds": null,
+          "evaluation_results": [
+            {
+              "criterion": "correctness",
+              "details": {},
+              "duration_seconds": null,
+              "error": null,
+              "evaluator_config": {
+                "case_sensitive": false,
+                "collapse_whitespace": true
+              },
+              "evaluator_name": "exact_match",
+              "explanation": "Generated output did not exactly match the reference answer under the configured normalization (case_sensitive=False, collapse_whitespace=True).",
+              "label": "mismatch",
+              "passed": false,
+              "score": 0.0,
+              "status": "success",
+              "test_case_id": "correct-context-contradictory-answer"
+            },
+            {
+              "criterion": "faithfulness",
+              "details": {
+                "rubric_id": "faithfulness_vs_context_v1"
+              },
+              "duration_seconds": null,
+              "error": null,
+              "evaluator_config": {
+                "judge_model_id": "fake-judge-v1",
+                "rubric": {
+                  "criterion": "faithfulness",
+                  "instructions": "You are evaluating whether a generated answer is faithful to a provided set of retrieved context passages -- not whether the answer is fluent, complete, or externally true. Judge only whether the context supports the answer's claims. Do not use outside knowledge to decide whether the answer is factually correct in general; judge strictly against the given context.\n\nChoose exactly one outcome from: contradicted, unsupported, undetermined, supported.\n- supported: the context contains information that backs the answer's claims.\n- unsupported: the context neither confirms nor denies the answer's claims (the information simply is not present).\n- contradicted: the context directly conflicts with a claim in the answer.\n- undetermined: the context and the answer are too ambiguous, fragmentary, or unrelated in scope for you to reach any of the above three judgments reliably.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the four values above>, \"reasoning\": <one or two sentences of justification>}.",
+                  "rubric_id": "faithfulness_vs_context_v1",
+                  "scale": [
+                    "contradicted",
+                    "unsupported",
+                    "undetermined",
+                    "supported"
+                  ]
+                }
+              },
+              "evaluator_name": "llm_faithfulness_judge",
+              "explanation": "The context says Paris; the answer says Lyon.",
+              "label": "contradicted",
+              "passed": false,
+              "score": null,
+              "status": "success",
+              "test_case_id": "correct-context-contradictory-answer"
+            }
+          ],
+          "execution_error": null,
+          "input_text": "What is the capital of France?",
+          "model_response": {
+            "completion_tokens": null,
+            "latency_ms": null,
+            "model_id": "fake-rag-generator",
+            "output_text": "Lyon is the capital of France.",
+            "prompt_tokens": null,
+            "provider_metadata": {
+              "adapter": "mock",
+              "note": "deterministic fake adapter; does not reflect real model behavior",
+              "rag": {
+                "pipeline_config": {
+                  "chunk_overlap": 0,
+                  "chunk_size": 200,
+                  "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
+                  "embedding_model_id": "fake-embedding-v1",
+                  "prompt_template_id": "default_v1",
+                  "similarity_metric": "cosine",
+                  "top_k": 1
+                },
+                "prompt": "Answer the question using only the context passages below. If the context does not contain the answer, say you do not know.\n\nContext:\n[1] (source: doc-france) Paris is the capital of France.\n\nQuestion: What is the capital of France?\n",
+                "query": "What is the capital of France?",
+                "retrieval_config": {
+                  "embedding_model_id": "fake-embedding-v1",
+                  "similarity_metric": "cosine",
+                  "top_k": 1
+                },
+                "retrieved_chunks": [
+                  {
+                    "chunk_id": "doc-france::chunk-0",
+                    "document_id": "doc-france",
+                    "rank": 1,
+                    "score": 1.0,
+                    "text": "Paris is the capital of France."
+                  }
+                ]
+              }
+            },
+            "test_case_id": "correct-context-contradictory-answer",
+            "total_tokens": null
+          },
+          "reference_answer": "Paris",
+          "test_case_id": "correct-context-contradictory-answer"
+        },
+        {
+          "duration_seconds": null,
+          "evaluation_results": [
+            {
+              "criterion": "correctness",
+              "details": {},
+              "duration_seconds": null,
+              "error": null,
+              "evaluator_config": {
+                "case_sensitive": false,
+                "collapse_whitespace": true
+              },
+              "evaluator_name": "exact_match",
+              "explanation": "Generated output did not exactly match the reference answer under the configured normalization (case_sensitive=False, collapse_whitespace=True).",
+              "label": "mismatch",
+              "passed": false,
+              "score": 0.0,
+              "status": "success",
+              "test_case_id": "relevant-context-incorrect-answer"
+            },
+            {
+              "criterion": "faithfulness",
+              "details": {
+                "rubric_id": "faithfulness_vs_context_v1"
+              },
+              "duration_seconds": null,
+              "error": null,
+              "evaluator_config": {
+                "judge_model_id": "fake-judge-v1",
+                "rubric": {
+                  "criterion": "faithfulness",
+                  "instructions": "You are evaluating whether a generated answer is faithful to a provided set of retrieved context passages -- not whether the answer is fluent, complete, or externally true. Judge only whether the context supports the answer's claims. Do not use outside knowledge to decide whether the answer is factually correct in general; judge strictly against the given context.\n\nChoose exactly one outcome from: contradicted, unsupported, undetermined, supported.\n- supported: the context contains information that backs the answer's claims.\n- unsupported: the context neither confirms nor denies the answer's claims (the information simply is not present).\n- contradicted: the context directly conflicts with a claim in the answer.\n- undetermined: the context and the answer are too ambiguous, fragmentary, or unrelated in scope for you to reach any of the above three judgments reliably.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the four values above>, \"reasoning\": <one or two sentences of justification>}.",
+                  "rubric_id": "faithfulness_vs_context_v1",
+                  "scale": [
+                    "contradicted",
+                    "unsupported",
+                    "undetermined",
+                    "supported"
+                  ]
+                }
+              },
+              "evaluator_name": "llm_faithfulness_judge",
+              "explanation": "Berlin is not Paris.",
+              "label": "unsupported",
+              "passed": false,
+              "score": null,
+              "status": "success",
+              "test_case_id": "relevant-context-incorrect-answer"
+            }
+          ],
+          "execution_error": null,
+          "input_text": "What is the capital of France?",
+          "model_response": {
+            "completion_tokens": null,
+            "latency_ms": null,
+            "model_id": "fake-rag-generator",
+            "output_text": "Berlin",
+            "prompt_tokens": null,
+            "provider_metadata": {
+              "adapter": "mock",
+              "note": "deterministic fake adapter; does not reflect real model behavior",
+              "rag": {
+                "pipeline_config": {
+                  "chunk_overlap": 0,
+                  "chunk_size": 200,
+                  "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
+                  "embedding_model_id": "fake-embedding-v1",
+                  "prompt_template_id": "default_v1",
+                  "similarity_metric": "cosine",
+                  "top_k": 1
+                },
+                "prompt": "Answer the question using only the context passages below. If the context does not contain the answer, say you do not know.\n\nContext:\n[1] (source: doc-france) Paris is the capital of France.\n\nQuestion: What is the capital of France?\n",
+                "query": "What is the capital of France?",
+                "retrieval_config": {
+                  "embedding_model_id": "fake-embedding-v1",
+                  "similarity_metric": "cosine",
+                  "top_k": 1
+                },
+                "retrieved_chunks": [
+                  {
+                    "chunk_id": "doc-france::chunk-0",
+                    "document_id": "doc-france",
+                    "rank": 1,
+                    "score": 1.0,
+                    "text": "Paris is the capital of France."
+                  }
+                ]
+              }
+            },
+            "test_case_id": "relevant-context-incorrect-answer",
+            "total_tokens": null
+          },
+          "reference_answer": "Paris",
+          "test_case_id": "relevant-context-incorrect-answer"
+        },
+        {
+          "duration_seconds": null,
+          "evaluation_results": [
+            {
+              "criterion": "correctness",
+              "details": {},
+              "duration_seconds": null,
+              "error": null,
+              "evaluator_config": {
+                "case_sensitive": false,
+                "collapse_whitespace": true
+              },
+              "evaluator_name": "exact_match",
+              "explanation": "Generated output did not exactly match the reference answer under the configured normalization (case_sensitive=False, collapse_whitespace=True).",
+              "label": "mismatch",
+              "passed": false,
+              "score": 0.0,
+              "status": "success",
+              "test_case_id": "missing-context"
+            },
+            {
+              "criterion": "faithfulness",
+              "details": {
+                "rubric_id": "faithfulness_vs_context_v1"
+              },
+              "duration_seconds": null,
+              "error": null,
+              "evaluator_config": {
+                "judge_model_id": "fake-judge-v1",
+                "rubric": {
+                  "criterion": "faithfulness",
+                  "instructions": "You are evaluating whether a generated answer is faithful to a provided set of retrieved context passages -- not whether the answer is fluent, complete, or externally true. Judge only whether the context supports the answer's claims. Do not use outside knowledge to decide whether the answer is factually correct in general; judge strictly against the given context.\n\nChoose exactly one outcome from: contradicted, unsupported, undetermined, supported.\n- supported: the context contains information that backs the answer's claims.\n- unsupported: the context neither confirms nor denies the answer's claims (the information simply is not present).\n- contradicted: the context directly conflicts with a claim in the answer.\n- undetermined: the context and the answer are too ambiguous, fragmentary, or unrelated in scope for you to reach any of the above three judgments reliably.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the four values above>, \"reasoning\": <one or two sentences of justification>}.",
+                  "rubric_id": "faithfulness_vs_context_v1",
+                  "scale": [
+                    "contradicted",
+                    "unsupported",
+                    "undetermined",
+                    "supported"
+                  ]
+                }
+              },
+              "evaluator_name": "llm_faithfulness_judge",
+              "explanation": "No relevant context was retrieved.",
+              "label": "unsupported",
+              "passed": false,
+              "score": null,
+              "status": "success",
+              "test_case_id": "missing-context"
+            }
+          ],
+          "execution_error": null,
+          "input_text": "What is the capital of a country not in this corpus?",
+          "model_response": {
+            "completion_tokens": null,
+            "latency_ms": null,
+            "model_id": "fake-rag-generator",
+            "output_text": "I do not know.",
+            "prompt_tokens": null,
+            "provider_metadata": {
+              "adapter": "mock",
+              "note": "deterministic fake adapter; does not reflect real model behavior",
+              "rag": {
+                "pipeline_config": {
+                  "chunk_overlap": 0,
+                  "chunk_size": 200,
+                  "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
+                  "embedding_model_id": "fake-embedding-v1",
+                  "prompt_template_id": "default_v1",
+                  "similarity_metric": "cosine",
+                  "top_k": 1
+                },
+                "prompt": "Answer the question using only the context passages below. If the context does not contain the answer, say you do not know.\n\nContext:\n[1] (source: doc-fruit) Bananas are a good source of potassium.\n\nQuestion: What is the capital of a country not in this corpus?\n",
+                "query": "What is the capital of a country not in this corpus?",
+                "retrieval_config": {
+                  "embedding_model_id": "fake-embedding-v1",
+                  "similarity_metric": "cosine",
+                  "top_k": 1
+                },
+                "retrieved_chunks": [
+                  {
+                    "chunk_id": "doc-fruit::chunk-0",
+                    "document_id": "doc-fruit",
+                    "rank": 1,
+                    "score": 1.0,
+                    "text": "Bananas are a good source of potassium."
+                  }
+                ]
+              }
+            },
+            "test_case_id": "missing-context",
+            "total_tokens": null
+          },
+          "reference_answer": "Unknown",
+          "test_case_id": "missing-context"
+        },
+        {
+          "duration_seconds": null,
+          "evaluation_results": [
+            {
+              "criterion": "correctness",
+              "details": {},
+              "duration_seconds": null,
+              "error": null,
+              "evaluator_config": {
+                "case_sensitive": false,
+                "collapse_whitespace": true
+              },
+              "evaluator_name": "exact_match",
+              "explanation": "Generated output exactly matched the reference answer under the configured normalization (case_sensitive=False, collapse_whitespace=True).",
+              "label": "match",
+              "passed": true,
+              "score": 1.0,
+              "status": "success",
+              "test_case_id": "no-ground-truth"
+            },
+            {
+              "criterion": "faithfulness",
+              "details": {
+                "rubric_id": "faithfulness_vs_context_v1"
+              },
+              "duration_seconds": null,
+              "error": null,
+              "evaluator_config": {
+                "judge_model_id": "fake-judge-v1",
+                "rubric": {
+                  "criterion": "faithfulness",
+                  "instructions": "You are evaluating whether a generated answer is faithful to a provided set of retrieved context passages -- not whether the answer is fluent, complete, or externally true. Judge only whether the context supports the answer's claims. Do not use outside knowledge to decide whether the answer is factually correct in general; judge strictly against the given context.\n\nChoose exactly one outcome from: contradicted, unsupported, undetermined, supported.\n- supported: the context contains information that backs the answer's claims.\n- unsupported: the context neither confirms nor denies the answer's claims (the information simply is not present).\n- contradicted: the context directly conflicts with a claim in the answer.\n- undetermined: the context and the answer are too ambiguous, fragmentary, or unrelated in scope for you to reach any of the above three judgments reliably.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the four values above>, \"reasoning\": <one or two sentences of justification>}.",
+                  "rubric_id": "faithfulness_vs_context_v1",
+                  "scale": [
+                    "contradicted",
+                    "unsupported",
+                    "undetermined",
+                    "supported"
+                  ]
+                }
+              },
+              "evaluator_name": "llm_faithfulness_judge",
+              "explanation": "Supported by the context.",
+              "label": "supported",
+              "passed": true,
+              "score": null,
+              "status": "success",
+              "test_case_id": "no-ground-truth"
+            }
+          ],
+          "execution_error": null,
+          "input_text": "What is the capital of France?",
+          "model_response": {
+            "completion_tokens": null,
+            "latency_ms": null,
+            "model_id": "fake-rag-generator",
+            "output_text": "Paris",
+            "prompt_tokens": null,
+            "provider_metadata": {
+              "adapter": "mock",
+              "note": "deterministic fake adapter; does not reflect real model behavior",
+              "rag": {
+                "pipeline_config": {
+                  "chunk_overlap": 0,
+                  "chunk_size": 200,
+                  "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
+                  "embedding_model_id": "fake-embedding-v1",
+                  "prompt_template_id": "default_v1",
+                  "similarity_metric": "cosine",
+                  "top_k": 1
+                },
+                "prompt": "Answer the question using only the context passages below. If the context does not contain the answer, say you do not know.\n\nContext:\n[1] (source: doc-france) Paris is the capital of France.\n\nQuestion: What is the capital of France?\n",
+                "query": "What is the capital of France?",
+                "retrieval_config": {
+                  "embedding_model_id": "fake-embedding-v1",
+                  "similarity_metric": "cosine",
+                  "top_k": 1
+                },
+                "retrieved_chunks": [
+                  {
+                    "chunk_id": "doc-france::chunk-0",
+                    "document_id": "doc-france",
+                    "rank": 1,
+                    "score": 1.0,
+                    "text": "Paris is the capital of France."
+                  }
+                ]
+              }
+            },
+            "test_case_id": "no-ground-truth",
+            "total_tokens": null
+          },
+          "reference_answer": "Paris",
+          "test_case_id": "no-ground-truth"
+        },
+        {
+          "duration_seconds": null,
+          "evaluation_results": [
+            {
+              "criterion": "correctness",
+              "details": {},
+              "duration_seconds": null,
+              "error": null,
+              "evaluator_config": {
+                "case_sensitive": false,
+                "collapse_whitespace": true
+              },
+              "evaluator_name": "exact_match",
+              "explanation": "Generated output exactly matched the reference answer under the configured normalization (case_sensitive=False, collapse_whitespace=True).",
+              "label": "match",
+              "passed": true,
+              "score": 1.0,
+              "status": "success",
+              "test_case_id": "correct-context-correct-answer-reworded"
+            },
+            {
+              "criterion": "faithfulness",
+              "details": {
+                "rubric_id": "faithfulness_vs_context_v1"
+              },
+              "duration_seconds": null,
+              "error": null,
+              "evaluator_config": {
+                "judge_model_id": "fake-judge-v1",
+                "rubric": {
+                  "criterion": "faithfulness",
+                  "instructions": "You are evaluating whether a generated answer is faithful to a provided set of retrieved context passages -- not whether the answer is fluent, complete, or externally true. Judge only whether the context supports the answer's claims. Do not use outside knowledge to decide whether the answer is factually correct in general; judge strictly against the given context.\n\nChoose exactly one outcome from: contradicted, unsupported, undetermined, supported.\n- supported: the context contains information that backs the answer's claims.\n- unsupported: the context neither confirms nor denies the answer's claims (the information simply is not present).\n- contradicted: the context directly conflicts with a claim in the answer.\n- undetermined: the context and the answer are too ambiguous, fragmentary, or unrelated in scope for you to reach any of the above three judgments reliably.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the four values above>, \"reasoning\": <one or two sentences of justification>}.",
+                  "rubric_id": "faithfulness_vs_context_v1",
+                  "scale": [
+                    "contradicted",
+                    "unsupported",
+                    "undetermined",
+                    "supported"
+                  ]
+                }
+              },
+              "evaluator_name": "llm_faithfulness_judge",
+              "explanation": "Directly supported by the context.",
+              "label": "supported",
+              "passed": true,
+              "score": null,
+              "status": "success",
+              "test_case_id": "correct-context-correct-answer-reworded"
+            }
+          ],
+          "execution_error": null,
+          "input_text": "Which city serves as the capital of France?",
+          "model_response": {
+            "completion_tokens": null,
+            "latency_ms": null,
+            "model_id": "fake-rag-generator",
+            "output_text": "Paris",
+            "prompt_tokens": null,
+            "provider_metadata": {
+              "adapter": "mock",
+              "note": "deterministic fake adapter; does not reflect real model behavior",
+              "rag": {
+                "pipeline_config": {
+                  "chunk_overlap": 0,
+                  "chunk_size": 200,
+                  "corpus_fingerprint": "57e6541d2e8ddd045d30ffb6b8806bfdddadf1c7872251eab389669ba0954547",
+                  "embedding_model_id": "fake-embedding-v1",
+                  "prompt_template_id": "default_v1",
+                  "similarity_metric": "cosine",
+                  "top_k": 1
+                },
+                "prompt": "Answer the question using only the context passages below. If the context does not contain the answer, say you do not know.\n\nContext:\n[1] (source: doc-france) Paris is the capital of France.\n\nQuestion: Which city serves as the capital of France?\n",
+                "query": "Which city serves as the capital of France?",
+                "retrieval_config": {
+                  "embedding_model_id": "fake-embedding-v1",
+                  "similarity_metric": "cosine",
+                  "top_k": 1
+                },
+                "retrieved_chunks": [
+                  {
+                    "chunk_id": "doc-france::chunk-0",
+                    "document_id": "doc-france",
+                    "rank": 1,
+                    "score": 1.0,
+                    "text": "Paris is the capital of France."
+                  }
+                ]
+              }
+            },
+            "test_case_id": "correct-context-correct-answer-reworded",
+            "total_tokens": null
+          },
+          "reference_answer": "Paris",
+          "test_case_id": "correct-context-correct-answer-reworded"
+        }
+      ]
+    },
+    "run_id": "ffd9f406285f4040b5b99ef2aaf964fa",
+    "schema_version": 1,
+    "started_at": "2026-11-19T12:31:40.676003+00:00",
     "status": "succeeded"
   }
 }

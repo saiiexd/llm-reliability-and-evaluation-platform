@@ -1,373 +1,5 @@
 {
-  "347857f544194fc0b87d7748dd6abcaa": {
-    "correct-context-contradictory-answer": [
-      {
-        "error": null,
-        "evaluator_config": {
-          "k": 1
-        },
-        "evaluator_name": "hit_at_1",
-        "explanation": "At least one relevant target was found in the top 1 retrieved chunks.",
-        "metric_name": "hit_at_k",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-france::chunk-0"
-        ],
-        "score": 1.0,
-        "status": "success",
-        "test_case_id": "correct-context-contradictory-answer"
-      },
-      {
-        "error": null,
-        "evaluator_config": {
-          "k": 1
-        },
-        "evaluator_name": "recall_at_1",
-        "explanation": "Retrieved 1 of 1 relevant targets in the top 1.",
-        "metric_name": "recall_at_k",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-france::chunk-0"
-        ],
-        "score": 1.0,
-        "status": "success",
-        "test_case_id": "correct-context-contradictory-answer"
-      },
-      {
-        "error": null,
-        "evaluator_config": {},
-        "evaluator_name": "mrr",
-        "explanation": "First relevant chunk found at rank 1.",
-        "metric_name": "mrr",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-france::chunk-0"
-        ],
-        "score": 1.0,
-        "status": "success",
-        "test_case_id": "correct-context-contradictory-answer"
-      }
-    ],
-    "correct-context-correct-answer": [
-      {
-        "error": null,
-        "evaluator_config": {
-          "k": 1
-        },
-        "evaluator_name": "hit_at_1",
-        "explanation": "At least one relevant target was found in the top 1 retrieved chunks.",
-        "metric_name": "hit_at_k",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-france::chunk-0"
-        ],
-        "score": 1.0,
-        "status": "success",
-        "test_case_id": "correct-context-correct-answer"
-      },
-      {
-        "error": null,
-        "evaluator_config": {
-          "k": 1
-        },
-        "evaluator_name": "recall_at_1",
-        "explanation": "Retrieved 1 of 1 relevant targets in the top 1.",
-        "metric_name": "recall_at_k",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-france::chunk-0"
-        ],
-        "score": 1.0,
-        "status": "success",
-        "test_case_id": "correct-context-correct-answer"
-      },
-      {
-        "error": null,
-        "evaluator_config": {},
-        "evaluator_name": "mrr",
-        "explanation": "First relevant chunk found at rank 1.",
-        "metric_name": "mrr",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-france::chunk-0"
-        ],
-        "score": 1.0,
-        "status": "success",
-        "test_case_id": "correct-context-correct-answer"
-      }
-    ],
-    "correct-context-correct-answer-reworded": [
-      {
-        "error": null,
-        "evaluator_config": {
-          "k": 1
-        },
-        "evaluator_name": "hit_at_1",
-        "explanation": "At least one relevant target was found in the top 1 retrieved chunks.",
-        "metric_name": "hit_at_k",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-france::chunk-0"
-        ],
-        "score": 1.0,
-        "status": "success",
-        "test_case_id": "correct-context-correct-answer-reworded"
-      },
-      {
-        "error": null,
-        "evaluator_config": {
-          "k": 1
-        },
-        "evaluator_name": "recall_at_1",
-        "explanation": "Retrieved 1 of 1 relevant targets in the top 1.",
-        "metric_name": "recall_at_k",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-france::chunk-0"
-        ],
-        "score": 1.0,
-        "status": "success",
-        "test_case_id": "correct-context-correct-answer-reworded"
-      },
-      {
-        "error": null,
-        "evaluator_config": {},
-        "evaluator_name": "mrr",
-        "explanation": "First relevant chunk found at rank 1.",
-        "metric_name": "mrr",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-france::chunk-0"
-        ],
-        "score": 1.0,
-        "status": "success",
-        "test_case_id": "correct-context-correct-answer-reworded"
-      }
-    ],
-    "correct-context-unsupported-answer": [
-      {
-        "error": null,
-        "evaluator_config": {
-          "k": 1
-        },
-        "evaluator_name": "hit_at_1",
-        "explanation": "At least one relevant target was found in the top 1 retrieved chunks.",
-        "metric_name": "hit_at_k",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-france::chunk-0"
-        ],
-        "score": 1.0,
-        "status": "success",
-        "test_case_id": "correct-context-unsupported-answer"
-      },
-      {
-        "error": null,
-        "evaluator_config": {
-          "k": 1
-        },
-        "evaluator_name": "recall_at_1",
-        "explanation": "Retrieved 1 of 1 relevant targets in the top 1.",
-        "metric_name": "recall_at_k",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-france::chunk-0"
-        ],
-        "score": 1.0,
-        "status": "success",
-        "test_case_id": "correct-context-unsupported-answer"
-      },
-      {
-        "error": null,
-        "evaluator_config": {},
-        "evaluator_name": "mrr",
-        "explanation": "First relevant chunk found at rank 1.",
-        "metric_name": "mrr",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-france::chunk-0"
-        ],
-        "score": 1.0,
-        "status": "success",
-        "test_case_id": "correct-context-unsupported-answer"
-      }
-    ],
-    "missing-context": [
-      {
-        "error": null,
-        "evaluator_config": {
-          "k": 1
-        },
-        "evaluator_name": "hit_at_1",
-        "explanation": "No relevant target was found in the top 1 retrieved chunks.",
-        "metric_name": "hit_at_k",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-fruit::chunk-0"
-        ],
-        "score": 0.0,
-        "status": "success",
-        "test_case_id": "missing-context"
-      },
-      {
-        "error": null,
-        "evaluator_config": {
-          "k": 1
-        },
-        "evaluator_name": "recall_at_1",
-        "explanation": "Retrieved 0 of 1 relevant targets in the top 1.",
-        "metric_name": "recall_at_k",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-fruit::chunk-0"
-        ],
-        "score": 0.0,
-        "status": "success",
-        "test_case_id": "missing-context"
-      },
-      {
-        "error": null,
-        "evaluator_config": {},
-        "evaluator_name": "mrr",
-        "explanation": "No relevant chunk was found among the retrieved results.",
-        "metric_name": "mrr",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-fruit::chunk-0"
-        ],
-        "score": 0.0,
-        "status": "success",
-        "test_case_id": "missing-context"
-      }
-    ],
-    "no-ground-truth": [
-      {
-        "error": null,
-        "evaluator_config": {
-          "k": 1
-        },
-        "evaluator_name": "hit_at_1",
-        "explanation": "No retrieval ground truth was provided for this test case.",
-        "metric_name": "hit_at_k",
-        "relevant_targets": null,
-        "retrieved_ids": [],
-        "score": null,
-        "status": "skipped",
-        "test_case_id": "no-ground-truth"
-      },
-      {
-        "error": null,
-        "evaluator_config": {
-          "k": 1
-        },
-        "evaluator_name": "recall_at_1",
-        "explanation": "No retrieval ground truth was provided for this test case.",
-        "metric_name": "recall_at_k",
-        "relevant_targets": null,
-        "retrieved_ids": [],
-        "score": null,
-        "status": "skipped",
-        "test_case_id": "no-ground-truth"
-      },
-      {
-        "error": null,
-        "evaluator_config": {},
-        "evaluator_name": "mrr",
-        "explanation": "No retrieval ground truth was provided for this test case.",
-        "metric_name": "mrr",
-        "relevant_targets": null,
-        "retrieved_ids": [],
-        "score": null,
-        "status": "skipped",
-        "test_case_id": "no-ground-truth"
-      }
-    ],
-    "relevant-context-incorrect-answer": [
-      {
-        "error": null,
-        "evaluator_config": {
-          "k": 1
-        },
-        "evaluator_name": "hit_at_1",
-        "explanation": "At least one relevant target was found in the top 1 retrieved chunks.",
-        "metric_name": "hit_at_k",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-france::chunk-0"
-        ],
-        "score": 1.0,
-        "status": "success",
-        "test_case_id": "relevant-context-incorrect-answer"
-      },
-      {
-        "error": null,
-        "evaluator_config": {
-          "k": 1
-        },
-        "evaluator_name": "recall_at_1",
-        "explanation": "Retrieved 1 of 1 relevant targets in the top 1.",
-        "metric_name": "recall_at_k",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-france::chunk-0"
-        ],
-        "score": 1.0,
-        "status": "success",
-        "test_case_id": "relevant-context-incorrect-answer"
-      },
-      {
-        "error": null,
-        "evaluator_config": {},
-        "evaluator_name": "mrr",
-        "explanation": "First relevant chunk found at rank 1.",
-        "metric_name": "mrr",
-        "relevant_targets": [
-          "doc-france::chunk-0"
-        ],
-        "retrieved_ids": [
-          "doc-france::chunk-0"
-        ],
-        "score": 1.0,
-        "status": "success",
-        "test_case_id": "relevant-context-incorrect-answer"
-      }
-    ]
-  },
-  "350b690a337d4462a4253bd31d0112d7": {
+  "8c07d1c9f9b840b5b419a3e58351d287": {
     "correct-context-contradictory-answer": [
       {
         "error": null,
@@ -741,7 +373,375 @@
       }
     ]
   },
-  "a489deaac753435f9976783b06cbb994": {
+  "bf188087f5ab4fff82af2338926c1e42": {
+    "correct-context-contradictory-answer": [
+      {
+        "error": null,
+        "evaluator_config": {
+          "k": 1
+        },
+        "evaluator_name": "hit_at_1",
+        "explanation": "At least one relevant target was found in the top 1 retrieved chunks.",
+        "metric_name": "hit_at_k",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-france::chunk-0"
+        ],
+        "score": 1.0,
+        "status": "success",
+        "test_case_id": "correct-context-contradictory-answer"
+      },
+      {
+        "error": null,
+        "evaluator_config": {
+          "k": 1
+        },
+        "evaluator_name": "recall_at_1",
+        "explanation": "Retrieved 1 of 1 relevant targets in the top 1.",
+        "metric_name": "recall_at_k",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-france::chunk-0"
+        ],
+        "score": 1.0,
+        "status": "success",
+        "test_case_id": "correct-context-contradictory-answer"
+      },
+      {
+        "error": null,
+        "evaluator_config": {},
+        "evaluator_name": "mrr",
+        "explanation": "First relevant chunk found at rank 1.",
+        "metric_name": "mrr",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-france::chunk-0"
+        ],
+        "score": 1.0,
+        "status": "success",
+        "test_case_id": "correct-context-contradictory-answer"
+      }
+    ],
+    "correct-context-correct-answer": [
+      {
+        "error": null,
+        "evaluator_config": {
+          "k": 1
+        },
+        "evaluator_name": "hit_at_1",
+        "explanation": "At least one relevant target was found in the top 1 retrieved chunks.",
+        "metric_name": "hit_at_k",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-france::chunk-0"
+        ],
+        "score": 1.0,
+        "status": "success",
+        "test_case_id": "correct-context-correct-answer"
+      },
+      {
+        "error": null,
+        "evaluator_config": {
+          "k": 1
+        },
+        "evaluator_name": "recall_at_1",
+        "explanation": "Retrieved 1 of 1 relevant targets in the top 1.",
+        "metric_name": "recall_at_k",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-france::chunk-0"
+        ],
+        "score": 1.0,
+        "status": "success",
+        "test_case_id": "correct-context-correct-answer"
+      },
+      {
+        "error": null,
+        "evaluator_config": {},
+        "evaluator_name": "mrr",
+        "explanation": "First relevant chunk found at rank 1.",
+        "metric_name": "mrr",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-france::chunk-0"
+        ],
+        "score": 1.0,
+        "status": "success",
+        "test_case_id": "correct-context-correct-answer"
+      }
+    ],
+    "correct-context-correct-answer-reworded": [
+      {
+        "error": null,
+        "evaluator_config": {
+          "k": 1
+        },
+        "evaluator_name": "hit_at_1",
+        "explanation": "At least one relevant target was found in the top 1 retrieved chunks.",
+        "metric_name": "hit_at_k",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-france::chunk-0"
+        ],
+        "score": 1.0,
+        "status": "success",
+        "test_case_id": "correct-context-correct-answer-reworded"
+      },
+      {
+        "error": null,
+        "evaluator_config": {
+          "k": 1
+        },
+        "evaluator_name": "recall_at_1",
+        "explanation": "Retrieved 1 of 1 relevant targets in the top 1.",
+        "metric_name": "recall_at_k",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-france::chunk-0"
+        ],
+        "score": 1.0,
+        "status": "success",
+        "test_case_id": "correct-context-correct-answer-reworded"
+      },
+      {
+        "error": null,
+        "evaluator_config": {},
+        "evaluator_name": "mrr",
+        "explanation": "First relevant chunk found at rank 1.",
+        "metric_name": "mrr",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-france::chunk-0"
+        ],
+        "score": 1.0,
+        "status": "success",
+        "test_case_id": "correct-context-correct-answer-reworded"
+      }
+    ],
+    "correct-context-unsupported-answer": [
+      {
+        "error": null,
+        "evaluator_config": {
+          "k": 1
+        },
+        "evaluator_name": "hit_at_1",
+        "explanation": "At least one relevant target was found in the top 1 retrieved chunks.",
+        "metric_name": "hit_at_k",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-france::chunk-0"
+        ],
+        "score": 1.0,
+        "status": "success",
+        "test_case_id": "correct-context-unsupported-answer"
+      },
+      {
+        "error": null,
+        "evaluator_config": {
+          "k": 1
+        },
+        "evaluator_name": "recall_at_1",
+        "explanation": "Retrieved 1 of 1 relevant targets in the top 1.",
+        "metric_name": "recall_at_k",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-france::chunk-0"
+        ],
+        "score": 1.0,
+        "status": "success",
+        "test_case_id": "correct-context-unsupported-answer"
+      },
+      {
+        "error": null,
+        "evaluator_config": {},
+        "evaluator_name": "mrr",
+        "explanation": "First relevant chunk found at rank 1.",
+        "metric_name": "mrr",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-france::chunk-0"
+        ],
+        "score": 1.0,
+        "status": "success",
+        "test_case_id": "correct-context-unsupported-answer"
+      }
+    ],
+    "missing-context": [
+      {
+        "error": null,
+        "evaluator_config": {
+          "k": 1
+        },
+        "evaluator_name": "hit_at_1",
+        "explanation": "No relevant target was found in the top 1 retrieved chunks.",
+        "metric_name": "hit_at_k",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-fruit::chunk-0"
+        ],
+        "score": 0.0,
+        "status": "success",
+        "test_case_id": "missing-context"
+      },
+      {
+        "error": null,
+        "evaluator_config": {
+          "k": 1
+        },
+        "evaluator_name": "recall_at_1",
+        "explanation": "Retrieved 0 of 1 relevant targets in the top 1.",
+        "metric_name": "recall_at_k",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-fruit::chunk-0"
+        ],
+        "score": 0.0,
+        "status": "success",
+        "test_case_id": "missing-context"
+      },
+      {
+        "error": null,
+        "evaluator_config": {},
+        "evaluator_name": "mrr",
+        "explanation": "No relevant chunk was found among the retrieved results.",
+        "metric_name": "mrr",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-fruit::chunk-0"
+        ],
+        "score": 0.0,
+        "status": "success",
+        "test_case_id": "missing-context"
+      }
+    ],
+    "no-ground-truth": [
+      {
+        "error": null,
+        "evaluator_config": {
+          "k": 1
+        },
+        "evaluator_name": "hit_at_1",
+        "explanation": "No retrieval ground truth was provided for this test case.",
+        "metric_name": "hit_at_k",
+        "relevant_targets": null,
+        "retrieved_ids": [],
+        "score": null,
+        "status": "skipped",
+        "test_case_id": "no-ground-truth"
+      },
+      {
+        "error": null,
+        "evaluator_config": {
+          "k": 1
+        },
+        "evaluator_name": "recall_at_1",
+        "explanation": "No retrieval ground truth was provided for this test case.",
+        "metric_name": "recall_at_k",
+        "relevant_targets": null,
+        "retrieved_ids": [],
+        "score": null,
+        "status": "skipped",
+        "test_case_id": "no-ground-truth"
+      },
+      {
+        "error": null,
+        "evaluator_config": {},
+        "evaluator_name": "mrr",
+        "explanation": "No retrieval ground truth was provided for this test case.",
+        "metric_name": "mrr",
+        "relevant_targets": null,
+        "retrieved_ids": [],
+        "score": null,
+        "status": "skipped",
+        "test_case_id": "no-ground-truth"
+      }
+    ],
+    "relevant-context-incorrect-answer": [
+      {
+        "error": null,
+        "evaluator_config": {
+          "k": 1
+        },
+        "evaluator_name": "hit_at_1",
+        "explanation": "At least one relevant target was found in the top 1 retrieved chunks.",
+        "metric_name": "hit_at_k",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-france::chunk-0"
+        ],
+        "score": 1.0,
+        "status": "success",
+        "test_case_id": "relevant-context-incorrect-answer"
+      },
+      {
+        "error": null,
+        "evaluator_config": {
+          "k": 1
+        },
+        "evaluator_name": "recall_at_1",
+        "explanation": "Retrieved 1 of 1 relevant targets in the top 1.",
+        "metric_name": "recall_at_k",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-france::chunk-0"
+        ],
+        "score": 1.0,
+        "status": "success",
+        "test_case_id": "relevant-context-incorrect-answer"
+      },
+      {
+        "error": null,
+        "evaluator_config": {},
+        "evaluator_name": "mrr",
+        "explanation": "First relevant chunk found at rank 1.",
+        "metric_name": "mrr",
+        "relevant_targets": [
+          "doc-france::chunk-0"
+        ],
+        "retrieved_ids": [
+          "doc-france::chunk-0"
+        ],
+        "score": 1.0,
+        "status": "success",
+        "test_case_id": "relevant-context-incorrect-answer"
+      }
+    ]
+  },
+  "ffd9f406285f4040b5b99ef2aaf964fa": {
     "correct-context-contradictory-answer": [
       {
         "error": null,

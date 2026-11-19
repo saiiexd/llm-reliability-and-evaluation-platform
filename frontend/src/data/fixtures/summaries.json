@@ -1,5 +1,5 @@
 {
-  "347857f544194fc0b87d7748dd6abcaa": {
+  "8c07d1c9f9b840b5b419a3e58351d287": {
     "evaluation_summary": {
       "dataset_name": "reliability-console-demo",
       "disagreement_count": 0,
@@ -25,177 +25,12 @@
         "llm_faithfulness_judge": {
           "criterion": "faithfulness",
           "evaluator_name": "llm_faithfulness_judge",
-          "num_error": 7,
-          "num_evaluated": 7,
-          "num_failed": 0,
-          "num_passed": 0,
-          "num_skipped": 0,
-          "num_success": 0,
-          "score_count": 0,
-          "score_max": null,
-          "score_mean": null,
-          "score_min": null
-        }
-      }
-    },
-    "reliability_findings": [
-      {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "correct-context-correct-answer"
-      },
-      {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "correct-context-unsupported-answer"
-      },
-      {
-        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
-        "evaluator_names": [
-          "exact_match"
-        ],
-        "flag_type": "incorrect_per_evaluator",
-        "test_case_id": "correct-context-unsupported-answer"
-      },
-      {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "correct-context-contradictory-answer"
-      },
-      {
-        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
-        "evaluator_names": [
-          "exact_match"
-        ],
-        "flag_type": "incorrect_per_evaluator",
-        "test_case_id": "correct-context-contradictory-answer"
-      },
-      {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "relevant-context-incorrect-answer"
-      },
-      {
-        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
-        "evaluator_names": [
-          "exact_match"
-        ],
-        "flag_type": "incorrect_per_evaluator",
-        "test_case_id": "relevant-context-incorrect-answer"
-      },
-      {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "missing-context"
-      },
-      {
-        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
-        "evaluator_names": [
-          "exact_match"
-        ],
-        "flag_type": "incorrect_per_evaluator",
-        "test_case_id": "missing-context"
-      },
-      {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "no-ground-truth"
-      },
-      {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "correct-context-correct-answer-reworded"
-      }
-    ],
-    "retrieval_summary": {
-      "hit_at_1": {
-        "evaluator_name": "hit_at_1",
-        "metric_name": "hit_at_k",
-        "num_error": 0,
-        "num_evaluated": 7,
-        "num_skipped": 1,
-        "num_success": 6,
-        "score_max": 1.0,
-        "score_mean": 0.8333333333333334,
-        "score_min": 0.0
-      },
-      "mrr": {
-        "evaluator_name": "mrr",
-        "metric_name": "mrr",
-        "num_error": 0,
-        "num_evaluated": 7,
-        "num_skipped": 1,
-        "num_success": 6,
-        "score_max": 1.0,
-        "score_mean": 0.8333333333333334,
-        "score_min": 0.0
-      },
-      "recall_at_1": {
-        "evaluator_name": "recall_at_1",
-        "metric_name": "recall_at_k",
-        "num_error": 0,
-        "num_evaluated": 7,
-        "num_skipped": 1,
-        "num_success": 6,
-        "score_max": 1.0,
-        "score_mean": 0.8333333333333334,
-        "score_min": 0.0
-      }
-    }
-  },
-  "350b690a337d4462a4253bd31d0112d7": {
-    "evaluation_summary": {
-      "dataset_name": "reliability-console-demo",
-      "disagreement_count": 0,
-      "model_id": "mock-adapter-v1",
-      "num_execution_failed": 0,
-      "num_execution_succeeded": 7,
-      "num_test_cases": 7,
-      "per_evaluator": {
-        "exact_match": {
-          "criterion": "correctness",
-          "evaluator_name": "exact_match",
           "num_error": 0,
           "num_evaluated": 7,
           "num_failed": 4,
           "num_passed": 3,
           "num_skipped": 0,
           "num_success": 7,
-          "score_count": 7,
-          "score_max": 1.0,
-          "score_mean": 0.42857142857142855,
-          "score_min": 0.0
-        },
-        "llm_faithfulness_judge": {
-          "criterion": "faithfulness",
-          "evaluator_name": "llm_faithfulness_judge",
-          "num_error": 7,
-          "num_evaluated": 7,
-          "num_failed": 0,
-          "num_passed": 0,
-          "num_skipped": 0,
-          "num_success": 0,
           "score_count": 0,
           "score_max": null,
           "score_mean": null,
@@ -205,92 +40,40 @@
     },
     "reliability_findings": [
       {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "correct-context-correct-answer"
-      },
-      {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "correct-context-unsupported-answer"
-      },
-      {
         "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
         "evaluator_names": [
-          "exact_match"
+          "exact_match",
+          "llm_faithfulness_judge"
         ],
         "flag_type": "incorrect_per_evaluator",
         "test_case_id": "correct-context-unsupported-answer"
       },
       {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "correct-context-contradictory-answer"
-      },
-      {
         "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
         "evaluator_names": [
-          "exact_match"
+          "exact_match",
+          "llm_faithfulness_judge"
         ],
         "flag_type": "incorrect_per_evaluator",
         "test_case_id": "correct-context-contradictory-answer"
       },
       {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "relevant-context-incorrect-answer"
-      },
-      {
         "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
         "evaluator_names": [
-          "exact_match"
+          "exact_match",
+          "llm_faithfulness_judge"
         ],
         "flag_type": "incorrect_per_evaluator",
         "test_case_id": "relevant-context-incorrect-answer"
       },
       {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "missing-context"
-      },
-      {
         "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
         "evaluator_names": [
-          "exact_match"
+          "exact_match",
+          "llm_faithfulness_judge"
         ],
         "flag_type": "incorrect_per_evaluator",
         "test_case_id": "missing-context"
-      },
-      {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "no-ground-truth"
-      },
-      {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "correct-context-correct-answer-reworded"
       }
     ],
     "retrieval_summary": {
@@ -329,7 +112,7 @@
       }
     }
   },
-  "664f791bd61b4b708116b67c22569afa": {
+  "ba5b1d40a20049d29b73693497743afd": {
     "evaluation_summary": {
       "dataset_name": "baseline-non-rag-demo",
       "disagreement_count": 0,
@@ -366,7 +149,7 @@
     ],
     "retrieval_summary": {}
   },
-  "a489deaac753435f9976783b06cbb994": {
+  "bf188087f5ab4fff82af2338926c1e42": {
     "evaluation_summary": {
       "dataset_name": "reliability-console-demo",
       "disagreement_count": 0,
@@ -392,12 +175,12 @@
         "llm_faithfulness_judge": {
           "criterion": "faithfulness",
           "evaluator_name": "llm_faithfulness_judge",
-          "num_error": 7,
+          "num_error": 0,
           "num_evaluated": 7,
-          "num_failed": 0,
-          "num_passed": 0,
+          "num_failed": 4,
+          "num_passed": 3,
           "num_skipped": 0,
-          "num_success": 0,
+          "num_success": 7,
           "score_count": 0,
           "score_max": null,
           "score_mean": null,
@@ -407,92 +190,153 @@
     },
     "reliability_findings": [
       {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "correct-context-correct-answer"
-      },
-      {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "correct-context-unsupported-answer"
-      },
-      {
         "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
         "evaluator_names": [
-          "exact_match"
+          "exact_match",
+          "llm_faithfulness_judge"
         ],
         "flag_type": "incorrect_per_evaluator",
         "test_case_id": "correct-context-unsupported-answer"
       },
       {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "correct-context-contradictory-answer"
-      },
-      {
         "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
         "evaluator_names": [
-          "exact_match"
+          "exact_match",
+          "llm_faithfulness_judge"
         ],
         "flag_type": "incorrect_per_evaluator",
         "test_case_id": "correct-context-contradictory-answer"
       },
       {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "relevant-context-incorrect-answer"
-      },
-      {
         "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
         "evaluator_names": [
-          "exact_match"
+          "exact_match",
+          "llm_faithfulness_judge"
         ],
         "flag_type": "incorrect_per_evaluator",
         "test_case_id": "relevant-context-incorrect-answer"
       },
       {
-        "detail": "1 evaluator(s) failed to produce a result.",
+        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
         "evaluator_names": [
+          "exact_match",
           "llm_faithfulness_judge"
         ],
-        "flag_type": "evaluator_failure",
+        "flag_type": "incorrect_per_evaluator",
         "test_case_id": "missing-context"
+      }
+    ],
+    "retrieval_summary": {
+      "hit_at_1": {
+        "evaluator_name": "hit_at_1",
+        "metric_name": "hit_at_k",
+        "num_error": 0,
+        "num_evaluated": 7,
+        "num_skipped": 1,
+        "num_success": 6,
+        "score_max": 1.0,
+        "score_mean": 0.8333333333333334,
+        "score_min": 0.0
+      },
+      "mrr": {
+        "evaluator_name": "mrr",
+        "metric_name": "mrr",
+        "num_error": 0,
+        "num_evaluated": 7,
+        "num_skipped": 1,
+        "num_success": 6,
+        "score_max": 1.0,
+        "score_mean": 0.8333333333333334,
+        "score_min": 0.0
+      },
+      "recall_at_1": {
+        "evaluator_name": "recall_at_1",
+        "metric_name": "recall_at_k",
+        "num_error": 0,
+        "num_evaluated": 7,
+        "num_skipped": 1,
+        "num_success": 6,
+        "score_max": 1.0,
+        "score_mean": 0.8333333333333334,
+        "score_min": 0.0
+      }
+    }
+  },
+  "ffd9f406285f4040b5b99ef2aaf964fa": {
+    "evaluation_summary": {
+      "dataset_name": "reliability-console-demo",
+      "disagreement_count": 0,
+      "model_id": "mock-adapter-v1",
+      "num_execution_failed": 0,
+      "num_execution_succeeded": 7,
+      "num_test_cases": 7,
+      "per_evaluator": {
+        "exact_match": {
+          "criterion": "correctness",
+          "evaluator_name": "exact_match",
+          "num_error": 0,
+          "num_evaluated": 7,
+          "num_failed": 4,
+          "num_passed": 3,
+          "num_skipped": 0,
+          "num_success": 7,
+          "score_count": 7,
+          "score_max": 1.0,
+          "score_mean": 0.42857142857142855,
+          "score_min": 0.0
+        },
+        "llm_faithfulness_judge": {
+          "criterion": "faithfulness",
+          "evaluator_name": "llm_faithfulness_judge",
+          "num_error": 0,
+          "num_evaluated": 7,
+          "num_failed": 4,
+          "num_passed": 3,
+          "num_skipped": 0,
+          "num_success": 7,
+          "score_count": 0,
+          "score_max": null,
+          "score_mean": null,
+          "score_min": null
+        }
+      }
+    },
+    "reliability_findings": [
+      {
+        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
+        "evaluator_names": [
+          "exact_match",
+          "llm_faithfulness_judge"
+        ],
+        "flag_type": "incorrect_per_evaluator",
+        "test_case_id": "correct-context-unsupported-answer"
       },
       {
         "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
         "evaluator_names": [
-          "exact_match"
+          "exact_match",
+          "llm_faithfulness_judge"
+        ],
+        "flag_type": "incorrect_per_evaluator",
+        "test_case_id": "correct-context-contradictory-answer"
+      },
+      {
+        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
+        "evaluator_names": [
+          "exact_match",
+          "llm_faithfulness_judge"
+        ],
+        "flag_type": "incorrect_per_evaluator",
+        "test_case_id": "relevant-context-incorrect-answer"
+      },
+      {
+        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
+        "evaluator_names": [
+          "exact_match",
+          "llm_faithfulness_judge"
         ],
         "flag_type": "incorrect_per_evaluator",
         "test_case_id": "missing-context"
-      },
-      {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "no-ground-truth"
-      },
-      {
-        "detail": "1 evaluator(s) failed to produce a result.",
-        "evaluator_names": [
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "evaluator_failure",
-        "test_case_id": "correct-context-correct-answer-reworded"
       }
     ],
     "retrieval_summary": {
