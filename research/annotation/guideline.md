@@ -28,8 +28,8 @@ Do not edit, delete or add any other cell. Sorting the sheet is fine; rows are m
 > Does the model answer give the same answer as at least one gold answer, so that a reader who asked
 > the question would get the right answer from it?
 
-`correct` means yes. `incorrect` means no. `unsure` means the gold answers alone do not let you decide
-(see rule 9). This is a binary judgement: there is no partial credit.
+`correct` means yes. `incorrect` means no. `unsure` means the gold answers alone cannot decide it
+(rule 9 only). This is a binary judgement: there is no partial credit.
 
 ## Decision rules
 
@@ -55,17 +55,21 @@ Apply them in order; the first rule that fits decides.
    two forms …") or a gold answer lists several items, every item must be present and no item may be
    wrong. One right item out of three is `incorrect`. An answer that is vaguer than every gold answer,
    so that it would fit many other answers ("Diverse"), is `incorrect`.
-7. **A different entity is incorrect.** A different person, place, organism, value or concept from
-   every gold answer is `incorrect`, however plausible it sounds. So is repeating the question's own
-   term instead of answering it.
-8. **Numbers and units must match in value.** Different formatting of the same value is fine ("€53,423"
-   vs "53,423"; "1,000" vs "1000"). A different value, a range or bound that is not the gold value
-   ("Over €90,000"), or a different unit that changes the value is `incorrect`.
-9. **Use `unsure` only when the gold answers cannot decide it.** Typical case: the answer is specific
-   in a way the gold answers do not state (a year where the gold answer names an event), so deciding
-   would need outside facts. Do not look anything up: label `unsure` and write the reason in `notes`.
-   `unsure` is not for answers that are merely hard to judge; apply rules 1 to 8 first. Expect it to
-   be rare.
+7. **A different entity of the same kind is incorrect.** If the answer is the same kind of thing as
+   the gold answers (a person for a person, an organism for an organism, a concept for a concept)
+   but names a different one, so that it and the gold answer cannot both be the answer, it is
+   `incorrect`, however plausible it sounds. Repeating the question's own term instead of answering
+   is also `incorrect`.
+8. **Numbers of the same kind must match in value.** This applies when the answer and a gold answer
+   are the same kind of quantity, such as an amount for an amount or a year for a year. Different
+   formatting of the same value is fine ("€53,423" vs "53,423"; "1,000" vs "1000"). A different
+   value, a range or bound that is not the gold value ("Over €90,000"), or a different unit that
+   changes the value is `incorrect`.
+9. **Different kind or granularity: `unsure`.** If the answer is of a different kind or granularity
+   from every gold answer, the gold answers alone cannot decide it. Rules 7 and 8 then do not apply.
+   Example: a year where the gold answer names an event. Do not look anything up: label `unsure` and
+   write the reason in `notes`. `unsure` is not for answers that are merely hard to judge. Expect it
+   to be rare.
 
 ## Examples
 
@@ -149,7 +153,8 @@ is deliberately not stated.
 - Question: When was Thoreau's essay published?
 - Gold answers: after the end of the Mexican War | after the end of the Mexican War. | end of the Mexican War
 - Model answer: 1850
-- Why: the gold answers name an event, not a year; checking the year would need outside facts.
+- Why: the answer is a year and the gold answers name an event, which is a different granularity.
+  Rules 7 and 8 do not apply, and checking the year would need outside facts.
   Note: "No year given in gold; needs a date for the end of the Mexican War."
 
 ## Procedure

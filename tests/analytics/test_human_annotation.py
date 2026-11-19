@@ -423,6 +423,24 @@ def test_hand_computed_accuracy_precision_recall_kappa_and_exclusions(
     assert "exact_match vs human" in render_markdown(report)
 
 
+def test_sheet_saved_with_byte_order_mark_is_read(
+    synthetic_hand_store: Path, tmp_path: Path
+) -> None:
+    sheet_dir = tmp_path / "sheet"
+    export_annotation_sheet(synthetic_hand_store, sheet_dir, ["exp-synthetic-hand"])
+    filled = _fill_synthetic(
+        sheet_dir / SHEET_FILENAME,
+        sheet_dir / KEY_FILENAME,
+        tmp_path / "SYNTHETIC_labels_A.csv",
+        SYNTHETIC_HAND_LABELS,
+        "synthetic-annotator-A",
+    )
+    # As written by a spreadsheet program's "CSV UTF-8" export.
+    filled.write_text(filled.read_text(encoding="utf-8"), encoding="utf-8-sig")
+    report = analyze_human_agreement(sheet_dir / KEY_FILENAME, filled, synthetic_hand_store)
+    assert report["evaluators"]["exact_match"]["overall"]["n"] == 10
+
+
 def test_undefined_rates_are_none_not_zero(synthetic_hand_store: Path, tmp_path: Path) -> None:
     sheet_dir = tmp_path / "sheet"
     export_annotation_sheet(synthetic_hand_store, sheet_dir, ["exp-synthetic-hand"])

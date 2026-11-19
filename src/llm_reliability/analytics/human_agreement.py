@@ -96,7 +96,8 @@ class SheetLabels:
 
 
 def _read_csv(path: Path, required: Iterable[str]) -> list[dict[str, str]]:
-    with path.open(newline="", encoding="utf-8") as handle:
+    # utf-8-sig: spreadsheet programs often save "CSV UTF-8" with a byte-order mark.
+    with path.open(newline="", encoding="utf-8-sig") as handle:
         reader = csv.DictReader(handle)
         missing = [c for c in required if c not in (reader.fieldnames or [])]
         if missing:
