@@ -17,6 +17,7 @@ import type {
   FailureDistribution,
   ProvidersListResponse,
   ReliabilityDiagnostic,
+  RepeatConsistencyReport,
   RetrievalEvaluationResult,
   RetrievalSummary,
   RobustnessSummary,
@@ -507,6 +508,12 @@ export class ApiClient {
 
   async getTrends(experimentId: string): Promise<TrendAnalysis> {
     return this.request<TrendAnalysis>(`/analytics/trends/${encodeURIComponent(experimentId)}`);
+  }
+
+  /** Repeated-run consistency (RQ4), optionally for one experiment. */
+  async getRepeatConsistency(experimentId?: string): Promise<RepeatConsistencyReport> {
+    const qs = experimentId ? `?experiment_id=${encodeURIComponent(experimentId)}` : "";
+    return this.request<RepeatConsistencyReport>(`/analytics/consistency${qs}`);
   }
 }
 

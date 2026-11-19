@@ -143,3 +143,62 @@ class AnalyticsOverviewResponse(BaseApiSchema):
     retrieval_runs_count: int
     mean_retrieval_mrr: float | None = None
     recent_runs: list[dict[str, Any]] = Field(default_factory=list)
+
+
+class EvaluatorStabilityResponse(BaseApiSchema):
+    """Verdict stability of one evaluator across a repeat group.
+
+    stability_rate = stable_cases / compared_cases. Cases where the evaluator
+    was missing, not SUCCESS, or gave no verdict (passed=None) in any run are
+    excluded from compared_cases and counted in the excluded_* fields.
+    """
+
+    evaluator_name: str
+    stable_cases: int
+    compared_cases: int
+    stability_rate: float | None = None
+    excluded_cases: int = 0
+    excluded_missing: int = 0
+    excluded_not_success: int = 0
+    excluded_no_verdict: int = 0
+    unstable_count: int = 0
+    unstable_test_case_ids: list[str] = Field(default_factory=list)
+
+
+class RepeatGroupConsistencyResponse(BaseApiSchema):
+    """Repeated-run consistency for one group of true repeats (RQ4).
+
+    A group shares experiment_id, config_fingerprint and adapter_id. Rates use
+    compared_cases (cases with a model response in every run) as denominator;
+    identical_output_rate uses exact string equality of output_text.
+    *_test_case_ids lists are capped; the matching *_count is the full total.
+    """
+
+    experiment_id: str
+    experiment_name: str | None = None
+    config_fingerprint: str
+    adapter_id: str | None = None
+    adapter_recorded: bool
+    num_runs: int
+    run_ids: list[str]
+    temperature: float | None = None
+    model_id: str
+    simulated_components: list[str] = Field(default_factory=list)
+    total_test_cases: int
+    compared_cases: int
+    excluded_cases: int
+    identical_output_cases: int
+    identical_output_rate: float | None = None
+    output_changed_count: int = 0
+    output_changed_test_case_ids: list[str] = Field(default_factory=list)
+    case_pass_stable_cases: int
+    case_pass_compared_cases: int
+    case_pass_stability_rate: float | None = None
+    case_pass_changed_count: int = 0
+    case_pass_changed_test_case_ids: list[str] = Field(default_factory=list)
+    evaluators: list[EvaluatorStabilityResponse] = Field(default_factory=list)
+
+
+class RepeatConsistencyResponse(BaseApiSchema):
+    experiment_id: str | None = None
+    groups: list[RepeatGroupConsistencyResponse] = Field(default_factory=list)

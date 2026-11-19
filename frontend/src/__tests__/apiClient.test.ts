@@ -207,5 +207,32 @@ describe("ApiClient", () => {
       }),
     );
   });
+
+  it("fetches repeated-run consistency, with and without an experiment filter", async () => {
+    const body = {
+      experiment_id: "exp 1",
+      groups: [{ experiment_id: "exp 1", identical_output_cases: 57, compared_cases: 60, evaluators: [] }],
+    };
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      headers: new Headers(),
+      json: async () => body,
+    });
+
+    const res = await client.getRepeatConsistency("exp 1");
+    expect(res.groups[0].identical_output_cases).toBe(57);
+    expect(res.groups[0].compared_cases).toBe(60);
+    expect(global.fetch).toHaveBeenCalledWith(
+      "http://test-server:8000/api/v1/analytics/consistency?experiment_id=exp%201",
+      expect.anything(),
+    );
+
+    await client.getRepeatConsistency();
+    expect(global.fetch).toHaveBeenLastCalledWith(
+      "http://test-server:8000/api/v1/analytics/consistency",
+      expect.anything(),
+    );
+  });
 });
 

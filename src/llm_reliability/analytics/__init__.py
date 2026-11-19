@@ -2,7 +2,8 @@
 Analytics and observability package for LLM Reliability & Evaluation.
 
 Provides structured aggregation, cross-run comparison, evaluator agreement,
-failure taxonomy analysis, retrieval metrics, and longitudinal trends.
+failure taxonomy analysis, retrieval metrics, repeated-run consistency,
+and longitudinal trends.
 """
 
 from __future__ import annotations
@@ -19,6 +20,13 @@ from llm_reliability.analytics.agreement import (
     compute_evaluator_agreement,
 )
 from llm_reliability.analytics.comparison import assess_compatibility, compare_runs
+from llm_reliability.analytics.consistency import (
+    EvaluatorStability,
+    RepeatGroupConsistency,
+    compute_group_consistency,
+    compute_repeat_consistency,
+    group_repeat_runs,
+)
 from llm_reliability.analytics.models import (
     AnalyticsOverview,
     ComparisonCompatibility,
@@ -42,9 +50,11 @@ __all__ = [
     "ComparisonCompatibility",
     "EvaluationAggregate",
     "EvaluatorAgreementSummary",
+    "EvaluatorStability",
     "ExecutionPerformanceSummary",
     "FailureCategoryCount",
     "FailureDistribution",
+    "RepeatGroupConsistency",
     "RetrievalSummary",
     "RobustnessSummary",
     "RunComparison",
@@ -58,6 +68,9 @@ __all__ = [
     "compare_runs",
     "compute_all_pairwise_agreements",
     "compute_evaluator_agreement",
+    "compute_group_consistency",
+    "compute_repeat_consistency",
     "compute_trend_analysis",
+    "group_repeat_runs",
     "measure_performance",
 ]
