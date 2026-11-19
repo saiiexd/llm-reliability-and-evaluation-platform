@@ -71,6 +71,10 @@ select = [
 ]
 ignore = []
 
+[tool.ruff.lint.per-file-ignores]
+# Renders wide Markdown tables; wrapping the row templates hurts readability.
+"scripts/analyze_reliability_study.py" = ["E501"]
+
 [tool.ruff.lint.flake8-bugbear]
 extend-immutable-calls = [
     "fastapi.Depends",

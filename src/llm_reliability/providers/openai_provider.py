@@ -28,7 +28,6 @@ from llm_reliability.providers.base import (
     ProviderTimeoutError,
 )
 
-
 # ModelConfig.extra_params keys that describe the experiment (and so belong
 # in its fingerprint) but are not chat-completions arguments. Everything else
 # in extra_params (seed, response_format, top_p, ...) is forwarded to the SDK.

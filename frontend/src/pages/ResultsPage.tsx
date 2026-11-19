@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FixtureNotice } from "../components/FixtureNotice";
 import { SimulatedNotice } from "../components/SimulatedNotice";
+import { EvaluatorAgreement } from "../components/EvaluatorAgreement";
 import { PageHeader } from "../components/Card";
 import { EmptyState } from "../components/EmptyState";
 import { Tag } from "../components/Tag";
@@ -207,6 +208,8 @@ export function ResultsPage() {
                 )}
               </div>
             </section>
+
+            <EvaluatorAgreement runId={run.run_id} />
 
             {/* Questions */}
             <section className="grid gap-6 lg:grid-cols-12">
