@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import pytest
 
-from llm_reliability.api.schemas.runs import RunDetailResponse, TestCaseResultResponse
+from llm_reliability.api.schemas.runs import RunDetailResponse
 from llm_reliability.api.services import to_run_detail, to_run_summary
 from llm_reliability.evaluation.adapters import MockAdapter
 from llm_reliability.evaluation.evaluators import ExactMatchEvaluator
@@ -22,14 +22,20 @@ from llm_reliability.evaluation.models import (
     TestCaseResult,
 )
 from llm_reliability.evaluation.runner import EvaluationRunner
-from llm_reliability.experiments.models import DatasetVersion, ExperimentDefinition, ExperimentRun, RunStatus
+from llm_reliability.experiments.models import (
+    DatasetVersion,
+    ExperimentRun,
+    RunStatus,
+)
 
 
 def test_exact_match_correct_answer() -> None:
     """Exact match passing test case has succeeded=True and passed=True."""
     dataset = Dataset(
         name="test-ds",
-        test_cases=[TestCase(id="t1", input="What is the capital of France?", reference_answer="Paris")],
+        test_cases=[
+            TestCase(id="t1", input="What is the capital of France?", reference_answer="Paris")
+        ],
     )
     adapter = MockAdapter(responses={"t1": "Paris"})
     runner = EvaluationRunner(adapter=adapter, evaluators=[ExactMatchEvaluator()])
@@ -51,7 +57,9 @@ def test_exact_match_with_extra_text_fails_evaluation_while_execution_succeeds()
     """
     dataset = Dataset(
         name="qa-geography-baseline-v1",
-        test_cases=[TestCase(id="tc-1", input="What is the capital of France?", reference_answer="Paris")],
+        test_cases=[
+            TestCase(id="tc-1", input="What is the capital of France?", reference_answer="Paris")
+        ],
     )
     # Model generates the answer but echoes the prompt and context text
     noisy_output = "Question: What is the capital of France?\nAnswer: Paris"
@@ -92,7 +100,9 @@ def test_incorrect_answer_fails_evaluation() -> None:
     """Completely incorrect answer fails evaluation (succeeded=True, passed=False)."""
     dataset = Dataset(
         name="test-ds",
-        test_cases=[TestCase(id="t1", input="What is the capital of France?", reference_answer="Paris")],
+        test_cases=[
+            TestCase(id="t1", input="What is the capital of France?", reference_answer="Paris")
+        ],
     )
     adapter = MockAdapter(responses={"t1": "London"})
     runner = EvaluationRunner(adapter=adapter, evaluators=[ExactMatchEvaluator()])
@@ -217,7 +227,10 @@ def test_run_aggregation_mixed_results() -> None:
             model_response=ModelResponse(test_case_id="t1", output_text="a1", model_id="m"),
             evaluation_results=[
                 EvaluationResult(
-                    evaluator_name="e", test_case_id="t1", status=EvaluationStatus.SUCCESS, passed=True
+                    evaluator_name="e",
+                    test_case_id="t1",
+                    status=EvaluationStatus.SUCCESS,
+                    passed=True,
                 )
             ],
             execution_error=None,
@@ -229,7 +242,10 @@ def test_run_aggregation_mixed_results() -> None:
             model_response=ModelResponse(test_case_id="t2", output_text="wrong", model_id="m"),
             evaluation_results=[
                 EvaluationResult(
-                    evaluator_name="e", test_case_id="t2", status=EvaluationStatus.SUCCESS, passed=False
+                    evaluator_name="e",
+                    test_case_id="t2",
+                    status=EvaluationStatus.SUCCESS,
+                    passed=False,
                 )
             ],
             execution_error=None,

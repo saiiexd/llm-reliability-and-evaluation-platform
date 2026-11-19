@@ -108,7 +108,9 @@ class SentenceTransformerEmbeddingModel(EmbeddingModel):
     def embed(self, texts: Sequence[str]) -> list[list[float]]:
         if self._model is None:
             try:
-                from sentence_transformers import SentenceTransformer
+                from sentence_transformers import (  # type: ignore[import-not-found]
+                    SentenceTransformer,
+                )
             except ImportError as exc:
                 raise EmbeddingBackendError(
                     "The 'sentence-transformers' package is required to compute real "

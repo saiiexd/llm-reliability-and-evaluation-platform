@@ -4,25 +4,21 @@ Verification script for Prompt 10: Evaluation Integrity Audit & Pass-Rate Consis
 
 from __future__ import annotations
 
-import os
-import shutil
+import tempfile
+from pathlib import Path
 
 from fastapi.testclient import TestClient
 
 from llm_reliability.api.app import create_app
+from llm_reliability.api.config import ApiSettings
 
 
 def main() -> None:
-    client = TestClient(create_app())
+    # Runs against a throwaway store so the audit never writes into ./experiments.
+    store = Path(tempfile.mkdtemp(prefix="llm-integrity-audit-"))
+    client = TestClient(create_app(ApiSettings(persistence_dir=store)))
 
     exp_id = "exp-geo-audit-test"
-
-    # Clean up prior test artifacts if any
-    shutil.rmtree(f"experiments/runs/{exp_id}", ignore_errors=True)
-    try:
-        os.remove(f"experiments/experiments/{exp_id}.json")
-    except OSError:
-        pass
 
     # 1. Create geography baseline experiment
     exp_payload = {
@@ -31,11 +27,36 @@ def main() -> None:
         "description": "Audit test for Prompt 10 pass-rate consistency",
         "dataset_name": "qa-geography-baseline-v1",
         "test_cases": [
-            {"id": "tc-1", "input": "What is the capital of France?", "reference_answer": "Paris", "metadata": {}},
-            {"id": "tc-2", "input": "Bananas are rich in which mineral?", "reference_answer": "Potassium", "metadata": {}},
-            {"id": "tc-3", "input": "What is the largest ocean on Earth?", "reference_answer": "Pacific Ocean", "metadata": {}},
-            {"id": "tc-4", "input": "Which element has atomic number 1?", "reference_answer": "Hydrogen", "metadata": {}},
-            {"id": "tc-5", "input": "What year did the Apollo 11 mission land on the Moon?", "reference_answer": "1969", "metadata": {}},
+            {
+                "id": "tc-1",
+                "input": "What is the capital of France?",
+                "reference_answer": "Paris",
+                "metadata": {},
+            },
+            {
+                "id": "tc-2",
+                "input": "Bananas are rich in which mineral?",
+                "reference_answer": "Potassium",
+                "metadata": {},
+            },
+            {
+                "id": "tc-3",
+                "input": "What is the largest ocean on Earth?",
+                "reference_answer": "Pacific Ocean",
+                "metadata": {},
+            },
+            {
+                "id": "tc-4",
+                "input": "Which element has atomic number 1?",
+                "reference_answer": "Hydrogen",
+                "metadata": {},
+            },
+            {
+                "id": "tc-5",
+                "input": "What year did the Apollo 11 mission land on the Moon?",
+                "reference_answer": "1969",
+                "metadata": {},
+            },
         ],
         "model_config": {"model_id": "mock-adapter-v1", "temperature": 0.0, "max_tokens": 100},
         "evaluator_names": ["exact_match"],
@@ -59,7 +80,9 @@ def main() -> None:
     assert summary_count == 5
 
     # 3. Execute experiment
-    exec_res = client.post(f"/api/v1/experiments/{exp_id}/execute", json={"adapter_id": "mock-adapter-v1"})
+    exec_res = client.post(
+        f"/api/v1/experiments/{exp_id}/execute", json={"adapter_id": "mock-adapter-v1"}
+    )
     assert exec_res.status_code == 201, f"Execution failed: {exec_res.text}"
     exec_data = exec_res.json()
     print(
@@ -124,4 +147,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
