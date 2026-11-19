@@ -319,10 +319,74 @@ def main() -> int:
         }
 
     args.out.mkdir(parents=True, exist_ok=True)
+    write_per_case_csv(runs, args.out / "per_case.csv")
     (args.out / "results.json").write_text(json.dumps(report, indent=1, default=str) + "\n")
     (args.out / "results_tables.md").write_text(render_tables(report))
     print(render_tables(report))
     return 0
+
+
+def write_per_case_csv(runs: dict[str, list[ExperimentRun]], path: Path) -> None:
+    """One row per (arm, question) from each arm's first run.
+
+    Compact, human-reviewable record of every answer and verdict (not a raw
+    dump: no prompts or retrieved text). The empty ``human_correct`` and
+    ``human_notes`` columns make it the annotation sheet for validating the
+    LLM judge against human labels (recommended next experiment).
+    """
+    import csv
+
+    fields = [
+        "arm",
+        "test_case_id",
+        "question",
+        "gold_answers",
+        "answer",
+        "exact_match",
+        "squad_em",
+        "squad_f1",
+        "llm_judge_label",
+        "faithfulness_label",
+        "retrieved_chunk_ids",
+        "relevant_chunk_ids",
+        "human_correct",
+        "human_notes",
+    ]
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        for arm, arm_runs in runs.items():
+            run = arm_runs[0]
+            cases = {tc.id: tc for tc in run.dataset_version.dataset.test_cases}
+            for r in run.result.test_case_results:  # type: ignore[union-attr]
+                tc = cases[r.test_case_id]
+                ev = {e.evaluator_name: e for e in r.evaluation_results}
+                rag = (
+                    r.model_response.provider_metadata.get("rag") if r.model_response else None
+                ) or {}
+                sm = ev.get("squad_match")
+                writer.writerow(
+                    {
+                        "arm": arm,
+                        "test_case_id": r.test_case_id,
+                        "question": r.input_text,
+                        "gold_answers": " | ".join(gold_answers_for(tc)),
+                        "answer": r.model_response.output_text if r.model_response else "",
+                        "exact_match": ev["exact_match"].passed if "exact_match" in ev else "",
+                        "squad_em": sm.passed if sm else "",
+                        "squad_f1": f"{sm.score:.3f}" if sm and sm.score is not None else "",
+                        "llm_judge_label": ev["llm_judge"].label if "llm_judge" in ev else "",
+                        "faithfulness_label": ev["llm_faithfulness_judge"].label
+                        if "llm_faithfulness_judge" in ev
+                        else "",
+                        "retrieved_chunk_ids": " ".join(
+                            c["chunk_id"] for c in rag.get("retrieved_chunks", [])
+                        ),
+                        "relevant_chunk_ids": " ".join(tc.metadata.get("relevant_chunk_ids", [])),
+                        "human_correct": "",
+                        "human_notes": "",
+                    }
+                )
 
 
 def pct(x: float | None) -> str:

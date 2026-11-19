@@ -340,6 +340,15 @@ def main() -> int:
                 metadata={"study": env, "arm": arm.key},
             )
         existing = len(repo.list_run_ids(exp_id))
+        if existing < arm.runs:
+            # Re-warm before each arm: Ollama unloads models idle for 5 minutes
+            # (keep_alive), so a start-up warm-up alone left a cold load in the
+            # first recorded call of later arms (seen as one max-latency outlier
+            # in the original EXP-001 gemma arms).
+            for model in {arm.generator, JUDGE}:
+                provider(model).generate(
+                    ExecutionRequest("warmup", "Say OK.", ModelConfig(model, 0.0, 4))
+                )
         for rep in range(existing + 1, arm.runs + 1):
             print(f"[{exp_id}] run {rep}/{arm.runs}", flush=True)
             run = manager.execute_experiment(
