@@ -224,6 +224,3 @@ export function experimentCaseCount(e: ExperimentDefinition): number {
   return e.dataset_version?.test_case_count ?? e.dataset_version?.test_cases?.length ?? e.test_case_count ?? 0;
 }
 
-export function experimentDataset(e: ExperimentDefinition): string | null {
-  return e.dataset_version?.dataset_name ?? e.dataset_name ?? null;
-}
