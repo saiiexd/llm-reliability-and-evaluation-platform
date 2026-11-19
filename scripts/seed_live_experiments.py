@@ -13,10 +13,10 @@ Usage:
 
 from __future__ import annotations
 
-import json
 import sys
 from pathlib import Path
 
+from llm_reliability.api.registry import GENERATION_RESPONSES, JUDGE_RESPONSES
 from llm_reliability.evaluation import (
     Dataset,
     ExactMatchEvaluator,
@@ -118,46 +118,10 @@ def seed_store(store_path: Path) -> None:
         dimensions=2,
     )
 
-    generation_responses = {
-        "correct-context-correct-answer": "Paris",
-        "correct-context-unsupported-answer": "Paris, which has a population of 30 million.",
-        "correct-context-contradictory-answer": "Lyon is the capital of France.",
-        "relevant-context-incorrect-answer": "Berlin",
-        "missing-context": "I do not know.",
-        "no-ground-truth": "Paris",
-        "correct-context-correct-answer-reworded": "Paris",
-    }
-    judge_responses = {
-        "correct-context-correct-answer": json.dumps(
-            {"verdict": "supported", "confidence": 1.0, "explanation": "Directly supported."}
-        ),
-        "correct-context-unsupported-answer": json.dumps(
-            {
-                "verdict": "unsupported",
-                "confidence": 0.9,
-                "explanation": "Context does not mention population.",
-            }
-        ),
-        "correct-context-contradictory-answer": json.dumps(
-            {
-                "verdict": "contradicted",
-                "confidence": 1.0,
-                "explanation": "Context says Paris, answer says Lyon.",
-            }
-        ),
-        "relevant-context-incorrect-answer": json.dumps(
-            {"verdict": "unsupported", "confidence": 0.8, "explanation": "Berlin is not Paris."}
-        ),
-        "missing-context": json.dumps(
-            {"verdict": "unsupported", "confidence": 0.5, "explanation": "No relevant context."}
-        ),
-        "no-ground-truth": json.dumps(
-            {"verdict": "supported", "confidence": 1.0, "explanation": "Supported by context."}
-        ),
-        "correct-context-correct-answer-reworded": json.dumps(
-            {"verdict": "supported", "confidence": 1.0, "explanation": "Directly supported."}
-        ),
-    }
+    # Shared with the API registry so seeded runs and live runs use the same
+    # canned generations and the same (rubric-conformant) fake judge replies.
+    generation_responses = GENERATION_RESPONSES
+    judge_responses = JUDGE_RESPONSES
 
     retriever_k1 = Retriever(
         chunks=corpus,

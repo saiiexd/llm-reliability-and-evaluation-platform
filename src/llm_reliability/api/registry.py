@@ -26,11 +26,6 @@ from llm_reliability.providers.openai_provider import (
 )
 from llm_reliability.rag.documents import ChunkingConfig, Document, FixedSizeChunker
 from llm_reliability.rag.embeddings import FakeEmbeddingModel
-from llm_reliability.rag.evaluators import (
-    HitAtKEvaluator,
-    MeanReciprocalRankEvaluator,
-    RecallAtKEvaluator,
-)
 from llm_reliability.rag.faithfulness_judge import LLMFaithfulnessEvaluator
 from llm_reliability.rag.pipeline import (
     RagPipeline,
@@ -50,28 +45,31 @@ GENERATION_RESPONSES = {
 }
 
 JUDGE_RESPONSES = {
+    # Canned judge replies for the deterministic fake judge. They must follow the
+    # exact output contract of FAITHFULNESS_RUBRIC ({"outcome", "reasoning"}),
+    # because parse_judge_output is deliberately strict. Any test case id not
+    # listed here makes MockAdapter echo the prompt, which the parser rejects as
+    # an output_validation_error -- the fake judge only "knows" these cases.
     "correct-context-correct-answer": (
-        '{"verdict": "supported", "confidence": 1.0, "explanation": "Directly supported."}'
+        '{"outcome": "supported", "reasoning": "Directly supported by the context."}'
     ),
     "correct-context-unsupported-answer": (
-        '{"verdict": "unsupported", "confidence": 0.9, "explanation": "Context does not mention'
-        ' population."}'
+        '{"outcome": "unsupported", "reasoning": "The context does not mention population."}'
     ),
     "correct-context-contradictory-answer": (
-        '{"verdict": "contradicted", "confidence": 1.0, "explanation": "Context says Paris, answer'
-        ' says Lyon."}'
+        '{"outcome": "contradicted", "reasoning": "The context says Paris; the answer says Lyon."}'
     ),
     "relevant-context-incorrect-answer": (
-        '{"verdict": "unsupported", "confidence": 0.8, "explanation": "Berlin is not Paris."}'
+        '{"outcome": "unsupported", "reasoning": "Berlin is not Paris."}'
     ),
     "missing-context": (
-        '{"verdict": "unsupported", "confidence": 0.5, "explanation": "No relevant context."}'
+        '{"outcome": "unsupported", "reasoning": "No relevant context was retrieved."}'
     ),
     "no-ground-truth": (
-        '{"verdict": "supported", "confidence": 1.0, "explanation": "Supported by context."}'
+        '{"outcome": "supported", "reasoning": "Supported by the context."}'
     ),
     "correct-context-correct-answer-reworded": (
-        '{"verdict": "supported", "confidence": 1.0, "explanation": "Directly supported."}'
+        '{"outcome": "supported", "reasoning": "Directly supported by the context."}'
     ),
 }
 
@@ -197,15 +195,25 @@ class EvaluatorRegistry:
                 ),
                 judge_model_config=ModelConfig(model_id="fake-judge-v1"),
             ),
-            "hit_at_1": lambda: HitAtKEvaluator(k=1),
-            "recall_at_1": lambda: RecallAtKEvaluator(k=1),
-            "mrr": lambda: MeanReciprocalRankEvaluator(),
         }
+
+    # Retrieval metrics are not answer evaluators: they return a
+    # RetrievalEvaluationResult (no ``passed``), score the retriever rather than
+    # the answer, and are computed automatically for every RAG run by
+    # DiagnosticsService. Accepting them here used to persist a run whose
+    # aggregation then crashed with an AttributeError (HTTP 500).
+    RETRIEVAL_METRIC_NAMES = frozenset({"hit_at_1", "recall_at_1", "mrr"})
 
     def list_available(self) -> list[str]:
         return sorted(self._factories.keys())
 
     def get(self, name: str) -> Any:
+        if name in self.RETRIEVAL_METRIC_NAMES:
+            raise ValueError(
+                f"'{name}' is a retrieval metric, not an answer evaluator. Retrieval metrics "
+                "(Hit@K, Recall@K, MRR) are computed automatically for every RAG run and "
+                "shown under retrieval results; remove it from evaluator_names."
+            )
         if name not in self._factories:
             available = ", ".join(self.list_available())
             raise ValueError(f"Unknown evaluator '{name}'. Allowlisted evaluators: {available}")
