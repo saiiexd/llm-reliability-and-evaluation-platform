@@ -7,7 +7,7 @@
  * recompute the same logic on the frontend from the raw fields, rather
  * than inventing new derived semantics that might drift from the backend.
  */
-import type { ModelResponse, RunResult, TestCaseResult } from "../types/domain";
+import type { ExperimentDefinition, ModelResponse, RunResult, TestCaseResult } from "../types/domain";
 
 export function testCaseSucceeded(result: TestCaseResult): boolean {
   if (result.execution_error !== null && result.execution_error !== undefined) {
@@ -213,4 +213,17 @@ export function evaluatorLabel(name: string): string {
 
 export function evaluatorHelp(name: string): string | null {
   return EVALUATOR_INFO[name]?.help ?? null;
+}
+
+/** Fields that differ between the experiment list (flat) and detail (nested) shapes. */
+export function experimentModel(e: ExperimentDefinition): string | null {
+  return e.model_config?.model_id ?? e.model_id ?? null;
+}
+
+export function experimentCaseCount(e: ExperimentDefinition): number {
+  return e.dataset_version?.test_case_count ?? e.dataset_version?.test_cases?.length ?? e.test_case_count ?? 0;
+}
+
+export function experimentDataset(e: ExperimentDefinition): string | null {
+  return e.dataset_version?.dataset_name ?? e.dataset_name ?? null;
 }

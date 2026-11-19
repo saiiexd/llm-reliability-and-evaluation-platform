@@ -124,6 +124,11 @@ export interface ExperimentDefinition {
   config_fingerprint: string;
   test_case_count?: number;
   runs_count?: number;
+  // The list endpoint returns these flat summary fields instead of the
+  // nested dataset_version / model_config / evaluator_configs objects.
+  dataset_name?: string;
+  model_id?: string;
+  evaluator_count?: number;
 }
 
 export type RunStatus = "succeeded" | "partially_succeeded" | "failed";

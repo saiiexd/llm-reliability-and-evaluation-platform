@@ -88,7 +88,7 @@ describe("Simplified Academic Research Navigation & Layout", () => {
     );
 
     expect(screen.getByRole("heading", { name: "Experiments" })).toBeDefined();
-    expect(screen.getByRole("button", { name: /\+ Define.*Experiment/ })).toBeDefined();
+    expect(screen.getByRole("button", { name: "New experiment" })).toBeDefined();
   });
 
   it("renders the Analysis section with the 5 plain-language diagnostic sub-tabs", () => {
