@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from "vitest";
+import { CATEGORY_HELP } from "../lib/derived";
 import { cleanup, render, screen } from "@testing-library/react";
 import { PassFailDonutChart } from "../components/charts/PassFailDonutChart";
 import { FailureDistributionChart } from "../components/charts/FailureDistributionChart";
@@ -75,10 +76,10 @@ describe("Visual Research Dashboard Chart Components", () => {
 
       // Explanations
       expect(
-        screen.getByText("Output did not match reference answer under evaluator criteria."),
+        screen.getByText(CATEGORY_HELP.incorrect),
       ).toBeDefined();
       expect(
-        screen.getByText("Required reference context was not retrieved in top passages."),
+        screen.getByText(CATEGORY_HELP.retrieval_failure),
       ).toBeDefined();
     });
 
@@ -92,10 +93,10 @@ describe("Visual Research Dashboard Chart Components", () => {
       expect(screen.getByText("Unsupported Answer")).toBeDefined();
       expect(screen.getByText("Contradicted Answer")).toBeDefined();
       expect(
-        screen.getByText("Answer contains claims not substantiated by retrieved context."),
+        screen.getByText(CATEGORY_HELP.unsupported),
       ).toBeDefined();
       expect(
-        screen.getByText("Answer directly contradicts facts in retrieved passages."),
+        screen.getByText(CATEGORY_HELP.contradicted),
       ).toBeDefined();
     });
   });

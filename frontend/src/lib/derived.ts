@@ -182,3 +182,35 @@ export function formatCategoryLabel(category: string): string {
     category.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
   );
 }
+
+/** Plain-language meaning of each diagnosed failure reason. */
+export const CATEGORY_HELP: Record<string, string> = {
+  correct: "The answer was judged correct.",
+  incorrect: "The answer didn't match the expected answer.",
+  retrieval_failure: "The search step didn't find the passage that contains the answer.",
+  generation_failure: "The right passage was found, but the model still answered wrongly.",
+  unsupported: "The answer says things the retrieved passages don't support.",
+  contradicted: "The answer contradicts the retrieved passages.",
+  evaluator_disagreement: "The checks disagreed about whether the answer is right.",
+  insufficient_evidence: "There wasn't enough evidence to decide.",
+  undetermined: "The evidence doesn't point to a single cause.",
+};
+
+const EVALUATOR_INFO: Record<string, { label: string; help: string }> = {
+  exact_match: {
+    label: "Exact match",
+    help: "Passes if the answer text matches the expected answer exactly.",
+  },
+  llm_faithfulness_judge: {
+    label: "Faithfulness (LLM judge)",
+    help: "A second model checks that the answer is backed by the retrieved passages.",
+  },
+};
+
+export function evaluatorLabel(name: string): string {
+  return EVALUATOR_INFO[name]?.label ?? name.replace(/_/g, " ").replace(/^\w/, (c) => c.toUpperCase());
+}
+
+export function evaluatorHelp(name: string): string | null {
+  return EVALUATOR_INFO[name]?.help ?? null;
+}

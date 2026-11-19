@@ -1,4 +1,4 @@
-import { formatCategoryLabel } from "../../lib/derived";
+import { CATEGORY_HELP, formatCategoryLabel } from "../../lib/derived";
 
 interface FailureDistributionChartProps {
   categoryCounts: Map<string, number> | Record<string, number>;
@@ -7,16 +7,7 @@ interface FailureDistributionChartProps {
   emptyMessage?: string;
 }
 
-const CATEGORY_EXPLANATIONS: Record<string, string> = {
-  incorrect: "Output did not match reference answer under evaluator criteria.",
-  retrieval_failure: "Required reference context was not retrieved in top passages.",
-  generation_failure: "Relevant context was retrieved, but model hallucinated or erred.",
-  unsupported: "Answer contains claims not substantiated by retrieved context.",
-  contradicted: "Answer directly contradicts facts in retrieved passages.",
-  evaluator_disagreement: "Multiple evaluators split on whether the answer passed.",
-  insufficient_evidence: "Evaluator skipped or lacked ground-truth evidence.",
-  undetermined: "Available evidence does not isolate a single failure cause.",
-};
+const CATEGORY_EXPLANATIONS = CATEGORY_HELP;
 
 export function FailureDistributionChart({
   categoryCounts,
