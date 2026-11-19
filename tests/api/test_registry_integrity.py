@@ -132,3 +132,57 @@ def test_rag_pipeline_must_match_declared_retrieval_config(api_client: TestClien
         json={"adapter_id": "rag-pipeline-topk-2"},
     )
     assert right.status_code == 201, right.text
+
+
+def test_agreement_kappa_and_table_reach_the_api(api_client: TestClient) -> None:
+    api_client.post(
+        f"{API}/experiments",
+        json={
+            "experiment_id": "exp-agreement",
+            "name": "Agreement",
+            "dataset_name": "d",
+            "test_cases": [
+                {"id": f"tc-{i}", "input": "same" if i < 2 else f"q{i}", "reference_answer": "same"}
+                for i in range(6)
+            ],
+            "model_config": {"model_id": "echo-adapter"},
+            "evaluator_names": ["exact_match", "squad_match"],
+        },
+    )
+    run_id = api_client.post(
+        f"{API}/experiments/exp-agreement/execute", json={"adapter_id": "echo-adapter"}
+    ).json()["run_id"]
+    body = api_client.get(f"{API}/analytics/evaluators", params={"run_id": run_id}).json()
+    pair = body["agreements"][0]
+    assert (
+        pair["both_passed"],
+        pair["only_a_passed"],
+        pair["only_b_passed"],
+        pair["both_failed"],
+    ) == (2, 0, 0, 4)
+    assert pair["cohens_kappa"] == 1.0
+    assert pair["excluded_cases"] == 0
+
+
+def test_credential_keys_in_any_casing_are_rejected(api_client: TestClient) -> None:
+    from llm_reliability.api.schemas.common import find_credential_keys
+
+    found = find_credential_keys(
+        {
+            "secret_key": 1,
+            "aws_secret_access_key": 1,
+            "openaiApiKey": 1,
+            "private-key": 1,
+            "token": 1,
+            "max_tokens": 1,
+            "top_k": 1,
+            "tokenizer": 1,
+        }
+    )
+    assert sorted(found) == [
+        "aws_secret_access_key",
+        "openaiApiKey",
+        "private-key",
+        "secret_key",
+        "token",
+    ]

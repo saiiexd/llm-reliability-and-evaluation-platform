@@ -141,7 +141,13 @@ def get_evaluator_analytics(
             agreements=a.agreements,
             disagreements=a.disagreements,
             agreement_rate=a.agreement_rate,
+            excluded_cases=a.excluded_cases,
             disagreement_test_case_ids=list(a.disagreement_test_case_ids),
+            both_passed=a.both_passed,
+            only_a_passed=a.only_a_passed,
+            only_b_passed=a.only_b_passed,
+            both_failed=a.both_failed,
+            cohens_kappa=a.cohens_kappa,
         )
         for a in agreements
     ]

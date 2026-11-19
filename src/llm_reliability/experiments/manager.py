@@ -43,6 +43,11 @@ def _determine_status(result: RunResult | None) -> RunStatus:
     return RunStatus.PARTIALLY_SUCCEEDED
 
 
+# Evaluator config keys added after experiments had already been persisted
+# (judge_model_config: 2026-11-19). Absent from an old record = not compared.
+_LATER_ADDED_CONFIG_KEYS = frozenset({"judge_model_config"})
+
+
 def _check_rag_config_matches(definition: ExperimentDefinition, adapter: ModelAdapter) -> None:
     """Refuse to run a RAG pipeline whose retrieval settings differ from the definition's.
 
@@ -152,6 +157,15 @@ class ExperimentManager:
         # did not produce it, so it is refused.
         for declared, supplied in zip(definition.evaluator_configs, evaluators, strict=True):
             supplied_config = EvaluatorConfig.from_evaluator(supplied).parameters
+            # Records written before a config key was introduced lack it; drop
+            # only those known later-added keys before comparing, so older
+            # experiments stay executable while every key they DO declare must
+            # still match exactly.
+            supplied_config = {
+                k: v
+                for k, v in supplied_config.items()
+                if k in declared.parameters or k not in _LATER_ADDED_CONFIG_KEYS
+            }
             if supplied_config != declared.parameters:
                 raise ValueError(
                     f"Evaluator configuration mismatch for '{declared.evaluator_name}' in "

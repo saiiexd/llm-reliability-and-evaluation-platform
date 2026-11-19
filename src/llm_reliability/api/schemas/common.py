@@ -17,10 +17,14 @@ _SECRET_PATTERN = re.compile(r"(key|secret|token|password|auth|credential|bearer
 # key names that can only plausibly hold a credential, so a request containing
 # them is rejected instead of being written to the experiment store.
 _CREDENTIAL_KEY_PATTERN = re.compile(
-    r"(^|[_-])(api[_-]?key|secret|password|passwd|credentials?|bearer|authorization|"
-    r"access[_-]?token|auth[_-]?token|token)$",
-    re.IGNORECASE,
+    r"(secret|password|passwd|credential|private_?key|api_?key|access_?key|authorization|"
+    r"bearer)|(^|_)token$",
 )
+
+
+def _normalize_key(key: str) -> str:
+    """camelCase / kebab-case -> snake_case lowercase, so 'openaiApiKey' -> 'openai_api_key'."""
+    return re.sub(r"(?<=[a-z0-9])(?=[A-Z])", "_", key).replace("-", "_").lower()
 
 
 def find_credential_keys(data: Any, path: str = "") -> list[str]:
@@ -29,7 +33,7 @@ def find_credential_keys(data: Any, path: str = "") -> list[str]:
     if isinstance(data, dict):
         for k, v in data.items():
             key_path = f"{path}.{k}" if path else str(k)
-            if _CREDENTIAL_KEY_PATTERN.search(str(k)):
+            if _CREDENTIAL_KEY_PATTERN.search(_normalize_key(str(k))):
                 found.append(key_path)
             found.extend(find_credential_keys(v, key_path))
     elif isinstance(data, list):

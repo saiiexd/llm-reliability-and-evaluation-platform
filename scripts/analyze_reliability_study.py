@@ -178,7 +178,10 @@ def summarize_run(run: ExperimentRun) -> dict[str, Any]:
             for tc_id, m in responses.items()
         ]
         strict_hit = {
-            tc_id: next((x.score > 0 for x in lst if x.metric_name == "hit_at_k"), None)
+            tc_id: next(
+                (x.score > 0 for x in lst if x.metric_name == "hit_at_k" and x.score is not None),
+                None,
+            )
             for tc_id, lst in retrieval_by_case.items()
         }
         judge_given = {True: [], False: []}  # type: dict[bool, list[bool]]
