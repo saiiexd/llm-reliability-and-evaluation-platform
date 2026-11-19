@@ -61,6 +61,7 @@ def compute_evaluator_agreement(
     disagreements = 0
     excluded_cases = 0
     disagreement_ids: list[str] = []
+    table = {(True, True): 0, (True, False): 0, (False, True): 0, (False, False): 0}
 
     for tc_id, r_a, r_b in pairs:
         if (
@@ -73,6 +74,7 @@ def compute_evaluator_agreement(
             continue
 
         cases_compared += 1
+        table[(bool(r_a.passed), bool(r_b.passed))] += 1
         if r_a.passed == r_b.passed:
             agreements += 1
         else:
@@ -91,7 +93,33 @@ def compute_evaluator_agreement(
         agreement_rate=agreement_rate,
         excluded_cases=excluded_cases,
         disagreement_test_case_ids=disagreement_ids,
+        both_passed=table[(True, True)],
+        only_a_passed=table[(True, False)],
+        only_b_passed=table[(False, True)],
+        both_failed=table[(False, False)],
+        cohens_kappa=cohens_kappa(table),
     )
+
+
+def cohens_kappa(table: dict[tuple[bool, bool], int]) -> float | None:
+    """Cohen's kappa for two binary raters from a 2x2 table keyed (a_passed, b_passed).
+
+    kappa = (p_o - p_e) / (1 - p_e), where p_o is the observed agreement and
+    p_e = P(a pass)P(b pass) + P(a fail)P(b fail) is the agreement expected if
+    the two evaluators were independent with their observed pass rates
+    (Cohen, 1960). Returns None when there are no cases or p_e == 1 (kappa is
+    undefined because chance alone already explains perfect agreement).
+    """
+    n = sum(table.values())
+    if n == 0:
+        return None
+    p_o = (table[(True, True)] + table[(False, False)]) / n
+    a_pass = (table[(True, True)] + table[(True, False)]) / n
+    b_pass = (table[(True, True)] + table[(False, True)]) / n
+    p_e = a_pass * b_pass + (1 - a_pass) * (1 - b_pass)
+    if p_e >= 1.0:
+        return None
+    return (p_o - p_e) / (1 - p_e)
 
 
 def compute_all_pairwise_agreements(run: ExperimentRun) -> list[EvaluatorAgreementSummary]:

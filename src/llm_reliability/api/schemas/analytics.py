@@ -42,6 +42,11 @@ class EvaluatorAgreementSummaryResponse(BaseApiSchema):
     disagreements: int
     agreement_rate: float | None = None
     disagreement_test_case_ids: list[str] = Field(default_factory=list)
+    both_passed: int = 0
+    only_a_passed: int = 0
+    only_b_passed: int = 0
+    both_failed: int = 0
+    cohens_kappa: float | None = None
 
 
 class EvaluatorAnalyticsResponse(BaseApiSchema):

@@ -27,4 +27,3 @@ class BenchmarkExecutionResponse(BaseApiSchema):
     experiment_id: str
     total_runs: int
     runs: list[RunExecutionResponse]
-

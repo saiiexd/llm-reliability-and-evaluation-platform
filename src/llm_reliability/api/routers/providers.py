@@ -48,4 +48,3 @@ def list_providers() -> ProvidersListResponse:
         )
 
     return ProvidersListResponse(providers=providers)
-

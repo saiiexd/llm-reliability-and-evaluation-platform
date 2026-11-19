@@ -393,6 +393,12 @@ export interface EvaluatorAgreementSummary {
   agreement_rate: number | null;
   excluded_cases: number;
   disagreement_test_case_ids: string[];
+  both_passed?: number;
+  only_a_passed?: number;
+  only_b_passed?: number;
+  both_failed?: number;
+  /** Chance-corrected agreement; null when undefined. */
+  cohens_kappa?: number | null;
 }
 
 export interface RobustnessSummary {

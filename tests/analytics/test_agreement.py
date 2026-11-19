@@ -156,3 +156,26 @@ def test_compute_all_pairwise_agreements() -> None:
     assert summaries[0].evaluator_a == "exact_match"
     assert summaries[0].evaluator_b == "llm_judge"
     assert summaries[0].disagreements == 1
+
+
+def test_cohens_kappa_matches_hand_computation() -> None:
+    from llm_reliability.analytics.agreement import cohens_kappa
+
+    # 20 cases: both pass 8, a only 2, b only 3, both fail 7.
+    # p_o = 15/20 = 0.75; a_pass = 0.5; b_pass = 0.55
+    # p_e = 0.5*0.55 + 0.5*0.45 = 0.5; kappa = (0.75-0.5)/(1-0.5) = 0.5
+    table = {(True, True): 8, (True, False): 2, (False, True): 3, (False, False): 7}
+    assert abs(cohens_kappa(table) - 0.5) < 1e-12
+
+
+def test_cohens_kappa_undefined_when_chance_explains_everything() -> None:
+    from llm_reliability.analytics.agreement import cohens_kappa
+
+    assert (
+        cohens_kappa({(True, True): 0, (True, False): 0, (False, True): 0, (False, False): 5})
+        is None
+    )
+    assert (
+        cohens_kappa({(True, True): 0, (True, False): 0, (False, True): 0, (False, False): 0})
+        is None
+    )

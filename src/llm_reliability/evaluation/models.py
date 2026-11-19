@@ -320,7 +320,8 @@ class TestCaseResult:
         if any(r.passed is False for r in self.evaluation_results):
             return False
         if any(
-            r.status in (
+            r.status
+            in (
                 EvaluationStatus.EXECUTION_ERROR,
                 EvaluationStatus.OUTPUT_VALIDATION_ERROR,
                 EvaluationStatus.INVALID_CONFIGURATION,

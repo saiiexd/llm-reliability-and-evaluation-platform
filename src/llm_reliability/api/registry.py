@@ -66,9 +66,7 @@ JUDGE_RESPONSES = {
     "missing-context": (
         '{"outcome": "unsupported", "reasoning": "No relevant context was retrieved."}'
     ),
-    "no-ground-truth": (
-        '{"outcome": "supported", "reasoning": "Supported by the context."}'
-    ),
+    "no-ground-truth": ('{"outcome": "supported", "reasoning": "Supported by the context."}'),
     "correct-context-correct-answer-reworded": (
         '{"outcome": "supported", "reasoning": "Directly supported by the context."}'
     ),

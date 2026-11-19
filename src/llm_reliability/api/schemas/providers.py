@@ -26,4 +26,3 @@ class ProviderStatusResponse(BaseApiSchema):
 
 class ProvidersListResponse(BaseApiSchema):
     providers: list[ProviderStatusResponse]
-

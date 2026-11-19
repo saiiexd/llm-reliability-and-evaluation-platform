@@ -260,9 +260,23 @@ class EvaluatorAgreementSummary:
     agreement_rate: float | None
     excluded_cases: int
     disagreement_test_case_ids: list[str] = field(default_factory=list)
+    # 2x2 contingency table over the compared cases (a = evaluator_a, b = evaluator_b).
+    both_passed: int = 0
+    only_a_passed: int = 0
+    only_b_passed: int = 0
+    both_failed: int = 0
+    # Cohen's kappa: agreement corrected for the agreement expected by chance
+    # given each evaluator's own pass rate. None when undefined (no cases, or
+    # chance agreement is exactly 1, e.g. both evaluators always say "fail").
+    cohens_kappa: float | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
+            "both_passed": self.both_passed,
+            "only_a_passed": self.only_a_passed,
+            "only_b_passed": self.only_b_passed,
+            "both_failed": self.both_failed,
+            "cohens_kappa": self.cohens_kappa,
             "evaluator_a": self.evaluator_a,
             "evaluator_b": self.evaluator_b,
             "criterion": self.criterion,
@@ -286,6 +300,11 @@ class EvaluatorAgreementSummary:
             agreement_rate=data.get("agreement_rate"),
             excluded_cases=data["excluded_cases"],
             disagreement_test_case_ids=list(data.get("disagreement_test_case_ids", [])),
+            both_passed=int(data.get("both_passed", 0)),
+            only_a_passed=int(data.get("only_a_passed", 0)),
+            only_b_passed=int(data.get("only_b_passed", 0)),
+            both_failed=int(data.get("both_failed", 0)),
+            cohens_kappa=data.get("cohens_kappa"),
         )
 
 
