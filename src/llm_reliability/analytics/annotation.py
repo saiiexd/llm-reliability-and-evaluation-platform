@@ -17,6 +17,18 @@ judgement (RQ3 evaluator reliability):
   written to a separate sheet for the second annotator; the main sheet does not
   say which rows are double-labelled.
 
+**Guideline examples.** The guideline (``research/annotation/guideline.md``)
+illustrates its rules with real EXP-001 answers and states a verdict for each.
+Those verdicts were written by the guideline author, not by an annotator, and
+annotators see them, so the rows that show these answers cannot count as
+independent human evidence. They stay in the sheet (the annotator labels them
+like any other row), but the key flags them (``guideline_example = 1``), they
+are never sampled for the overlap, and the analysis excludes them from
+inter-annotator agreement and from the primary evaluator agreement (they are
+added back only in a separately reported sensitivity analysis). The examples
+are listed in :data:`GUIDELINE_EXAMPLES`; a test checks that the list matches
+the guideline exactly.
+
 Deduplication key: the question (test case id, question text and gold answers)
 plus :func:`annotation_normalize` of the answer. Answers that differ only in
 case, punctuation, articles or whitespace are labelled once, because a human
@@ -34,6 +46,7 @@ import math
 import random
 import re
 from collections import Counter
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -54,6 +67,7 @@ SHEET_COLUMNS = [
 KEY_COLUMNS = [
     "row_id",
     "overlap",
+    "guideline_example",
     "experiment_id",
     "run_id",
     "repetition_index",
@@ -71,6 +85,82 @@ SHEET_FILENAME = "annotation_sheet.csv"
 OVERLAP_SHEET_FILENAME = "annotation_sheet_overlap.csv"
 KEY_FILENAME = "annotation_key.csv"
 MANIFEST_FILENAME = "export_manifest.json"
+
+# Every sheet answer for which research/annotation/guideline.md states a verdict:
+# (question, gold answers joined with GOLD_SEPARATOR, model answer), verbatim.
+# E1-E14 plus the contrast answer quoted in E6. Only the identity of the rows is
+# recorded here, never the verdict. Keep in sync with the guideline (tested).
+GUIDELINE_EXAMPLES: tuple[tuple[str, str, str], ...] = (
+    (
+        "What type of T cells help with both innnate and adaptive immunity?",
+        "γδ | γδ T cells",
+        "Gamma delta T cells",
+    ),
+    (
+        "What is the effect of testosterone on the male immune system?",
+        "immunosuppressive",
+        "Suppresses immune function.",
+    ),
+    (
+        "Who has loaned the Raphael Cartoons to the museum?",
+        "Queen Elizabeth II",
+        "Her Majesty the Queen Elizabeth II",
+    ),
+    (
+        "What is the most well-known algorithm associated with the integer factorization problem?",
+        "RSA | general number field sieve | the general number field sieve",
+        "The best known algorithm for integer factorization is the general number field sieve.",
+    ),
+    (
+        "What do most online pharmacies do?",
+        "sell prescription drugs | sell prescription drugs and require a valid prescription",
+        "Sell prescription drugs without a prescription.",
+    ),
+    (
+        "Which three famous British potters are represented the the V&A ceramics collection?",
+        "Josiah Wedgwood, William De Morgan and Bernard Leach",
+        "John Clare, Josiah Wedgwood, Peter Firton",
+    ),
+    (
+        "Which three famous British potters are represented the the V&A ceramics collection?",
+        "Josiah Wedgwood, William De Morgan and Bernard Leach",
+        "Bernard Leach, Josiah Wedgwood, and William De Morgan",
+    ),
+    (
+        "Which cultures are represented in the V&A's collections?",
+        "Europe, North America, Asia and North Africa",
+        "Diverse",
+    ),
+    (
+        "What is an example of a parasite that used the antigenic variation strategy to evade "
+        "destruction?",
+        "Trypanosoma brucei",
+        "HIV",
+    ),
+    ("What are white blood cells known as?", "Leukocytes", "White blood cells"),
+    ("Who officially opened the V&A?", "Queen Victoria", "I don't know"),
+    (
+        "Where are teachers recruited from?",
+        "Lehramtstudien | Lehramtstudien (Teaching Education Studies) | special university classes",
+        "Special university classes",
+    ),
+    (
+        "What can a teacher with 25 years of experience make, in Euros?",
+        "53,423 | €53,423",
+        "€53,423",
+    ),
+    (
+        "What can a teacher with 25 years of experience make, in Euros?",
+        "53,423 | €53,423",
+        "Over €90,000",
+    ),
+    (
+        "When was Thoreau's essay published?",
+        "after the end of the Mexican War | after the end of the Mexican War. | "
+        "end of the Mexican War",
+        "1850",
+    ),
+)
 
 _NUMBER = re.compile(r"\d+(?:[.,:/]\d+)*")
 
@@ -120,6 +210,7 @@ class AnnotationItem:
     instances: list[AnnotationInstance] = field(default_factory=list)
     row_id: str = ""
     overlap: bool = False
+    guideline_example: bool = False
 
     @property
     def display_answer(self) -> str:
@@ -198,6 +289,26 @@ def collect_items(
     return list(items.values()), stats
 
 
+def mark_guideline_examples(
+    items: list[AnnotationItem],
+    examples: Iterable[tuple[str, str, str]] = GUIDELINE_EXAMPLES,
+) -> int:
+    """Flag the items whose answer the guideline gives a verdict for; return the unmatched count.
+
+    An example matches an item with the same question and gold answers and the
+    same :func:`annotation_normalize` form of the answer, i.e. the sheet row
+    that shows that answer.
+    """
+    wanted = {(q, gold, annotation_normalize(answer)) for q, gold, answer in examples}
+    found: set[tuple[str, str, str]] = set()
+    for item in items:
+        ident = (item.question, GOLD_SEPARATOR.join(item.gold_answers), item.normalized_answer)
+        item.guideline_example = ident in wanted
+        if item.guideline_example:
+            found.add(ident)
+    return len(wanted - found)
+
+
 def assign_rows(
     items: list[AnnotationItem],
     seed: int = DEFAULT_SEED,
@@ -206,8 +317,12 @@ def assign_rows(
     """Sort, shuffle with ``seed``, assign row ids and choose the overlap rows.
 
     Sorting first makes the result independent of file-listing order. The
-    overlap is ``ceil(overlap_fraction * n)`` rows sampled with the same
-    random generator, so it is spread over the sheet rather than at the top.
+    overlap is ``ceil(overlap_fraction * n)`` rows (``n`` = all rows) sampled
+    with the same random generator, so it is spread over the sheet rather than
+    at the top. Guideline-example rows are never sampled; if fewer other rows
+    exist, every other row is taken, and fewer than
+    ``ceil(MIN_OVERLAP_FRACTION * n)`` is an error. Row ids depend only on the
+    shuffle, not on which rows are guideline examples.
     """
     if not MIN_OVERLAP_FRACTION <= overlap_fraction <= 1.0:
         raise ValueError(
@@ -221,8 +336,14 @@ def assign_rows(
     for index, item in enumerate(ordered, start=1):
         item.row_id = f"R{index:0{width}d}"
         item.overlap = False
-    n_overlap = math.ceil(overlap_fraction * len(ordered))
-    for index in rng.sample(range(len(ordered)), n_overlap):
+    eligible = [i for i, item in enumerate(ordered) if not item.guideline_example]
+    n_overlap = min(math.ceil(overlap_fraction * len(ordered)), len(eligible))
+    if n_overlap < math.ceil(MIN_OVERLAP_FRACTION * len(ordered)):
+        raise ValueError(
+            f"Only {len(eligible)} of {len(ordered)} rows are not guideline examples; "
+            f"the overlap needs at least {MIN_OVERLAP_FRACTION:.0%} of the rows."
+        )
+    for index in rng.sample(eligible, n_overlap):
         ordered[index].overlap = True
     return ordered
 
@@ -259,6 +380,7 @@ def write_key(path: Path, items: list[AnnotationItem]) -> None:
                     {
                         "row_id": item.row_id,
                         "overlap": "1" if item.overlap else "0",
+                        "guideline_example": "1" if item.guideline_example else "0",
                         "experiment_id": inst.experiment_id,
                         "run_id": inst.run_id,
                         "repetition_index": str(inst.repetition_index),
@@ -275,8 +397,13 @@ def export_annotation_sheet(
     experiment_ids: list[str] | None = None,
     seed: int = DEFAULT_SEED,
     overlap_fraction: float = DEFAULT_OVERLAP_FRACTION,
+    guideline_examples: Iterable[tuple[str, str, str]] = GUIDELINE_EXAMPLES,
 ) -> dict[str, Any]:
-    """Write the blind sheet, the overlap sheet, the key and a manifest; return the manifest."""
+    """Write the blind sheet, the overlap sheet, the key and a manifest; return the manifest.
+
+    ``guideline_examples`` defaults to the EXP-001 examples of the guideline;
+    examples that match no row (any other store) are only counted in the manifest.
+    """
     repo = LocalFileExperimentRepository(store)
     selected = experiment_ids if experiment_ids else default_experiment_ids(repo)
     if not selected:
@@ -284,6 +411,7 @@ def export_annotation_sheet(
     items, stats = collect_items(repo, selected)
     if not items:
         raise ValueError("The selected runs contain no model answers to annotate.")
+    examples_unmatched = mark_guideline_examples(items, guideline_examples)
     rows = assign_rows(items, seed=seed, overlap_fraction=overlap_fraction)
 
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -311,6 +439,8 @@ def export_annotation_sheet(
         "instances": stats.instances,
         "rows": len(rows),
         "overlap_rows": sum(1 for r in rows if r.overlap),
+        "guideline_example_rows": sum(1 for r in rows if r.guideline_example),
+        "guideline_examples_unmatched": examples_unmatched,
         "distinct_questions": len({r.test_case_id for r in rows}),
         "rows_by_instance_count": {
             str(k): v for k, v in sorted(Counter(len(r.instances) for r in rows).items())

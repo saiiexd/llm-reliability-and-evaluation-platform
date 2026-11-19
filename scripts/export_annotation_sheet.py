@@ -9,9 +9,12 @@ fixed seed and writes, into ``--out``:
   (row_id, question, gold_answers, model_answer, human_correct, annotator, notes);
   no model, arm, run or evaluator information;
 - ``annotation_sheet_overlap.csv``: the overlap rows (>= 20%, chosen with the
-  same seed) for the second annotator to label independently;
+  same seed, never a guideline-example row) for the second annotator to label
+  independently;
 - ``annotation_key.csv``: row_id -> every (experiment_id, run_id, test_case_id)
-  with that answer, plus the overlap flag. Not for annotators;
+  with that answer, plus the overlap flag and the guideline-example flag (rows
+  whose verdict the guideline states; the analysis keeps them out of agreement).
+  Not for annotators;
 - ``export_manifest.json``: counts and parameters.
 
 ``human_correct`` is always empty: this script creates no labels.
@@ -62,7 +65,17 @@ def main(argv: list[str] | None = None) -> int:
         )
     except ValueError as exc:
         parser.exit(2, f"error: {exc}\n")
-    summary = {k: manifest[k] for k in ("rows", "overlap_rows", "instances", "distinct_questions")}
+    summary = {
+        k: manifest[k]
+        for k in (
+            "rows",
+            "overlap_rows",
+            "guideline_example_rows",
+            "guideline_examples_unmatched",
+            "instances",
+            "distinct_questions",
+        )
+    }
     print(json.dumps({"out": str(args.out), **summary}, indent=1))
     return 0
 

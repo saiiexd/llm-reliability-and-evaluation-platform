@@ -25,6 +25,8 @@
  "instances": 540,
  "rows": 238,
  "overlap_rows": 60,
+ "guideline_example_rows": 15,
+ "guideline_examples_unmatched": 0,
  "distinct_questions": 60,
  "rows_by_instance_count": {
   "1": 158,

@@ -5,17 +5,21 @@ Reads one or two filled annotation sheets, the key written by
 ``scripts/export_annotation_sheet.py`` and the run store, then writes
 ``human_agreement.json`` and ``human_agreement.md`` into ``--out``:
 
-- inter-annotator Cohen's kappa on the rows both annotators labelled
-  (binary correct/incorrect, unsure excluded and counted; and three-category);
+- inter-annotator Cohen's kappa on the rows both annotators labelled, except
+  guideline-example rows (binary correct/incorrect, unsure excluded and
+  counted; and three-category);
 - for exact_match, squad_match and llm_judge, overall and per experiment:
   accuracy, precision, recall and specificity (positive = correct) with Wilson
   95% intervals, Cohen's kappa, the confusion table and every exclusion count
-  (unlabelled, unsure, unresolved disagreement, evaluator status not SUCCESS);
+  (guideline example, unlabelled, unsure, unresolved disagreement, evaluator
+  status not SUCCESS). Primary result without the guideline-example rows (the
+  guideline states their verdict); a sensitivity result with them;
 - for llm_faithfulness_judge only a descriptive table on RAG arms: it measures
   support by the retrieved context, a different criterion, so human correctness
   labels cannot validate it.
 
-Refuses (exit code 2, nothing written) when no label is filled in.
+Refuses (exit code 2, nothing written) when no label is filled in, and when a
+file is malformed or not UTF-8 (save as "CSV UTF-8").
 Definitions: ``llm_reliability.analytics.human_agreement``.
 
 Usage:

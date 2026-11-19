@@ -11,6 +11,7 @@ are checked to contain no labels at all.
 from __future__ import annotations
 
 import csv
+import json
 import math
 import re
 from pathlib import Path
@@ -19,7 +20,10 @@ import pytest
 
 from llm_reliability.analytics.agreement import cohens_kappa, cohens_kappa_nominal
 from llm_reliability.analytics.annotation import (
+    GOLD_SEPARATOR,
+    GUIDELINE_EXAMPLES,
     KEY_FILENAME,
+    MANIFEST_FILENAME,
     OVERLAP_SHEET_FILENAME,
     SHEET_COLUMNS,
     SHEET_FILENAME,
@@ -441,6 +445,43 @@ def test_sheet_saved_with_byte_order_mark_is_read(
     assert report["evaluators"]["exact_match"]["overall"]["n"] == 10
 
 
+def test_sheet_saved_in_a_windows_code_page_is_a_clear_error(
+    synthetic_hand_store: Path, tmp_path: Path
+) -> None:
+    sheet_dir = tmp_path / "sheet"
+    export_annotation_sheet(synthetic_hand_store, sheet_dir, ["exp-synthetic-hand"])
+    filled = _fill_synthetic(
+        sheet_dir / SHEET_FILENAME,
+        sheet_dir / KEY_FILENAME,
+        tmp_path / "SYNTHETIC_labels_A.csv",
+        SYNTHETIC_HAND_LABELS,
+        "synthetic-annotator-A",
+    )
+    # As written by Excel's "CSV (Comma delimited)": cp1252, where "€" is byte 0x80,
+    # which is not valid UTF-8. (The synthetic sheet is otherwise pure ASCII.)
+    text = filled.read_text(encoding="utf-8").replace(",synthetic-annotator-A,", ",synthetic €,", 1)
+    filled.write_bytes(text.encode("cp1252"))
+    with pytest.raises(AnnotationFormatError, match="CSV UTF-8"):
+        analyze_human_agreement(sheet_dir / KEY_FILENAME, filled, synthetic_hand_store)
+
+    out = tmp_path / "analysis"
+    with pytest.raises(SystemExit) as excinfo:
+        analyze_main(
+            [
+                "--sheet",
+                str(filled),
+                "--key",
+                str(sheet_dir / KEY_FILENAME),
+                "--store",
+                str(synthetic_hand_store),
+                "--out",
+                str(out),
+            ]
+        )
+    assert excinfo.value.code == 2
+    assert not out.exists()
+
+
 def test_undefined_rates_are_none_not_zero(synthetic_hand_store: Path, tmp_path: Path) -> None:
     sheet_dir = tmp_path / "sheet"
     export_annotation_sheet(synthetic_hand_store, sheet_dir, ["exp-synthetic-hand"])
@@ -522,6 +563,7 @@ def test_two_annotators_unresolved_adjudication_runs_scope_and_faithfulness(
     )
 
     report = analyze_human_agreement(key, a, synthetic_store, second_sheet_path=b)
+    inter_before = report["inter_annotator"]
     assert report["rows"]["reference"]["unresolved_disagreement"] == 1
     assert report["inter_annotator"]["rows_labelled_by_both"] == 5
     em = report["evaluators"]["exact_match"]
@@ -552,8 +594,128 @@ def test_two_annotators_unresolved_adjudication_runs_scope_and_faithfulness(
     assert em_all["instances"] == 9 and em_all["excluded"] == {}
     # Same 5 distinct rows behind 9 instances.
     assert em_all["distinct_rows"] == 5
-    # Interannotator kappa is unchanged by adjudication.
-    assert report["inter_annotator"]["disagreeing_row_ids"] == [q1_row]
+    # Inter-annotator agreement is computed from the independent labels, so
+    # adjudication changes none of it.
+    inter_after = report["inter_annotator"]
+    assert inter_before["binary_definite"]["cohens_kappa"] is not None
+    assert inter_before["three_category"]["cohens_kappa"] is not None
+    assert inter_after["binary_definite"] == inter_before["binary_definite"]
+    assert inter_after["three_category"] == inter_before["three_category"]
+    assert inter_after["disagreeing_row_ids"] == inter_before["disagreeing_row_ids"] == [q1_row]
+
+
+# --- guideline examples
+
+SYNTHETIC_EXAMPLE = ("Question 5?", "x", "answer 5")  # SYNTHETIC guideline example (row q05)
+
+
+def test_guideline_examples_are_flagged_and_never_in_the_overlap(
+    synthetic_hand_store: Path, tmp_path: Path
+) -> None:
+    plain, flagged = tmp_path / "plain", tmp_path / "flagged"
+    export_annotation_sheet(synthetic_hand_store, plain, ["exp-synthetic-hand"])
+    manifest = export_annotation_sheet(
+        synthetic_hand_store,
+        flagged,
+        ["exp-synthetic-hand"],
+        overlap_fraction=1.0,
+        guideline_examples=[SYNTHETIC_EXAMPLE, ("Question 99?", "x", "not in the store")],
+    )
+    assert manifest["guideline_example_rows"] == 1
+    assert manifest["guideline_examples_unmatched"] == 1
+    # Row ids and the sheet do not depend on which rows are guideline examples.
+    assert (plain / SHEET_FILENAME).read_bytes() == (flagged / SHEET_FILENAME).read_bytes()
+    key = _read(flagged / KEY_FILENAME)
+    examples = {k["row_id"] for k in key if k["guideline_example"] == "1"}
+    assert examples == {k["row_id"] for k in key if k["test_case_id"] == "q05"}
+    # overlap_fraction=1.0 takes every row except the guideline example.
+    overlap = {k["row_id"] for k in key if k["overlap"] == "1"}
+    assert overlap == {k["row_id"] for k in key} - examples
+    assert {r["row_id"] for r in _read(flagged / OVERLAP_SHEET_FILENAME)} == overlap
+    # The blind sheet does not reveal the flag.
+    assert "guideline" not in (flagged / SHEET_FILENAME).read_text()
+
+
+def test_guideline_examples_excluded_from_kappa_and_primary_but_in_sensitivity(
+    synthetic_hand_store: Path, tmp_path: Path
+) -> None:
+    sheet_dir = tmp_path / "sheet"
+    export_annotation_sheet(
+        synthetic_hand_store,
+        sheet_dir,
+        ["exp-synthetic-hand"],
+        guideline_examples=[SYNTHETIC_EXAMPLE],
+    )
+    key = sheet_dir / KEY_FILENAME
+    a = _fill_synthetic(
+        sheet_dir / SHEET_FILENAME,
+        key,
+        tmp_path / "SYNTHETIC_A.csv",
+        SYNTHETIC_HAND_LABELS,
+        "synthetic-A",
+    )
+    # B labels the whole sheet and disagrees only on the guideline-example row.
+    b = _fill_synthetic(
+        sheet_dir / SHEET_FILENAME,
+        key,
+        tmp_path / "SYNTHETIC_B.csv",
+        {**SYNTHETIC_HAND_LABELS, ("q05", "answer 5"): "correct"},
+        "synthetic-B",
+    )
+    q05_row = next(r["row_id"] for r in _read(key) if r["test_case_id"] == "q05")
+    adjudication = tmp_path / "SYNTHETIC_adjudication.csv"
+    adjudication.write_text(f"row_id,human_correct,notes\n{q05_row},incorrect,synthetic\n")
+    report = analyze_human_agreement(
+        key, a, synthetic_hand_store, second_sheet_path=b, adjudication_path=adjudication
+    )
+    assert report["rows"]["guideline_examples"] == 1
+
+    inter = report["inter_annotator"]
+    # 12 rows labelled by both (q13 by nobody); the example is left out of kappa.
+    assert inter["rows_labelled_by_both"] == 12
+    assert inter["excluded_guideline_examples"] == 1 and inter["rows_compared"] == 11
+    # q11 (unsure) is excluded from the binary measure; the other 10 all agree.
+    assert inter["binary_definite"]["n"] == 10
+    assert inter["binary_definite"]["raw_agreement"] == 1.0
+    assert inter["binary_definite"]["cohens_kappa"] == pytest.approx(1.0)
+    assert inter["three_category"]["n"] == 11
+    # The disagreement on the example row is still listed for adjudication.
+    assert inter["disagreeing_row_ids"] == [q05_row]
+
+    # Primary: q05 (the false positive) is excluded and counted.
+    primary = report["evaluators"]["exact_match"]["overall"]
+    assert primary["table"] == {"tp": 4, "fp": 0, "fn": 2, "tn": 3}
+    assert primary["excluded"]["guideline_example"] == 1
+    # Sensitivity: the example row is used with its adjudicated label.
+    sensitivity = report["evaluators_including_guideline_examples"]["exact_match"]["overall"]
+    assert sensitivity["table"] == {"tp": 4, "fp": 1, "fn": 2, "tn": 3}
+    assert "guideline_example" not in sensitivity["excluded"]
+    judge = report["llm_judge_labels"]["exp-synthetic-hand"]
+    assert judge["excluded"]["guideline_example"] == 1
+    markdown = render_markdown(report)
+    assert "Sensitivity: guideline-example rows included" in markdown
+
+
+def test_key_without_guideline_example_column_is_rejected(
+    synthetic_store: Path, tmp_path: Path
+) -> None:
+    sheet_dir = tmp_path / "sheet"
+    export_annotation_sheet(synthetic_store, sheet_dir, SYNTHETIC_EXPERIMENTS)
+    rows = _read(sheet_dir / KEY_FILENAME)
+    columns = [c for c in rows[0] if c != "guideline_example"]
+    with (sheet_dir / KEY_FILENAME).open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=columns, extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(rows)
+    filled = _fill_synthetic(
+        sheet_dir / SHEET_FILENAME,
+        sheet_dir / KEY_FILENAME,
+        tmp_path / "SYNTHETIC_A.csv",
+        SYNTHETIC_LABELS_A,
+        "synthetic-A",
+    )
+    with pytest.raises(AnnotationFormatError, match="guideline_example"):
+        analyze_human_agreement(sheet_dir / KEY_FILENAME, filled, synthetic_store)
 
 
 def test_store_that_does_not_match_the_key_is_rejected(
@@ -595,13 +757,74 @@ def test_committed_exp001_sheet_is_blank_and_matches_key() -> None:
     assert len(key) == len({(k["run_id"], k["test_case_id"]) for k in key})
 
 
-def test_guideline_examples_are_verbatim_exp001_answers() -> None:
+def _guideline_examples_from_text() -> set[tuple[str, str, str]]:
+    """Every (question, gold answers, answer) the guideline states a verdict for."""
     text = GUIDELINE.read_text(encoding="utf-8")
-    examples = re.findall(r"- Question: (.+)\n- Gold answers: (.+)\n- Model answer: (.+)\n", text)
-    assert len(examples) >= 10
+    blocks = re.findall(
+        r"- Question: (.+)\n- Gold answers: (.+)\n- Model answer: (.+)\n((?:(?!\*\*E).*\n)*)",
+        text,
+    )
+    examples: set[tuple[str, str, str]] = set()
+    for question, gold, answer, rest in blocks:
+        examples.add((question, gold, answer))
+        # A contrast answer quoted in the explanation ("By contrast, "..." is `correct`").
+        for contrast in re.findall(r'By contrast, "([^"]+)" is', " ".join(rest.split())):
+            examples.add((question, gold, contrast))
+    return examples
+
+
+def test_guideline_examples_are_verbatim_exp001_answers() -> None:
+    examples = _guideline_examples_from_text()
+    assert len(examples) == 15  # E1-E14 and the contrast answer in E6
     sheet = {
         (r["question"], r["gold_answers"], r["model_answer"])
         for r in _read(EXP001_DIR / SHEET_FILENAME)
     }
     for example in examples:
         assert example in sheet, example
+
+
+def test_guideline_example_list_matches_the_guideline() -> None:
+    assert set(GUIDELINE_EXAMPLES) == _guideline_examples_from_text()
+    assert len(GUIDELINE_EXAMPLES) == len(set(GUIDELINE_EXAMPLES))
+
+
+def test_guideline_quotes_no_other_sheet_answer() -> None:
+    """A quoted answer in the rules is a verdict too: it must be one of the flagged examples."""
+    text = " ".join(GUIDELINE.read_text(encoding="utf-8").split())
+    quoted = {annotation_normalize(q) for q in re.findall(r'"([^"]+)"', text)}
+    example_answers = {annotation_normalize(a) for _, _, a in GUIDELINE_EXAMPLES}
+    sheet_answers = {
+        annotation_normalize(r["model_answer"]) for r in _read(EXP001_DIR / SHEET_FILENAME)
+    }
+    gold = {
+        annotation_normalize(g)
+        for r in _read(EXP001_DIR / SHEET_FILENAME)
+        for g in r["gold_answers"].split(GOLD_SEPARATOR)
+    }
+    # Quoting a gold answer reveals nothing; quoting another model answer would.
+    assert (quoted & sheet_answers) - gold <= example_answers
+
+
+def test_committed_exp001_key_flags_exactly_the_guideline_examples() -> None:
+    sheet = {r["row_id"]: r for r in _read(EXP001_DIR / SHEET_FILENAME)}
+    key = _read(EXP001_DIR / KEY_FILENAME)
+    flags: dict[str, set[str]] = {}
+    for k in key:
+        flags.setdefault(k["row_id"], set()).add(k["guideline_example"])
+    assert all(len(v) == 1 for v in flags.values())  # one flag per row
+    flagged = {r for r, v in flags.items() if v == {"1"}}
+    wanted = {(q, g, annotation_normalize(a)) for q, g, a in GUIDELINE_EXAMPLES}
+    expected = {
+        r
+        for r, row in sheet.items()
+        if (row["question"], row["gold_answers"], annotation_normalize(row["model_answer"]))
+        in wanted
+    }
+    assert flagged == expected and len(flagged) == len(GUIDELINE_EXAMPLES)
+    overlap = {k["row_id"] for k in key if k["overlap"] == "1"}
+    assert not flagged & overlap
+    manifest = json.loads((EXP001_DIR / MANIFEST_FILENAME).read_text())
+    assert manifest["guideline_example_rows"] == len(flagged)
+    assert manifest["guideline_examples_unmatched"] == 0
+    assert manifest["overlap_rows"] == len(overlap)

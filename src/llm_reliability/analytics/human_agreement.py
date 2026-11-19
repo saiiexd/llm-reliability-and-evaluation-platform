@@ -5,13 +5,24 @@ Reads filled annotation sheets (see :mod:`llm_reliability.analytics.annotation`)
 the key and the run store, and reports:
 
 1. **Inter-annotator agreement** on rows labelled by both annotators, computed
-   on the original, independent labels (before any adjudication).
+   on the original, independent labels (before any adjudication), excluding
+   guideline-example rows.
 2. **Evaluator vs human agreement** for each correctness evaluator, overall and
-   per experiment (arm).
+   per experiment (arm). Primary result: guideline-example rows excluded.
+   Sensitivity result (``evaluators_including_guideline_examples``): the same
+   with them included.
 3. A descriptive cross-tabulation of the faithfulness judge against human
    correctness for RAG arms. Faithfulness ("is the answer supported by the
    retrieved context?") is a different criterion from correctness, so no
    accuracy or kappa is reported for it; see :data:`FAITHFULNESS_NOTE`.
+
+Guideline-example rows (``guideline_example = 1`` in the key) show answers for
+which the annotation guideline itself states a verdict, written by the
+guideline author and seen by every annotator. Their labels are therefore not
+independent human evidence: they are excluded from inter-annotator kappa (and
+counted), from the primary evaluator agreement, and from the llm_judge and
+faithfulness cross-tabulations. They still receive a reference label, which is
+used only in the sensitivity result.
 
 Definitions (positive class = "correct"):
 
@@ -27,9 +38,10 @@ Definitions (positive class = "correct"):
   denominator. A zero denominator gives ``None`` (undefined), never 0.
 - Cohen's kappa between human and evaluator on the same n; no interval.
 - Exclusions, each instance in exactly one bucket, checked in this order:
-  row not labelled, human ``unsure``, unresolved annotator disagreement,
-  evaluator not run on the instance, evaluator status other than SUCCESS (by
-  status), SUCCESS with ``passed = None``.
+  guideline-example row (primary result only), row not labelled, human
+  ``unsure``, unresolved annotator disagreement, evaluator not run on the
+  instance, evaluator status other than SUCCESS (by status), SUCCESS with
+  ``passed = None``.
 
 Instances that repeat the same answer are not independent (the same text is
 judged by deterministic evaluators the same way), so intervals computed over
@@ -70,7 +82,7 @@ FAITHFULNESS_NOTE = (
 
 
 class AnnotationFormatError(ValueError):
-    """A sheet, adjudication file or key is malformed (unknown rows, invalid labels...)."""
+    """A sheet, adjudication file or key is malformed (unknown rows, bad labels, encoding...)."""
 
 
 class NoLabelsError(ValueError):
@@ -81,6 +93,7 @@ class NoLabelsError(ValueError):
 class KeyEntry:
     row_id: str
     overlap: bool
+    guideline_example: bool
     experiment_id: str
     run_id: str
     repetition_index: int
@@ -99,10 +112,21 @@ def _read_csv(path: Path, required: Iterable[str]) -> list[dict[str, str]]:
     # utf-8-sig: spreadsheet programs often save "CSV UTF-8" with a byte-order mark.
     with path.open(newline="", encoding="utf-8-sig") as handle:
         reader = csv.DictReader(handle)
-        missing = [c for c in required if c not in (reader.fieldnames or [])]
-        if missing:
+        try:
+            # Decoding is lazy: both the header and the rows can fail.
+            fieldnames = reader.fieldnames or []
+            missing = [c for c in required if c not in fieldnames]
+            rows = None if missing else list(reader)
+        except UnicodeDecodeError as exc:
+            raise AnnotationFormatError(
+                f"{path}: not valid UTF-8 (byte {exc.start} of the file). It was probably saved "
+                "as 'CSV (Comma delimited)', which uses a Windows code page. Save it again as "
+                "'CSV UTF-8 (Comma delimited)' (Excel) or 'Text CSV' with character set "
+                "'Unicode (UTF-8)' (LibreOffice) and re-run."
+            ) from exc
+        if rows is None:
             raise AnnotationFormatError(f"{path}: missing column(s) {', '.join(missing)}.")
-        return list(reader)
+        return rows
 
 
 def read_key(path: Path) -> list[KeyEntry]:
@@ -111,6 +135,7 @@ def read_key(path: Path) -> list[KeyEntry]:
         [
             "row_id",
             "overlap",
+            "guideline_example",
             "experiment_id",
             "run_id",
             "repetition_index",
@@ -124,6 +149,7 @@ def read_key(path: Path) -> list[KeyEntry]:
         KeyEntry(
             row_id=r["row_id"],
             overlap=r["overlap"] == "1",
+            guideline_example=r["guideline_example"] == "1",
             experiment_id=r["experiment_id"],
             run_id=r["run_id"],
             repetition_index=int(r["repetition_index"]),
@@ -194,15 +220,25 @@ def _sheet_summary(sheet: SheetLabels, n_rows: int, overlap_rows: set[str]) -> d
     }
 
 
-def inter_annotator_agreement(first: SheetLabels, second: SheetLabels) -> dict[str, Any]:
+def inter_annotator_agreement(
+    first: SheetLabels, second: SheetLabels, excluded_rows: Iterable[str] = ()
+) -> dict[str, Any]:
     """Agreement on rows both annotators labelled, from their independent labels.
 
-    Primary measure (target kappa >= 0.6): binary Cohen's kappa on rows where both
-    gave a definite label (correct/incorrect); rows where either said ``unsure``
-    are excluded from it and counted. Secondary: raw agreement and kappa over the
+    ``excluded_rows`` (the guideline-example rows) are left out of every measure
+    and counted in ``excluded_guideline_examples``. Primary measure (target
+    kappa >= 0.6): binary Cohen's kappa on the remaining rows where both gave a
+    definite label (correct/incorrect); rows where either said ``unsure`` are
+    excluded from it and counted. Secondary: raw agreement and kappa over the
     three categories, with ``unsure`` as a category of its own.
+
+    ``disagreeing_row_ids`` lists every row both labelled differently,
+    guideline examples included: it is the adjudication worklist, and an
+    unadjudicated disagreement leaves a row without a reference label.
     """
-    both = sorted(set(first.labels) & set(second.labels))
+    excluded = set(excluded_rows)
+    all_both = sorted(set(first.labels) & set(second.labels))
+    both = [r for r in all_both if r not in excluded]
     pairs = [(first.labels[r], second.labels[r]) for r in both]
     definite = [(a, b) for a, b in pairs if a != "unsure" and b != "unsure"]
     table = {(True, True): 0, (True, False): 0, (False, True): 0, (False, False): 0}
@@ -210,7 +246,9 @@ def inter_annotator_agreement(first: SheetLabels, second: SheetLabels) -> dict[s
         table[(a == "correct", b == "correct")] += 1
     binary_kappa = cohens_kappa(table)
     return {
-        "rows_labelled_by_both": len(both),
+        "rows_labelled_by_both": len(all_both),
+        "excluded_guideline_examples": len(all_both) - len(both),
+        "rows_compared": len(both),
         "confusion_first_by_second": {
             a: {b: sum(1 for x, y in pairs if x == a and y == b) for b in LABELS} for a in LABELS
         },
@@ -229,7 +267,7 @@ def inter_annotator_agreement(first: SheetLabels, second: SheetLabels) -> dict[s
             "kappa_target": KAPPA_TARGET,
             "meets_target": None if binary_kappa is None else binary_kappa >= KAPPA_TARGET,
         },
-        "disagreeing_row_ids": [r for r in both if first.labels[r] != second.labels[r]],
+        "disagreeing_row_ids": [r for r in all_both if first.labels[r] != second.labels[r]],
     }
 
 
@@ -338,14 +376,25 @@ def _rate(k: int, n: int) -> dict[str, Any]:
 
 
 def evaluator_vs_human(
-    instances: list[Instance], labels: dict[str, str], unresolved: set[str], evaluator: str
+    instances: list[Instance],
+    labels: dict[str, str],
+    unresolved: set[str],
+    evaluator: str,
+    excluded_rows: set[str] | frozenset[str] = frozenset(),
 ) -> dict[str, Any]:
-    """Confusion table, rates with Wilson intervals, kappa and exclusions for one group."""
+    """Confusion table, rates with Wilson intervals, kappa and exclusions for one group.
+
+    Instances of ``excluded_rows`` (guideline examples, in the primary result)
+    are counted under ``guideline_example`` and not used.
+    """
     excluded = Counter[str]()
     table = {(True, True): 0, (True, False): 0, (False, True): 0, (False, False): 0}
     rows: set[str] = set()
     for inst in instances:
         row_id = inst.entry.row_id
+        if row_id in excluded_rows:
+            excluded["guideline_example"] += 1
+            continue
         if row_id in unresolved:
             excluded["human_unresolved_disagreement"] += 1
             continue
@@ -388,14 +437,20 @@ def evaluator_vs_human(
 
 
 def _label_crosstab(
-    instances: list[Instance], labels: dict[str, str], unresolved: set[str], evaluator: str
+    instances: list[Instance],
+    labels: dict[str, str],
+    unresolved: set[str],
+    evaluator: str,
+    excluded_rows: set[str],
 ) -> dict[str, Any]:
     """Human reference label (correct/incorrect) x evaluator label, with exclusions."""
     cells: dict[str, Counter[str]] = {"correct": Counter(), "incorrect": Counter()}
     excluded = Counter[str]()
     for inst in instances:
         label = labels.get(inst.entry.row_id)
-        if inst.entry.row_id in unresolved:
+        if inst.entry.row_id in excluded_rows:
+            excluded["guideline_example"] += 1
+        elif inst.entry.row_id in unresolved:
             excluded["human_unresolved_disagreement"] += 1
         elif label is None:
             excluded["human_unlabelled"] += 1
@@ -428,6 +483,7 @@ def analyze_human_agreement(
     key = read_key(key_path)
     row_ids = {e.row_id for e in key}
     overlap_rows = {e.row_id for e in key if e.overlap}
+    example_rows = {e.row_id for e in key if e.guideline_example}
     first = read_labels(sheet_path, row_ids)
     second = read_labels(second_sheet_path, row_ids) if second_sheet_path else None
     if not first.labels and not (second and second.labels):
@@ -449,17 +505,18 @@ def analyze_human_agreement(
     inter: dict[str, Any] | None = None
     if second is not None:
         sheets.append(_sheet_summary(second, len(row_ids), overlap_rows))
-        inter = inter_annotator_agreement(first, second)
-        if inter["rows_labelled_by_both"] == 0:
+        inter = inter_annotator_agreement(first, second, excluded_rows=example_rows)
+        if inter["rows_compared"] == 0:
             warnings.append(
-                "The two sheets share no labelled row; inter-annotator agreement is undefined."
+                "The two sheets share no labelled row outside the guideline examples; "
+                "inter-annotator agreement is undefined."
             )
         if set(sheets[0]["annotators"]) & set(sheets[1]["annotators"]):
             warnings.append("The same annotator name appears in both sheets.")
-        if inter["rows_labelled_by_both"] < 0.2 * len(row_ids):
+        if inter["rows_compared"] < 0.2 * len(row_ids):
             warnings.append(
-                f"Only {inter['rows_labelled_by_both']} of {len(row_ids)} rows are double-labelled "
-                "(the guideline requires at least 20%)."
+                f"Only {inter['rows_compared']} of {len(row_ids)} rows are double-labelled outside "
+                "the guideline examples (the guideline requires at least 20%)."
             )
     else:
         warnings.append("Only one sheet given: inter-annotator agreement cannot be computed.")
@@ -484,22 +541,28 @@ def analyze_human_agreement(
     by_exp = {x: [i for i in instances if i.entry.experiment_id == x] for x in experiments}
     present = {e.evaluator_name for i in instances for e in i.result.evaluation_results}
     evaluators: dict[str, Any] = {}
+    sensitivity: dict[str, Any] = {}
     for name in CORRECTNESS_EVALUATORS:
         if name not in present:
             continue
-        evaluators[name] = {
-            "overall": evaluator_vs_human(instances, labels, unresolved, name),
-            "by_experiment": {
-                x: evaluator_vs_human(by_exp[x], labels, unresolved, name) for x in experiments
-            },
-        }
+        for target, excluded_rows in ((evaluators, example_rows), (sensitivity, set())):
+            target[name] = {
+                "overall": evaluator_vs_human(instances, labels, unresolved, name, excluded_rows),
+                "by_experiment": {
+                    x: evaluator_vs_human(by_exp[x], labels, unresolved, name, excluded_rows)
+                    for x in experiments
+                },
+            }
     judge_labels = (
-        {x: _label_crosstab(by_exp[x], labels, unresolved, "llm_judge") for x in experiments}
+        {
+            x: _label_crosstab(by_exp[x], labels, unresolved, "llm_judge", example_rows)
+            for x in experiments
+        }
         if "llm_judge" in present
         else {}
     )
     faithfulness = {
-        x: _label_crosstab(by_exp[x], labels, unresolved, FAITHFULNESS_EVALUATOR)
+        x: _label_crosstab(by_exp[x], labels, unresolved, FAITHFULNESS_EVALUATOR, example_rows)
         for x in experiments
         if any(
             (ev := _evaluation(i.result, FAITHFULNESS_EVALUATOR)) is not None
@@ -521,6 +584,7 @@ def analyze_human_agreement(
         "rows": {
             "total": len(row_ids),
             "overlap": len(overlap_rows),
+            "guideline_examples": len(example_rows),
             "reference": {
                 **{label: reference_label_counts.get(label, 0) for label in LABELS},
                 "unresolved_disagreement": len(unresolved),
@@ -532,6 +596,7 @@ def analyze_human_agreement(
         "sheets": sheets,
         "inter_annotator": inter,
         "evaluators": evaluators,
+        "evaluators_including_guideline_examples": sensitivity,
         "llm_judge_labels": judge_labels,
         "faithfulness_crosstab": faithfulness,
         "faithfulness_note": FAITHFULNESS_NOTE,
@@ -554,6 +619,24 @@ def _kappa(k: float | None) -> str:
     return "undefined" if k is None else f"{k:.2f}"
 
 
+def _evaluator_rows(groups: Iterable[tuple[str, dict[str, Any]]]) -> list[str]:
+    lines = [
+        "| Group | n (distinct rows) | Accuracy | Precision | Recall | Specificity | "
+        "Cohen's kappa | TP / FP / FN / TN | Excluded |",
+        "|---|---|---|---|---|---|---|---|---|",
+    ]
+    for group, m in groups:
+        t = m["table"]
+        excluded = ", ".join(f"{k}: {v}" for k, v in m["excluded"].items()) or "none"
+        lines.append(
+            f"| {group} | {m['n']} ({m['distinct_rows']}) | {_rate_cell(m['accuracy'])} | "
+            f"{_rate_cell(m['precision'])} | {_rate_cell(m['recall'])} | "
+            f"{_rate_cell(m['specificity'])} | {_kappa(m['cohens_kappa'])} | "
+            f"{t['tp']} / {t['fp']} / {t['fn']} / {t['tn']} | {excluded} |"
+        )
+    return lines
+
+
 def render_markdown(report: dict[str, Any]) -> str:
     rows = report["rows"]
     lines = [
@@ -569,7 +652,11 @@ def render_markdown(report: dict[str, Any]) -> str:
         "",
         "## Labels",
         "",
-        f"- Sheet rows: {rows['total']} (overlap rows for double labelling: {rows['overlap']}).",
+        f"- Sheet rows: {rows['total']} (overlap rows for double labelling: {rows['overlap']}; "
+        f"guideline-example rows: {rows['guideline_examples']}). The guideline states a verdict "
+        "for each guideline-example row, so those rows are excluded from inter-annotator "
+        "agreement and from the primary evaluator results, and included only in the sensitivity "
+        "section.",
         "- Reference labels: " + ", ".join(f"{k}: {v}" for k, v in rows["reference"].items()) + ".",
         "- Sources: " + ", ".join(f"{k}: {v}" for k, v in rows["reference_sources"].items()) + ".",
     ]
@@ -588,7 +675,9 @@ def render_markdown(report: dict[str, Any]) -> str:
         b, t = inter["binary_definite"], inter["three_category"]
         met = {True: "yes", False: "no", None: "undefined"}[b["meets_target"]]
         lines += [
-            f"- Rows labelled by both: {inter['rows_labelled_by_both']}.",
+            f"- Rows labelled by both: {inter['rows_labelled_by_both']}; guideline-example rows "
+            f"excluded: {inter['excluded_guideline_examples']}; "
+            f"compared: {inter['rows_compared']}.",
             f"- Binary (correct vs incorrect, rows where either said unsure excluded: "
             f"{b['excluded_unsure']}): n = {b['n']}, raw agreement {_pct(b['raw_agreement'])}, "
             f"Cohen's kappa {_kappa(b['cohens_kappa'])} (target >= {b['kappa_target']}: {met}).",
@@ -602,24 +691,20 @@ def render_markdown(report: dict[str, Any]) -> str:
             cells = " | ".join(str(inter["confusion_first_by_second"][a][x]) for x in LABELS)
             lines.append(f"| {a} | {cells} |")
     for name, data in report["evaluators"].items():
+        lines += ["", f"## {name} vs human (primary: guideline-example rows excluded)", ""]
+        lines += _evaluator_rows([("overall", data["overall"]), *data["by_experiment"].items()])
+    if report["evaluators_including_guideline_examples"]:
         lines += [
             "",
-            f"## {name} vs human",
+            "## Sensitivity: guideline-example rows included",
             "",
-            "| Group | n (distinct rows) | Accuracy | Precision | Recall | Specificity | "
-            "Cohen's kappa | TP / FP / FN / TN | Excluded |",
-            "|---|---|---|---|---|---|---|---|---|",
+            "Same as above, but the guideline-example rows are used too. Their labels may follow "
+            "the verdicts the guideline states, so this is not independent human evidence; it "
+            "only shows how much those rows change the result.",
         ]
-        groups = [("overall", data["overall"]), *data["by_experiment"].items()]
-        for group, m in groups:
-            t = m["table"]
-            excluded = ", ".join(f"{k}: {v}" for k, v in m["excluded"].items()) or "none"
-            lines.append(
-                f"| {group} | {m['n']} ({m['distinct_rows']}) | {_rate_cell(m['accuracy'])} | "
-                f"{_rate_cell(m['precision'])} | {_rate_cell(m['recall'])} | "
-                f"{_rate_cell(m['specificity'])} | {_kappa(m['cohens_kappa'])} | "
-                f"{t['tp']} / {t['fp']} / {t['fn']} / {t['tn']} | {excluded} |"
-            )
+        for name, data in report["evaluators_including_guideline_examples"].items():
+            lines += ["", f"### {name} vs human, including guideline examples", ""]
+            lines += _evaluator_rows([("overall", data["overall"]), *data["by_experiment"].items()])
     if report["llm_judge_labels"]:
         lines += [
             "",
