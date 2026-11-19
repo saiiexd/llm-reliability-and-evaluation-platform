@@ -31,5 +31,5 @@ and in the platform. Each item has evidence and a proposed fix.
 | P1 | First recorded call of a later arm included a model load (Ollama unloads idle models after 5 min) | Fixed in the runner (warm-up before every arm); one outlier remains in this run's gemma-closed max latency |
 | P2 | `evaluator_disagreement` dominates the diagnosis (18–22 of 60 in RAG arms) because EM is in the disagreement rule | Open: designate a primary correctness evaluator (results.md §5) |
 | P3 | Strict relevance labels miss answer-bearing paragraphs other than SQuAD's source paragraph (lenient Hit@3 91.7% vs strict 86.7%) | Reported both; open: graded relevance labels |
-| P4 | Real judges are only available from the study script, not from the console | Open (technical report §G) |
+| P4 | Real judges are only available from the study script, not from the console | Open (`docs/PROJECT_TECHNICAL_UNDERSTANDING.md` §10.2, §12) |
 | P5 | T = 0 with a fixed seed is not bit-for-bit repeatable on this server (3/60 outputs differ) | Documented; record outputs, never assume regeneration reproduces them |
