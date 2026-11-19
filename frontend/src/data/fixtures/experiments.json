@@ -1,7 +1,7 @@
 [
   {
-    "config_fingerprint": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28",
-    "created_at": "2026-11-19T12:37:14.567743+00:00",
+    "config_fingerprint": "0d3458e27b8e24439d542689aa743ce6bcdc33fe8386ff85609a9e1f821f108b",
+    "created_at": "2026-11-19T12:49:57.832045+00:00",
     "dataset_version": {
       "dataset_name": "reliability-console-demo",
       "test_cases": [
@@ -96,6 +96,12 @@
       {
         "evaluator_name": "llm_faithfulness_judge",
         "parameters": {
+          "judge_model_config": {
+            "extra_params": {},
+            "max_tokens": null,
+            "model_id": "fake-judge-v1",
+            "temperature": null
+          },
           "judge_model_id": "fake-judge-v1",
           "rubric": {
             "criterion": "faithfulness",
@@ -133,8 +139,8 @@
     "schema_version": 1
   },
   {
-    "config_fingerprint": "0d85492573ceabb2943d4d50a85cc00ace51978396355fea601d831888400b94",
-    "created_at": "2026-11-19T12:37:14.569409+00:00",
+    "config_fingerprint": "212dc15c652e1afb36acda00a6dc71ea2ab15dce7f987fb0ebfd6a25bf148522",
+    "created_at": "2026-11-19T12:49:57.833747+00:00",
     "dataset_version": {
       "dataset_name": "reliability-console-demo",
       "test_cases": [
@@ -229,6 +235,12 @@
       {
         "evaluator_name": "llm_faithfulness_judge",
         "parameters": {
+          "judge_model_config": {
+            "extra_params": {},
+            "max_tokens": null,
+            "model_id": "fake-judge-v1",
+            "temperature": null
+          },
           "judge_model_id": "fake-judge-v1",
           "rubric": {
             "criterion": "faithfulness",
@@ -267,7 +279,7 @@
   },
   {
     "config_fingerprint": "042023b17a261703cd58b5ddde29800b7e605486ee2cd57b7c6857c44022b33d",
-    "created_at": "2026-11-19T12:37:14.570097+00:00",
+    "created_at": "2026-11-19T12:49:57.834451+00:00",
     "dataset_version": {
       "dataset_name": "baseline-non-rag-demo",
       "test_cases": [

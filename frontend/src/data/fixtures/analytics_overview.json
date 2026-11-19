@@ -21,32 +21,32 @@
       "case_count": 2,
       "config_fingerprint": "042023b17a261703cd58b5ddde29800b7e605486ee2cd57b7c6857c44022b33d",
       "experiment_id": "exp-baseline-non-rag-demo",
-      "run_id": "a4643cd1c88140adb8fce946198b1bc7",
-      "started_at": "2026-11-19T12:37:14.570205+00:00",
+      "run_id": "ab8678e2efac46ce9f539e7ea18cd509",
+      "started_at": "2026-11-19T12:49:57.834545+00:00",
       "status": "succeeded"
     },
     {
       "case_count": 7,
-      "config_fingerprint": "0d85492573ceabb2943d4d50a85cc00ace51978396355fea601d831888400b94",
+      "config_fingerprint": "212dc15c652e1afb36acda00a6dc71ea2ab15dce7f987fb0ebfd6a25bf148522",
       "experiment_id": "exp-reliability-topk2-demo",
-      "run_id": "d0d83eeada47465a9ddddda6ef2d9b2e",
-      "started_at": "2026-11-19T12:37:14.569558+00:00",
+      "run_id": "afc62dd02e824b7189cfe5f3cfd40982",
+      "started_at": "2026-11-19T12:49:57.833896+00:00",
       "status": "succeeded"
     },
     {
       "case_count": 7,
-      "config_fingerprint": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28",
+      "config_fingerprint": "0d3458e27b8e24439d542689aa743ce6bcdc33fe8386ff85609a9e1f821f108b",
       "experiment_id": "exp-reliability-console-demo",
-      "run_id": "a75a6b079c5740ba9f049df77336e33b",
-      "started_at": "2026-11-19T12:37:14.568846+00:00",
+      "run_id": "b80e4606f53d46b3acdbeb4757cc5544",
+      "started_at": "2026-11-19T12:49:57.833171+00:00",
       "status": "succeeded"
     },
     {
       "case_count": 7,
-      "config_fingerprint": "0780e4b8660630b619ffd2d23ae51a32855e8b65c77e08e757f5f72e518b8b28",
+      "config_fingerprint": "0d3458e27b8e24439d542689aa743ce6bcdc33fe8386ff85609a9e1f821f108b",
       "experiment_id": "exp-reliability-console-demo",
-      "run_id": "84624dc837b64be9993c068f2c69b7d2",
-      "started_at": "2026-11-19T12:37:14.567977+00:00",
+      "run_id": "97043daa30194ab19b4883cd64798f74",
+      "started_at": "2026-11-19T12:49:57.832452+00:00",
       "status": "succeeded"
     }
   ],

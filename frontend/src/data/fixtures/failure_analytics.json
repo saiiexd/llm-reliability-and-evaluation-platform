@@ -1,5 +1,5 @@
 {
-  "84624dc837b64be9993c068f2c69b7d2": {
+  "97043daa30194ab19b4883cd64798f74": {
     "num_determined": 7,
     "num_undetermined": 0,
     "primary_categories": {
@@ -79,11 +79,11 @@
       }
     },
     "source_run_ids": [
-      "84624dc837b64be9993c068f2c69b7d2"
+      "97043daa30194ab19b4883cd64798f74"
     ],
     "total_cases": 7
   },
-  "a4643cd1c88140adb8fce946198b1bc7": {
+  "ab8678e2efac46ce9f539e7ea18cd509": {
     "num_determined": 2,
     "num_undetermined": 0,
     "primary_categories": {
@@ -144,95 +144,11 @@
     },
     "secondary_findings": {},
     "source_run_ids": [
-      "a4643cd1c88140adb8fce946198b1bc7"
+      "ab8678e2efac46ce9f539e7ea18cd509"
     ],
     "total_cases": 2
   },
-  "a75a6b079c5740ba9f049df77336e33b": {
-    "num_determined": 7,
-    "num_undetermined": 0,
-    "primary_categories": {
-      "contradicted": {
-        "category": "contradicted",
-        "count": 1,
-        "denominator": 7,
-        "proportion": 0.14285714285714285
-      },
-      "correct": {
-        "category": "correct",
-        "count": 3,
-        "denominator": 7,
-        "proportion": 0.42857142857142855
-      },
-      "evaluator_disagreement": {
-        "category": "evaluator_disagreement",
-        "count": 0,
-        "denominator": 7,
-        "proportion": 0.0
-      },
-      "generation_failure": {
-        "category": "generation_failure",
-        "count": 0,
-        "denominator": 7,
-        "proportion": 0.0
-      },
-      "incorrect": {
-        "category": "incorrect",
-        "count": 0,
-        "denominator": 7,
-        "proportion": 0.0
-      },
-      "insufficient_evidence": {
-        "category": "insufficient_evidence",
-        "count": 0,
-        "denominator": 7,
-        "proportion": 0.0
-      },
-      "retrieval_failure": {
-        "category": "retrieval_failure",
-        "count": 1,
-        "denominator": 7,
-        "proportion": 0.14285714285714285
-      },
-      "undetermined": {
-        "category": "undetermined",
-        "count": 0,
-        "denominator": 7,
-        "proportion": 0.0
-      },
-      "unsupported": {
-        "category": "unsupported",
-        "count": 2,
-        "denominator": 7,
-        "proportion": 0.2857142857142857
-      }
-    },
-    "secondary_findings": {
-      "generation_failure": {
-        "count": 3,
-        "denominator": 7,
-        "finding_name": "generation_failure",
-        "frequency": 0.42857142857142855
-      },
-      "insufficient_evidence": {
-        "count": 1,
-        "denominator": 7,
-        "finding_name": "insufficient_evidence",
-        "frequency": 0.14285714285714285
-      },
-      "unsupported_claims": {
-        "count": 1,
-        "denominator": 7,
-        "finding_name": "unsupported_claims",
-        "frequency": 0.14285714285714285
-      }
-    },
-    "source_run_ids": [
-      "a75a6b079c5740ba9f049df77336e33b"
-    ],
-    "total_cases": 7
-  },
-  "d0d83eeada47465a9ddddda6ef2d9b2e": {
+  "afc62dd02e824b7189cfe5f3cfd40982": {
     "num_determined": 7,
     "num_undetermined": 0,
     "primary_categories": {
@@ -306,7 +222,91 @@
       }
     },
     "source_run_ids": [
-      "d0d83eeada47465a9ddddda6ef2d9b2e"
+      "afc62dd02e824b7189cfe5f3cfd40982"
+    ],
+    "total_cases": 7
+  },
+  "b80e4606f53d46b3acdbeb4757cc5544": {
+    "num_determined": 7,
+    "num_undetermined": 0,
+    "primary_categories": {
+      "contradicted": {
+        "category": "contradicted",
+        "count": 1,
+        "denominator": 7,
+        "proportion": 0.14285714285714285
+      },
+      "correct": {
+        "category": "correct",
+        "count": 3,
+        "denominator": 7,
+        "proportion": 0.42857142857142855
+      },
+      "evaluator_disagreement": {
+        "category": "evaluator_disagreement",
+        "count": 0,
+        "denominator": 7,
+        "proportion": 0.0
+      },
+      "generation_failure": {
+        "category": "generation_failure",
+        "count": 0,
+        "denominator": 7,
+        "proportion": 0.0
+      },
+      "incorrect": {
+        "category": "incorrect",
+        "count": 0,
+        "denominator": 7,
+        "proportion": 0.0
+      },
+      "insufficient_evidence": {
+        "category": "insufficient_evidence",
+        "count": 0,
+        "denominator": 7,
+        "proportion": 0.0
+      },
+      "retrieval_failure": {
+        "category": "retrieval_failure",
+        "count": 1,
+        "denominator": 7,
+        "proportion": 0.14285714285714285
+      },
+      "undetermined": {
+        "category": "undetermined",
+        "count": 0,
+        "denominator": 7,
+        "proportion": 0.0
+      },
+      "unsupported": {
+        "category": "unsupported",
+        "count": 2,
+        "denominator": 7,
+        "proportion": 0.2857142857142857
+      }
+    },
+    "secondary_findings": {
+      "generation_failure": {
+        "count": 3,
+        "denominator": 7,
+        "finding_name": "generation_failure",
+        "frequency": 0.42857142857142855
+      },
+      "insufficient_evidence": {
+        "count": 1,
+        "denominator": 7,
+        "finding_name": "insufficient_evidence",
+        "frequency": 0.14285714285714285
+      },
+      "unsupported_claims": {
+        "count": 1,
+        "denominator": 7,
+        "finding_name": "unsupported_claims",
+        "frequency": 0.14285714285714285
+      }
+    },
+    "source_run_ids": [
+      "b80e4606f53d46b3acdbeb4757cc5544"
     ],
     "total_cases": 7
   }

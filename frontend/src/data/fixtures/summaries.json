@@ -1,5 +1,5 @@
 {
-  "84624dc837b64be9993c068f2c69b7d2": {
+  "97043daa30194ab19b4883cd64798f74": {
     "evaluation_summary": {
       "dataset_name": "reliability-console-demo",
       "disagreement_count": 0,
@@ -112,7 +112,7 @@
       }
     }
   },
-  "a4643cd1c88140adb8fce946198b1bc7": {
+  "ab8678e2efac46ce9f539e7ea18cd509": {
     "evaluation_summary": {
       "dataset_name": "baseline-non-rag-demo",
       "disagreement_count": 0,
@@ -149,120 +149,7 @@
     ],
     "retrieval_summary": {}
   },
-  "a75a6b079c5740ba9f049df77336e33b": {
-    "evaluation_summary": {
-      "dataset_name": "reliability-console-demo",
-      "disagreement_count": 0,
-      "model_id": "mock-adapter-v1",
-      "num_execution_failed": 0,
-      "num_execution_succeeded": 7,
-      "num_test_cases": 7,
-      "per_evaluator": {
-        "exact_match": {
-          "criterion": "correctness",
-          "evaluator_name": "exact_match",
-          "num_error": 0,
-          "num_evaluated": 7,
-          "num_failed": 4,
-          "num_passed": 3,
-          "num_skipped": 0,
-          "num_success": 7,
-          "score_count": 7,
-          "score_max": 1.0,
-          "score_mean": 0.42857142857142855,
-          "score_min": 0.0
-        },
-        "llm_faithfulness_judge": {
-          "criterion": "faithfulness",
-          "evaluator_name": "llm_faithfulness_judge",
-          "num_error": 0,
-          "num_evaluated": 7,
-          "num_failed": 4,
-          "num_passed": 3,
-          "num_skipped": 0,
-          "num_success": 7,
-          "score_count": 0,
-          "score_max": null,
-          "score_mean": null,
-          "score_min": null
-        }
-      }
-    },
-    "reliability_findings": [
-      {
-        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
-        "evaluator_names": [
-          "exact_match",
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "incorrect_per_evaluator",
-        "test_case_id": "correct-context-unsupported-answer"
-      },
-      {
-        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
-        "evaluator_names": [
-          "exact_match",
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "incorrect_per_evaluator",
-        "test_case_id": "correct-context-contradictory-answer"
-      },
-      {
-        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
-        "evaluator_names": [
-          "exact_match",
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "incorrect_per_evaluator",
-        "test_case_id": "relevant-context-incorrect-answer"
-      },
-      {
-        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
-        "evaluator_names": [
-          "exact_match",
-          "llm_faithfulness_judge"
-        ],
-        "flag_type": "incorrect_per_evaluator",
-        "test_case_id": "missing-context"
-      }
-    ],
-    "retrieval_summary": {
-      "hit_at_1": {
-        "evaluator_name": "hit_at_1",
-        "metric_name": "hit_at_k",
-        "num_error": 0,
-        "num_evaluated": 7,
-        "num_skipped": 1,
-        "num_success": 6,
-        "score_max": 1.0,
-        "score_mean": 0.8333333333333334,
-        "score_min": 0.0
-      },
-      "mrr": {
-        "evaluator_name": "mrr",
-        "metric_name": "mrr",
-        "num_error": 0,
-        "num_evaluated": 7,
-        "num_skipped": 1,
-        "num_success": 6,
-        "score_max": 1.0,
-        "score_mean": 0.8333333333333334,
-        "score_min": 0.0
-      },
-      "recall_at_1": {
-        "evaluator_name": "recall_at_1",
-        "metric_name": "recall_at_k",
-        "num_error": 0,
-        "num_evaluated": 7,
-        "num_skipped": 1,
-        "num_success": 6,
-        "score_max": 1.0,
-        "score_mean": 0.8333333333333334,
-        "score_min": 0.0
-      }
-    }
-  },
-  "d0d83eeada47465a9ddddda6ef2d9b2e": {
+  "afc62dd02e824b7189cfe5f3cfd40982": {
     "evaluation_summary": {
       "dataset_name": "reliability-console-demo",
       "disagreement_count": 0,
@@ -372,6 +259,119 @@
         "score_max": 1.0,
         "score_mean": 1.0,
         "score_min": 1.0
+      }
+    }
+  },
+  "b80e4606f53d46b3acdbeb4757cc5544": {
+    "evaluation_summary": {
+      "dataset_name": "reliability-console-demo",
+      "disagreement_count": 0,
+      "model_id": "mock-adapter-v1",
+      "num_execution_failed": 0,
+      "num_execution_succeeded": 7,
+      "num_test_cases": 7,
+      "per_evaluator": {
+        "exact_match": {
+          "criterion": "correctness",
+          "evaluator_name": "exact_match",
+          "num_error": 0,
+          "num_evaluated": 7,
+          "num_failed": 4,
+          "num_passed": 3,
+          "num_skipped": 0,
+          "num_success": 7,
+          "score_count": 7,
+          "score_max": 1.0,
+          "score_mean": 0.42857142857142855,
+          "score_min": 0.0
+        },
+        "llm_faithfulness_judge": {
+          "criterion": "faithfulness",
+          "evaluator_name": "llm_faithfulness_judge",
+          "num_error": 0,
+          "num_evaluated": 7,
+          "num_failed": 4,
+          "num_passed": 3,
+          "num_skipped": 0,
+          "num_success": 7,
+          "score_count": 0,
+          "score_max": null,
+          "score_mean": null,
+          "score_min": null
+        }
+      }
+    },
+    "reliability_findings": [
+      {
+        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
+        "evaluator_names": [
+          "exact_match",
+          "llm_faithfulness_judge"
+        ],
+        "flag_type": "incorrect_per_evaluator",
+        "test_case_id": "correct-context-unsupported-answer"
+      },
+      {
+        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
+        "evaluator_names": [
+          "exact_match",
+          "llm_faithfulness_judge"
+        ],
+        "flag_type": "incorrect_per_evaluator",
+        "test_case_id": "correct-context-contradictory-answer"
+      },
+      {
+        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
+        "evaluator_names": [
+          "exact_match",
+          "llm_faithfulness_judge"
+        ],
+        "flag_type": "incorrect_per_evaluator",
+        "test_case_id": "relevant-context-incorrect-answer"
+      },
+      {
+        "detail": "Reported as incorrect by the listed evaluator(s), relative to their own methodology. This is not a hallucination determination.",
+        "evaluator_names": [
+          "exact_match",
+          "llm_faithfulness_judge"
+        ],
+        "flag_type": "incorrect_per_evaluator",
+        "test_case_id": "missing-context"
+      }
+    ],
+    "retrieval_summary": {
+      "hit_at_1": {
+        "evaluator_name": "hit_at_1",
+        "metric_name": "hit_at_k",
+        "num_error": 0,
+        "num_evaluated": 7,
+        "num_skipped": 1,
+        "num_success": 6,
+        "score_max": 1.0,
+        "score_mean": 0.8333333333333334,
+        "score_min": 0.0
+      },
+      "mrr": {
+        "evaluator_name": "mrr",
+        "metric_name": "mrr",
+        "num_error": 0,
+        "num_evaluated": 7,
+        "num_skipped": 1,
+        "num_success": 6,
+        "score_max": 1.0,
+        "score_mean": 0.8333333333333334,
+        "score_min": 0.0
+      },
+      "recall_at_1": {
+        "evaluator_name": "recall_at_1",
+        "metric_name": "recall_at_k",
+        "num_error": 0,
+        "num_evaluated": 7,
+        "num_skipped": 1,
+        "num_success": 6,
+        "score_max": 1.0,
+        "score_mean": 0.8333333333333334,
+        "score_min": 0.0
       }
     }
   }

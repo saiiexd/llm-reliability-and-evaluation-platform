@@ -1,5 +1,5 @@
 {
-  "84624dc837b64be9993c068f2c69b7d2": [
+  "97043daa30194ab19b4883cd64798f74": [
     {
       "evaluated_cases": 6,
       "k": 1,
@@ -31,40 +31,8 @@
       "total_cases": 7
     }
   ],
-  "a4643cd1c88140adb8fce946198b1bc7": [],
-  "a75a6b079c5740ba9f049df77336e33b": [
-    {
-      "evaluated_cases": 6,
-      "k": 1,
-      "max_score": 1.0,
-      "mean_score": 0.8333333333333334,
-      "metric_name": "hit_at_k",
-      "min_score": 0.0,
-      "skipped_cases": 1,
-      "total_cases": 7
-    },
-    {
-      "evaluated_cases": 6,
-      "k": null,
-      "max_score": 1.0,
-      "mean_score": 0.8333333333333334,
-      "metric_name": "mrr",
-      "min_score": 0.0,
-      "skipped_cases": 1,
-      "total_cases": 7
-    },
-    {
-      "evaluated_cases": 6,
-      "k": 1,
-      "max_score": 1.0,
-      "mean_score": 0.8333333333333334,
-      "metric_name": "recall_at_k",
-      "min_score": 0.0,
-      "skipped_cases": 1,
-      "total_cases": 7
-    }
-  ],
-  "d0d83eeada47465a9ddddda6ef2d9b2e": [
+  "ab8678e2efac46ce9f539e7ea18cd509": [],
+  "afc62dd02e824b7189cfe5f3cfd40982": [
     {
       "evaluated_cases": 6,
       "k": 2,
@@ -92,6 +60,38 @@
       "mean_score": 1.0,
       "metric_name": "recall_at_k",
       "min_score": 1.0,
+      "skipped_cases": 1,
+      "total_cases": 7
+    }
+  ],
+  "b80e4606f53d46b3acdbeb4757cc5544": [
+    {
+      "evaluated_cases": 6,
+      "k": 1,
+      "max_score": 1.0,
+      "mean_score": 0.8333333333333334,
+      "metric_name": "hit_at_k",
+      "min_score": 0.0,
+      "skipped_cases": 1,
+      "total_cases": 7
+    },
+    {
+      "evaluated_cases": 6,
+      "k": null,
+      "max_score": 1.0,
+      "mean_score": 0.8333333333333334,
+      "metric_name": "mrr",
+      "min_score": 0.0,
+      "skipped_cases": 1,
+      "total_cases": 7
+    },
+    {
+      "evaluated_cases": 6,
+      "k": 1,
+      "max_score": 1.0,
+      "mean_score": 0.8333333333333334,
+      "metric_name": "recall_at_k",
+      "min_score": 0.0,
       "skipped_cases": 1,
       "total_cases": 7
     }

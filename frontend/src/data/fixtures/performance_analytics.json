@@ -1,5 +1,5 @@
 {
-  "84624dc837b64be9993c068f2c69b7d2": {
+  "97043daa30194ab19b4883cd64798f74": {
     "completion_tokens_total": null,
     "cost_available": false,
     "evaluator_duration_seconds_mean": null,
@@ -13,12 +13,12 @@
     "per_case_duration_seconds_mean": null,
     "prompt_tokens_total": null,
     "retrieval_duration_seconds_mean": null,
-    "run_id": "84624dc837b64be9993c068f2c69b7d2",
+    "run_id": "97043daa30194ab19b4883cd64798f74",
     "tokens_available": false,
     "total_tokens": null,
-    "wall_clock_duration_seconds": 0.000402
+    "wall_clock_duration_seconds": 0.000248
   },
-  "a4643cd1c88140adb8fce946198b1bc7": {
+  "ab8678e2efac46ce9f539e7ea18cd509": {
     "completion_tokens_total": null,
     "cost_available": false,
     "evaluator_duration_seconds_mean": null,
@@ -32,12 +32,12 @@
     "per_case_duration_seconds_mean": null,
     "prompt_tokens_total": null,
     "retrieval_duration_seconds_mean": null,
-    "run_id": "a4643cd1c88140adb8fce946198b1bc7",
+    "run_id": "ab8678e2efac46ce9f539e7ea18cd509",
     "tokens_available": false,
     "total_tokens": null,
-    "wall_clock_duration_seconds": 2e-05
+    "wall_clock_duration_seconds": 2.3e-05
   },
-  "a75a6b079c5740ba9f049df77336e33b": {
+  "afc62dd02e824b7189cfe5f3cfd40982": {
     "completion_tokens_total": null,
     "cost_available": false,
     "evaluator_duration_seconds_mean": null,
@@ -51,12 +51,12 @@
     "per_case_duration_seconds_mean": null,
     "prompt_tokens_total": null,
     "retrieval_duration_seconds_mean": null,
-    "run_id": "a75a6b079c5740ba9f049df77336e33b",
+    "run_id": "afc62dd02e824b7189cfe5f3cfd40982",
     "tokens_available": false,
     "total_tokens": null,
-    "wall_clock_duration_seconds": 0.000139
+    "wall_clock_duration_seconds": 0.000157
   },
-  "d0d83eeada47465a9ddddda6ef2d9b2e": {
+  "b80e4606f53d46b3acdbeb4757cc5544": {
     "completion_tokens_total": null,
     "cost_available": false,
     "evaluator_duration_seconds_mean": null,
@@ -70,9 +70,9 @@
     "per_case_duration_seconds_mean": null,
     "prompt_tokens_total": null,
     "retrieval_duration_seconds_mean": null,
-    "run_id": "d0d83eeada47465a9ddddda6ef2d9b2e",
+    "run_id": "b80e4606f53d46b3acdbeb4757cc5544",
     "tokens_available": false,
     "total_tokens": null,
-    "wall_clock_duration_seconds": 0.000147
+    "wall_clock_duration_seconds": 0.000172
   }
 }

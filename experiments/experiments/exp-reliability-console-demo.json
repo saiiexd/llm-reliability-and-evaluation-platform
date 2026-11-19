@@ -1,6 +1,6 @@
 {
-  "config_fingerprint": "351e339760d3c499848efe080c731ef4dd9bd9be93d538c28008a2c9bb9721df",
-  "created_at": "2026-11-01T20:38:24.518074+00:00",
+  "config_fingerprint": "8fb90b77bbe15c66ec30de2657a9b13dbd47390f7b7959e56c7b83ad9a5d557c",
+  "created_at": "2026-11-19T12:49:57.205847+00:00",
   "dataset_version": {
     "dataset_name": "reliability-console-demo",
     "test_cases": [
@@ -94,6 +94,12 @@
     {
       "evaluator_name": "llm_faithfulness_judge",
       "parameters": {
+        "judge_model_config": {
+          "extra_params": {},
+          "max_tokens": null,
+          "model_id": "fake-judge-v1",
+          "temperature": null
+        },
         "judge_model_id": "fake-judge-v1",
         "rubric": {
           "criterion": "faithfulness",
