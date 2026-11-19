@@ -56,3 +56,31 @@ def test_retrieval_metric_rejected_as_answer_evaluator(api_client: TestClient) -
     assert response.status_code == 400
     assert "retrieval metric" in response.json()["error"]["message"]
     assert api_client.get(f"{API}/experiments/exp-retrieval-as-answer-eval").status_code == 404
+
+
+def test_runs_record_the_adapter_that_actually_executed(api_client: TestClient) -> None:
+    """Benchmarking one experiment on two adapters must yield distinguishable runs."""
+    create = api_client.post(
+        f"{API}/experiments",
+        json={
+            "experiment_id": "exp-provenance",
+            "name": "Provenance",
+            "dataset_name": "d",
+            "test_cases": [{"id": "tc-1", "input": "q", "reference_answer": "a"}],
+            "model_config": {"model_id": "declared-label"},
+            "evaluator_names": ["exact_match"],
+        },
+    )
+    assert create.status_code == 201, create.text
+    bench = api_client.post(
+        f"{API}/benchmarks/execute",
+        json={
+            "experiment_id": "exp-provenance",
+            "adapter_ids": ["echo-adapter", "mock-adapter-v1"],
+        },
+    )
+    assert bench.status_code in (200, 201), bench.text
+    runs = api_client.get(f"{API}/experiments/exp-provenance/runs").json()["items"]
+    assert sorted(r["adapter_id"] for r in runs) == ["echo-adapter", "mock-adapter-v1"]
+    for r in runs:
+        assert r["executed_model_ids"] == [r["adapter_id"]]

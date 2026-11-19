@@ -23,6 +23,7 @@ from llm_reliability.providers.base import ProviderConfig
 from llm_reliability.providers.openai_provider import (
     OpenAIProviderAdapter,
     get_openai_api_key_from_env,
+    get_openai_base_url_from_env,
 )
 from llm_reliability.rag.documents import ChunkingConfig, Document, FixedSizeChunker
 from llm_reliability.rag.embeddings import FakeEmbeddingModel
@@ -149,7 +150,11 @@ class AdapterRegistry:
                 client=cfg.get("client") if cfg else None,
                 sleeper=cfg.get("sleeper") if cfg else None,
             ),
+            # Generic OpenAI-compatible endpoint (Ollama, vLLM, LM Studio). The
+            # served model name comes from the experiment's model_config.model_id
+            # and the URL from LLM_RELIABILITY_OPENAI_BASE_URL / OPENAI_BASE_URL.
             "openai-custom": lambda cfg: OpenAIProviderAdapter(
+                use_request_model=True,
                 config=ProviderConfig(
                     provider_id="openai-compatible",
                     model_id=str(cfg.get("model_id", "custom-model")) if cfg else "custom-model",
@@ -252,7 +257,7 @@ def get_providers_metadata() -> list[dict[str, Any]]:
             "provider_id": "openai-compatible",
             "name": "OpenAI-Compatible (Local / Self-Hosted)",
             "is_configured": True,
-            "base_url": os.environ.get("OPENAI_BASE_URL"),
+            "base_url": get_openai_base_url_from_env(),
             "requires_api_key": False,
             "supported_models": [
                 {

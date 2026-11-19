@@ -271,6 +271,12 @@ class ExperimentRun:
     error: str | None = None
     benchmark_id: str | None = None
     repetition_index: int = 0
+    # Execution provenance: which allowlisted adapter actually produced the
+    # responses. Deliberately NOT part of ``config_fingerprint``: the
+    # fingerprint identifies the experiment configuration, while the adapter is
+    # an execution condition (the same experiment may be benchmarked against
+    # several adapters). ``None`` for runs persisted before this field existed.
+    adapter_id: str | None = None
 
     def __post_init__(self) -> None:
         if not self.run_id or not self.run_id.strip():
@@ -281,6 +287,22 @@ class ExperimentRun:
     @property
     def succeeded(self) -> bool:
         return self.status == RunStatus.SUCCEEDED
+
+    @property
+    def executed_model_ids(self) -> list[str]:
+        """Distinct model ids reported by the responses actually produced in this run.
+
+        This is what really answered, as reported by the adapter/provider, and
+        can differ from ``model_config.model_id`` (the experiment's declared
+        model) -- for example when an experiment is benchmarked against a mock.
+        """
+        if self.result is None:
+            return []
+        seen: dict[str, None] = {}
+        for tc in self.result.test_case_results:
+            if tc.model_response is not None:
+                seen.setdefault(tc.model_response.model_id, None)
+        return list(seen)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -298,6 +320,7 @@ class ExperimentRun:
             "error": self.error,
             "benchmark_id": self.benchmark_id,
             "repetition_index": self.repetition_index,
+            "adapter_id": self.adapter_id,
         }
 
     def to_json(self) -> str:
@@ -326,6 +349,7 @@ class ExperimentRun:
             error=data.get("error"),
             benchmark_id=data.get("benchmark_id"),
             repetition_index=int(data.get("repetition_index", 0)),
+            adapter_id=data.get("adapter_id"),
         )
         expected_fingerprint = compute_experiment_fingerprint(
             dataset_version.version_id,

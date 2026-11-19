@@ -90,6 +90,7 @@ class ExperimentManager:
         run_id: str | None = None,
         benchmark_id: str | None = None,
         repetition_index: int = 0,
+        adapter_id: str | None = None,
     ) -> ExperimentRun:
         """Execute ``definition`` once via ``EvaluationRunner`` and persist the run.
 
@@ -142,6 +143,7 @@ class ExperimentManager:
             error=error,
             benchmark_id=benchmark_id,
             repetition_index=repetition_index,
+            adapter_id=adapter_id,
         )
         self._repository.save_run(run)
         return run

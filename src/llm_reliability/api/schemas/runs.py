@@ -58,6 +58,8 @@ class RunSummaryResponse(BaseApiSchema):
     num_passed: int | None = None
     pass_rate: float | None = None
     error: str | None = None
+    adapter_id: str | None = None
+    executed_model_ids: list[str] = Field(default_factory=list)
 
 
 class RunDetailResponse(BaseApiSchema):
@@ -78,6 +80,8 @@ class RunDetailResponse(BaseApiSchema):
     pass_rate: float | None = None
     test_case_results: list[TestCaseResultResponse] = Field(default_factory=list)
     error: str | None = None
+    adapter_id: str | None = None
+    executed_model_ids: list[str] = Field(default_factory=list)
 
 
 class RunSummariesResponse(BaseApiSchema):

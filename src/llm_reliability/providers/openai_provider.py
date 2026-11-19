@@ -29,6 +29,11 @@ from llm_reliability.providers.base import (
 )
 
 
+def get_openai_base_url_from_env() -> str | None:
+    """Base URL for OpenAI-compatible servers, from the server environment."""
+    return os.environ.get("LLM_RELIABILITY_OPENAI_BASE_URL") or os.environ.get("OPENAI_BASE_URL")
+
+
 def get_openai_api_key_from_env() -> str | None:
     """Retrieve OpenAI API key strictly from server environment variables."""
     return os.environ.get("LLM_RELIABILITY_OPENAI_API_KEY") or os.environ.get("OPENAI_API_KEY")
@@ -43,14 +48,25 @@ class OpenAIProviderAdapter(BaseProviderAdapter):
         client: OpenAI | None = None,
         api_key: str | None = None,
         sleeper: Callable[[float], None] | None = None,
+        use_request_model: bool = False,
     ) -> None:
+        """``use_request_model`` selects which model id is sent to the provider.
+
+        ``False`` (default): the adapter is bound to ``config.model_id`` (for
+        example the allowlisted ``openai-gpt-4o-mini`` adapter always calls
+        ``gpt-4o-mini``), regardless of the experiment's declared model id.
+        ``True``: the experiment's ``ModelConfig.model_id`` is sent, which is
+        what a generic OpenAI-compatible endpoint (Ollama, vLLM) needs, since
+        the served model name is chosen per experiment.
+        """
         super().__init__(config=config, sleeper=sleeper)
+        self._use_request_model = use_request_model
 
         if client is not None:
             self._client = client
         else:
             resolved_key = api_key or get_openai_api_key_from_env()
-            base_url = config.base_url or os.environ.get("OPENAI_BASE_URL")
+            base_url = config.base_url or get_openai_base_url_from_env()
 
             # Local servers (e.g. Ollama, vLLM) typically don't require a real OpenAI key
             is_local = base_url and any(
@@ -78,7 +94,11 @@ class OpenAIProviderAdapter(BaseProviderAdapter):
         return self._client
 
     def _execute_inference(self, prompt: str, model_config: ModelConfig) -> ProviderInferenceResult:
-        model = model_config.model_id or self.config.model_id
+        model = (
+            model_config.model_id
+            if self._use_request_model and model_config.model_id
+            else self.config.model_id
+        )
 
         kwargs: dict[str, Any] = {
             "model": model,

@@ -134,10 +134,16 @@ class BaseProviderAdapter(ModelAdapter):
 
         while attempt <= self._config.max_retries:
             attempt += 1
+            attempt_start = time.perf_counter()
             try:
                 result = self._execute_inference(request.input_text, request.model_config)
                 end_perf = time.perf_counter()
-                latency_ms = (end_perf - start_perf) * 1000.0
+                # ``latency_ms`` is the duration of the successful attempt only,
+                # so it measures the provider, not our retry back-off sleeps.
+                # The end-to-end time including failed attempts and back-off is
+                # kept separately for operational analysis.
+                latency_ms = (end_perf - attempt_start) * 1000.0
+                total_elapsed_ms = (end_perf - start_perf) * 1000.0
 
                 # Determine token provenance
                 has_tokens = (
@@ -153,6 +159,7 @@ class BaseProviderAdapter(ModelAdapter):
                     "finish_reason": result.finish_reason,
                     "system_fingerprint": result.system_fingerprint,
                     "attempts": attempt,
+                    "total_elapsed_ms": total_elapsed_ms,
                     "provider_latency_ms": result.provider_latency_ms,
                     "token_source": token_source,
                 }

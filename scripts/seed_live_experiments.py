@@ -196,10 +196,18 @@ def seed_store(store_path: Path) -> None:
 
     if not repo.list_run_ids(exp1_id):
         manager.execute_experiment(
-            definition_k1, pipeline_k1, evaluators, run_id="run-rag-baseline-001"
+            definition_k1,
+            pipeline_k1,
+            evaluators,
+            run_id="run-rag-baseline-001",
+            adapter_id="rag-pipeline-v1",
         )
         manager.execute_experiment(
-            definition_k1, pipeline_k1, evaluators, run_id="run-rag-baseline-002"
+            definition_k1,
+            pipeline_k1,
+            evaluators,
+            run_id="run-rag-baseline-002",
+            adapter_id="rag-pipeline-v1",
         )
 
     # 2. Controlled Intervention RAG Experiment Definition (Top-K=2)
@@ -220,7 +228,11 @@ def seed_store(store_path: Path) -> None:
 
     if not repo.list_run_ids(exp2_id):
         manager.execute_experiment(
-            definition_k2, pipeline_k2, evaluators, run_id="run-rag-topk2-001"
+            definition_k2,
+            pipeline_k2,
+            evaluators,
+            run_id="run-rag-topk2-001",
+            adapter_id="rag-pipeline-topk-2",
         )
 
     # 3. Small non-RAG experiment for contrast (different dataset version)
@@ -254,7 +266,11 @@ def seed_store(store_path: Path) -> None:
 
     if not repo.list_run_ids(exp3_id):
         manager.execute_experiment(
-            plain_definition, plain_adapter, plain_evaluators, run_id="run-non-rag-001"
+            plain_definition,
+            plain_adapter,
+            plain_evaluators,
+            run_id="run-non-rag-001",
+            adapter_id="mock-adapter-v1",
         )
 
     print(f"Successfully seeded experiment repository at: {store_path.resolve()}")

@@ -93,6 +93,7 @@ def execute_benchmark(
                     run_id=run_id,
                     benchmark_id=benchmark_id,
                     repetition_index=rep,
+                    adapter_id=adapter_id,
                 )
             except Exception as exc:
                 raise ExecutionError(

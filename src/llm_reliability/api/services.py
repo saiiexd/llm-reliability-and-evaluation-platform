@@ -243,6 +243,8 @@ def to_run_summary(run: ExperimentRun) -> RunSummaryResponse:
         num_passed=run.result.num_passed if run.result else 0,
         pass_rate=run.result.pass_rate if run.result else 0.0,
         error=run.error,
+        adapter_id=run.adapter_id,
+        executed_model_ids=run.executed_model_ids,
     )
 
 
@@ -332,6 +334,8 @@ def to_run_detail(run: ExperimentRun, include_test_cases: bool = True) -> RunDet
         pass_rate=run.result.pass_rate if run.result else 0.0,
         test_case_results=test_case_results,
         error=run.error,
+        adapter_id=run.adapter_id,
+        executed_model_ids=run.executed_model_ids,
     )
 
 

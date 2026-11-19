@@ -227,6 +227,7 @@ def execute_experiment(
             adapter=adapter,
             evaluators=evaluators,
             run_id=req.run_id,
+            adapter_id=req.adapter_id,
         )
     except Exception as exc:
         raise ExecutionError(f"Execution failed: {exc}") from exc

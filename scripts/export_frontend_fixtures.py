@@ -232,9 +232,13 @@ def main() -> int:
             ),
         )
         # Run 1: Primary baseline execution
-        run_1 = manager.execute_experiment(definition_k1, pipeline_k1, evaluators)
+        run_1 = manager.execute_experiment(
+            definition_k1, pipeline_k1, evaluators, adapter_id="rag-pipeline-v1"
+        )
         # Run 2: Repeated baseline execution (testing stability / reproducibility)
-        run_2_repeated = manager.execute_experiment(definition_k1, pipeline_k1, evaluators)
+        run_2_repeated = manager.execute_experiment(
+            definition_k1, pipeline_k1, evaluators, adapter_id="rag-pipeline-v1"
+        )
 
         # 2. Controlled Intervention RAG Experiment Definition (Top-K=2)
         definition_k2 = manager.create_experiment(
@@ -248,7 +252,9 @@ def main() -> int:
             ),
         )
         # Run 3: Controlled intervention execution
-        run_3_intervention = manager.execute_experiment(definition_k2, pipeline_k2, evaluators)
+        run_3_intervention = manager.execute_experiment(
+            definition_k2, pipeline_k2, evaluators, adapter_id="rag-pipeline-topk-2"
+        )
 
         # 3. Small non-RAG experiment for contrast (different dataset version)
         plain_dataset = Dataset(
@@ -270,7 +276,9 @@ def main() -> int:
             evaluators=plain_evaluators,
             description="A plain (non-RAG) experiment, for contrast with the RAG demonstration.",
         )
-        run_plain = manager.execute_experiment(plain_definition, plain_adapter, plain_evaluators)
+        run_plain = manager.execute_experiment(
+            plain_definition, plain_adapter, plain_evaluators, adapter_id="mock-adapter-v1"
+        )
 
         # Reload all runs from persistence
         fresh_repo = LocalFileExperimentRepository(store_dir)

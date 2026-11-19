@@ -286,3 +286,55 @@ def test_missing_api_key_raises_auth_error_without_leaking_secrets() -> None:
         OpenAIProviderAdapter(config=config, client=None, api_key=None)
 
     assert "OpenAI API key is missing" in str(exc_info.value)
+
+
+def _adapter_with(mock_client: MagicMock, *, use_request_model: bool) -> OpenAIProviderAdapter:
+    config = ProviderConfig(
+        provider_id="openai", model_id="gpt-4o-mini", allow_external_inference=True
+    )
+    return OpenAIProviderAdapter(
+        config=config, client=mock_client, use_request_model=use_request_model
+    )
+
+
+def test_bound_adapter_sends_its_own_model_not_the_experiment_label() -> None:
+    """An adapter bound to gpt-4o-mini must not send the experiment's model label."""
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = _build_fake_chat_completion()
+    adapter = _adapter_with(mock_client, use_request_model=False)
+    adapter.generate(ExecutionRequest("tc-1", "q", ModelConfig(model_id="some-experiment-label")))
+    assert mock_client.chat.completions.create.call_args.kwargs["model"] == "gpt-4o-mini"
+
+
+def test_openai_compatible_adapter_sends_experiment_model() -> None:
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = _build_fake_chat_completion(
+        model="qwen3:4b-instruct"
+    )
+    adapter = _adapter_with(mock_client, use_request_model=True)
+    resp = adapter.generate(
+        ExecutionRequest("tc-1", "q", ModelConfig(model_id="qwen3:4b-instruct"))
+    )
+    assert mock_client.chat.completions.create.call_args.kwargs["model"] == "qwen3:4b-instruct"
+    assert resp.model_id == "qwen3:4b-instruct"
+
+
+def test_latency_excludes_retry_backoff() -> None:
+    """latency_ms covers the successful attempt; back-off sleeps go in total_elapsed_ms."""
+    import time as _time
+
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.side_effect = [
+        ProviderRateLimitError("slow down"),
+        _build_fake_chat_completion(),
+    ]
+    config = ProviderConfig(
+        provider_id="openai", model_id="gpt-4o-mini", allow_external_inference=True
+    )
+    adapter = OpenAIProviderAdapter(
+        config=config, client=mock_client, sleeper=lambda s: _time.sleep(0.05)
+    )
+    resp = adapter.generate(ExecutionRequest("tc-1", "q", ModelConfig(model_id="gpt-4o-mini")))
+    assert resp.provider_metadata["attempts"] == 2
+    assert resp.latency_ms is not None and resp.latency_ms < 40
+    assert resp.provider_metadata["total_elapsed_ms"] >= 50
