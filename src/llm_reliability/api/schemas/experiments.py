@@ -62,7 +62,9 @@ class ExperimentDetailResponse(BaseApiSchema):
 class CreateTestCaseRequest(BaseApiSchema):
     id: str = Field(min_length=1)
     input: str = Field(min_length=1)
-    reference_answer: str = Field(min_length=1)
+    # Optional: reference-free cases are supported by the engine (reference-based
+    # evaluators report SKIPPED for them; faithfulness can still be judged).
+    reference_answer: str | None = Field(default=None, min_length=1)
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 

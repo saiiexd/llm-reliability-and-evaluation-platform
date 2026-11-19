@@ -84,3 +84,25 @@ def test_runs_record_the_adapter_that_actually_executed(api_client: TestClient) 
     assert sorted(r["adapter_id"] for r in runs) == ["echo-adapter", "mock-adapter-v1"]
     for r in runs:
         assert r["executed_model_ids"] == [r["adapter_id"]]
+
+
+def test_reference_free_case_is_accepted_and_skipped_not_failed(api_client: TestClient) -> None:
+    create = api_client.post(
+        f"{API}/experiments",
+        json={
+            "experiment_id": "exp-reference-free",
+            "name": "Reference-free",
+            "dataset_name": "d",
+            "test_cases": [{"id": "tc-1", "input": "Say something"}],
+            "model_config": {"model_id": "echo-adapter"},
+            "evaluator_names": ["exact_match"],
+        },
+    )
+    assert create.status_code == 201, create.text
+    run = api_client.post(
+        f"{API}/experiments/exp-reference-free/execute", json={"adapter_id": "echo-adapter"}
+    ).json()
+    detail = api_client.get(f"{API}/runs/{run['run_id']}").json()
+    evaluation = detail["test_case_results"][0]["evaluations"][0]
+    assert evaluation["status"] == "skipped"
+    assert evaluation["passed"] is None

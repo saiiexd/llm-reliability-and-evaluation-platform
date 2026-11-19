@@ -128,3 +128,26 @@ def test_compare_runs() -> None:
     assert em_comp["numerators"]["run-2"] == 0
     assert em_comp["denominators"]["run-1"] == 1
     assert em_comp["denominators"]["run-2"] == 1
+
+
+def test_same_fingerprint_different_adapters_is_not_a_repeated_trial() -> None:
+    """A benchmark of one experiment on two adapters compares systems, not noise."""
+    r1 = _make_run("run-1", "ds-v1", "Q1", "fp-aaa")
+    r2 = _make_run("run-2", "ds-v1", "Q1", "fp-aaa")
+    r1.adapter_id = "mock-adapter-v1"
+    r2.adapter_id = "openai-custom"
+
+    compat, reasons, diffs = assess_compatibility([r1, r2])
+    assert compat == ComparisonCompatibility.PARTIALLY_DIFFERENT_CONFIGURATION
+    assert "different adapters" in reasons[0]
+    assert diffs["adapters"] == {"run-1": "mock-adapter-v1", "run-2": "openai-custom"}
+
+
+def test_unknown_adapter_on_legacy_run_is_flagged() -> None:
+    r1 = _make_run("run-1", "ds-v1", "Q1", "fp-aaa")
+    r2 = _make_run("run-2", "ds-v1", "Q1", "fp-aaa")
+    r1.adapter_id = "mock-adapter-v1"
+
+    compat, reasons, _ = assess_compatibility([r1, r2])
+    assert compat == ComparisonCompatibility.IDENTICAL_CONFIGURATION
+    assert any("not recorded" in r for r in reasons)

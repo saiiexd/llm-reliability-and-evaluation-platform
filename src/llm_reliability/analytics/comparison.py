@@ -72,11 +72,20 @@ def assess_compatibility(
         r.run_id: sorted([e.evaluator_name for e in r.evaluator_configs]) for r in runs
     }
 
+    # 5. Inspect execution adapters (what actually produced the answers). The
+    # config fingerprint does not include the adapter, so two runs of the same
+    # experiment on different adapters share a fingerprint but are different
+    # systems, not repeated trials.
+    adapters = {r.run_id: r.adapter_id for r in runs}
+    known_adapters = {a for a in adapters.values() if a is not None}
+    unknown_adapter_runs = sorted(rid for rid, a in adapters.items() if a is None)
+
     diffs: dict[str, Any] = {
         "dataset_versions": dataset_versions,
         "config_fingerprints": fingerprints,
         "model_configs": model_configs,
         "evaluators": evaluator_sets,
+        "adapters": adapters,
     }
 
     # Methodological compatibility logic
@@ -88,7 +97,21 @@ def assess_compatibility(
         )
         return ComparisonCompatibility.MATERIALLY_INCOMPATIBLE, reasons, diffs
 
+    if len(known_adapters) > 1:
+        reasons.append(
+            f"Runs share the dataset version but were executed by different adapters "
+            f"({', '.join(sorted(known_adapters))}). Differences reflect the systems under "
+            "test, not run-to-run variation."
+        )
+        return ComparisonCompatibility.PARTIALLY_DIFFERENT_CONFIGURATION, reasons, diffs
+
     if len(distinct_fingerprints) == 1:
+        if unknown_adapter_runs and known_adapters:
+            reasons.append(
+                "The executing adapter was not recorded for "
+                f"{', '.join(unknown_adapter_runs)} (older record); it cannot be confirmed "
+                "that every run used the same system."
+            )
         reasons.append(
             f"All {len(runs)} runs share identical configuration fingerprint "
             f"('{list(distinct_fingerprints)[0][:8]}...'). Variations represent stochasticity, "
