@@ -92,8 +92,10 @@ describe("experiment actions send unchanged requests", () => {
 
     fireEvent.click(await screen.findByRole("button", { name: "Run" }));
     await waitFor(() => expect(execute).toHaveBeenCalledTimes(1));
+    // Non-RAG experiment (no extra_params.rag) defaults to the plain mock
+    // adapter; a RAG pipeline would not match its recorded configuration.
     expect(execute).toHaveBeenCalledWith("exp-x", {
-      adapter_id: "rag-pipeline-v1",
+      adapter_id: "mock-adapter-v1",
       allow_external_inference: false,
       model_config: undefined,
     });
