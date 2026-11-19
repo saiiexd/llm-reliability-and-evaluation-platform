@@ -259,6 +259,11 @@ def main() -> int:
     parser.add_argument("--store", type=Path, default=REPO_ROOT / "experiments")
     parser.add_argument("--limit", type=int, default=None, help="pilot: first N questions only")
     parser.add_argument("--arms", default=",".join(a.key for a in ARMS))
+    parser.add_argument(
+        "--allow-env-change",
+        action="store_true",
+        help="append runs to existing experiments even if Ollama model digests differ",
+    )
     args = parser.parse_args()
 
     raw = json.loads(DATA_PATH.read_text(encoding="utf-8"))
@@ -324,6 +329,15 @@ def main() -> int:
         evs = evaluators()
         if exp_id in repo.list_experiment_ids():
             definition = manager.load_experiment(exp_id)
+            recorded = (definition.metadata.get("study") or {}).get("model_digests")
+            if recorded and recorded != env["model_digests"] and not args.allow_env_change:
+                raise SystemExit(
+                    f"{exp_id} was defined with model digests {recorded}, but this machine has "
+                    f"{env['model_digests']}. New runs would be filed under an environment that "
+                    "did "
+                    "not produce them. Use a new --store (fresh experiments), or pass "
+                    "--allow-env-change to append anyway (and document it)."
+                )
         else:
             retrieval = "closed book" if arm.top_k is None else f"top-{arm.top_k} retrieval"
             definition = manager.create_experiment(

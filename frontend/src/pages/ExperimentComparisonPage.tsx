@@ -93,7 +93,9 @@ export function ExperimentComparisonPage() {
   const { data: allRuns } = useRuns();
   const { dataMode } = useConnection();
   const live = dataMode === "live";
-  const [preset, setPreset] = useState(live ? "pick" : "identical");
+  const [chosenPreset, setPreset] = useState(live ? "pick" : "identical");
+  // "Pick two runs" needs the live API; in demo mode fall back to a demo preset.
+  const preset = !live && chosenPreset === "pick" ? "identical" : chosenPreset;
   const sortedRuns = [...(allRuns ?? [])].sort((a, b) => b.started_at.localeCompare(a.started_at));
   const [pickA, setPickA] = useState("");
   const [pickB, setPickB] = useState("");

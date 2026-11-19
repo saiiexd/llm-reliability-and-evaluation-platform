@@ -5,6 +5,15 @@ intervals and environment are in [`results_tables.md`](results_tables.md) (gener
 [`results.json`](results.json). Every answer and verdict is in [`per_case.csv`](per_case.csv).
 Design and hypotheses: [`definition.md`](definition.md) (written before the run).
 
+**Raw runs.** All 9 persisted runs (prompts, retrieved passages, outputs, every evaluator result,
+provenance) are archived in [`runs.tar.gz`](runs.tar.gz) (0.6 MB). To load them into the console
+and re-run the analysis:
+
+```bash
+tar xzf research/experiments/EXP-001_local_rag_reliability/runs.tar.gz -C experiments
+python scripts/analyze_reliability_study.py
+```
+
 **Observed** marks a measurement. **Interpretation** marks what we think it means.
 
 ## 1. Headline numbers (first run of each arm, n = 60, 95% Wilson intervals)
@@ -63,7 +72,8 @@ hides.
 **Evaluator choice changes the conclusion more than model choice does.** For the same 60 qwen top-3
 answers, "accuracy" is 30%, 43% or 58% depending on the evaluator. That spread (28 points) is larger
 than every model or retrieval-depth difference measured. Exact match never passed an answer the
-judge failed (0 cases in the "EM only" cell in every arm), so its errors are all false negatives.
+judge failed (0 cases in the "EM only" cell in every arm), so *relative to the judge* its errors are
+all false negatives (the judge itself is not yet validated against humans).
 
 **The judge is not uniformly lenient.** In 4 qwen top-3 cases SQuAD EM passed but the judge did
 not; in 13 the judge passed what SQuAD EM failed (mostly correct but longer answers). Spot checks show the judge marking "the Henry Cole wing" vs gold "Henry Cole wing", and "pharma"

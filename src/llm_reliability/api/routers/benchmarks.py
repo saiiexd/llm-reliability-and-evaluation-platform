@@ -75,6 +75,24 @@ def execute_benchmark(
             f"Configured evaluator could not be resolved from allowlisted registry: {exc}"
         ) from exc
 
+    # Validate every adapter against the definition before executing any, so a
+    # mismatch (e.g. a top-1 pipeline on a top-2 experiment) is a clean 400
+    # instead of a benchmark whose first adapters' runs were already saved.
+    for adapter_id in req.adapter_ids:
+        try:
+            manager.validate_execution(
+                defn,
+                adapter_registry.get(
+                    adapter_id,
+                    config={"allow_external_inference": req.allow_external_inference},
+                ),
+                evaluators,
+            )
+        except ValueError as exc:
+            raise ExecutionError(
+                f"Adapter '{adapter_id}' cannot run this experiment: {exc}"
+            ) from exc
+
     benchmark_id = f"bench-{uuid.uuid4().hex[:8]}"
     run_responses: list[RunExecutionResponse] = []
 

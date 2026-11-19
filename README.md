@@ -530,9 +530,13 @@ python scripts/analyze_reliability_study.py    # writes results.json and results
 ```
 
 The runs land in `./experiments` and appear in the console like any other run, without the
-Simulated label. From the console, the `openai-custom` adapter can also call any
-OpenAI-compatible server: set `LLM_RELIABILITY_OPENAI_BASE_URL=http://localhost:11434/v1`, use the
-served model name as the experiment's model id, and tick the external-inference opt-in.
+Simulated label. From the console or API, the `openai-custom` adapter can also call any
+OpenAI-compatible server (verified with Ollama): export
+`LLM_RELIABILITY_OPENAI_BASE_URL=http://localhost:11434/v1` in the shell that starts the backend
+(the provider reads the process environment, not `.env`), use the served model name (e.g.
+`qwen3:4b-instruct`) as the experiment's model id, and tick the external-inference opt-in. Without
+the opt-in the server refuses with 400. Judges in the console registry are still the canned fakes;
+real judges are wired in the study script.
 
 ### Data and secrets rules
 

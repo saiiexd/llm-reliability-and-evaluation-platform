@@ -10,7 +10,7 @@ and in the platform. Each item has evidence and a proposed fix.
 | E1 | Faithfulness judge labels abstentions `supported` | 8/8 "I don't know" answers in RAG arms | Faithfulness rate inflated; an abstention is counted as a supported claim | Rubric v2 with a `no_claim` outcome (passed = None) |
 | E2 | Correctness judge is stricter than the gold set on surface variants | "the Henry Cole wing" vs "Henry Cole wing", "pharma" vs "its root word pharma" → `partially_correct` (4 such cases in qwen top-3) | Judge false negatives; `partially_correct` counts as fail | Give the judge all gold answers; report `partially_correct` separately |
 | E3 | Judge output truncated by `max_tokens = 200` | 1 `output_validation_error` (qwen top-1): unterminated JSON string in a long reasoning | The case is "not scored" for faithfulness (correctly not a pass or fail) | Raise judge `max_tokens`, or ask for one-sentence reasoning |
-| E4 | Exact match only produces false negatives here | "EM pass, judge fail" = 0 in every arm; 15–18 "judge pass, EM fail" per RAG arm | Any-fail case verdict and diagnosis are dominated by formatting | Use SQuAD EM / F1 as the lexical baseline for extractive QA; keep EM only as a formatting check |
+| E4 | Relative to the (unvalidated) judge, exact match only produces false negatives | "EM pass, judge fail" = 0 in every arm; 15–18 "judge pass, EM fail" per RAG arm | Any-fail case verdict and diagnosis are dominated by formatting | Use SQuAD EM / F1 as the lexical baseline for extractive QA; keep EM only as a formatting check |
 | E5 | Self-judging | Judge = qwen3:4b, also the main generator | Model comparison confounded | Neutral judge (EXP-002/004) |
 
 ## System-under-test failures (observed, interpretation separated)

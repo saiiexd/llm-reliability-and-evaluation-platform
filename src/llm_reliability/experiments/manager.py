@@ -118,28 +118,18 @@ class ExperimentManager:
         self._repository.save_experiment(definition)
         return definition
 
-    def execute_experiment(
+    def validate_execution(
         self,
         definition: ExperimentDefinition,
         adapter: ModelAdapter,
         evaluators: Sequence[Evaluator],
-        run_id: str | None = None,
-        benchmark_id: str | None = None,
-        repetition_index: int = 0,
-        adapter_id: str | None = None,
-    ) -> ExperimentRun:
-        """Execute ``definition`` once via ``EvaluationRunner`` and persist the run.
+    ) -> None:
+        """Raise ``ValueError`` if executing ``definition`` with these components would
+        record a run under a configuration that did not produce it.
 
-        ``evaluators`` must match ``definition.evaluator_configs`` by name
-        and order; this is a consistency check, not a re-derivation of
-        configuration, so that a run can never be silently recorded against
-        evaluators different from the ones the experiment declares. Raises
-        ``ValueError`` if they do not match.
-
-        ``run_id`` defaults to a freshly generated, random identifier: run
-        identity only needs to be unique, not reproducible, since two runs
-        of the same experiment are expected to have different run ids even
-        when their configuration is identical.
+        Called by ``execute_experiment``; callers that execute several adapters
+        (benchmarks) should call it for every adapter *before* executing any, so a
+        mismatch does not leave a partially persisted benchmark behind.
         """
         configured_names = [ec.evaluator_name for ec in definition.evaluator_configs]
         supplied_names = [e.name for e in evaluators]
@@ -174,6 +164,31 @@ class ExperimentManager:
                     f"{supplied_config!r}. Define a new experiment for the new configuration."
                 )
         _check_rag_config_matches(definition, adapter)
+
+    def execute_experiment(
+        self,
+        definition: ExperimentDefinition,
+        adapter: ModelAdapter,
+        evaluators: Sequence[Evaluator],
+        run_id: str | None = None,
+        benchmark_id: str | None = None,
+        repetition_index: int = 0,
+        adapter_id: str | None = None,
+    ) -> ExperimentRun:
+        """Execute ``definition`` once via ``EvaluationRunner`` and persist the run.
+
+        ``evaluators`` must match ``definition.evaluator_configs`` by name
+        and order; this is a consistency check, not a re-derivation of
+        configuration, so that a run can never be silently recorded against
+        evaluators different from the ones the experiment declares. Raises
+        ``ValueError`` if they do not match.
+
+        ``run_id`` defaults to a freshly generated, random identifier: run
+        identity only needs to be unique, not reproducible, since two runs
+        of the same experiment are expected to have different run ids even
+        when their configuration is identical.
+        """
+        self.validate_execution(definition, adapter, evaluators)
         if run_id is None:
             run_id = uuid.uuid4().hex
 

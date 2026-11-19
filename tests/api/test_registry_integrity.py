@@ -224,3 +224,18 @@ def test_generation_telemetry_reaches_the_api(tmp_path) -> None:
         1,
         4,
     )
+
+
+def test_benchmark_validates_all_adapters_before_running_any(api_client: TestClient) -> None:
+    before = api_client.get(f"{API}/experiments/exp-reliability-console-demo/runs").json()
+    response = api_client.post(
+        f"{API}/benchmarks/execute",
+        json={
+            "experiment_id": "exp-reliability-console-demo",
+            "adapter_ids": ["rag-pipeline-v1", "rag-pipeline-topk-2"],
+        },
+    )
+    assert response.status_code == 400
+    assert "rag-pipeline-topk-2" in response.json()["error"]["message"]
+    after = api_client.get(f"{API}/experiments/exp-reliability-console-demo/runs").json()
+    assert after["pagination"]["total"] == before["pagination"]["total"]
