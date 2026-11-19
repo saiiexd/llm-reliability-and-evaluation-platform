@@ -116,3 +116,19 @@ def test_seeded_runs_are_labelled_simulated(api_client: TestClient) -> None:
     assert "canned judge" in joined
     summary = api_client.get(f"{API}/runs?limit=50").json()["items"]
     assert all(r["simulated_components"] for r in summary)
+
+
+def test_rag_pipeline_must_match_declared_retrieval_config(api_client: TestClient) -> None:
+    """A top_k=2 experiment must not be recorded from a top_k=1 pipeline."""
+    wrong = api_client.post(
+        f"{API}/experiments/exp-reliability-topk2-demo/execute",
+        json={"adapter_id": "rag-pipeline-v1"},
+    )
+    assert wrong.status_code == 400
+    assert "top_k" in wrong.json()["error"]["message"]
+
+    right = api_client.post(
+        f"{API}/experiments/exp-reliability-topk2-demo/execute",
+        json={"adapter_id": "rag-pipeline-topk-2"},
+    )
+    assert right.status_code == 201, right.text

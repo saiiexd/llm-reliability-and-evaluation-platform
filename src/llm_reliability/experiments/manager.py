@@ -43,6 +43,37 @@ def _determine_status(result: RunResult | None) -> RunStatus:
     return RunStatus.PARTIALLY_SUCCEEDED
 
 
+def _check_rag_config_matches(definition: ExperimentDefinition, adapter: ModelAdapter) -> None:
+    """Refuse to run a RAG pipeline whose retrieval settings differ from the definition's.
+
+    A RAG experiment records its pipeline configuration (top_k, chunking,
+    embedding model, corpus fingerprint, prompt template) in
+    ``model_config.extra_params["rag"]``, and that record is part of the
+    configuration fingerprint. Executing it with a pipeline configured
+    differently (for example top_k=1 for a top_k=2 experiment) would store a
+    run whose recorded configuration is not the one that produced it.
+
+    Duck-typed (``adapter.config.to_dict()`` with a ``corpus_fingerprint``) to
+    avoid an import cycle with ``llm_reliability.rag``. Non-RAG adapters, and
+    definitions that declare no RAG configuration, are not checked.
+    """
+    declared = definition.model_config.extra_params.get("rag")
+    adapter_config = getattr(adapter, "config", None)
+    if not isinstance(declared, dict) or not hasattr(adapter_config, "corpus_fingerprint"):
+        return
+    actual = adapter_config.to_dict()  # type: ignore[union-attr]
+    differing = sorted(k for k in set(declared) | set(actual) if declared.get(k) != actual.get(k))
+    if differing:
+        details = ", ".join(
+            f"{k}: declared {declared.get(k)!r}, pipeline {actual.get(k)!r}" for k in differing
+        )
+        raise ValueError(
+            f"RAG pipeline configuration does not match experiment "
+            f"'{definition.experiment_id}' ({details}). Choose the adapter that matches the "
+            "experiment, or define a new experiment for this configuration."
+        )
+
+
 class ExperimentManager:
     """Creates, executes, and persists experiments using a given repository."""
 
@@ -128,6 +159,7 @@ class ExperimentManager:
                     f"{declared.parameters!r} but the supplied evaluator is configured as "
                     f"{supplied_config!r}. Define a new experiment for the new configuration."
                 )
+        _check_rag_config_matches(definition, adapter)
         if run_id is None:
             run_id = uuid.uuid4().hex
 

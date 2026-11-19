@@ -224,3 +224,8 @@ export function experimentCaseCount(e: ExperimentDefinition): number {
   return e.dataset_version?.test_case_count ?? e.dataset_version?.test_cases?.length ?? e.test_case_count ?? 0;
 }
 
+
+/** Short display form of a run id: random hex ids are cut to 8 chars, readable ids are kept. */
+export function shortRunId(runId: string): string {
+  return /^[0-9a-f]{32}$/.test(runId) ? runId.slice(0, 8) : runId;
+}

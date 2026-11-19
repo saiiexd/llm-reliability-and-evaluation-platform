@@ -12,6 +12,7 @@ import {
   formatTimestamp,
   runPassCounts,
   shortFingerprint,
+  shortRunId,
 } from "../lib/derived";
 import { useExperiment, useRuns } from "../data/useData";
 import { useConnection } from "../context/ConnectionContext";
@@ -29,6 +30,17 @@ const ADAPTERS = [
 ];
 
 const isExternal = (id: string) => ADAPTERS.find((a) => a.id === id)?.isExternal ?? false;
+
+/**
+ * Pick the adapter that matches how the experiment was defined. The backend
+ * refuses a RAG pipeline whose top_k etc. differ from the experiment's
+ * recorded retrieval settings, so the default should be the matching one.
+ */
+function defaultAdapterFor(experiment: ExperimentDefinition | null | undefined): string {
+  const rag = experiment?.model_config?.extra_params?.rag as { top_k?: number } | undefined;
+  if (!rag) return "mock-adapter-v1";
+  return rag.top_k === 2 ? "rag-pipeline-topk-2" : "rag-pipeline-v1";
+}
 
 function Section({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
   return (
@@ -66,10 +78,18 @@ function ExternalConsent({
   );
 }
 
-function RunControls({ experimentId, onRan }: { experimentId: string; onRan: () => void }) {
+function RunControls({
+  experimentId,
+  defaultAdapter,
+  onRan,
+}: {
+  experimentId: string;
+  defaultAdapter: string;
+  onRan: () => void;
+}) {
   const { dataMode, executeRun, executeBenchmark, client } = useConnection();
   const [mode, setMode] = useState<"single" | "benchmark">("single");
-  const [adapter, setAdapter] = useState("rag-pipeline-v1");
+  const [adapter, setAdapter] = useState(defaultAdapter);
   const [benchAdapters, setBenchAdapters] = useState<string[]>(["mock-adapter-v1", "echo-adapter"]);
   const [repetitions, setRepetitions] = useState(1);
   const [allowExternal, setAllowExternal] = useState(false);
@@ -350,7 +370,11 @@ export function ExperimentDetailPage() {
             <FixtureNotice />
 
             <div className="space-y-6">
-              <RunControls experimentId={experimentId} onRan={() => void refetchRuns()} />
+              <RunControls
+                experimentId={experimentId}
+                defaultAdapter={defaultAdapterFor(experiment)}
+                onRan={() => void refetchRuns()}
+              />
 
               <Section title={`Past runs (${runList.length})`}>
                 {runList.length === 0 ? (
@@ -367,7 +391,7 @@ export function ExperimentDetailPage() {
                           >
                             <p className="text-sm sm:col-span-4">
                               {formatTimestamp(run.started_at)}{" "}
-                              <span className="font-mono text-xs text-ink-soft">{run.run_id.slice(0, 8)}</span>
+                              <span className="font-mono text-xs text-ink-soft">{shortRunId(run.run_id)}</span>
                               {run.adapter_id && (
                                 <span className="font-mono text-xs text-ink-soft"> · {run.adapter_id}</span>
                               )}
