@@ -392,6 +392,10 @@ def write_per_case_csv(runs: dict[str, list[ExperimentRun]], path: Path) -> None
                 )
 
 
+def fmt_p(p: float) -> str:
+    return f"{p:.1e}" if p < 0.001 else f"{p:.3f}"
+
+
 def pct(x: float | None) -> str:
     return "n/a" if x is None else f"{100 * x:.1f}%"
 
@@ -468,7 +472,7 @@ def render_tables(report: dict[str, Any]) -> str:
         for r in c["results"]:
             lines.append(
                 f"| {c['label']} | {r['evaluator']} | {r['n_paired']} | {r['a_pass']} | {r['b_pass']} | "
-                f"{r['a_only']} | {r['b_only']} | {r['mcnemar_exact_p']:.4f} |"
+                f"{r['a_only']} | {r['b_only']} | {fmt_p(r['mcnemar_exact_p'])} |"
             )
     lines += ["", "## Evaluator agreement on correctness (first run of each arm)", ""]
     lines += [

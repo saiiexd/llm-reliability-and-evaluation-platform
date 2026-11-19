@@ -203,6 +203,22 @@ Previously faithfulness came before retrieval, so a wrong answer after a retriev
 | Precision@K, context relevance, NLI faithfulness, claim extraction, human annotation, perturbation generation | Not implemented |
 | Benchmarks (multi-adapter, repetitions) | Working [Verified]; synchronous |
 
+### EXP-001 in one paragraph [Verified, n = 60 per arm]
+
+Setup: local models (qwen3:4b, gemma3:1b) on a 60-question SQuAD subset with a 266-paragraph
+corpus.
+
+- **Retrieval:** top-3 retrieval raised LLM-judge correctness from 13% to 58% (qwen) and from 7% to
+  50% (gemma). This is a large, highly significant paired effect.
+- **Retrieval depth and model:** top-1 vs top-3, and qwen vs gemma, were *not* distinguishable at
+  this sample size.
+- **Evaluator choice:** the same 60 answers score 30% (exact match), 43% (SQuAD EM) or 58% (LLM
+  judge). That spread is larger than any system difference measured.
+- **Faithfulness judge:** it labels abstentions "supported".
+- **Determinism:** temperature 0 with a fixed seed was not fully deterministic (57/60 identical).
+
+Details: `research/experiments/EXP-001_local_rag_reliability/results.md`.
+
 ## J. Research questions that should guide the remaining work
 
 Ordered by value for a defensible capstone:

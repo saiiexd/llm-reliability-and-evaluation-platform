@@ -1,0 +1,1319 @@
+{
+  "config_fingerprint": "1d7386e1b860d28d8b5dd41d466a72833cddf216693a9475939c3b9d4eacc06f",
+  "created_at": "2026-11-19T13:02:17.272175+00:00",
+  "dataset_version": {
+    "dataset_name": "squad-v1.1-dev-subset-v1",
+    "test_cases": [
+      {
+        "id": "squad-56e1b00ce3433e140042309e",
+        "input": "Turing machines are commonly employed to define what? ",
+        "metadata": {
+          "answer_start": 49,
+          "article": "Computational_complexity_theory",
+          "gold_answers": [
+            "complexity classes"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Computational_complexity_theory::p014::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Computational_complexity_theory::p014",
+          "squad_id": "56e1b00ce3433e140042309e"
+        },
+        "reference_answer": "complexity classes"
+      },
+      {
+        "id": "squad-56e1ee4de3433e1400423210",
+        "input": "What is the unproven assumption generally ascribed to the value of complexity classes?",
+        "metadata": {
+          "answer_start": 34,
+          "article": "Computational_complexity_theory",
+          "gold_answers": [
+            "Many known complexity classes are suspected to be unequal",
+            "suspected to be unequal",
+            "unequal"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Computational_complexity_theory::p038::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Computational_complexity_theory::p038",
+          "squad_id": "56e1ee4de3433e1400423210"
+        },
+        "reference_answer": "suspected to be unequal"
+      },
+      {
+        "id": "squad-56e1efa0e3433e140042321a",
+        "input": "In what complexity class do complement problems of NP problems exist?",
+        "metadata": {
+          "answer_start": 22,
+          "article": "Computational_complexity_theory",
+          "gold_answers": [
+            "co-NP"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Computational_complexity_theory::p039::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Computational_complexity_theory::p039",
+          "squad_id": "56e1efa0e3433e140042321a"
+        },
+        "reference_answer": "co-NP"
+      },
+      {
+        "id": "squad-56e1ded7cd28a01900c67bd4",
+        "input": "Who demonstrated that P= NP implies problems not present in P or NP-complete?",
+        "metadata": {
+          "answer_start": 16,
+          "article": "Computational_complexity_theory",
+          "gold_answers": [
+            "Ladner"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Computational_complexity_theory::p035::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Computational_complexity_theory::p035",
+          "squad_id": "56e1ded7cd28a01900c67bd4"
+        },
+        "reference_answer": "Ladner"
+      },
+      {
+        "id": "squad-56e1c4fce3433e1400423150",
+        "input": "BQP and QMA are examples of complexity classes most commonly associated with what type of Turing machine?",
+        "metadata": {
+          "answer_start": 209,
+          "article": "Computational_complexity_theory",
+          "gold_answers": [
+            "quantum"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Computational_complexity_theory::p026::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Computational_complexity_theory::p026",
+          "squad_id": "56e1c4fce3433e1400423150"
+        },
+        "reference_answer": "quantum"
+      },
+      {
+        "id": "squad-56e1e9dfe3433e14004231fc",
+        "input": "What is the problem attributed to defining if two finite graphs are isomorphic?",
+        "metadata": {
+          "answer_start": 0,
+          "article": "Computational_complexity_theory",
+          "gold_answers": [
+            "The graph isomorphism problem",
+            "graph isomorphism"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Computational_complexity_theory::p036::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Computational_complexity_theory::p036",
+          "squad_id": "56e1e9dfe3433e14004231fc"
+        },
+        "reference_answer": "The graph isomorphism problem"
+      },
+      {
+        "id": "squad-56e202e9e3433e1400423243",
+        "input": "What complex measurements were defined by \"On the Computational Complexity of Algorithms\"?",
+        "metadata": {
+          "answer_start": 265,
+          "article": "Computational_complexity_theory",
+          "gold_answers": [
+            "definitions of time and space complexity",
+            "time and space",
+            "time and space complexity"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Computational_complexity_theory::p044::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Computational_complexity_theory::p044",
+          "squad_id": "56e202e9e3433e1400423243"
+        },
+        "reference_answer": "time and space"
+      },
+      {
+        "id": "squad-56e1ce08e3433e14004231a4",
+        "input": "The complexity of problems often depends on what?",
+        "metadata": {
+          "answer_start": 315,
+          "article": "Computational_complexity_theory",
+          "gold_answers": [
+            "the type of reduction being used"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Computational_complexity_theory::p031::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Computational_complexity_theory::p031",
+          "squad_id": "56e1ce08e3433e14004231a4"
+        },
+        "reference_answer": "the type of reduction being used"
+      },
+      {
+        "id": "squad-56e1ec83cd28a01900c67c0e",
+        "input": "What is the most well-known algorithm associated with the integer factorization problem?",
+        "metadata": {
+          "answer_start": 641,
+          "article": "Computational_complexity_theory",
+          "gold_answers": [
+            "RSA",
+            "general number field sieve",
+            "the general number field sieve"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Computational_complexity_theory::p037::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Computational_complexity_theory::p037",
+          "squad_id": "56e1ec83cd28a01900c67c0e"
+        },
+        "reference_answer": "the general number field sieve"
+      },
+      {
+        "id": "squad-56e1c7e2cd28a01900c67b76",
+        "input": "Within what variable is L constrained according to the space hierarchy theorem?",
+        "metadata": {
+          "answer_start": 268,
+          "article": "Computational_complexity_theory",
+          "gold_answers": [
+            "PSPACE"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Computational_complexity_theory::p028::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Computational_complexity_theory::p028",
+          "squad_id": "56e1c7e2cd28a01900c67b76"
+        },
+        "reference_answer": "PSPACE"
+      },
+      {
+        "id": "squad-5729f5a03f37b31900478607",
+        "input": "What type of T cells help with both innnate and adaptive immunity?",
+        "metadata": {
+          "answer_start": 395,
+          "article": "Immune_system",
+          "gold_answers": [
+            "\u03b3\u03b4",
+            "\u03b3\u03b4 T cells"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Immune_system::p020::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Immune_system::p020",
+          "squad_id": "5729f5a03f37b31900478607"
+        },
+        "reference_answer": "\u03b3\u03b4 T cells"
+      },
+      {
+        "id": "squad-572908c13f37b31900477fbd",
+        "input": "What are white blood cells known as?",
+        "metadata": {
+          "answer_start": 0,
+          "article": "Immune_system",
+          "gold_answers": [
+            "Leukocytes"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Immune_system::p013::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Immune_system::p013",
+          "squad_id": "572908c13f37b31900477fbd"
+        },
+        "reference_answer": "Leukocytes"
+      },
+      {
+        "id": "squad-5729fa40af94a219006aa711",
+        "input": "What kind of deprivation results in diminished immune response and lower antibody production?",
+        "metadata": {
+          "answer_start": 20,
+          "article": "Immune_system",
+          "gold_answers": [
+            "sleep",
+            "sleep deprivation"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Immune_system::p025::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Immune_system::p025",
+          "squad_id": "5729fa40af94a219006aa711"
+        },
+        "reference_answer": "sleep deprivation"
+      },
+      {
+        "id": "squad-5729f12e3f37b319004785e3",
+        "input": "Antigen specificity  allows responses that are specific to certain types of what?",
+        "metadata": {
+          "answer_start": 436,
+          "article": "Immune_system",
+          "gold_answers": [
+            "pathogen-infected cells",
+            "pathogens",
+            "pathogens or pathogen-infected cells"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Immune_system::p016::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Immune_system::p016",
+          "squad_id": "5729f12e3f37b319004785e3"
+        },
+        "reference_answer": "pathogens or pathogen-infected cells"
+      },
+      {
+        "id": "squad-5729f799af94a219006aa709",
+        "input": "Immunological memory can take what two forms?",
+        "metadata": {
+          "answer_start": 514,
+          "article": "Immune_system",
+          "gold_answers": [
+            "passive short-term memory or active long-term memory"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Immune_system::p022::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Immune_system::p022",
+          "squad_id": "5729f799af94a219006aa709"
+        },
+        "reference_answer": "passive short-term memory or active long-term memory"
+      },
+      {
+        "id": "squad-572a0e4b6aef051400155216",
+        "input": "What is an example of a parasite that used the antigenic variation strategy to evade destruction?",
+        "metadata": {
+          "answer_start": 553,
+          "article": "Immune_system",
+          "gold_answers": [
+            "Trypanosoma brucei"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Immune_system::p044::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Immune_system::p044",
+          "squad_id": "572a0e4b6aef051400155216"
+        },
+        "reference_answer": "Trypanosoma brucei"
+      },
+      {
+        "id": "squad-5729f9953f37b31900478622",
+        "input": "What is the effect of testosterone on the male immune system?",
+        "metadata": {
+          "answer_start": 383,
+          "article": "Immune_system",
+          "gold_answers": [
+            "immunosuppressive"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Immune_system::p024::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Immune_system::p024",
+          "squad_id": "5729f9953f37b31900478622"
+        },
+        "reference_answer": "immunosuppressive"
+      },
+      {
+        "id": "squad-572a019f3f37b31900478644",
+        "input": "What kind of system of infection involves inserting a hollow tube into a host cell?",
+        "metadata": {
+          "answer_start": 397,
+          "article": "Immune_system",
+          "gold_answers": [
+            "type III secretion system"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Immune_system::p032::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Immune_system::p032",
+          "squad_id": "572a019f3f37b31900478644"
+        },
+        "reference_answer": "type III secretion system"
+      },
+      {
+        "id": "squad-572a0a686aef0514001551f0",
+        "input": "According to the humoral theory of immunity, what were the bodies immune agents?",
+        "metadata": {
+          "answer_start": 689,
+          "article": "Immune_system",
+          "gold_answers": [
+            "soluble components",
+            "soluble components (molecules)"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Immune_system::p040::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Immune_system::p040",
+          "squad_id": "572a0a686aef0514001551f0"
+        },
+        "reference_answer": "soluble components (molecules)"
+      },
+      {
+        "id": "squad-5726f8aef1498d1400e8f170",
+        "input": "What protection comes after the innate response?",
+        "metadata": {
+          "answer_start": 487,
+          "article": "Immune_system",
+          "gold_answers": [
+            "adaptive immune system",
+            "the adaptive immune system"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Immune_system::p004::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Immune_system::p004",
+          "squad_id": "5726f8aef1498d1400e8f170"
+        },
+        "reference_answer": "the adaptive immune system"
+      },
+      {
+        "id": "squad-5726d8bd708984140094d35b",
+        "input": "What word is the word pharmacy taken from?",
+        "metadata": {
+          "answer_start": 34,
+          "article": "Pharmacy",
+          "gold_answers": [
+            "its root word pharma",
+            "pharma"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Pharmacy::p000::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Pharmacy::p000",
+          "squad_id": "5726d8bd708984140094d35b"
+        },
+        "reference_answer": "its root word pharma"
+      },
+      {
+        "id": "squad-5726f7715951b619008f8391",
+        "input": "How else might a physician take advantage of self-interest?",
+        "metadata": {
+          "answer_start": 227,
+          "article": "Pharmacy",
+          "gold_answers": [
+            "avoiding the unnecessary use of medication that may have side-effects",
+            "because he or she can then sell more medications to the patient",
+            "exaggerating their seriousness"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Pharmacy::p022::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Pharmacy::p022",
+          "squad_id": "5726f7715951b619008f8391"
+        },
+        "reference_answer": "exaggerating their seriousness"
+      },
+      {
+        "id": "squad-5726e5c95951b619008f81ce",
+        "input": "What are some other factors a pharmacist must monitor?",
+        "metadata": {
+          "answer_start": 455,
+          "article": "Pharmacy",
+          "gold_answers": [
+            "potential drug interactions",
+            "potential drug interactions, adverse drug reactions",
+            "potential drug interactions, adverse drug reactions, and assess patient drug allergies"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Pharmacy::p011::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Pharmacy::p011",
+          "squad_id": "5726e5c95951b619008f81ce"
+        },
+        "reference_answer": "potential drug interactions, adverse drug reactions"
+      },
+      {
+        "id": "squad-5726f868dd62a815002e9687",
+        "input": "What are examples of clinical services that pharmacists can provide?",
+        "metadata": {
+          "answer_start": 389,
+          "article": "Pharmacy",
+          "gold_answers": [
+            "the thorough analysis of all medication (prescription, non-prescription, and herbals) currently being taken by an individual",
+            "thorough analysis of all medication (prescription, non-prescription, and herbals) currently being taken by an individual",
+            "thorough analysis of all medication (prescription, non-prescription, and herbals) currently being taken by an individual."
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Pharmacy::p023::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Pharmacy::p023",
+          "squad_id": "5726f868dd62a815002e9687"
+        },
+        "reference_answer": "thorough analysis of all medication (prescription, non-prescription, and herbals) currently being taken by an individual"
+      },
+      {
+        "id": "squad-5726eb4b5951b619008f826f",
+        "input": "What is the main difference between online pharmacies and community pharmacies?",
+        "metadata": {
+          "answer_start": 340,
+          "article": "Pharmacy",
+          "gold_answers": [
+            "method by which the medications are requested and received",
+            "the method by which the medications are requested and received"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Pharmacy::p014::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Pharmacy::p014",
+          "squad_id": "5726eb4b5951b619008f826f"
+        },
+        "reference_answer": "the method by which the medications are requested and received"
+      },
+      {
+        "id": "squad-5726ea985951b619008f8263",
+        "input": "What are some large pharmacy management companies?",
+        "metadata": {
+          "answer_start": 463,
+          "article": "Pharmacy",
+          "gold_answers": [
+            "Omnicare, Kindred Healthcare and PharMerica"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Pharmacy::p013::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Pharmacy::p013",
+          "squad_id": "5726ea985951b619008f8263"
+        },
+        "reference_answer": "Omnicare, Kindred Healthcare and PharMerica"
+      },
+      {
+        "id": "squad-5726da89dd62a815002e92b5",
+        "input": "What type of professional is a Pharmacy Technician considered to be?",
+        "metadata": {
+          "answer_start": 48,
+          "article": "Pharmacy",
+          "gold_answers": [
+            "health care professional",
+            "pharmacy health care"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Pharmacy::p002::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Pharmacy::p002",
+          "squad_id": "5726da89dd62a815002e92b5"
+        },
+        "reference_answer": "health care professional"
+      },
+      {
+        "id": "squad-5726e985dd62a815002e94de",
+        "input": "What entities are included in the federal health care system?",
+        "metadata": {
+          "answer_start": 50,
+          "article": "Pharmacy",
+          "gold_answers": [
+            "VA, the Indian Health Service, and NIH",
+            "the VA, the Indian Health Service, and NIH"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Pharmacy::p012::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Pharmacy::p012",
+          "squad_id": "5726e985dd62a815002e94de"
+        },
+        "reference_answer": "the VA, the Indian Health Service, and NIH"
+      },
+      {
+        "id": "squad-5726f0e35951b619008f82fa",
+        "input": "Has there ever been anyone charged with importing drugs from Canada for personal medicinal use?",
+        "metadata": {
+          "answer_start": 375,
+          "article": "Pharmacy",
+          "gold_answers": [
+            "There is no known case",
+            "no",
+            "no known case"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Pharmacy::p017::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Pharmacy::p017",
+          "squad_id": "5726f0e35951b619008f82fa"
+        },
+        "reference_answer": "There is no known case"
+      },
+      {
+        "id": "squad-5726ed6cf1498d1400e8f010",
+        "input": "What do most online pharmacies do?",
+        "metadata": {
+          "answer_start": 31,
+          "article": "Pharmacy",
+          "gold_answers": [
+            "sell prescription drugs",
+            "sell prescription drugs and require a valid prescription"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Pharmacy::p015::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Pharmacy::p015",
+          "squad_id": "5726ed6cf1498d1400e8f010"
+        },
+        "reference_answer": "sell prescription drugs and require a valid prescription"
+      },
+      {
+        "id": "squad-5726dd71f1498d1400e8edd8",
+        "input": "Which three famous British potters are represented the the V&A ceramics collection?",
+        "metadata": {
+          "answer_start": 29,
+          "article": "Victoria_and_Albert_Museum",
+          "gold_answers": [
+            "Josiah Wedgwood, William De Morgan and Bernard Leach"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Victoria_and_Albert_Museum::p033::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Victoria_and_Albert_Museum::p033",
+          "squad_id": "5726dd71f1498d1400e8edd8"
+        },
+        "reference_answer": "Josiah Wedgwood, William De Morgan and Bernard Leach"
+      },
+      {
+        "id": "squad-5726fe95dd62a815002e9736",
+        "input": "Which sculpture by Rodin was not donated by the artist?",
+        "metadata": {
+          "answer_start": 294,
+          "article": "Victoria_and_Albert_Museum",
+          "gold_answers": [
+            "St John the Baptist"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Victoria_and_Albert_Museum::p051::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Victoria_and_Albert_Museum::p051",
+          "squad_id": "5726fe95dd62a815002e9736"
+        },
+        "reference_answer": "St John the Baptist"
+      },
+      {
+        "id": "squad-57268294708984140094c87a",
+        "input": "Which cultures are represented in the V&A's collections?",
+        "metadata": {
+          "answer_start": 158,
+          "article": "Victoria_and_Albert_Museum",
+          "gold_answers": [
+            "Europe, North America, Asia and North Africa"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Victoria_and_Albert_Museum::p001::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Victoria_and_Albert_Museum::p001",
+          "squad_id": "57268294708984140094c87a"
+        },
+        "reference_answer": "Europe, North America, Asia and North Africa"
+      },
+      {
+        "id": "squad-5726e1fcdd62a815002e93c7",
+        "input": "Which famous Dutch artist who painted The Night Watch is represented in the drawings collection of the V&A?",
+        "metadata": {
+          "answer_start": 165,
+          "article": "Victoria_and_Albert_Museum",
+          "gold_answers": [
+            "Rembrandt"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Victoria_and_Albert_Museum::p036::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Victoria_and_Albert_Museum::p036",
+          "squad_id": "5726e1fcdd62a815002e93c7"
+        },
+        "reference_answer": "Rembrandt"
+      },
+      {
+        "id": "squad-5726ace8dd62a815002e8c9f",
+        "input": "What did the museum acquire from the Royal College of Science?",
+        "metadata": {
+          "answer_start": 706,
+          "article": "Victoria_and_Albert_Museum",
+          "gold_answers": [
+            "Henry Cole wing"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Victoria_and_Albert_Museum::p014::chunk-0",
+            "Victoria_and_Albert_Museum::p014::chunk-1"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Victoria_and_Albert_Museum::p014",
+          "squad_id": "5726ace8dd62a815002e8c9f"
+        },
+        "reference_answer": "Henry Cole wing"
+      },
+      {
+        "id": "squad-5726fb18dd62a815002e96d1",
+        "input": "Which uses of sculpture are represented in the collection?",
+        "metadata": {
+          "answer_start": 438,
+          "article": "Victoria_and_Albert_Museum",
+          "gold_answers": [
+            "All",
+            "All uses"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Victoria_and_Albert_Museum::p049::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Victoria_and_Albert_Museum::p049",
+          "squad_id": "5726fb18dd62a815002e96d1"
+        },
+        "reference_answer": "All"
+      },
+      {
+        "id": "squad-57269c06708984140094cba2",
+        "input": "What art historical style was used in the decoration for the northern part of the museum?",
+        "metadata": {
+          "answer_start": 1369,
+          "article": "Victoria_and_Albert_Museum",
+          "gold_answers": [
+            "Italian Renaissance"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Victoria_and_Albert_Museum::p008::chunk-1"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Victoria_and_Albert_Museum::p008",
+          "squad_id": "57269c06708984140094cba2"
+        },
+        "reference_answer": "Italian Renaissance"
+      },
+      {
+        "id": "squad-57268d02f1498d1400e8e378",
+        "input": "Who officially opened the V&A?",
+        "metadata": {
+          "answer_start": 24,
+          "article": "Victoria_and_Albert_Museum",
+          "gold_answers": [
+            "Queen Victoria"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Victoria_and_Albert_Museum::p003::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Victoria_and_Albert_Museum::p003",
+          "squad_id": "57268d02f1498d1400e8e378"
+        },
+        "reference_answer": "Queen Victoria"
+      },
+      {
+        "id": "squad-5726f2bcf1498d1400e8f0bf",
+        "input": "Who has loaned the Raphael Cartoons to the museum?",
+        "metadata": {
+          "answer_start": 232,
+          "article": "Victoria_and_Albert_Museum",
+          "gold_answers": [
+            "Queen Elizabeth II"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Victoria_and_Albert_Museum::p045::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Victoria_and_Albert_Museum::p045",
+          "squad_id": "5726f2bcf1498d1400e8f0bf"
+        },
+        "reference_answer": "Queen Elizabeth II"
+      },
+      {
+        "id": "squad-57270ab9708984140094d8fa",
+        "input": "Besides the V&A's, whose collections are under the responsibility of conservators at the V&A?",
+        "metadata": {
+          "answer_start": 134,
+          "article": "Victoria_and_Albert_Museum",
+          "gold_answers": [
+            "V&A Museum of Childhood"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Victoria_and_Albert_Museum::p058::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Victoria_and_Albert_Museum::p058",
+          "squad_id": "57270ab9708984140094d8fa"
+        },
+        "reference_answer": "V&A Museum of Childhood"
+      },
+      {
+        "id": "squad-56e773fa00c9c71400d7714d",
+        "input": "What type of degree must a teacher have, at a minimum?",
+        "metadata": {
+          "answer_start": 312,
+          "article": "Teacher",
+          "gold_answers": [
+            "a bachelor's degree",
+            "bachelor's",
+            "bachelor's degree"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Teacher::p045::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Teacher::p045",
+          "squad_id": "56e773fa00c9c71400d7714d"
+        },
+        "reference_answer": "a bachelor's degree"
+      },
+      {
+        "id": "squad-56e769dc00c9c71400d770eb",
+        "input": "What has the avoidance of men to become teachers caused, in some areas?",
+        "metadata": {
+          "answer_start": 560,
+          "article": "Teacher",
+          "gold_answers": [
+            "a shortage of male teachers",
+            "shortage of male teachers"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Teacher::p034::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Teacher::p034",
+          "squad_id": "56e769dc00c9c71400d770eb"
+        },
+        "reference_answer": "a shortage of male teachers"
+      },
+      {
+        "id": "squad-56e7586d37bdd419002c3eb6",
+        "input": "What U.S. entity said that corporal punishment was Constitutional?",
+        "metadata": {
+          "answer_start": 340,
+          "article": "Teacher",
+          "gold_answers": [
+            "Supreme Court",
+            "US Supreme Court"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Teacher::p016::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Teacher::p016",
+          "squad_id": "56e7586d37bdd419002c3eb6"
+        },
+        "reference_answer": "Supreme Court"
+      },
+      {
+        "id": "squad-56e76abf37bdd419002c3f76",
+        "input": "What, when combined with a large workload, can contribute to occupational stress?",
+        "metadata": {
+          "answer_start": 376,
+          "article": "Teacher",
+          "gold_answers": [
+            "long hours",
+            "organizational change, relationships with students, fellow teachers, and administrative personnel, working environment, expectations to substitute",
+            "organizational change, relationships with students, fellow teachers, and administrative personnel, working environment, expectations to substitute, long hours"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Teacher::p035::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Teacher::p035",
+          "squad_id": "56e76abf37bdd419002c3f76"
+        },
+        "reference_answer": "long hours"
+      },
+      {
+        "id": "squad-56e761d037bdd419002c3f15",
+        "input": "What do these teachers NOT do?",
+        "metadata": {
+          "answer_start": 431,
+          "article": "Teacher",
+          "gold_answers": [
+            "teach by rote"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Teacher::p025::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Teacher::p025",
+          "squad_id": "56e761d037bdd419002c3f15"
+        },
+        "reference_answer": "teach by rote"
+      },
+      {
+        "id": "squad-56e7714a00c9c71400d77139",
+        "input": "What can a teacher with 25 years of experience make, in Euros?",
+        "metadata": {
+          "answer_start": 363,
+          "article": "Teacher",
+          "gold_answers": [
+            "53,423",
+            "\u20ac53,423"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Teacher::p042::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Teacher::p042",
+          "squad_id": "56e7714a00c9c71400d77139"
+        },
+        "reference_answer": "53,423"
+      },
+      {
+        "id": "squad-56e75a9037bdd419002c3ec7",
+        "input": "What is a common punishment in Singapore?",
+        "metadata": {
+          "answer_start": 10,
+          "article": "Teacher",
+          "gold_answers": [
+            "detention"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Teacher::p019::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Teacher::p019",
+          "squad_id": "56e75a9037bdd419002c3ec7"
+        },
+        "reference_answer": "detention"
+      },
+      {
+        "id": "squad-56e77c6737bdd419002c401d",
+        "input": "What is an abbreviation for the Church of Jesus Christ of Latter-day Saints?",
+        "metadata": {
+          "answer_start": 52,
+          "article": "Teacher",
+          "gold_answers": [
+            "LDS Church"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Teacher::p054::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Teacher::p054",
+          "squad_id": "56e77c6737bdd419002c401d"
+        },
+        "reference_answer": "LDS Church"
+      },
+      {
+        "id": "squad-56e76f7000c9c71400d7712d",
+        "input": "Where are teachers recruited from?",
+        "metadata": {
+          "answer_start": 95,
+          "article": "Teacher",
+          "gold_answers": [
+            "Lehramtstudien",
+            "Lehramtstudien (Teaching Education Studies)",
+            "special university classes"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Teacher::p041::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Teacher::p041",
+          "squad_id": "56e76f7000c9c71400d7712d"
+        },
+        "reference_answer": "Lehramtstudien (Teaching Education Studies)"
+      },
+      {
+        "id": "squad-56e7683d00c9c71400d770ce",
+        "input": "What study covered subjects in 80,000 schools?",
+        "metadata": {
+          "answer_start": 684,
+          "article": "Teacher",
+          "gold_answers": [
+            "AAUW",
+            "AAUW study",
+            "The AAUW study"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Teacher::p032::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Teacher::p032",
+          "squad_id": "56e7683d00c9c71400d770ce"
+        },
+        "reference_answer": "The AAUW study"
+      },
+      {
+        "id": "squad-5728fd3c3f37b31900477f2f",
+        "input": "What should the punishment rely on instead in a just society?",
+        "metadata": {
+          "answer_start": 383,
+          "article": "Civil_disobedience",
+          "gold_answers": [
+            "moral reasons to follow this law",
+            "whether it would do more harm than good"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Civil_disobedience::p025::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Civil_disobedience::p025",
+          "squad_id": "5728fd3c3f37b31900477f2f"
+        },
+        "reference_answer": "moral reasons to follow this law"
+      },
+      {
+        "id": "squad-5728eb1a3acd2414000e01c9",
+        "input": "Anarchists do not want to accept punishment for what reason?",
+        "metadata": {
+          "answer_start": 700,
+          "article": "Civil_disobedience",
+          "gold_answers": [
+            "a violation of criminal law that does not infringe the rights of others",
+            "a violation of criminal law that does not infringe the rights of others.",
+            "does not infringe the rights of others",
+            "don't believe in the legitimacy of any government",
+            "see no need to accept punishment for a violation of criminal law that does not infringe the rights of others"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Civil_disobedience::p016::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Civil_disobedience::p016",
+          "squad_id": "5728eb1a3acd2414000e01c9"
+        },
+        "reference_answer": "does not infringe the rights of others"
+      },
+      {
+        "id": "squad-5728e8212ca10214002daa6c",
+        "input": "What type of government investigations apply to civil disobedience?",
+        "metadata": {
+          "answer_start": 62,
+          "article": "Civil_disobedience",
+          "gold_answers": [
+            "Many of the same decisions and principles that apply in other criminal investigations",
+            "criminal",
+            "criminal investigations",
+            "grant a consent search"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Civil_disobedience::p015::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Civil_disobedience::p015",
+          "squad_id": "5728e8212ca10214002daa6c"
+        },
+        "reference_answer": "criminal investigations"
+      },
+      {
+        "id": "squad-572822233acd2414000df559",
+        "input": "When was Thoreau's essay published?",
+        "metadata": {
+          "answer_start": 937,
+          "article": "Civil_disobedience",
+          "gold_answers": [
+            "after the end of the Mexican War",
+            "after the end of the Mexican War.",
+            "end of the Mexican War"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Civil_disobedience::p011::chunk-1"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Civil_disobedience::p011",
+          "squad_id": "572822233acd2414000df559"
+        },
+        "reference_answer": "after the end of the Mexican War"
+      },
+      {
+        "id": "squad-5728dafe3acd2414000e005d",
+        "input": "Who is the final judge of right and wrong?",
+        "metadata": {
+          "answer_start": 115,
+          "article": "Civil_disobedience",
+          "gold_answers": [
+            "The individual",
+            "individual",
+            "individuals"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Civil_disobedience::p006::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Civil_disobedience::p006",
+          "squad_id": "5728dafe3acd2414000e005d"
+        },
+        "reference_answer": "The individual"
+      },
+      {
+        "id": "squad-5728dddc2ca10214002da9d4",
+        "input": "What is sometimes more effective than civil disobedience at times?",
+        "metadata": {
+          "answer_start": 513,
+          "article": "Civil_disobedience",
+          "gold_answers": [
+            "assisting in fabricating evidence or committing perjury",
+            "covert lawbreaking",
+            "fabricating evidence or committing perjury"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Civil_disobedience::p008::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Civil_disobedience::p008",
+          "squad_id": "5728dddc2ca10214002da9d4"
+        },
+        "reference_answer": "fabricating evidence or committing perjury"
+      },
+      {
+        "id": "squad-5728fb6a1d04691400778ef5",
+        "input": "What needs to be avoided with civil disobedience?",
+        "metadata": {
+          "answer_start": 117,
+          "article": "Civil_disobedience",
+          "gold_answers": [
+            "conscientious lawbreakers",
+            "general disobedience",
+            "great amount of it",
+            "undermine the law by encouraging general disobedience which is neither conscientious nor of social benefit"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Civil_disobedience::p023::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Civil_disobedience::p023",
+          "squad_id": "5728fb6a1d04691400778ef5"
+        },
+        "reference_answer": "general disobedience"
+      },
+      {
+        "id": "squad-5728e715ff5b5019007da917",
+        "input": "What goal do many of these protests have?",
+        "metadata": {
+          "answer_start": 367,
+          "article": "Civil_disobedience",
+          "gold_answers": [
+            ", make it more difficult for a system to function",
+            "engage in moral dialogue",
+            "get their issue onto the table"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Civil_disobedience::p014::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Civil_disobedience::p014",
+          "squad_id": "5728e715ff5b5019007da917"
+        },
+        "reference_answer": "engage in moral dialogue"
+      },
+      {
+        "id": "squad-5728fc9e1d04691400778f15",
+        "input": "Why are people who distribute leaflets inside courthouses not been arrested?",
+        "metadata": {
+          "answer_start": 1377,
+          "article": "Civil_disobedience",
+          "gold_answers": [
+            "if they arrest fully informed jury leafleters, the leaflets will have to be given to the leafleter's own jury as evidence",
+            "the leaflets will have to be given to the leafleter's own jury as evidence"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Civil_disobedience::p024::chunk-1"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Civil_disobedience::p024",
+          "squad_id": "5728fc9e1d04691400778f15"
+        },
+        "reference_answer": "the leaflets will have to be given to the leafleter's own jury as evidence"
+      },
+      {
+        "id": "squad-5728ed94ff5b5019007da97e",
+        "input": "What is the most important item for civil disobedience to follow through?",
+        "metadata": {
+          "answer_start": 327,
+          "article": "Civil_disobedience",
+          "gold_answers": [
+            "protest should be maintained all the way",
+            "spirit of protest",
+            "the spirit of protest should be maintained all the way"
+          ],
+          "relevance_rule": "chunks fully containing the first gold answer span",
+          "relevant_chunk_ids": [
+            "Civil_disobedience::p019::chunk-0"
+          ],
+          "source": "squad_v1.1_dev",
+          "source_document_id": "Civil_disobedience::p019",
+          "squad_id": "5728ed94ff5b5019007da97e"
+        },
+        "reference_answer": "protest should be maintained all the way"
+      }
+    ],
+    "version_id": "c8088162bc678530baab3d9837135cb6c98b23bb117abf3287870ecefe7fcbbe"
+  },
+  "description": "EXP-001 arm 'gemma-rag-k3': 60 SQuAD v1.1 questions answered by gemma3:1b (top-3 retrieval, temperature 0.0); judged by qwen3:4b-instruct.",
+  "evaluator_configs": [
+    {
+      "evaluator_name": "exact_match",
+      "parameters": {
+        "case_sensitive": false,
+        "collapse_whitespace": true
+      }
+    },
+    {
+      "evaluator_name": "squad_match",
+      "parameters": {
+        "gold_source": "metadata.gold_answers",
+        "normalization": "squad_v1.1_official"
+      }
+    },
+    {
+      "evaluator_name": "llm_judge",
+      "parameters": {
+        "judge_model_config": {
+          "extra_params": {
+            "response_format": {
+              "type": "json_object"
+            },
+            "seed": 42
+          },
+          "max_tokens": 200,
+          "model_id": "qwen3:4b-instruct",
+          "temperature": 0.0
+        },
+        "judge_model_id": "qwen3:4b-instruct",
+        "rubric": {
+          "criterion": "correctness",
+          "instructions": "You are evaluating whether a generated answer is factually correct relative to a provided reference answer. Judge only correctness against the reference. Do not reward an answer for being long, confident-sounding, or fluent, and do not assume that an answer which is worded similarly to the reference is necessarily correct -- judge the actual factual content, not surface similarity.\n\nChoose exactly one outcome from: incorrect, partially_correct, correct.\n- correct: the answer states the same key fact(s) as the reference, with no material error or omission.\n- partially_correct: the answer contains some correct elements of the reference but is incomplete, imprecise, or partially wrong.\n- incorrect: the answer contradicts the reference or does not address it.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the three values above>, \"reasoning\": <one or two sentences of justification>}.",
+          "rubric_id": "correctness_vs_reference_v1",
+          "scale": [
+            "incorrect",
+            "partially_correct",
+            "correct"
+          ]
+        }
+      }
+    },
+    {
+      "evaluator_name": "llm_faithfulness_judge",
+      "parameters": {
+        "judge_model_config": {
+          "extra_params": {
+            "response_format": {
+              "type": "json_object"
+            },
+            "seed": 42
+          },
+          "max_tokens": 200,
+          "model_id": "qwen3:4b-instruct",
+          "temperature": 0.0
+        },
+        "judge_model_id": "qwen3:4b-instruct",
+        "rubric": {
+          "criterion": "faithfulness",
+          "instructions": "You are evaluating whether a generated answer is faithful to a provided set of retrieved context passages -- not whether the answer is fluent, complete, or externally true. Judge only whether the context supports the answer's claims. Do not use outside knowledge to decide whether the answer is factually correct in general; judge strictly against the given context.\n\nChoose exactly one outcome from: contradicted, unsupported, undetermined, supported.\n- supported: the context contains information that backs the answer's claims.\n- unsupported: the context neither confirms nor denies the answer's claims (the information simply is not present).\n- contradicted: the context directly conflicts with a claim in the answer.\n- undetermined: the context and the answer are too ambiguous, fragmentary, or unrelated in scope for you to reach any of the above three judgments reliably.\n\nRespond with a single JSON object and nothing else, in exactly this form: {\"outcome\": <one of the four values above>, \"reasoning\": <one or two sentences of justification>}.",
+          "rubric_id": "faithfulness_vs_context_v1",
+          "scale": [
+            "contradicted",
+            "unsupported",
+            "undetermined",
+            "supported"
+          ]
+        }
+      }
+    }
+  ],
+  "experiment_id": "exp001-gemma-rag-k3",
+  "metadata": {
+    "arm": "gemma-rag-k3",
+    "study": {
+      "git_commit": "c9f5cdf9fdea175a769a7a09191ff5a4c5b00143",
+      "git_dirty_src_or_scripts": false,
+      "model_digests": {
+        "gemma3:1b": "97558784bdc9175075a72655bf360b15da17df6b3b9e5182af9f8c0c8e58ba7c",
+        "nomic-embed-text": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+        "qwen3:4b-instruct": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0"
+      },
+      "ollama_version": "0.40.16",
+      "platform": "Linux-7.3.4-1-cachyos-x86_64-with-glibc2.44",
+      "python": "3.13.18",
+      "study_id": "EXP-001"
+    }
+  },
+  "model_config": {
+    "extra_params": {
+      "rag": {
+        "chunk_overlap": 100,
+        "chunk_size": 800,
+        "corpus_fingerprint": "883f46cf2a883b37a1c1884e79717c7808911ada18209db06790d18f18b876cf",
+        "embedding_model_id": "nomic-embed-text",
+        "prompt_template_id": "concise_v1",
+        "similarity_metric": "cosine",
+        "top_k": 3
+      },
+      "seed": 42
+    },
+    "max_tokens": 64,
+    "model_id": "gemma3:1b",
+    "temperature": 0.0
+  },
+  "name": "EXP-001 \u00b7 gemma3:1b \u00b7 top-3 retrieval \u00b7 T=0.0",
+  "schema_version": 1
+}
