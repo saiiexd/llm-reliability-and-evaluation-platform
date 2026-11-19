@@ -102,14 +102,26 @@ class RagPipelineConfig:
         )
 
 
-def build_rag_prompt(question: str, retrieved_chunks: list[RetrievedChunk]) -> str:
+def build_rag_prompt(
+    question: str,
+    retrieved_chunks: list[RetrievedChunk],
+    template_id: str = PROMPT_TEMPLATE_ID,
+) -> str:
     """Render the exact generation prompt from a question and ranked retrieved chunks.
 
-    This is ``prompt_template_id="default_v1"``: numbered context passages
-    in ranked order (each labeled with its source document id), followed
-    by the question and an explicit instruction not to answer beyond the
-    given context. Context construction happens here, in the open, rather
-    than inside the retriever or the model adapter.
+    Templates (selected by ``RagPipelineConfig.prompt_template_id``, which is
+    part of the experiment fingerprint):
+
+    - ``default_v1``: numbered context passages in ranked order (each labeled
+      with its source document id), the question, and an instruction not to
+      answer beyond the context. Free-form answers.
+    - ``concise_v1``: same context block, but asks for only the answer as a
+      short phrase (and an exact "I don't know" when the context lacks it).
+      Used for extractive QA, where verbose answers would otherwise be
+      scored as wrong by lexical metrics for formatting rather than content.
+
+    Context construction happens here, in the open, rather than inside the
+    retriever or the model adapter.
     """
     if not retrieved_chunks:
         context_block = "(no context retrieved)"
@@ -118,12 +130,24 @@ def build_rag_prompt(question: str, retrieved_chunks: list[RetrievedChunk]) -> s
             f"[{chunk.rank}] (source: {chunk.document_id}) {chunk.text}"
             for chunk in retrieved_chunks
         )
-    return (
-        "Answer the question using only the context passages below. "
-        "If the context does not contain the answer, say you do not know.\n\n"
-        f"Context:\n{context_block}\n\n"
-        f"Question: {question}\n"
-    )
+    if template_id == PROMPT_TEMPLATE_ID:
+        return (
+            "Answer the question using only the context passages below. "
+            "If the context does not contain the answer, say you do not know.\n\n"
+            f"Context:\n{context_block}\n\n"
+            f"Question: {question}\n"
+        )
+    if template_id == "concise_v1":
+        return (
+            "Answer the question using only the context passages below. Reply with only "
+            "the answer, as a short phrase taken from the context where possible, with no "
+            "explanation. If the context does not contain the answer, reply exactly: "
+            "I don't know\n\n"
+            f"Context:\n{context_block}\n\n"
+            f"Question: {question}\n"
+            "Answer:"
+        )
+    raise ValueError(f"Unknown RAG prompt template '{template_id}'.")
 
 
 class RagPipeline(ModelAdapter):
@@ -150,7 +174,11 @@ class RagPipeline(ModelAdapter):
 
     def generate(self, request: ExecutionRequest) -> ModelResponse:
         retrieval_result = self._retriever.retrieve(request.input_text)
-        prompt = build_rag_prompt(request.input_text, retrieval_result.retrieved_chunks)
+        prompt = build_rag_prompt(
+            request.input_text,
+            retrieval_result.retrieved_chunks,
+            template_id=self._config.prompt_template_id,
+        )
 
         generation_request = ExecutionRequest(
             test_case_id=request.test_case_id,

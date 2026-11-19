@@ -19,6 +19,7 @@ from llm_reliability.evaluation.semantic_similarity import (
     FakeSimilarityBackend,
     SemanticSimilarityEvaluator,
 )
+from llm_reliability.evaluation.squad_match import SquadNormalizedMatchEvaluator
 from llm_reliability.providers.base import ProviderConfig
 from llm_reliability.providers.openai_provider import (
     OpenAIProviderAdapter,
@@ -188,6 +189,7 @@ class EvaluatorRegistry:
     def __init__(self) -> None:
         self._factories: dict[str, Callable[[], Any]] = {
             "exact_match": lambda: ExactMatchEvaluator(),
+            "squad_match": lambda: SquadNormalizedMatchEvaluator(),
             "semantic_similarity": lambda: SemanticSimilarityEvaluator(
                 backend=FakeSimilarityBackend()
             ),

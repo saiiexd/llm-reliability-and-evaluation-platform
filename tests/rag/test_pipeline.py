@@ -164,3 +164,12 @@ class TestRagPipeline:
         response = pipeline.generate(_request())
         assert response.provider_metadata["adapter"] == "mock"
         assert "rag" in response.provider_metadata
+
+
+def test_concise_template_asks_for_short_answer_and_unknown_template_fails() -> None:
+    from llm_reliability.rag.pipeline import build_rag_prompt as _build
+
+    prompt = _build("Who?", [], template_id="concise_v1")
+    assert "short phrase" in prompt and prompt.endswith("Answer:")
+    with pytest.raises(ValueError):
+        _build("Who?", [], template_id="missing")

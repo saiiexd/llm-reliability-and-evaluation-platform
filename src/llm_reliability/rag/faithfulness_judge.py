@@ -39,6 +39,7 @@ it rather than replacing it.
 
 from __future__ import annotations
 
+from dataclasses import asdict
 from typing import Any
 
 from llm_reliability.evaluation.criteria import FAITHFULNESS
@@ -121,8 +122,12 @@ class LLMFaithfulnessEvaluator(Evaluator):
         self._rubric = rubric
 
     def get_config(self) -> dict[str, Any]:
+        # The judge's full generation settings (temperature, max_tokens,
+        # response_format, ...) change its verdicts, so they belong in the
+        # reproducibility record, not just the judge's model id.
         return {
             "judge_model_id": self._judge_model_config.model_id,
+            "judge_model_config": asdict(self._judge_model_config),
             "rubric": self._rubric.to_dict(),
         }
 

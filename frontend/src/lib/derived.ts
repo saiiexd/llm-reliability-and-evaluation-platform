@@ -205,6 +205,18 @@ const EVALUATOR_INFO: Record<string, { label: string; help: string }> = {
     label: "Faithfulness (LLM judge)",
     help: "A second model checks that the answer is backed by the retrieved passages.",
   },
+  llm_judge: {
+    label: "Correctness (LLM judge)",
+    help: "A second model compares the answer with the expected answer and decides if the facts match.",
+  },
+  squad_match: {
+    label: "Normalized match (SQuAD)",
+    help: "Passes if the answer equals any accepted answer after removing case, punctuation and a/an/the. The score is word overlap (F1).",
+  },
+  semantic_similarity: {
+    label: "Similarity",
+    help: "Compares the answer with the expected answer by similarity score against a threshold.",
+  },
 };
 
 export function evaluatorLabel(name: string): string {

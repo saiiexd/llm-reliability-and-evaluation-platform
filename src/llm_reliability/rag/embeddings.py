@@ -119,3 +119,77 @@ class SentenceTransformerEmbeddingModel(EmbeddingModel):
             self._model = SentenceTransformer(self.model_id)
         vectors = self._model.encode(list(texts), convert_to_numpy=True)
         return [vector.tolist() for vector in vectors]
+
+
+class OpenAICompatibleEmbeddingModel(EmbeddingModel):
+    """Real embeddings from an OpenAI-compatible ``/v1/embeddings`` endpoint.
+
+    Works with a local Ollama server (for example ``nomic-embed-text``) or
+    any other OpenAI-compatible server, without adding a heavy local ML
+    dependency. Every call is an outbound network request, so this model is
+    only constructed by code that has explicitly opted in to real inference
+    (experiment scripts), never by the offline test suite, which injects a
+    fake ``client``.
+
+    ``document_prefix`` / ``query_prefix`` support embedding models that are
+    trained with task prefixes (``nomic-embed-text`` expects
+    ``"search_document: "`` and ``"search_query: "``). They are part of
+    ``get_config`` because they change the vectors.
+    """
+
+    def __init__(
+        self,
+        model_id: str,
+        base_url: str | None = None,
+        client: Any | None = None,
+        batch_size: int = 64,
+        document_prefix: str = "",
+        query_prefix: str = "",
+    ) -> None:
+        if batch_size <= 0:
+            raise ValueError("OpenAICompatibleEmbeddingModel.batch_size must be positive.")
+        self.model_id = model_id
+        self._base_url = base_url
+        self._batch_size = batch_size
+        self.document_prefix = document_prefix
+        self.query_prefix = query_prefix
+        if client is None:
+            from openai import OpenAI
+
+            client = OpenAI(api_key="local-dummy-key", base_url=base_url)
+        self._client = client
+
+    def get_config(self) -> dict[str, Any]:
+        return {
+            "model_id": self.model_id,
+            "backend": "openai_compatible_embeddings",
+            "document_prefix": self.document_prefix,
+            "query_prefix": self.query_prefix,
+        }
+
+    def embed(self, texts: Sequence[str]) -> list[list[float]]:
+        """Embed corpus passages (``Retriever`` uses ``embed`` for chunks)."""
+        return self._embed_raw([self.document_prefix + t for t in texts])
+
+    def embed_one(self, text: str) -> list[float]:
+        """Embed a query (``Retriever`` uses ``embed_one`` for the question)."""
+        return self._embed_raw([self.query_prefix + text])[0]
+
+    def _embed_raw(self, texts: Sequence[str]) -> list[list[float]]:
+        vectors: list[list[float]] = []
+        items = list(texts)
+        for start in range(0, len(items), self._batch_size):
+            batch = items[start : start + self._batch_size]
+            try:
+                response = self._client.embeddings.create(model=self.model_id, input=batch)
+            except Exception as exc:
+                raise EmbeddingBackendError(
+                    f"Embedding request to model '{self.model_id}' failed: {exc}"
+                ) from exc
+            data = sorted(response.data, key=lambda d: d.index)
+            if len(data) != len(batch):
+                raise EmbeddingBackendError(
+                    f"Embedding endpoint returned {len(data)} vectors for {len(batch)} inputs."
+                )
+            vectors.extend(list(d.embedding) for d in data)
+        return vectors
