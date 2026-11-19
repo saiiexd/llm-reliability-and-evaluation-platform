@@ -1,0 +1,932 @@
+{
+  "name": "squad-v1.1-dev-subset-v1-paraphrases-v1",
+  "source_dataset": "squad-v1.1-dev-subset-v1",
+  "description": "One automatic rewording per question, generated once and frozen for EXP-002 (question-rewording perturbation).",
+  "generator": {
+    "model": "qwen3:4b-instruct",
+    "model_digest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+    "server": "ollama (OpenAI-compatible API)",
+    "temperature": 0.0,
+    "seed": 42,
+    "max_tokens": 96,
+    "prompt": "Rewrite the following question using different wording and sentence structure. Keep exactly the same meaning, so that it has exactly the same answer. Keep every name, number and technical term needed to identify what is asked. Do not answer it. Reply with only the rewritten question.\n\nQuestion: {question}\nRewritten question:"
+  },
+  "automatic_check_failures": {
+    "changed": 0,
+    "no_answer_leak": 0,
+    "is_question": 0,
+    "length_ratio_ok": 2
+  },
+  "items": [
+    {
+      "id": "squad-56e1b00ce3433e140042309e",
+      "original": "Turing machines are commonly employed to define what? ",
+      "paraphrase": "What concept do Turing machines typically serve to define?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-56e1ee4de3433e1400423210",
+      "original": "What is the unproven assumption generally ascribed to the value of complexity classes?",
+      "paraphrase": "What is the commonly accepted, yet unverified, hypothesis regarding the value of complexity classes?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-56e1efa0e3433e140042321a",
+      "original": "In what complexity class do complement problems of NP problems exist?",
+      "paraphrase": "What complexity class contains the complements of problems that are in NP?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-56e1ded7cd28a01900c67bd4",
+      "original": "Who demonstrated that P= NP implies problems not present in P or NP-complete?",
+      "paraphrase": "Who showed that the statement P = NP leads to the existence of problems that are neither in P nor in NP-complete?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-56e1c4fce3433e1400423150",
+      "original": "BQP and QMA are examples of complexity classes most commonly associated with what type of Turing machine?",
+      "paraphrase": "What kind of Turing machine is most typically linked to complexity classes such as BQP and QMA?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-56e1e9dfe3433e14004231fc",
+      "original": "What is the problem attributed to defining if two finite graphs are isomorphic?",
+      "paraphrase": "What specific issue arises when determining whether two finite graphs are isomorphic?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "meaning_changed",
+        "note": "Asks what issue arises when deciding isomorphism; the original asks which named problem it is."
+      }
+    },
+    {
+      "id": "squad-56e202e9e3433e1400423243",
+      "original": "What complex measurements were defined by \"On the Computational Complexity of Algorithms\"?",
+      "paraphrase": "What specific complexity measures were established in the paper \"On the Computational Complexity of Algorithms\"?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-56e1ce08e3433e14004231a4",
+      "original": "The complexity of problems often depends on what?",
+      "paraphrase": "What factor primarily influences the complexity of problems?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "minor_shift",
+        "note": "'Often depends on' became 'primarily influences'."
+      }
+    },
+    {
+      "id": "squad-56e1ec83cd28a01900c67c0e",
+      "original": "What is the most well-known algorithm associated with the integer factorization problem?",
+      "paraphrase": "Which algorithm is most widely recognized for solving the integer factorization problem?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-56e1c7e2cd28a01900c67b76",
+      "original": "Within what variable is L constrained according to the space hierarchy theorem?",
+      "paraphrase": "According to the space hierarchy theorem, in which variable is the resource L bounded?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5729f5a03f37b31900478607",
+      "original": "What type of T cells help with both innnate and adaptive immunity?",
+      "paraphrase": "Which T cells play a role in both innate and adaptive immune responses?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-572908c13f37b31900477fbd",
+      "original": "What are white blood cells known as?",
+      "paraphrase": "What is the term used for white blood cells?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5729fa40af94a219006aa711",
+      "original": "What kind of deprivation results in diminished immune response and lower antibody production?",
+      "paraphrase": "What form of deprivation leads to a weakened immune response and reduced antibody synthesis?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5729f12e3f37b319004785e3",
+      "original": "Antigen specificity  allows responses that are specific to certain types of what?",
+      "paraphrase": "Antigen specificity enables immune responses that are targeted to particular types of what?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5729f799af94a219006aa709",
+      "original": "Immunological memory can take what two forms?",
+      "paraphrase": "What are the two types of immunological memory?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-572a0e4b6aef051400155216",
+      "original": "What is an example of a parasite that used the antigenic variation strategy to evade destruction?",
+      "paraphrase": "Can you name a parasite that employs antigenic variation as a mechanism to avoid being destroyed by the immune system?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5729f9953f37b31900478622",
+      "original": "What is the effect of testosterone on the male immune system?",
+      "paraphrase": "How does testosterone influence the male immune system?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-572a019f3f37b31900478644",
+      "original": "What kind of system of infection involves inserting a hollow tube into a host cell?",
+      "paraphrase": "What type of infection mechanism includes the injection of a hollow tube into a host cell?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-572a0a686aef0514001551f0",
+      "original": "According to the humoral theory of immunity, what were the bodies immune agents?",
+      "paraphrase": "Under the humoral theory of immunity, what were the body's immune factors considered to be?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5726f8aef1498d1400e8f170",
+      "original": "What protection comes after the innate response?",
+      "paraphrase": "What immune response follows the innate immune response?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5726d8bd708984140094d35b",
+      "original": "What word is the word pharmacy taken from?",
+      "paraphrase": "What is the origin of the word 'pharmacy'?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5726f7715951b619008f8391",
+      "original": "How else might a physician take advantage of self-interest?",
+      "paraphrase": "In what other ways could a doctor leverage self-interest?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5726e5c95951b619008f81ce",
+      "original": "What are some other factors a pharmacist must monitor?",
+      "paraphrase": "What additional elements should a pharmacist keep an eye on?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5726f868dd62a815002e9687",
+      "original": "What are examples of clinical services that pharmacists can provide?",
+      "paraphrase": "What specific clinical services are available for pharmacists to deliver?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5726eb4b5951b619008f826f",
+      "original": "What is the main difference between online pharmacies and community pharmacies?",
+      "paraphrase": "How do online pharmacies differ from community pharmacies in terms of operation and service?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "minor_shift",
+        "note": "Adds 'in terms of operation and service', narrowing the original 'main difference'."
+      }
+    },
+    {
+      "id": "squad-5726ea985951b619008f8263",
+      "original": "What are some large pharmacy management companies?",
+      "paraphrase": "Which major pharmacy management firms are there?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5726da89dd62a815002e92b5",
+      "original": "What type of professional is a Pharmacy Technician considered to be?",
+      "paraphrase": "What occupational category is a Pharmacy Technician classified under?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5726e985dd62a815002e94de",
+      "original": "What entities are included in the federal health care system?",
+      "paraphrase": "Which organizations and programs constitute the federal health care system?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5726f0e35951b619008f82fa",
+      "original": "Has there ever been anyone charged with importing drugs from Canada for personal medicinal use?",
+      "paraphrase": "Has any individual ever faced legal charges for bringing drugs from Canada into the United States for personal medical purposes?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "minor_shift",
+        "note": "Adds 'into the United States', which the original does not state."
+      }
+    },
+    {
+      "id": "squad-5726ed6cf1498d1400e8f010",
+      "original": "What do most online pharmacies do?",
+      "paraphrase": "What is the typical action taken by the majority of online pharmacies?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": false
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5726dd71f1498d1400e8edd8",
+      "original": "Which three famous British potters are represented the the V&A ceramics collection?",
+      "paraphrase": "What are the names of the three renowned British potters whose works are featured in the V&A ceramics collection?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5726fe95dd62a815002e9736",
+      "original": "Which sculpture by Rodin was not donated by the artist?",
+      "paraphrase": "What Rodin sculpture was not given by the artist himself?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-57268294708984140094c87a",
+      "original": "Which cultures are represented in the V&A's collections?",
+      "paraphrase": "What cultural groups are included in the V&A's holdings?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5726e1fcdd62a815002e93c7",
+      "original": "Which famous Dutch artist who painted The Night Watch is represented in the drawings collection of the V&A?",
+      "paraphrase": "Which renowned Dutch painter, best known for creating The Night Watch, is featured in the drawings collection of the V&A?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5726ace8dd62a815002e8c9f",
+      "original": "What did the museum acquire from the Royal College of Science?",
+      "paraphrase": "From which institution did the museum obtain its collection, specifically the one from the Royal College of Science?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "meaning_changed",
+        "note": "Asks which institution the collection came from; the original asks what was acquired from the Royal College of Science."
+      }
+    },
+    {
+      "id": "squad-5726fb18dd62a815002e96d1",
+      "original": "Which uses of sculpture are represented in the collection?",
+      "paraphrase": "What sculptural applications are included in the collection?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-57269c06708984140094cba2",
+      "original": "What art historical style was used in the decoration for the northern part of the museum?",
+      "paraphrase": "What artistic style was employed in the decorative elements of the northern section of the museum?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-57268d02f1498d1400e8e378",
+      "original": "Who officially opened the V&A?",
+      "paraphrase": "Who was responsible for the formal opening of the V&A?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5726f2bcf1498d1400e8f0bf",
+      "original": "Who has loaned the Raphael Cartoons to the museum?",
+      "paraphrase": "Which organization or individual has provided the Raphael Cartoons to the museum on loan?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-57270ab9708984140094d8fa",
+      "original": "Besides the V&A's, whose collections are under the responsibility of conservators at the V&A?",
+      "paraphrase": "In addition to the V&A's own collections, which other collections are managed by conservators at the V&A?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-56e773fa00c9c71400d7714d",
+      "original": "What type of degree must a teacher have, at a minimum?",
+      "paraphrase": "What is the lowest level of academic qualification that a teacher is required to hold?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-56e769dc00c9c71400d770eb",
+      "original": "What has the avoidance of men to become teachers caused, in some areas?",
+      "paraphrase": "What effect has the exclusion of men from becoming teachers had, in certain regions?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "meaning_changed",
+        "note": "'Avoidance' (men choosing not to teach) became 'exclusion' (men being kept out)."
+      }
+    },
+    {
+      "id": "squad-56e7586d37bdd419002c3eb6",
+      "original": "What U.S. entity said that corporal punishment was Constitutional?",
+      "paraphrase": "Which U.S. organization ruled that corporal punishment is constitutional?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-56e76abf37bdd419002c3f76",
+      "original": "What, when combined with a large workload, can contribute to occupational stress?",
+      "paraphrase": "What factor, when paired with a significant workload, can lead to occupational stress?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-56e761d037bdd419002c3f15",
+      "original": "What do these teachers NOT do?",
+      "paraphrase": "Which of these activities do these teachers not perform?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-56e7714a00c9c71400d77139",
+      "original": "What can a teacher with 25 years of experience make, in Euros?",
+      "paraphrase": "How much can a teacher who has 25 years of experience earn, in Euros?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-56e75a9037bdd419002c3ec7",
+      "original": "What is a common punishment in Singapore?",
+      "paraphrase": "What type of penalty is frequently imposed in Singapore?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-56e77c6737bdd419002c401d",
+      "original": "What is an abbreviation for the Church of Jesus Christ of Latter-day Saints?",
+      "paraphrase": "What is the shortened form of the Church of Jesus Christ of Latter-day Saints?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-56e76f7000c9c71400d7712d",
+      "original": "Where are teachers recruited from?",
+      "paraphrase": "From where are educators selected?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-56e7683d00c9c71400d770ce",
+      "original": "What study covered subjects in 80,000 schools?",
+      "paraphrase": "Which study included participants from 80,000 schools?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5728fd3c3f37b31900477f2f",
+      "original": "What should the punishment rely on instead in a just society?",
+      "paraphrase": "In a just society, upon what basis should the penalty be grounded instead?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5728eb1a3acd2414000e01c9",
+      "original": "Anarchists do not want to accept punishment for what reason?",
+      "paraphrase": "Why do anarchists refuse to accept punishment?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5728e8212ca10214002daa6c",
+      "original": "What type of government investigations apply to civil disobedience?",
+      "paraphrase": "Which government inquiries are relevant to acts of civil disobedience?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-572822233acd2414000df559",
+      "original": "When was Thoreau's essay published?",
+      "paraphrase": "What year was Thoreau's essay released?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5728dafe3acd2414000e005d",
+      "original": "Who is the final judge of right and wrong?",
+      "paraphrase": "What entity determines the ultimate standard of what is correct versus what is incorrect?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": false
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5728dddc2ca10214002da9d4",
+      "original": "What is sometimes more effective than civil disobedience at times?",
+      "paraphrase": "What form of action, in certain situations, can be more effective than civil disobedience?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5728fb6a1d04691400778ef5",
+      "original": "What needs to be avoided with civil disobedience?",
+      "paraphrase": "What should be carefully prevented when engaging in civil disobedience?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5728e715ff5b5019007da917",
+      "original": "What goal do many of these protests have?",
+      "paraphrase": "What objective do most of these demonstrations aim to achieve?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5728fc9e1d04691400778f15",
+      "original": "Why are people who distribute leaflets inside courthouses not been arrested?",
+      "paraphrase": "Why aren't individuals distributing leaflets within courthouses being apprehended?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    },
+    {
+      "id": "squad-5728ed94ff5b5019007da97e",
+      "original": "What is the most important item for civil disobedience to follow through?",
+      "paraphrase": "What is the essential principle that must be adhered to in civil disobedience?",
+      "checks": {
+        "changed": true,
+        "no_answer_leak": true,
+        "is_question": true,
+        "length_ratio_ok": true
+      },
+      "meaning_review": {
+        "status": "same_meaning",
+        "note": ""
+      }
+    }
+  ],
+  "meaning_review": {
+    "reviewer": "AI assistant (Claude), not a human annotator",
+    "date": "2026-11-19",
+    "method": "Each pair read against the original; status same_meaning / minor_shift / meaning_changed. Reviewed before any EXP-002 run.",
+    "counts": {
+      "same_meaning": 54,
+      "minor_shift": 3,
+      "meaning_changed": 3
+    }
+  }
+}

@@ -107,3 +107,46 @@ class SquadSubset:
 @lru_cache(maxsize=1)
 def load_squad_subset(path: Path = SQUAD_SUBSET_PATH) -> SquadSubset:
     return SquadSubset(raw=json.loads(path.read_text(encoding="utf-8")))
+
+
+PARAPHRASES_PATH = SQUAD_SUBSET_PATH.with_name("squad_v1_1_dev_subset_v1_paraphrases_v1.json")
+
+
+def paraphrased_dataset(
+    chunking: ChunkingConfig = SQUAD_CHUNKING, path: Path = PARAPHRASES_PATH
+) -> Dataset:
+    """The SQuAD subset with every question replaced by its frozen paraphrase.
+
+    Test case ids are kept, so each case pairs with the same question in the
+    original dataset; ``metadata`` records the perturbation in the platform's
+    robustness convention (``perturbation_of``/``perturbation_type``), the
+    original wording, and the meaning review status of the paraphrase.
+    Gold answers and ``relevant_chunk_ids`` are unchanged: the question asks
+    for the same answer span, so the same passage is relevant.
+    """
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    by_id = {item["id"]: item for item in raw["items"]}
+    base = load_squad_subset().dataset(chunking)
+    test_cases = []
+    for tc in base.test_cases:
+        item = by_id[tc.id]
+        if item["original"] != tc.input:
+            raise ValueError(f"Paraphrase file does not match the dataset for {tc.id}.")
+        meta = dict(tc.metadata)
+        meta.update(
+            {
+                "perturbation_of": tc.id,
+                "perturbation_type": "question_rewording",
+                "original_question": tc.input,
+                "paraphrase_review": item.get("meaning_review", {}).get("status"),
+            }
+        )
+        test_cases.append(
+            TestCase(
+                id=tc.id,
+                input=item["paraphrase"],
+                reference_answer=tc.reference_answer,
+                metadata=meta,
+            )
+        )
+    return Dataset(name=str(raw["name"]), test_cases=test_cases)
