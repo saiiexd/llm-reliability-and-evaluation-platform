@@ -57,6 +57,14 @@ Scripts here automate clearly defined, repeatable tasks that support the researc
   resumable; refuses to mix environments). See `research/experiments/EXP-001_local_rag_reliability/`.
 - `analyze_reliability_study.py` -- analyses EXP-001 runs (Wilson intervals, McNemar tests,
   retrieval at the run's K, Cohen's kappa, consistency) and writes results files.
+- `export_annotation_sheet.py` -- writes a blind human-annotation sheet for answer correctness
+  (one row per distinct answer to a question, shuffled with a fixed seed), a key mapping each row
+  to every run and test case it represents, and an overlap sheet (>= 20%) for a second annotator.
+  Creates no labels. See `research/annotation/`.
+- `analyze_human_agreement.py` -- reads filled sheets, the key and the store; reports
+  inter-annotator Cohen's kappa and, per correctness evaluator and arm, accuracy, precision,
+  recall and specificity (Wilson 95% intervals) and kappa against the human labels, with every
+  exclusion counted. Refuses to run while no label is filled in.
 
 ## Script Requirements
 

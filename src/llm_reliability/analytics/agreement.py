@@ -8,6 +8,8 @@ criterion, preserving the exact cases responsible for disagreement.
 from __future__ import annotations
 
 import itertools
+from collections import Counter
+from collections.abc import Sequence
 
 from llm_reliability.analytics.models import EvaluatorAgreementSummary
 from llm_reliability.evaluation.models import EvaluationResult, EvaluationStatus
@@ -117,6 +119,26 @@ def cohens_kappa(table: dict[tuple[bool, bool], int]) -> float | None:
     a_pass = (table[(True, True)] + table[(True, False)]) / n
     b_pass = (table[(True, True)] + table[(False, True)]) / n
     p_e = a_pass * b_pass + (1 - a_pass) * (1 - b_pass)
+    if p_e >= 1.0:
+        return None
+    return (p_o - p_e) / (1 - p_e)
+
+
+def cohens_kappa_nominal(pairs: Sequence[tuple[str, str]]) -> float | None:
+    """Cohen's kappa for two raters assigning nominal categories to the same items.
+
+    ``pairs`` holds one ``(rater_a_label, rater_b_label)`` per item. Same
+    formula as :func:`cohens_kappa`, with p_e summed over every category either
+    rater used. For two categories it equals :func:`cohens_kappa`. Returns None
+    when there are no items or p_e == 1.
+    """
+    n = len(pairs)
+    if n == 0:
+        return None
+    count_a = Counter(a for a, _ in pairs)
+    count_b = Counter(b for _, b in pairs)
+    p_o = sum(1 for a, b in pairs if a == b) / n
+    p_e = sum((count_a[c] / n) * (count_b[c] / n) for c in set(count_a) | set(count_b))
     if p_e >= 1.0:
         return None
     return (p_o - p_e) / (1 - p_e)
