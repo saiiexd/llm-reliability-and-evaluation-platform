@@ -7,13 +7,12 @@ interface, never on a concrete library. ``FakeEmbeddingModel`` is
 deterministic and requires no dependency, so the standard test suite can
 exercise the full retrieval pipeline without network access or model
 downloads. ``SentenceTransformerEmbeddingModel`` is the one real
-implementation for this milestone (per the project's research plan);
-Sentence Transformers was already available in this environment, so no
-new dependency was required to enable it, but it imports the library
-lazily -- only inside ``embed()``, never at module import or construction
-time -- because the first real call downloads and caches a pretrained
-model, which requires network access this project's standard tests must
-never depend on.
+local implementation (per the project's research plan). It needs the
+optional ``embeddings`` dependency group (``sentence-transformers``, which
+pulls in ``torch``) and imports the library lazily -- only inside
+``embed()``, never at module import or construction time -- because the
+first real call downloads and caches a pretrained model, which requires
+network access this project's standard tests must never depend on.
 """
 
 from __future__ import annotations
@@ -95,7 +94,8 @@ class SentenceTransformerEmbeddingModel(EmbeddingModel):
     reading its configuration never requires the library or a model
     download. This is why it is never exercised by the standard, offline
     test suite (see ``tests/rag/test_embeddings_integration.py``, which
-    skips itself unless ``sentence-transformers`` is importable).
+    skips itself unless ``sentence-transformers`` is importable and
+    ``LLM_RELIABILITY_RUN_INTEGRATION_TESTS=1`` is set).
     """
 
     def __init__(self, model_id: str = "sentence-transformers/all-MiniLM-L6-v2") -> None:
@@ -108,13 +108,12 @@ class SentenceTransformerEmbeddingModel(EmbeddingModel):
     def embed(self, texts: Sequence[str]) -> list[list[float]]:
         if self._model is None:
             try:
-                from sentence_transformers import (  # type: ignore[import-not-found]
-                    SentenceTransformer,
-                )
+                from sentence_transformers import SentenceTransformer
             except ImportError as exc:
                 raise EmbeddingBackendError(
                     "The 'sentence-transformers' package is required to compute real "
-                    "embeddings but is not installed in this environment."
+                    "embeddings but is not installed in this environment. Install the "
+                    "'embeddings' optional dependency group to enable it."
                 ) from exc
             self._model = SentenceTransformer(self.model_id)
         vectors = self._model.encode(list(texts), convert_to_numpy=True)

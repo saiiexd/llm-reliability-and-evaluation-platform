@@ -34,8 +34,21 @@ dev = [
 # bert-score lazily, and the fake backend used for testing needs no
 # dependency at all. Install this extra only to run real BERTScore scoring
 # or the opt-in semantic similarity integration test.
+# Both ML extras pull in torch. Install the CPU-only build first to avoid the
+# multi-GB CUDA wheels, e.g.
+#   uv pip install torch --index-url https://download.pytorch.org/whl/cpu
+# Verified with torch 2.15.0+cpu, transformers 5.23.0, bert-score 0.3.13 and
+# sentence-transformers 6.3.0.
 semantic = [
     "bert-score>=0.3.13",
+]
+# Required only for the real SentenceTransformerEmbeddingModel
+# (llm_reliability.rag.embeddings), imported lazily inside embed(); the fake
+# embedding model and the OpenAI-compatible one need no extra dependency.
+# Install this extra only for local SentenceTransformer retrieval or the
+# opt-in embeddings integration test.
+embeddings = [
+    "sentence-transformers>=6.3",
 ]
 
 [tool.setuptools.packages.find]
@@ -94,3 +107,10 @@ extend-immutable-calls = [
 python_version = "3.13"
 files = ["src"]
 warn_unused_ignores = true
+
+# Optional, lazily imported ML packages: absent in the default install, and
+# bert-score ships no type information when present. An override (rather than
+# an inline ignore) type-checks the same with or without them installed.
+[[tool.mypy.overrides]]
+module = ["bert_score", "bert_score.*", "sentence_transformers", "sentence_transformers.*"]
+ignore_missing_imports = true

@@ -36,6 +36,10 @@ TRACKED_DEPENDENCIES = (
     "numpy",
     "bert-score",
     "sentence-transformers",
+    # The model runtime under bert-score / sentence-transformers: a different
+    # torch or transformers version can change the scores and embeddings.
+    "torch",
+    "transformers",
 )
 _REPO_ROOT = Path(__file__).resolve().parents[3]
 

@@ -72,6 +72,13 @@ class TestSemanticSimilarityConfigurationChangesFingerprint:
         )
         assert baseline.config_fingerprint != changed.config_fingerprint
 
+    def test_backend_layer_change_changes_fingerprint(self):
+        from llm_reliability.evaluation.semantic_similarity import BertScoreBackend
+
+        baseline = _definition([SemanticSimilarityEvaluator(backend=BertScoreBackend())])
+        changed = _definition([SemanticSimilarityEvaluator(backend=BertScoreBackend(num_layers=6))])
+        assert baseline.config_fingerprint != changed.config_fingerprint
+
 
 class TestLLMJudgeConfigurationChangesFingerprint:
     def _judge_config(self):
