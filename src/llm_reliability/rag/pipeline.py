@@ -39,6 +39,7 @@ from llm_reliability.rag.documents import Document
 from llm_reliability.rag.retriever import RetrievedChunk, Retriever
 
 PROMPT_TEMPLATE_ID = "default_v1"
+CONTEXT_ORDERS = ("ranked", "reversed")
 
 
 def compute_corpus_fingerprint(documents: list[Document]) -> str:
@@ -77,9 +78,26 @@ class RagPipelineConfig:
     corpus_fingerprint: str
     similarity_metric: str = "cosine"
     prompt_template_id: str = PROMPT_TEMPLATE_ID
+    # Controlled perturbations of the context given to generation (RQ5). They
+    # change only the prompt, never ``retrieved_chunks``, so retrieval metrics
+    # still describe what the retriever actually returned.
+    #   context_order: "ranked" (best first) or "reversed" (best last).
+    #   distractor_chunks: number of least-similar corpus chunks placed before
+    #   the retrieved passages (irrelevant context injection).
+    context_order: str = "ranked"
+    distractor_chunks: int = 0
+
+    def __post_init__(self) -> None:
+        if self.context_order not in CONTEXT_ORDERS:
+            raise ValueError(
+                f"RagPipelineConfig.context_order must be one of {CONTEXT_ORDERS}, "
+                f"got {self.context_order!r}."
+            )
+        if self.distractor_chunks < 0:
+            raise ValueError("RagPipelineConfig.distractor_chunks must be >= 0.")
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        data: dict[str, Any] = {
             "embedding_model_id": self.embedding_model_id,
             "chunk_size": self.chunk_size,
             "chunk_overlap": self.chunk_overlap,
@@ -88,6 +106,14 @@ class RagPipelineConfig:
             "similarity_metric": self.similarity_metric,
             "prompt_template_id": self.prompt_template_id,
         }
+        # Perturbation settings are written only when they differ from the
+        # default, so configurations recorded before they existed keep their
+        # exact dict (and therefore their fingerprints).
+        if self.context_order != "ranked":
+            data["context_order"] = self.context_order
+        if self.distractor_chunks:
+            data["distractor_chunks"] = self.distractor_chunks
+        return data
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> RagPipelineConfig:
@@ -99,6 +125,8 @@ class RagPipelineConfig:
             corpus_fingerprint=data["corpus_fingerprint"],
             similarity_metric=data.get("similarity_metric", "cosine"),
             prompt_template_id=data.get("prompt_template_id", PROMPT_TEMPLATE_ID),
+            context_order=data.get("context_order", "ranked"),
+            distractor_chunks=int(data.get("distractor_chunks", 0)),
         )
 
 
@@ -126,9 +154,12 @@ def build_rag_prompt(
     if not retrieved_chunks:
         context_block = "(no context retrieved)"
     else:
+        # Numbered by position in the prompt, not by retrieval rank: for the
+        # default ranked order the two are identical, and for perturbed orders
+        # the model must not be told which passage the retriever ranked first.
         context_block = "\n".join(
-            f"[{chunk.rank}] (source: {chunk.document_id}) {chunk.text}"
-            for chunk in retrieved_chunks
+            f"[{position}] (source: {chunk.document_id}) {chunk.text}"
+            for position, chunk in enumerate(retrieved_chunks, start=1)
         )
     if template_id == PROMPT_TEMPLATE_ID:
         return (
@@ -174,9 +205,18 @@ class RagPipeline(ModelAdapter):
 
     def generate(self, request: ExecutionRequest) -> ModelResponse:
         retrieval_result = self._retriever.retrieve(request.input_text)
+        context_chunks = list(retrieval_result.retrieved_chunks)
+        if self._config.context_order == "reversed":
+            context_chunks.reverse()
+        injected = (
+            self._retriever.least_similar(request.input_text, self._config.distractor_chunks)
+            if self._config.distractor_chunks
+            else []
+        )
+        context_chunks = injected + context_chunks
         prompt = build_rag_prompt(
             request.input_text,
-            retrieval_result.retrieved_chunks,
+            context_chunks,
             template_id=self._config.prompt_template_id,
         )
 
@@ -197,6 +237,8 @@ class RagPipeline(ModelAdapter):
             "pipeline_config": self._config.to_dict(),
             "prompt": prompt,
         }
+        if injected:
+            provider_metadata["rag"]["injected_chunks"] = [chunk.to_dict() for chunk in injected]
         return ModelResponse(
             test_case_id=response.test_case_id,
             output_text=response.output_text,

@@ -168,3 +168,32 @@ class Retriever:
             for rank, (score, chunk) in enumerate(top, start=1)
         ]
         return RetrievalResult(query=query, retrieved_chunks=retrieved_chunks, config=self._config)
+
+    def least_similar(self, query: str, n: int) -> list[RetrievedChunk]:
+        """The ``n`` corpus chunks *least* similar to ``query``, least similar first.
+
+        Used as controlled distractors (an "irrelevant context injection"
+        perturbation): the least similar chunk is a deterministic, label-free
+        choice that is very unlikely to contain the answer. ``rank`` is the
+        chunk's true 1-based rank in the full similarity ordering.
+        """
+        if n <= 0:
+            return []
+        query_vector = self._embedding_model.embed_one(query)
+        scored = [
+            (cosine_similarity(query_vector, vector), chunk)
+            for vector, chunk in zip(self._chunk_vectors, self._chunks, strict=True)
+        ]
+        scored.sort(key=lambda pair: pair[0], reverse=True)
+        total = len(scored)
+        bottom = list(enumerate(scored, start=1))[-n:][::-1]
+        return [
+            RetrievedChunk(
+                chunk_id=chunk.id,
+                document_id=chunk.document_id,
+                text=chunk.text,
+                score=score,
+                rank=rank,
+            )
+            for rank, (score, chunk) in bottom
+        ][: min(n, total)]
