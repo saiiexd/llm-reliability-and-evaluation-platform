@@ -50,15 +50,27 @@ export function testCasePassed(result: TestCaseResult): boolean {
  * without changing which cases count as passed:
  *
  *   passed   - every check ran and passed (same set as testCasePassed)
+ *   disputed - two checks of the SAME criterion disagree (e.g. exact match says
+ *              wrong, the LLM judge says correct). Counted as not passed by the
+ *              backend's any-fail policy, but shown separately so evaluator
+ *              disagreement is never hidden inside "wrong".
  *   failed   - at least one check ran and judged the answer wrong
  *   unscored - no check said wrong, but at least one could not give a verdict
  *   error    - the model call itself crashed, so there is no answer to check
  */
-export type Verdict = "passed" | "failed" | "unscored" | "error";
+export type Verdict = "passed" | "disputed" | "failed" | "unscored" | "error";
 
 export function testCaseVerdict(result: TestCaseResult): Verdict {
   if (!testCaseSucceeded(result)) return "error";
   const evals = result.evaluation_results ?? [];
+  const byCriterion = new Map<string, Set<boolean>>();
+  for (const e of evals) {
+    if (e.passed === true || e.passed === false) {
+      const key = e.criterion ?? "";
+      byCriterion.set(key, (byCriterion.get(key) ?? new Set()).add(e.passed));
+    }
+  }
+  if ([...byCriterion.values()].some((s) => s.size === 2)) return "disputed";
   if (evals.some((e) => e.passed === false)) return "failed";
   if (testCasePassed(result)) return "passed";
   return "unscored";
@@ -72,7 +84,7 @@ export function evaluatorVerdict(e: { passed: boolean | null }): "passed" | "fai
 }
 
 export function verdictCounts(results: TestCaseResult[]): Record<Verdict, number> & { total: number } {
-  const counts = { passed: 0, failed: 0, unscored: 0, error: 0, total: results.length };
+  const counts = { passed: 0, disputed: 0, failed: 0, unscored: 0, error: 0, total: results.length };
   for (const r of results) counts[testCaseVerdict(r)] += 1;
   return counts;
 }
@@ -98,6 +110,7 @@ export function runPassCounts(run: {
 
 export const VERDICT_LABEL: Record<Verdict, string> = {
   passed: "Passed",
+  disputed: "Checks disagree",
   failed: "Wrong",
   unscored: "Not scored",
   error: "Crashed",

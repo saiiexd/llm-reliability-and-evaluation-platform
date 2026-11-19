@@ -268,13 +268,14 @@ export class ApiClient {
         if (!tc.model_response && tc.output_text !== undefined) {
           tc.model_response = {
             output_text: tc.output_text,
-            latency_ms:
-              tc.duration_seconds !== null && tc.duration_seconds !== undefined
-                ? tc.duration_seconds * 1000
-                : null,
-            prompt_tokens: tc.provider_metadata?.prompt_tokens ?? null,
-            completion_tokens: tc.provider_metadata?.completion_tokens ?? null,
-            total_tokens: tc.provider_metadata?.total_tokens ?? null,
+            model_id: tc.model_id ?? null,
+            // Generation latency as recorded by the adapter; null when not
+            // reported (mock adapters). Not derived from wall-clock duration,
+            // which also includes evaluation time.
+            latency_ms: tc.latency_ms ?? null,
+            prompt_tokens: tc.prompt_tokens ?? null,
+            completion_tokens: tc.completion_tokens ?? null,
+            total_tokens: tc.total_tokens ?? null,
             provider_metadata: tc.provider_metadata || {},
           };
         }
@@ -319,13 +320,11 @@ export class ApiClient {
     if (tc && !tc.model_response && tc.output_text !== undefined) {
       tc.model_response = {
         output_text: tc.output_text,
-        latency_ms:
-          tc.duration_seconds !== null && tc.duration_seconds !== undefined
-            ? tc.duration_seconds * 1000
-            : null,
-        prompt_tokens: tc.provider_metadata?.prompt_tokens ?? null,
-        completion_tokens: tc.provider_metadata?.completion_tokens ?? null,
-        total_tokens: tc.provider_metadata?.total_tokens ?? null,
+        model_id: tc.model_id ?? null,
+        latency_ms: tc.latency_ms ?? null,
+        prompt_tokens: tc.prompt_tokens ?? null,
+        completion_tokens: tc.completion_tokens ?? null,
+        total_tokens: tc.total_tokens ?? null,
         provider_metadata: tc.provider_metadata || {},
       };
     }

@@ -8,6 +8,7 @@ import { Tag } from "./Tag";
 
 const VERDICT_TONE: Record<Verdict, Tone> = {
   passed: "neutral",
+  disputed: "muted",
   failed: "negative",
   unscored: "muted",
   error: "negative",
@@ -15,6 +16,8 @@ const VERDICT_TONE: Record<Verdict, Tone> = {
 
 export const VERDICT_HELP: Record<Verdict, string> = {
   passed: "Every check ran and accepted the answer.",
+  disputed:
+    "Two checks of the same thing disagree (e.g. exact match says wrong, the LLM judge says correct). Open the question to see both.",
   failed: "At least one check judged the answer wrong.",
   unscored: "No check said it was wrong, but at least one check could not run.",
   error: "The model call failed, so there was no answer to check.",
@@ -26,13 +29,14 @@ export function VerdictTag({ verdict }: { verdict: Verdict }) {
 
 const SEGMENT_CLASS: Record<Verdict, string> = {
   passed: "bg-ink",
+  disputed: "bg-ink/45",
   failed: "bg-accent",
   unscored:
     "bg-[repeating-linear-gradient(135deg,var(--color-ink-soft)_0_2px,transparent_2px_6px)] opacity-70",
   error: "bg-accent/50",
 };
 
-const ORDER: Verdict[] = ["passed", "failed", "unscored", "error"];
+const ORDER: Verdict[] = ["passed", "disputed", "failed", "unscored", "error"];
 
 export function VerdictBar({
   counts,
@@ -77,9 +81,10 @@ export function VerdictBar({
 
 /** One plain sentence describing a run's outcome. */
 export function verdictSentence(counts: Record<Verdict, number> & { total: number }): string {
-  const { total, passed, failed, unscored, error } = counts;
+  const { total, passed, disputed, failed, unscored, error } = counts;
   if (total === 0) return "This run has no test cases.";
   const parts = [`${passed} of ${total} answers passed`];
+  if (disputed) parts.push(`the checks disagreed on ${disputed}`);
   if (failed) parts.push(`${failed} ${failed === 1 ? "was" : "were"} wrong`);
   if (unscored) parts.push(`${unscored} could not be fully scored`);
   if (error) parts.push(`${error} crashed`);

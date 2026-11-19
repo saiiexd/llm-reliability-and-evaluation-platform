@@ -312,6 +312,13 @@ def to_run_detail(run: ExperimentRun, include_test_cases: bool = True) -> RunDet
                     provider_metadata=redact_sensitive_dict(
                         tc.model_response.provider_metadata if tc.model_response else {}
                     ),
+                    model_id=tc.model_response.model_id if tc.model_response else None,
+                    latency_ms=tc.model_response.latency_ms if tc.model_response else None,
+                    prompt_tokens=tc.model_response.prompt_tokens if tc.model_response else None,
+                    completion_tokens=(
+                        tc.model_response.completion_tokens if tc.model_response else None
+                    ),
+                    total_tokens=tc.model_response.total_tokens if tc.model_response else None,
                 )
             )
 

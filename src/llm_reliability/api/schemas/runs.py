@@ -42,6 +42,14 @@ class TestCaseResultResponse(BaseApiSchema):
     duration_seconds: float | None = None
     execution_error: str | None = None
     provider_metadata: dict[str, Any] = Field(default_factory=dict)
+    # Generation telemetry from the ModelResponse (None when not reported;
+    # never fabricated). Previously dropped by the API, so the console showed
+    # "n/a" even for runs that recorded latency and provider token counts.
+    model_id: str | None = None
+    latency_ms: float | None = None
+    prompt_tokens: int | None = None
+    completion_tokens: int | None = None
+    total_tokens: int | None = None
 
 
 class RunSummaryResponse(BaseApiSchema):

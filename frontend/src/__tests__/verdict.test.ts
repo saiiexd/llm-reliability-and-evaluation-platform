@@ -57,6 +57,25 @@ describe("testCaseVerdict", () => {
       testCase([evalResult(false)]),
       testCase([evalResult(true), evalResult(null, "output_validation_error")]),
     ]);
-    expect(counts).toEqual({ passed: 1, failed: 1, unscored: 1, error: 0, total: 3 });
+    expect(counts).toEqual({ passed: 1, disputed: 0, failed: 1, unscored: 1, error: 0, total: 3 });
+  });
+});
+
+describe("disputed verdict", () => {
+  const ev = (name: string, criterion: string, passed: boolean): EvaluationResult => ({
+    ...evalResult(passed),
+    evaluator_name: name,
+    criterion,
+    error: null,
+  });
+
+  it("is disputed when two checks of the same criterion disagree", () => {
+    const tc = testCase([ev("exact_match", "correctness", false), ev("llm_judge", "correctness", true)]);
+    expect(testCaseVerdict(tc)).toBe("disputed");
+  });
+
+  it("stays failed when checks of different criteria differ", () => {
+    const tc = testCase([ev("exact_match", "correctness", true), ev("llm_faithfulness_judge", "faithfulness", false)]);
+    expect(testCaseVerdict(tc)).toBe("failed");
   });
 });

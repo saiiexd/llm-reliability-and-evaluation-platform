@@ -106,7 +106,7 @@ export function ResultsPage() {
     }
   }
 
-  const filters: Filter[] = ["all", "passed", "failed", "unscored", "error"];
+  const filters: Filter[] = ["all", "passed", "disputed", "failed", "unscored", "error"];
 
   return (
     <div>

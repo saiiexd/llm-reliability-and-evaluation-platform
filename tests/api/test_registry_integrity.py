@@ -186,3 +186,41 @@ def test_credential_keys_in_any_casing_are_rejected(api_client: TestClient) -> N
         "secret_key",
         "token",
     ]
+
+
+def test_generation_telemetry_reaches_the_api(tmp_path) -> None:
+    """latency/tokens recorded on a ModelResponse must be exposed per test case."""
+    from llm_reliability.api.services import to_run_detail
+    from llm_reliability.evaluation import Dataset, ExactMatchEvaluator, ModelConfig, TestCase
+    from llm_reliability.evaluation.adapters import ModelAdapter
+    from llm_reliability.evaluation.models import ModelResponse
+    from llm_reliability.experiments import ExperimentManager, LocalFileExperimentRepository
+
+    class _Telemetry(ModelAdapter):
+        def generate(self, request):
+            return ModelResponse(request.test_case_id, "a", "m-x", 12.5, 3, 1, 4)
+
+    mgr = ExperimentManager(LocalFileExperimentRepository(tmp_path))
+    d = mgr.create_experiment(
+        "exp-t",
+        "t",
+        Dataset("d", [TestCase("t1", "q", "a")]),
+        ModelConfig("m"),
+        [ExactMatchEvaluator()],
+    )
+    tc = to_run_detail(
+        mgr.execute_experiment(d, _Telemetry(), [ExactMatchEvaluator()])
+    ).test_case_results[0]
+    assert (
+        tc.model_id,
+        tc.latency_ms,
+        tc.prompt_tokens,
+        tc.completion_tokens,
+        tc.total_tokens,
+    ) == (
+        "m-x",
+        12.5,
+        3,
+        1,
+        4,
+    )

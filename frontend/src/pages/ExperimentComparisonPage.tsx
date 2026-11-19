@@ -1,15 +1,19 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useConnection } from "../context/ConnectionContext";
 import { useComparison, useRuns } from "../data/useData";
 import { DataStateView } from "../components/DataStateView";
 import { EmptyState } from "../components/EmptyState";
 import { evaluatorLabel, formatTimestamp } from "../lib/derived";
 import type { ComparisonCompatibility } from "../types/domain";
 
+// Demo-data examples. "pick" lets you compare any two runs (live API only:
+// the bundled fixtures contain just these three precomputed comparisons).
 const PRESETS = [
-  { id: "identical", label: "Same setup, run twice" },
-  { id: "intervention", label: "1 vs 2 retrieved passages" },
-  { id: "incompatible", label: "RAG vs no RAG" },
+  { id: "pick", label: "Pick two runs" },
+  { id: "identical", label: "Demo: same setup twice" },
+  { id: "intervention", label: "Demo: 1 vs 2 passages" },
+  { id: "incompatible", label: "Demo: RAG vs no RAG" },
 ];
 
 const VERDICT: Record<ComparisonCompatibility, { title: string; body: string }> = {
@@ -34,6 +38,15 @@ const METRIC_LABEL: Record<string, string> = {
   recall_at_k_k2: "Share of needed passages found (top 2)",
   mrr: "How high the right passage ranked (MRR)",
 };
+
+function metricLabel(metric: string): string {
+  if (METRIC_LABEL[metric]) return METRIC_LABEL[metric];
+  const m = /^(hit|recall)_at_k_k(\d+)$/.exec(metric);
+  if (!m) return metric;
+  return m[1] === "hit"
+    ? `Right passage found in top ${m[2]}`
+    : `Share of needed passages found (top ${m[2]})`;
+}
 
 /** Flatten nested config values to dotted paths so we can diff leaf settings. */
 function flatten(value: unknown, prefix: string, out: Record<string, string>) {
@@ -78,8 +91,15 @@ const pct = (v: number | null | undefined) => (v == null ? "—" : `${Math.round
 
 export function ExperimentComparisonPage() {
   const { data: allRuns } = useRuns();
-  const [preset, setPreset] = useState("identical");
-  const { data: comparison, loading, error, refetch } = useComparison(preset);
+  const { dataMode } = useConnection();
+  const live = dataMode === "live";
+  const [preset, setPreset] = useState(live ? "pick" : "identical");
+  const sortedRuns = [...(allRuns ?? [])].sort((a, b) => b.started_at.localeCompare(a.started_at));
+  const [pickA, setPickA] = useState("");
+  const [pickB, setPickB] = useState("");
+  const picked = preset === "pick" && pickA && pickB && pickA !== pickB ? [pickA, pickB] : undefined;
+  const { data: comparison, loading, error, refetch } = useComparison(preset, picked);
+  const waitingForPick = preset === "pick" && !picked;
 
   const runIds = comparison?.source_run_ids ?? [];
   const runInfo = (id: string) => allRuns?.find((r) => r.run_id === id);
@@ -94,7 +114,7 @@ export function ExperimentComparisonPage() {
           format: pct,
         })),
         ...Object.entries(comparison.retrieval_comparisons).map(([metric, scores]) => ({
-          label: METRIC_LABEL[metric] ?? metric,
+          label: metricLabel(metric),
           values: runIds.map((id) => scores[id]),
           format: (v: number | null | undefined) => (v == null ? "—" : v.toFixed(2)),
         })),
@@ -109,7 +129,7 @@ export function ExperimentComparisonPage() {
   return (
     <div>
       <div className="mb-6 flex flex-wrap gap-2">
-        {PRESETS.map((p) => (
+        {PRESETS.filter((p) => live || p.id !== "pick").map((p) => (
           <button
             key={p.id}
             type="button"
@@ -123,6 +143,38 @@ export function ExperimentComparisonPage() {
         ))}
       </div>
 
+      {preset === "pick" && (
+        <div className="mb-6 grid gap-3 sm:grid-cols-2">
+          {[
+            { label: "Run A", value: pickA, set: setPickA },
+            { label: "Run B", value: pickB, set: setPickB },
+          ].map(({ label, value, set }) => (
+            <label key={label} className="flex min-w-0 flex-col gap-1 text-sm">
+              <span className="text-ink-soft">{label}</span>
+              <select
+                value={value}
+                onChange={(e) => set(e.target.value)}
+                className="w-full min-w-0 rounded-md border border-line bg-paper px-3 py-2 text-sm"
+              >
+                <option value="">Choose a run…</option>
+                {sortedRuns.map((r) => (
+                  <option key={r.run_id} value={r.run_id}>
+                    {r.experiment_id} · {r.adapter_id ?? "adapter not recorded"}
+                    {r.repetition_index ? ` · repeat ${r.repetition_index}` : ""} · {formatTimestamp(r.started_at)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ))}
+        </div>
+      )}
+
+      {waitingForPick ? (
+        <EmptyState
+          title="Choose two different runs"
+          detail="The comparison checks first whether the runs can be fairly compared (same questions, what changed), then shows the results side by side."
+        />
+      ) : (
       <DataStateView loading={loading} error={error} onRetry={refetch}>
         {!comparison ? (
           <EmptyState title="No comparison available for this pair." />
@@ -210,6 +262,9 @@ export function ExperimentComparisonPage() {
                                 ? "—"
                                 : delta == null || Math.abs(delta) < 1e-9
                                 ? "same"
+                                : row.format === pct
+                                ? // A difference of two rates is in percentage points, not percent.
+                                  `${delta > 0 ? "+" : "−"}${Math.round(Math.abs(delta) * 100)} pts`
                                 : `${delta > 0 ? "+" : "−"}${row.format(Math.abs(delta))}`}
                             </td>
                           )}
@@ -223,6 +278,7 @@ export function ExperimentComparisonPage() {
           </div>
         )}
       </DataStateView>
+      )}
     </div>
   );
 }
