@@ -100,12 +100,12 @@ describe("Simplified Academic Research Navigation & Layout", () => {
       </ConnectionProvider>,
     );
 
-    expect(screen.getByText("Analytical Diagnostics")).toBeDefined();
-    expect(screen.getByRole("button", { name: "Model Comparison" })).toBeDefined();
-    expect(screen.getByRole("button", { name: "Reliability & Failure Forensics" })).toBeDefined();
-    expect(screen.getByRole("button", { name: "RAG & Context Retrieval" })).toBeDefined();
-    expect(screen.getByRole("button", { name: "Consistency & Robustness" })).toBeDefined();
-    expect(screen.getByRole("button", { name: "System Latency & Telemetry" })).toBeDefined();
+    expect(screen.getByRole("heading", { name: "Analysis" })).toBeDefined();
+    expect(screen.getByRole("tab", { name: "Compare runs" })).toBeDefined();
+    expect(screen.getByRole("tab", { name: "Why answers fail" })).toBeDefined();
+    expect(screen.getByRole("tab", { name: "Retrieval" })).toBeDefined();
+    expect(screen.getByRole("tab", { name: "Consistency" })).toBeDefined();
+    expect(screen.getByRole("tab", { name: "Speed & cost" })).toBeDefined();
   });
 
   it("seamlessly redirects legacy comparisons route to the Analysis Model Comparison tab", () => {
@@ -118,8 +118,8 @@ describe("Simplified Academic Research Navigation & Layout", () => {
     );
 
     // Successfully renders the Analysis view
-    expect(screen.getByText("Analytical Diagnostics")).toBeDefined();
-    expect(screen.getByRole("button", { name: "Model Comparison" })).toBeDefined();
+    expect(screen.getByRole("heading", { name: "Analysis" })).toBeDefined();
+    expect(screen.getByRole("tab", { name: "Compare runs" })).toBeDefined();
   });
 });
 

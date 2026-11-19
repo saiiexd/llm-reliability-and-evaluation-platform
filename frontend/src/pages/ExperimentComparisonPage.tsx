@@ -1,291 +1,213 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { FixtureNotice } from "../components/FixtureNotice";
-import { Card, SectionHeading } from "../components/Card";
-import { Tag } from "../components/Tag";
 import { useComparison, useRuns } from "../data/useData";
 import { DataStateView } from "../components/DataStateView";
+import { EmptyState } from "../components/EmptyState";
+import { evaluatorLabel, formatTimestamp } from "../lib/derived";
 import type { ComparisonCompatibility } from "../types/domain";
+
+const PRESETS = [
+  { id: "identical", label: "Same setup, run twice" },
+  { id: "intervention", label: "1 vs 2 retrieved passages" },
+  { id: "incompatible", label: "RAG vs no RAG" },
+];
+
+const VERDICT: Record<ComparisonCompatibility, { title: string; body: string }> = {
+  identical_configuration: {
+    title: "Same setup",
+    body: "Nothing was changed between these runs, so any difference in results is randomness, not a real effect.",
+  },
+  partially_different_configuration: {
+    title: "One thing changed",
+    body: "Only the settings listed under “What changed” differ, so differences in results can be attributed to them.",
+  },
+  materially_incompatible: {
+    title: "Not a fair comparison",
+    body: "Too much differs between these runs to say what caused any difference in results.",
+  },
+};
+
+const METRIC_LABEL: Record<string, string> = {
+  hit_at_k_k1: "Right passage found in top 1",
+  hit_at_k_k2: "Right passage found in top 2",
+  recall_at_k_k1: "Share of needed passages found (top 1)",
+  recall_at_k_k2: "Share of needed passages found (top 2)",
+  mrr: "How high the right passage ranked (MRR)",
+};
+
+/** Flatten nested config values to dotted paths so we can diff leaf settings. */
+function flatten(value: unknown, prefix: string, out: Record<string, string>) {
+  if (value !== null && typeof value === "object" && !Array.isArray(value)) {
+    for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
+      flatten(v, prefix ? `${prefix}.${k}` : k, out);
+    }
+  } else {
+    out[prefix] = Array.isArray(value) ? value.join(", ") : String(value);
+  }
+}
+
+/** Only the settings whose values actually differ between runs. */
+function changedSettings(
+  diffs: Record<string, unknown>,
+  runIds: string[],
+): { path: string; values: string[] }[] {
+  const perRun = runIds.map((id) => {
+    const flat: Record<string, string> = {};
+    for (const [param, byRun] of Object.entries(diffs)) {
+      flatten((byRun as Record<string, unknown> | null)?.[id], param, flat);
+    }
+    return flat;
+  });
+  const paths = new Set(perRun.flatMap((f) => Object.keys(f)));
+  return [...paths]
+    .filter((p) => !/fingerprint|version/i.test(p)) // hashes change whenever anything changes
+    .map((path) => ({ path, values: perRun.map((f) => f[path] ?? "—") }))
+    .filter((row) => new Set(row.values).size > 1);
+}
+
+const pct = (v: number | null | undefined) => (v == null ? "—" : `${Math.round(v * 100)}%`);
 
 export function ExperimentComparisonPage() {
   const { data: allRuns } = useRuns();
-  const [activePreset, setActivePreset] = useState<string>("identical");
-  const { data: comparison, loading, error, refetch } = useComparison(activePreset);
+  const [preset, setPreset] = useState("identical");
+  const { data: comparison, loading, error, refetch } = useComparison(preset);
 
-  const compatibilityBadge = (compat: ComparisonCompatibility) => {
-    switch (compat) {
-      case "identical_configuration":
-        return <Tag tone="neutral">Identical Configuration</Tag>;
-      case "partially_different_configuration":
-        return <Tag tone="caution">Controlled Intervention</Tag>;
-      case "materially_incompatible":
-        return <Tag tone="negative">Materially Incompatible</Tag>;
-      default:
-        return <Tag tone="muted">{compat}</Tag>;
-    }
-  };
+  const runIds = comparison?.source_run_ids ?? [];
+  const runInfo = (id: string) => allRuns?.find((r) => r.run_id === id);
+  const letter = (i: number) => String.fromCharCode(65 + i);
+
+  type Row = { label: string; values: (number | null | undefined)[]; format: (v: number | null | undefined) => string };
+  const rows: Row[] = comparison
+    ? [
+        ...Object.entries(comparison.evaluation_comparisons).map(([name, d]) => ({
+          label: `${evaluatorLabel(name)}: passed`,
+          values: runIds.map((id) => d.pass_rates[id]),
+          format: pct,
+        })),
+        ...Object.entries(comparison.retrieval_comparisons).map(([metric, scores]) => ({
+          label: METRIC_LABEL[metric] ?? metric,
+          values: runIds.map((id) => scores[id]),
+          format: (v: number | null | undefined) => (v == null ? "—" : v.toFixed(2)),
+        })),
+        {
+          label: "Same answer when question is reworded",
+          values: runIds.map((id) => comparison.robustness_comparisons[id]),
+          format: pct,
+        },
+      ]
+    : [];
 
   return (
     <div>
-      <SectionHeading
-        eyebrow="Comparative analysis"
-        title="Cross-Run Experiment Comparison"
-        description="Side-by-side comparative evaluation across experimental conditions, assessing methodological validity, parameter sensitivity, and reliability patterns."
-      />
-      <FixtureNotice />
-
-      {/* Preset Selector */}
       <div className="mb-6 flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={() => setActivePreset("identical")}
-          className={`border px-3 py-1.5 text-xs font-medium transition-colors ${
-            activePreset === "identical"
-              ? "border-ink bg-ink text-paper"
-              : "border-line bg-paper text-ink hover:border-ink"
-          }`}
-        >
-          Repeated Baseline Trials (Identical Config)
-        </button>
-        <button
-          type="button"
-          onClick={() => setActivePreset("intervention")}
-          className={`border px-3 py-1.5 text-xs font-medium transition-colors ${
-            activePreset === "intervention"
-              ? "border-ink bg-ink text-paper"
-              : "border-line bg-paper text-ink hover:border-ink"
-          }`}
-        >
-          Top-K=1 vs Top-K=2 (Controlled Intervention)
-        </button>
-        <button
-          type="button"
-          onClick={() => setActivePreset("incompatible")}
-          className={`border px-3 py-1.5 text-xs font-medium transition-colors ${
-            activePreset === "incompatible"
-              ? "border-ink bg-ink text-paper"
-              : "border-line bg-paper text-ink hover:border-ink"
-          }`}
-        >
-          RAG vs Plain Non-RAG (Materially Incompatible)
-        </button>
+        {PRESETS.map((p) => (
+          <button
+            key={p.id}
+            type="button"
+            onClick={() => setPreset(p.id)}
+            className={`rounded-full border px-3 py-1.5 text-sm transition-colors ${
+              preset === p.id ? "border-ink bg-ink text-paper" : "border-line text-ink-soft hover:text-ink"
+            }`}
+          >
+            {p.label}
+          </button>
+        ))}
       </div>
 
       <DataStateView loading={loading} error={error} onRetry={refetch}>
         {!comparison ? (
-          <div className="border border-line bg-paper p-6 text-center text-xs text-ink-soft">
-            No comparison data available for this selection.
-          </div>
+          <EmptyState title="No comparison available for this pair." />
         ) : (
           <div className="space-y-6">
-            {/* Compatibility Overview Banner */}
-            <div className="border border-line bg-paper p-5">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <div className="font-mono text-xs uppercase text-ink-soft">
-                    Methodological Compatibility
-                  </div>
-                  <div className="mt-1 flex items-center gap-2">
-                    <span className="font-display text-lg font-medium">
-                      {comparison.compatibility === "identical_configuration" &&
-                        "Repeated Trials Under Identical Setup"}
-                      {comparison.compatibility === "partially_different_configuration" &&
-                        "Controlled Experimental Intervention"}
-                      {comparison.compatibility === "materially_incompatible" &&
-                        "Materially Incompatible Runs"}
-                    </span>
-                    {compatibilityBadge(comparison.compatibility)}
-                  </div>
-                </div>
-
-                <div className="font-mono text-xs text-ink-soft">
-                  Comparing {comparison.source_run_ids.length} runs:{" "}
-                  {comparison.source_run_ids.map((rId, i) => (
-                    <span key={rId}>
-                      {i > 0 && " vs "}
-                      <Link to={`/runs/${rId}`} className="underline">
-                        {rId.slice(0, 12)}
+            <section className="rounded-xl border border-line bg-paper-dim p-6">
+              <p className="text-lg font-semibold">{VERDICT[comparison.compatibility]?.title ?? comparison.compatibility}</p>
+              <p className="mt-1 max-w-2xl text-sm text-ink-soft">{VERDICT[comparison.compatibility]?.body}</p>
+              <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-sm">
+                {runIds.map((id, i) => {
+                  const r = runInfo(id);
+                  return (
+                    <li key={id}>
+                      <span className="text-ink-soft">Run {letter(i)}:</span>{" "}
+                      <Link to={`/results/${id}`} className="underline underline-offset-4">
+                        {r ? formatTimestamp(r.started_at) : id.slice(0, 12)}
                       </Link>
-                    </span>
-                  ))}
-                </div>
-              </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
 
-              {comparison.compatibility_reasons.length > 0 && (
-                <div className="mt-4 border-t border-line pt-3">
-                  <div className="font-mono text-xs uppercase text-ink-soft">
-                    Compatibility Findings & Warnings
-                  </div>
-                  <ul className="mt-1 list-disc space-y-1 pl-4 text-xs text-ink-soft">
-                    {comparison.compatibility_reasons.map((reason, idx) => (
-                      <li key={idx}>{reason}</li>
+            <section className="rounded-xl border border-line p-6">
+              <h3 className="font-semibold">What changed</h3>
+              {(() => {
+                const changed = changedSettings(comparison.configuration_diffs, runIds);
+                if (changed.length === 0) {
+                  return <p className="mt-2 text-sm text-ink-soft">Nothing. Both runs used exactly the same settings.</p>;
+                }
+                return (
+                  <ul className="mt-3 divide-y divide-line text-sm">
+                    {changed.map((c) => (
+                      <li key={c.path} className="flex flex-col gap-1 py-2 sm:flex-row sm:justify-between sm:gap-6">
+                        <span className="font-mono text-ink-soft break-all">{c.path}</span>
+                        <span className="font-mono break-all">{c.values.join("  →  ")}</span>
+                      </li>
                     ))}
                   </ul>
-                </div>
+                );
+              })()}
+              {comparison.compatibility_reasons.length > 0 && (
+                <details className="mt-4 text-sm">
+                  <summary className="cursor-pointer text-ink-soft hover:text-ink">How this was decided</summary>
+                  <ul className="mt-2 list-disc space-y-1 pl-5 text-ink-soft">
+                    {comparison.compatibility_reasons.map((r, i) => (
+                      <li key={i} className="break-words">{r}</li>
+                    ))}
+                  </ul>
+                </details>
               )}
-            </div>
+            </section>
 
-            {/* Configuration Differences */}
-            {Object.keys(comparison.configuration_diffs).length > 0 && (
-              <Card>
-                <SectionHeading
-                  eyebrow="Configuration deltas"
-                  title="Experimental Parameter Diffs"
-                  description="Configuration parameters that differ between the compared runs."
-                />
-                <div className="space-y-2 font-mono text-xs">
-                  {Object.entries(comparison.configuration_diffs).map(([param, vals]) => (
-                    <div key={param} className="border-b border-line pb-2 last:border-0">
-                      <span className="font-semibold text-ink">{param}: </span>
-                      {Object.entries(vals as Record<string, unknown>).map(([rId, v]) => (
-                        <span key={rId} className="mr-3 text-ink-soft">
-                          <code className="bg-paper-dim px-1">{rId.slice(0, 8)}</code> ={" "}
-                          <span className="text-ink">{JSON.stringify(v)}</span>
-                        </span>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            )}
-
-            {/* Side-by-Side Evaluator Metrics */}
-            <Card>
-              <SectionHeading
-                eyebrow="Evaluation comparison"
-                title="Metric Outcomes per Evaluator"
-                description="Pass rates and mean scores recorded for each evaluator across runs."
-              />
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs font-mono">
+            <section className="rounded-xl border border-line p-6">
+              <h3 className="font-semibold">Results side by side</h3>
+              <div className="mt-3 overflow-x-auto">
+                <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-line text-ink-soft">
-                      <th className="py-2 pr-4 font-normal font-sans">Evaluator / Metric</th>
-                      {comparison.source_run_ids.map((rId) => {
-                        const runObj = allRuns?.find((r) => r.run_id === rId);
-                        return (
-                          <th key={rId} className="py-2 pr-4 font-normal">
-                            <div>{rId.slice(0, 10)}</div>
-                            <div className="text-[10px] text-ink-soft">
-                              {runObj?.model_config?.model_id ?? "Run"}
-                            </div>
-                          </th>
-                        );
-                      })}
+                    <tr className="border-b border-line text-left text-ink-soft">
+                      <th className="py-2 pr-4 font-normal">Measure</th>
+                      {runIds.map((id, i) => (
+                        <th key={id} className="py-2 pr-4 text-right font-normal">
+                          Run {letter(i)}
+                        </th>
+                      ))}
+                      {runIds.length === 2 && <th className="py-2 text-right font-normal">Change</th>}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-line">
-                    {Object.entries(comparison.evaluation_comparisons).map(([name, data]) => {
-                      const typedData = data;
+                    {rows.map((row) => {
+                      const [a, b] = row.values;
+                      const delta = a != null && b != null ? b - a : null;
                       return (
-                        <tr key={name}>
-                          <td className="py-2 pr-4">
-                            <div className="font-medium text-ink">{name}</div>
-                          </td>
-                          {comparison.source_run_ids.map((rId) => {
-                            const pr = typedData.pass_rates[rId];
-                            const ms = typedData.score_means[rId];
-                            return (
-                              <td key={rId} className="py-2 pr-4">
-                                <div>
-                                  Pass:{" "}
-                                  <span className="font-semibold text-ink">
-                                    {pr !== null && pr !== undefined
-                                      ? `${(pr * 100).toFixed(1)}%`
-                                      : "—"}
-                                  </span>
-                                </div>
-                                {ms !== null && ms !== undefined && (
-                                  <div className="text-[10px] text-ink-soft">
-                                    Mean score: {ms.toFixed(3)}
-                                  </div>
-                                )}
-                              </td>
-                            );
-                          })}
+                        <tr key={row.label}>
+                          <td className="py-2 pr-4">{row.label}</td>
+                          {row.values.map((v, i) => (
+                            <td key={i} className="py-2 pr-4 text-right tabular-nums">
+                              {row.format(v)}
+                            </td>
+                          ))}
+                          {runIds.length === 2 && (
+                            <td className="py-2 text-right tabular-nums text-ink-soft">
+                              {delta == null || Math.abs(delta) < 1e-9
+                                ? "same"
+                                : `${delta > 0 ? "+" : "−"}${row.format(Math.abs(delta))}`}
+                            </td>
+                          )}
                         </tr>
                       );
                     })}
                   </tbody>
                 </table>
               </div>
-            </Card>
-
-            {/* Retrieval Metrics Side-by-Side */}
-            <div className="grid gap-6 lg:grid-cols-2">
-              <Card>
-                <SectionHeading
-                  eyebrow="Retrieval comparison"
-                  title="RAG Retrieval Metrics"
-                  description="Retrieval quality across runs under controlled K settings."
-                />
-                {Object.keys(comparison.retrieval_comparisons).length === 0 ? (
-                  <p className="text-xs text-ink-soft">No retrieval evaluations to compare.</p>
-                ) : (
-                  <table className="w-full text-left text-xs font-mono">
-                    <thead>
-                      <tr className="border-b border-line text-ink-soft">
-                        <th className="py-1.5 pr-4 font-normal font-sans">Metric</th>
-                        {comparison.source_run_ids.map((rId) => (
-                          <th key={rId} className="py-1.5 pr-4 font-normal">
-                            {rId.slice(0, 8)}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-line">
-                      {Object.entries(comparison.retrieval_comparisons).map(([metric, scores]) => (
-                        <tr key={metric}>
-                          <td className="py-1.5 pr-4 text-ink-soft">{metric}</td>
-                          {comparison.source_run_ids.map((rId) => (
-                            <td key={rId} className="py-1.5 pr-4">
-                              {scores[rId] !== null && scores[rId] !== undefined
-                                ? scores[rId]?.toFixed(3)
-                                : "—"}
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )}
-              </Card>
-
-              <Card>
-                <SectionHeading
-                  eyebrow="Input robustness"
-                  title="Consistency rate under perturbation"
-                  description="Fraction of test cases whose diagnostic outcome remained unchanged."
-                />
-                <table className="w-full text-left text-xs font-mono">
-                  <thead>
-                    <tr className="border-b border-line text-ink-soft">
-                      <th className="py-1.5 pr-4 font-normal font-sans">Run</th>
-                      <th className="py-1.5 font-normal">Consistency Rate</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-line">
-                    {comparison.source_run_ids.map((rId) => {
-                      const rate = comparison.robustness_comparisons[rId];
-                      return (
-                        <tr key={rId}>
-                          <td className="py-1.5 pr-4 font-medium">
-                            <Link to={`/runs/${rId}`} className="underline">
-                              {rId.slice(0, 10)}
-                            </Link>
-                          </td>
-                          <td className="py-1.5">
-                            {rate !== null && rate !== undefined
-                              ? `${(rate * 100).toFixed(1)}%`
-                              : "Not evaluated"}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </Card>
-            </div>
+            </section>
           </div>
         )}
       </DataStateView>

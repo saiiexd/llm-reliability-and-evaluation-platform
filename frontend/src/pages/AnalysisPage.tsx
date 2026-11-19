@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import { FixtureNotice } from "../components/FixtureNotice";
-import { SectionHeading } from "../components/Card";
+import { PageHeader } from "../components/Card";
 import { ExperimentComparisonPage } from "./ExperimentComparisonPage";
 import { ReliabilityDiagnosticsPage } from "./ReliabilityDiagnosticsPage";
 import { RagDiagnosticsPage } from "./RagDiagnosticsPage";
@@ -18,28 +18,28 @@ interface TabMeta {
 const ANALYSIS_TABS: TabMeta[] = [
   {
     id: "comparison",
-    label: "Model Comparison",
-    tagline: "Side-by-side run comparisons with automated methodological compatibility verification.",
+    label: "Compare runs",
+    tagline: "Did changing the setup change the results, or is the difference just noise?",
   },
   {
     id: "reliability",
-    label: "Reliability & Failure Forensics",
-    tagline: "Taxonomy of failure modes, unsupported claims, contradictions, and evaluator disagreements.",
+    label: "Why answers fail",
+    tagline: "Every non-passing answer, grouped by its diagnosed cause.",
   },
   {
     id: "retrieval",
-    label: "RAG & Context Retrieval",
-    tagline: "Retrieval accuracy metrics (Hit@1, MRR) and attribution of generation errors to context omissions.",
+    label: "Retrieval",
+    tagline: "For RAG runs: did the search step find the passage that holds the answer?",
   },
   {
     id: "robustness",
-    label: "Consistency & Robustness",
-    tagline: "Stability of model outputs under input perturbations (question rewording, context reordering).",
+    label: "Consistency",
+    tagline: "Does the model give the same answer when the question is reworded or the passages reordered?",
   },
   {
     id: "performance",
-    label: "System Latency & Telemetry",
-    tagline: "Platform wall-clock timing, model latency distributions, and token usage accounting.",
+    label: "Speed & cost",
+    tagline: "How long answers take and how many tokens they use.",
   },
 ];
 
@@ -57,51 +57,40 @@ export function AnalysisPage() {
   const currentTabMeta = ANALYSIS_TABS.find((t) => t.id === activeTab) ?? ANALYSIS_TABS[0];
 
   return (
-    <div className="space-y-6">
-      {/* Analysis Section Header */}
-      <div className="border-b border-line pb-4">
-        <SectionHeading eyebrow="Research Investigation" title="Analytical Diagnostics" />
-        <p className="mt-1 text-xs text-ink-soft max-w-2xl">
-          Scientific investigation of model performance across controlled experimental conditions, failure taxonomy,
-          retrieval effectiveness, and robustness perturbations.
-        </p>
+    <div>
+      <PageHeader
+        title="Analysis"
+        description="Look across runs instead of at one. Each tab answers one question."
+      />
 
-        {/* 5 Plain-Language Sub-Tabs */}
-        <div className="mt-5 flex flex-wrap gap-2 border-b border-line pb-0">
-          {ANALYSIS_TABS.map((tab) => {
-            const isActive = tab.id === activeTab;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setTab(tab.id)}
-                className={`px-3 py-2 text-xs font-mono transition-colors border-b-2 -mb-[2px] ${
-                  isActive
-                    ? "border-ink text-ink font-semibold bg-paper-dim"
-                    : "border-transparent text-ink-soft hover:text-ink hover:border-line"
-                }`}
-              >
-                {tab.label}
-              </button>
-            );
-          })}
-        </div>
-        <p className="mt-2 text-[11px] text-ink-soft italic">
-          {currentTabMeta.tagline}
-        </p>
+      <div role="tablist" className="mb-2 flex flex-wrap gap-1 border-b border-line pb-2">
+        {ANALYSIS_TABS.map((tab) => {
+          const isActive = tab.id === activeTab;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              onClick={() => setTab(tab.id)}
+              className={`rounded-md px-3 py-1.5 text-sm transition-colors ${
+                isActive ? "bg-paper-raised font-medium text-ink" : "text-ink-soft hover:text-ink"
+              }`}
+            >
+              {tab.label}
+            </button>
+          );
+        })}
       </div>
+      <p className="mb-8 text-sm text-ink-soft">{currentTabMeta.tagline}</p>
 
       <FixtureNotice />
 
-      {/* Tab Content Rendering with 100% Functionality Preserved */}
-      <div className="pt-2">
-        {activeTab === "comparison" && <ExperimentComparisonPage />}
-        {activeTab === "reliability" && <ReliabilityDiagnosticsPage />}
-        {activeTab === "retrieval" && <RagDiagnosticsPage />}
-        {activeTab === "robustness" && <RobustnessPage />}
-        {activeTab === "performance" && <PerformanceAnalyticsPage />}
-      </div>
+      {activeTab === "comparison" && <ExperimentComparisonPage />}
+      {activeTab === "reliability" && <ReliabilityDiagnosticsPage />}
+      {activeTab === "retrieval" && <RagDiagnosticsPage />}
+      {activeTab === "robustness" && <RobustnessPage />}
+      {activeTab === "performance" && <PerformanceAnalyticsPage />}
     </div>
   );
 }
-
