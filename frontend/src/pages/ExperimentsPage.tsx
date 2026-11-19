@@ -236,7 +236,7 @@ export function ExperimentsPage() {
       {showCreator && (
         <form onSubmit={handleCreate} className="border border-line bg-paper p-6 space-y-6">
           <div className="border-b border-line pb-3">
-            <h3 className="font-serif text-lg font-medium text-ink">Guided Experiment Setup</h3>
+            <h3 className="font-display text-lg font-medium text-ink">Guided Experiment Setup</h3>
             <p className="text-xs text-ink-soft mt-0.5">
               Follow three simple stages to configure a reproducible benchmark. Advanced parameters remain collapsed by default.
             </p>
@@ -311,7 +311,7 @@ export function ExperimentsPage() {
               <span className="w-5 h-5 rounded-full bg-paper-dim border border-line flex items-center justify-center font-mono text-[11px] font-bold text-ink">
                 1
               </span>
-              <span className="font-serif text-sm font-semibold text-ink uppercase tracking-wide">
+              <span className="font-display text-sm font-semibold text-ink uppercase tracking-wide">
                 Stage 1: Choose Dataset
               </span>
             </div>
@@ -334,7 +334,7 @@ export function ExperimentsPage() {
                     }`}
                   >
                     <div className="flex items-center justify-between text-xs mb-1">
-                      <span className="font-serif font-semibold text-ink text-sm">{ds.title}</span>
+                      <span className="font-display font-semibold text-ink text-sm">{ds.title}</span>
                       <span className="font-mono text-[11px] text-ink-soft bg-paper border border-line px-2 py-0.5">
                         {ds.caseCount} test cases
                       </span>
@@ -353,7 +353,7 @@ export function ExperimentsPage() {
               <span className="w-5 h-5 rounded-full bg-paper-dim border border-line flex items-center justify-center font-mono text-[11px] font-bold text-ink">
                 2
               </span>
-              <span className="font-serif text-sm font-semibold text-ink uppercase tracking-wide">
+              <span className="font-display text-sm font-semibold text-ink uppercase tracking-wide">
                 Stage 2: Choose Target Model
               </span>
             </div>
@@ -376,7 +376,7 @@ export function ExperimentsPage() {
                     }`}
                   >
                     <div className="flex items-center justify-between text-xs mb-0.5">
-                      <span className="font-serif font-semibold text-ink">{m.name}</span>
+                      <span className="font-display font-semibold text-ink">{m.name}</span>
                       <span className="font-mono text-[10px] text-ink-soft">{m.category}</span>
                     </div>
                     <span className="font-mono text-[11px] text-ink-soft block mb-1">{m.id}</span>
@@ -444,7 +444,7 @@ export function ExperimentsPage() {
               <span className="w-5 h-5 rounded-full bg-paper-dim border border-line flex items-center justify-center font-mono text-[11px] font-bold text-ink">
                 3
               </span>
-              <span className="font-serif text-sm font-semibold text-ink uppercase tracking-wide">
+              <span className="font-display text-sm font-semibold text-ink uppercase tracking-wide">
                 Stage 3: Choose Evaluation Methods
               </span>
             </div>
@@ -469,7 +469,7 @@ export function ExperimentsPage() {
                       className="mt-0.5 accent-ink"
                     />
                     <div>
-                      <div className="font-serif font-semibold text-ink">{ev.name}</div>
+                      <div className="font-display font-semibold text-ink">{ev.name}</div>
                       <div className="font-mono text-[10px] text-ink-soft mb-1">{ev.criterion}</div>
                       <p className="text-ink-soft text-[11px] leading-relaxed">{ev.desc}</p>
                     </div>

@@ -40,6 +40,69 @@ export function testCasePassed(result: TestCaseResult): boolean {
   return evals.some((e) => e.passed === true);
 }
 
+/**
+ * One plain-language outcome per test case.
+ *
+ * The backend's `passed` flag is false both when an evaluator judged the
+ * answer wrong AND when an evaluator could not produce a verdict (e.g. the
+ * LLM judge returned invalid output). Showing both as "Failed" made correct
+ * answers look wrong. This splits "not passed" into two honest states
+ * without changing which cases count as passed:
+ *
+ *   passed   - every check ran and passed (same set as testCasePassed)
+ *   failed   - at least one check ran and judged the answer wrong
+ *   unscored - no check said wrong, but at least one could not give a verdict
+ *   error    - the model call itself crashed, so there is no answer to check
+ */
+export type Verdict = "passed" | "failed" | "unscored" | "error";
+
+export function testCaseVerdict(result: TestCaseResult): Verdict {
+  if (!testCaseSucceeded(result)) return "error";
+  const evals = result.evaluation_results ?? [];
+  if (evals.some((e) => e.passed === false)) return "failed";
+  if (testCasePassed(result)) return "passed";
+  return "unscored";
+}
+
+/** Outcome of a single evaluator check on one test case. */
+export function evaluatorVerdict(e: { passed: boolean | null }): "passed" | "failed" | "unscored" {
+  if (e.passed === true) return "passed";
+  if (e.passed === false) return "failed";
+  return "unscored";
+}
+
+export function verdictCounts(results: TestCaseResult[]): Record<Verdict, number> & { total: number } {
+  const counts = { passed: 0, failed: 0, unscored: 0, error: 0, total: results.length };
+  for (const r of results) counts[testCaseVerdict(r)] += 1;
+  return counts;
+}
+
+/**
+ * Passed / total for a run, from whichever shape we have: list endpoints
+ * return summaries (num_passed, num_test_cases) without per-check detail,
+ * full runs carry test_case_results.
+ */
+export function runPassCounts(run: {
+  result?: RunResult | null;
+  num_passed?: number;
+  num_test_cases?: number;
+}): { passed: number; total: number } {
+  if (run.result) {
+    return {
+      passed: run.result.test_case_results.filter(testCasePassed).length,
+      total: run.result.test_case_results.length,
+    };
+  }
+  return { passed: run.num_passed ?? 0, total: run.num_test_cases ?? 0 };
+}
+
+export const VERDICT_LABEL: Record<Verdict, string> = {
+  passed: "Passed",
+  failed: "Wrong",
+  unscored: "Not scored",
+  error: "Crashed",
+};
+
 export function runCounts(result: RunResult): {
   numTestCases: number;
   numSucceeded: number;

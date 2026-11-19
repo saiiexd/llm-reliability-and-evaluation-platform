@@ -11,7 +11,7 @@ import { TONE_CLASSES } from "../lib/tone";
 export function Tag({ children, tone = "neutral" }: { children: ReactNode; tone?: Tone }) {
   return (
     <span
-      className={`inline-block border px-2 py-0.5 font-mono text-xs whitespace-nowrap ${TONE_CLASSES[tone]}`}
+      className={`inline-block rounded-md border px-2 py-0.5 text-xs font-medium whitespace-nowrap ${TONE_CLASSES[tone]}`}
     >
       {children}
     </span>

@@ -86,7 +86,7 @@ export function ExperimentComparisonPage() {
                     Methodological Compatibility
                   </div>
                   <div className="mt-1 flex items-center gap-2">
-                    <span className="font-serif text-lg font-medium">
+                    <span className="font-display text-lg font-medium">
                       {comparison.compatibility === "identical_configuration" &&
                         "Repeated Trials Under Identical Setup"}
                       {comparison.compatibility === "partially_different_configuration" &&

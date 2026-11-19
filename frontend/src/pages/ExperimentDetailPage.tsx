@@ -177,7 +177,7 @@ export function ExperimentDetailPage() {
             <div className="mb-6 border border-line bg-paper p-5">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-line pb-4 mb-4">
                 <div>
-                  <h4 className="font-serif text-base font-semibold">Model Execution & Controlled Benchmarking</h4>
+                  <h4 className="font-display text-base font-semibold">Model Execution & Controlled Benchmarking</h4>
                   <p className="mt-0.5 text-xs text-ink-soft">
                     Execute individual allowlisted models or launch controlled multi-model benchmarks with variance repetitions.
                   </p>
@@ -457,7 +457,7 @@ export function ExperimentDetailPage() {
 
             <div className="grid gap-6 lg:grid-cols-2">
               <Card>
-                <h3 className="mb-2 font-serif text-lg">Reproducibility</h3>
+                <h3 className="mb-2 font-display text-lg">Reproducibility</h3>
                 <dl className="space-y-2 text-sm">
                   <Row label="Experiment ID" value={<span className="font-mono">{experiment.experiment_id}</span>} />
                   <Row
@@ -469,7 +469,7 @@ export function ExperimentDetailPage() {
               </Card>
 
               <Card>
-                <h3 className="mb-2 font-serif text-lg">Dataset</h3>
+                <h3 className="mb-2 font-display text-lg">Dataset</h3>
                 <dl className="space-y-2 text-sm">
                   <Row label="Name" value={experiment.dataset_version?.dataset_name || "N/A"} />
                   <Row
@@ -485,7 +485,7 @@ export function ExperimentDetailPage() {
               </Card>
 
               <Card>
-                <h3 className="mb-2 font-serif text-lg">Model / application configuration</h3>
+                <h3 className="mb-2 font-display text-lg">Model / application configuration</h3>
                 <dl className="space-y-2 text-sm">
                   <Row label="Model ID" value={<span className="font-mono">{experiment.model_config?.model_id || "N/A"}</span>} />
                   <Row
@@ -527,7 +527,7 @@ export function ExperimentDetailPage() {
               </Card>
 
               <Card>
-                <h3 className="mb-2 font-serif text-lg">Evaluators ({experiment.evaluator_configs?.length ?? 0})</h3>
+                <h3 className="mb-2 font-display text-lg">Evaluators ({experiment.evaluator_configs?.length ?? 0})</h3>
                 <ul className="space-y-2 text-sm">
                   {experiment.evaluator_configs?.map((evaluator) => (
                     <li key={evaluator.evaluator_name} className="border-b border-line pb-2 last:border-0">

@@ -195,7 +195,7 @@ export function ResultsPage() {
                     <span className="font-mono text-[11px] uppercase tracking-wider text-ink-soft">Experiment</span>
                     <Tag tone={toneForRunStatus(run.status)}>{run.status}</Tag>
                   </div>
-                  <h3 className="font-serif text-lg font-medium text-ink mt-0.5">
+                  <h3 className="font-display text-lg font-medium text-ink mt-0.5">
                     {experiment ? experiment.name : run.experiment_id}
                   </h3>
                   <p className="font-mono text-xs text-ink-soft">
@@ -230,7 +230,7 @@ export function ResultsPage() {
               <div className="lg:col-span-6 border border-line bg-paper p-5 flex flex-col justify-between">
                 <div>
                   <div className="border-b border-line pb-2 mb-4">
-                    <h4 className="font-serif text-sm font-medium text-ink">
+                    <h4 className="font-display text-sm font-medium text-ink">
                       Visual Evaluation Performance
                     </h4>
                     <span className="text-[11px] text-ink-soft">
@@ -278,7 +278,7 @@ export function ResultsPage() {
                 <Card>
                   <div className="flex items-center justify-between border-b border-line pb-3 mb-3">
                     <div>
-                      <h4 className="font-serif text-base font-semibold">
+                      <h4 className="font-display text-base font-semibold">
                         Test Cases ({filteredCases.length})
                       </h4>
                       <span className="text-[11px] text-ink-soft">Click any case to inspect details</span>

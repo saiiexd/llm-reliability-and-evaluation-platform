@@ -90,8 +90,8 @@ export function toneForClaimSupport(status: ClaimSupportStatus): Tone {
 }
 
 export const TONE_CLASSES: Record<Tone, string> = {
-  neutral: "border-ink text-ink",
-  negative: "border-accent text-accent",
-  caution: "border-ink-soft text-ink",
-  muted: "border-dashed border-ink-soft text-ink-soft italic",
+  neutral: "border-line bg-paper-raised text-ink",
+  negative: "border-accent/40 bg-accent-soft text-accent",
+  caution: "border-line text-ink",
+  muted: "border-dashed border-ink-soft/50 text-ink-soft",
 };

@@ -1,8 +1,6 @@
 /**
- * Reusable loading, error, and empty state container for console views.
- *
- * Ensures errors in live API communication clearly provide retry actions
- * and mode switches, while loading spinners match the editorial design.
+ * Loading / error wrapper used by every data-backed view.
+ * Errors always offer a retry and an explicit switch to demo data.
  */
 
 import { useConnection } from "../context/ConnectionContext";
@@ -20,11 +18,9 @@ export function DataStateView({ loading, error, onRetry, children }: DataStateVi
 
   if (loading) {
     return (
-      <div className="flex min-h-[240px] flex-col items-center justify-center border border-line bg-paper p-8 text-center">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-line border-t-ink" />
-        <p className="mt-3 font-mono text-xs uppercase tracking-wider text-ink-soft">
-          Loading live research data...
-        </p>
+      <div className="flex min-h-[200px] items-center justify-center gap-3 text-sm text-ink-soft">
+        <div className="h-4 w-4 animate-spin rounded-full border-2 border-line border-t-ink" />
+        Loading…
       </div>
     );
   }
@@ -32,34 +28,30 @@ export function DataStateView({ loading, error, onRetry, children }: DataStateVi
   if (error) {
     const isApiError = error instanceof ApiError;
     return (
-      <div className="border border-red-500/40 bg-red-950/30 p-6 text-sm text-red-200">
-        <h3 className="font-serif text-base font-semibold text-red-300">
-          Failed to load research data
-        </h3>
-        <p className="mt-1 text-xs text-red-200/90">{error.message}</p>
-
+      <div className="rounded-xl border border-accent/40 bg-accent-soft/40 p-5 text-sm">
+        <p className="font-semibold text-ink">Couldn't load this data</p>
+        <p className="mt-1 text-ink-soft">{error.message}</p>
         {isApiError && error.requestId && (
-          <p className="mt-1 font-mono text-[11px] text-red-400">
-            Request ID: {error.requestId} | Status: {error.status}
+          <p className="mt-1 font-mono text-xs text-ink-soft">
+            Request {error.requestId} · HTTP {error.status}
           </p>
         )}
-
-        <div className="mt-4 flex flex-wrap items-center gap-3">
+        <div className="mt-4 flex flex-wrap gap-2">
           {onRetry && (
             <button
               type="button"
               onClick={onRetry}
-              className="bg-red-800 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-700 transition-colors"
+              className="rounded-md bg-ink px-3 py-1.5 text-xs font-medium text-paper hover:opacity-90"
             >
-              Retry Request
+              Try again
             </button>
           )}
           <button
             type="button"
             onClick={() => setDataMode("fixture")}
-            className="border border-red-700/60 bg-red-900/30 px-3 py-1.5 text-xs text-red-200 hover:bg-red-900/50 transition-colors"
+            className="rounded-md border border-line px-3 py-1.5 text-xs text-ink hover:bg-paper-dim"
           >
-            Switch to Demo Fixture Mode
+            Use demo data
           </button>
         </div>
       </div>
@@ -68,4 +60,3 @@ export function DataStateView({ loading, error, onRetry, children }: DataStateVi
 
   return <>{children}</>;
 }
-

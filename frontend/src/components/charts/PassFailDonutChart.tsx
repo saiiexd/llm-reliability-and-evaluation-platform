@@ -133,7 +133,7 @@ export function PassFailDonutChart({
 
         {/* Center Text: Big Pass Rate */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
-          <span className="font-serif text-3xl font-bold tracking-tight text-ink">
+          <span className="font-display text-3xl font-bold tracking-tight text-ink">
             {computedTotal > 0 ? `${passRate.toFixed(1)}%` : "N/A"}
           </span>
           <span className="font-mono text-[10px] uppercase tracking-wider text-ink-soft">
@@ -145,7 +145,7 @@ export function PassFailDonutChart({
       {/* Accessible Structured Legend */}
       <div className="flex flex-col justify-center gap-2 text-xs w-full max-w-xs">
         {title && (
-          <h4 className="font-serif font-medium text-ink text-sm mb-1">{title}</h4>
+          <h4 className="font-display font-medium text-ink text-sm mb-1">{title}</h4>
         )}
 
         <div className="flex items-center justify-between border-b border-line pb-1.5">

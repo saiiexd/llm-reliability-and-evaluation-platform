@@ -63,24 +63,19 @@ describe("Simplified Academic Research Navigation & Layout", () => {
       </ConnectionProvider>,
     );
 
-    // One concise introductory sentence
-    expect(
-      screen.getByText(
-        /A scientific research environment for measuring, comparing, and diagnosing language model reliability/i,
-      ),
-    ).toBeDefined();
+    // One plain question as the headline, plus a one-sentence explanation
+    expect(screen.getByRole("heading", { name: /Is the model answering correctly\?/i })).toBeDefined();
+    expect(screen.getByText(/checks every answer automatically/i)).toBeDefined();
 
     // Primary action button
     const startBtn = screen.getByRole("link", { name: /Start an Experiment/i });
     expect(startBtn).toBeDefined();
     expect(startBtn.getAttribute("href")).toContain("/experiments");
 
-    // 4-step research workflow
-    expect(screen.getByText(/Standard Research Lifecycle/i)).toBeDefined();
-    expect(screen.getByText(/01 \/ OVERVIEW/i)).toBeDefined();
-    expect(screen.getByText(/02 \/ EXPERIMENTS/i)).toBeDefined();
-    expect(screen.getByText(/03 \/ RESULTS/i)).toBeDefined();
-    expect(screen.getByText(/04 \/ ANALYSIS/i)).toBeDefined();
+    // Three plain steps explaining the workflow
+    expect(screen.getByText("Define an experiment")).toBeDefined();
+    expect(screen.getByText("Run it")).toBeDefined();
+    expect(screen.getByText("Read the results")).toBeDefined();
   });
 
   it("renders the Experiments section with guided definition trigger", () => {

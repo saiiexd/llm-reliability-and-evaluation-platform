@@ -149,7 +149,7 @@ export function ReliabilityDiagnosticsPage() {
                         <div className="mb-1">
                           <Tag tone={toneForFailureCategory(cat)}>{cat}</Tag>
                         </div>
-                        <p className="font-serif text-xl">{count}</p>
+                        <p className="font-display text-xl">{count}</p>
                         <p className="text-[11px] text-ink-soft">
                           {selectedCategory === cat ? "Filtered (click to clear)" : "Click to filter"}
                         </p>
@@ -167,7 +167,7 @@ export function ReliabilityDiagnosticsPage() {
             <div className="mb-4 flex flex-col gap-2 border-b border-line pb-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="font-mono text-xs uppercase tracking-wide text-ink-soft">Inspection</p>
-                <h2 className="font-serif text-xl">Diagnostic Cases</h2>
+                <h2 className="font-display text-xl">Diagnostic Cases</h2>
               </div>
               <div className="flex items-center gap-2">
                 <label htmlFor="cat-filter" className="text-xs text-ink-soft">

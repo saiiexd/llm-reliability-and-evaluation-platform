@@ -47,7 +47,7 @@ export function FailureDistributionChart({
         <div className="w-8 h-8 rounded-full bg-emerald-950/60 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-2">
           ✓
         </div>
-        <h4 className="font-serif text-sm font-medium text-ink">{title}</h4>
+        <h4 className="font-display text-sm font-medium text-ink">{title}</h4>
         <p className="mt-1 text-xs text-ink-soft max-w-sm">{emptyMessage}</p>
       </div>
     );
@@ -61,7 +61,7 @@ export function FailureDistributionChart({
     >
       <div className="flex items-center justify-between border-b border-line pb-2 mb-3">
         <div>
-          <h4 className="font-serif text-sm font-medium text-ink">{title}</h4>
+          <h4 className="font-display text-sm font-medium text-ink">{title}</h4>
           <span className="text-[11px] text-ink-soft">
             Breakdown of root causes identified by diagnostic taxonomy
           </span>

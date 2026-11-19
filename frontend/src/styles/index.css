@@ -1,24 +1,28 @@
 @import "tailwindcss";
 
 /*
- * Editorial research-instrument design tokens (Dark Theme).
+ * Design tokens (dark, monochrome).
  *
- * Palette: refined deep slate/charcoal surfaces, high-contrast off-white ink,
- * crisp 1px borders, and a warm coral accent for failures and active highlights.
- * Scientific, restrained, high-legibility layout.
+ * Rule: greys carry structure; ONE accent marks what needs attention
+ * (wrong answers, errors). "Passed" is plain ink, "not scored" is muted
+ * and dashed. Colour is never the only signal - every state also has a
+ * text label.
+ *
+ * Change colours here, not in components.
  */
 @theme {
-  --font-serif: "Source Serif 4", Georgia, serif;
   --font-sans: "Inter", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
-  --color-paper: #0e1117;
-  --color-paper-dim: #161b22;
-  --color-ink: #f0f3f6;
-  --color-ink-soft: #8b949e;
-  --color-line: #30363d;
-  --color-accent: #f97316;
-  --color-accent-soft: #431c0e;
+  --color-paper: #0b0b0c;
+  --color-paper-dim: #151517;
+  --color-paper-raised: #1c1c1f;
+  --color-ink: #ededed;
+  --color-ink-soft: #9b9ba1;
+  --color-line: #26262a;
+  --color-accent: #f26b5b;
+  --color-accent-soft: #3a1714;
 }
 
 html {
@@ -29,15 +33,30 @@ body {
   background-color: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: -0.01em;
 }
 
 /* Focus visibility: never rely on color alone. */
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-ink);
   outline-offset: 2px;
 }
 
 ::selection {
   background-color: var(--color-accent-soft);
   color: var(--color-ink);
+}
+
+/* Long unbroken strings (hashes, JSON) must wrap instead of widening the page. */
+pre,
+code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
