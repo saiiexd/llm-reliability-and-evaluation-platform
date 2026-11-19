@@ -29,6 +29,12 @@ from llm_reliability.providers.base import (
 )
 
 
+# ModelConfig.extra_params keys that describe the experiment (and so belong
+# in its fingerprint) but are not chat-completions arguments. Everything else
+# in extra_params (seed, response_format, top_p, ...) is forwarded to the SDK.
+NON_PROVIDER_PARAM_KEYS = frozenset({"rag", "provider", "prompt_template_id"})
+
+
 def get_openai_base_url_from_env() -> str | None:
     """Base URL for OpenAI-compatible servers, from the server environment."""
     return os.environ.get("LLM_RELIABILITY_OPENAI_BASE_URL") or os.environ.get("OPENAI_BASE_URL")
@@ -112,7 +118,7 @@ class OpenAIProviderAdapter(BaseProviderAdapter):
         # Merge extra parameters if specified
         if model_config.extra_params:
             for k, v in model_config.extra_params.items():
-                if k not in kwargs and k not in ("rag", "provider"):
+                if k not in kwargs and k not in NON_PROVIDER_PARAM_KEYS:
                     kwargs[k] = v
 
         try:
