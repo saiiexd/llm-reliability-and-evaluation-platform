@@ -2,7 +2,12 @@
 Tests for cross-experiment analytics, agreement, comparison, and trends.
 """
 
+from pathlib import Path
+
 from fastapi.testclient import TestClient
+
+from llm_reliability.experiments.local_repository import LocalFileExperimentRepository
+from llm_reliability.experiments.models import ExperimentRun
 
 
 def test_analytics_overview(api_client: TestClient) -> None:
@@ -103,6 +108,36 @@ def test_repeat_consistency_groups_true_repeats(api_client: TestClient) -> None:
     assert "exact_match" in names
     for e in g["evaluators"]:
         assert e["compared_cases"] + e["excluded_cases"] == g["compared_cases"]
+
+
+def test_repeat_consistency_separates_adapters_and_counts_changed_outputs(
+    api_client: TestClient, temp_store: Path
+) -> None:
+    repo = LocalFileExperimentRepository(temp_store)
+    base = repo.load_run("run-rag-baseline-001")
+
+    # Same experiment and fingerprint, different adapter: a model comparison, not a repeat.
+    other_adapter = ExperimentRun.from_dict(
+        {**base.to_dict(), "run_id": "run-other-adapter", "adapter_id": "other-adapter"}
+    )
+    repo.save_run(other_adapter)
+
+    # Same adapter, one answer changed: a third repeat with 6 of 7 identical outputs.
+    changed = ExperimentRun.from_dict({**base.to_dict(), "run_id": "run-rag-baseline-003"})
+    assert changed.result is not None
+    first = changed.result.test_case_results[0]
+    assert first.model_response is not None
+    first.model_response.output_text += " (reworded)"
+    repo.save_run(changed)
+
+    res = api_client.get("/api/v1/analytics/consistency?experiment_id=exp-reliability-console-demo")
+    assert res.status_code == 200
+    [group] = res.json()["groups"]
+    assert group["adapter_id"] == "rag-pipeline-v1"
+    assert group["num_runs"] == 3
+    assert "run-other-adapter" not in group["run_ids"]
+    assert (group["identical_output_cases"], group["compared_cases"]) == (6, 7)
+    assert group["output_changed_test_case_ids"] == [first.test_case_id]
 
 
 def test_repeat_consistency_filters_by_experiment(api_client: TestClient) -> None:

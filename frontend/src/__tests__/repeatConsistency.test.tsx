@@ -1,6 +1,8 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import App from "../App";
 import { ConnectionProvider } from "../context/ConnectionContext";
 import { ApiClient } from "../api/client";
 import { RepeatConsistency, formatOfTotal } from "../components/RepeatConsistency";
@@ -160,5 +162,20 @@ describe("RepeatConsistency panel", () => {
     expect(screen.getByText("Repeat analysis needs the live API.")).toBeTruthy();
     expect(screen.queryByText(/ of \d+ \(/)).toBeNull();
     await waitFor(() => expect(spy).not.toHaveBeenCalled());
+  });
+
+  it("is mounted on the Analysis reliability tab", async () => {
+    localStorage.setItem("llm_reliability_data_mode", "fixture");
+    const client = healthyClient();
+    render(
+      <ConnectionProvider client={client}>
+        <MemoryRouter initialEntries={["/analysis?tab=reliability"]}>
+          <App />
+        </MemoryRouter>
+      </ConnectionProvider>,
+    );
+
+    expect(await screen.findByRole("heading", { name: "Do repeated runs agree?" })).toBeTruthy();
+    expect(screen.getByText("Repeat analysis needs the live API.")).toBeTruthy();
   });
 });
