@@ -63,6 +63,12 @@ def create_app(settings: ApiSettings | None = None) -> FastAPI:
         openapi_url=f"{settings.api_v1_prefix}/openapi.json",
     )
 
+    # Route handlers resolve settings through the ``get_settings`` dependency.
+    # Without this override an app built with explicit ``settings`` would still
+    # read the process-wide defaults (for example the real ``./experiments``
+    # store), so tests and embedded uses would silently write to the wrong place.
+    app.dependency_overrides[get_settings] = lambda: settings
+
     # Middleware: Request correlation and timing
     app.add_middleware(RequestCorrelationMiddleware)
 
