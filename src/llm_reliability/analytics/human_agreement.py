@@ -119,7 +119,7 @@ def _read_csv(path: Path, required: Iterable[str]) -> list[dict[str, str]]:
             rows = None if missing else list(reader)
         except UnicodeDecodeError as exc:
             raise AnnotationFormatError(
-                f"{path}: not valid UTF-8 (byte {exc.start} of the file). It was probably saved "
+                f"{path}: not valid UTF-8 ({exc.reason}). It was probably saved "
                 "as 'CSV (Comma delimited)', which uses a Windows code page. Save it again as "
                 "'CSV UTF-8 (Comma delimited)' (Excel) or 'Text CSV' with character set "
                 "'Unicode (UTF-8)' (LibreOffice) and re-run."

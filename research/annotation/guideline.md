@@ -69,7 +69,9 @@ same value ("€53,423" vs "53,423"; "1,000" vs "1000").
    kind of quantity, such as an amount for an amount or a year for a year. If the answer's value is
    not the value of any gold answer, it is `incorrect`: a different value, a range or bound that is
    not the gold value ("Over €90,000"), or a different unit that changes the value. The same value
-   in a different format is not a different number; go on to the next rules.
+   in a different format is not a different number; go on to the next rules. If the answer is a
+   different kind of quantity from every gold answer (a year where the gold answer names an event),
+   this rule does not apply: see rule 10.
 5. **Partial and vague answers are incorrect.** If the question asks for a specific set ("which three
    …", "what two forms …") or a gold answer lists several items, every item must be present, in any
    order, and no item may be wrong. One right item out of three is `incorrect`. An answer that is
@@ -78,7 +80,8 @@ same value ("€53,423" vs "53,423"; "1,000" vs "1000").
 6. **A different entity of the same kind is incorrect.** If the answer is the same kind of thing as
    the gold answers (a person for a person, an organism for an organism, a concept for a concept)
    but names a different one from every gold answer, so that it and a gold answer cannot both be the
-   answer, it is `incorrect`, however plausible it sounds.
+   answer, it is `incorrect`, however plausible it sounds. If the answer is a different kind of thing
+   or a different granularity from every gold answer, this rule does not apply: see rule 10.
 7. **The same answer as a gold answer is correct.** An answer that is the same as one gold answer,
    apart from surface differences, is `correct`, even if another gold answer names something
    different.
