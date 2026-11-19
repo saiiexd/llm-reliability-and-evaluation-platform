@@ -27,6 +27,7 @@ from llm_reliability.experiments.models import DatasetVersion
 from llm_reliability.rag.embeddings import EmbeddingModel
 
 PRESET = "squad-v1.1-dev-subset-v1"
+REAL_PROVIDER_FACTORY = live.openai_compatible_provider  # captured before fixtures patch it
 MODEL = "qwen3:4b-instruct"
 
 
@@ -263,3 +264,28 @@ def test_declared_judge_with_a_changed_rubric_cannot_be_reproduced() -> None:
     }
     with pytest.raises(ValueError, match="cannot be reproduced"):
         live.build_live_judge("llm_judge", True, declared=declared)
+
+
+def test_judge_experiment_can_be_defined_without_a_configured_server(
+    api_client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # Use the real provider factory: defining must not need a server or key.
+    monkeypatch.setattr(live, "openai_compatible_provider", REAL_PROVIDER_FACTORY)
+    for var in (
+        "LLM_RELIABILITY_OPENAI_BASE_URL",
+        "OPENAI_BASE_URL",
+        "OPENAI_API_KEY",
+        "LLM_RELIABILITY_OPENAI_API_KEY",
+    ):
+        monkeypatch.delenv(var, raising=False)
+    res = _create(api_client, judge_rubric_version="v2")
+    assert res.status_code == 201, res.json()
+    rubrics = {
+        e["evaluator_name"]: e["parameters"]["rubric"]["rubric_id"]
+        for e in res.json()["evaluator_configs"]
+        if "rubric" in e["parameters"]
+    }
+    assert rubrics == {
+        "llm_judge": "correctness_vs_reference_v2",
+        "llm_faithfulness_judge": "faithfulness_vs_context_v2",
+    }

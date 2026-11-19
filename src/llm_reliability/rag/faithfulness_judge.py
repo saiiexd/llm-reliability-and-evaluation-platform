@@ -84,7 +84,40 @@ FAITHFULNESS_RUBRIC = JudgeRubric(
 )
 """The faithfulness rubric: supported / unsupported / contradicted / undetermined."""
 
+FAITHFULNESS_RUBRIC_V2 = JudgeRubric(
+    rubric_id="faithfulness_vs_context_v2",
+    criterion=FAITHFULNESS,
+    scale=("contradicted", "unsupported", "undetermined", "no_claim", "supported"),
+    instructions=(
+        "You are evaluating whether a generated answer is faithful to a provided set "
+        "of retrieved context passages -- not whether the answer is fluent, complete, "
+        "or externally true. Judge only whether the context supports the answer's "
+        "claims. Do not use outside knowledge to decide whether the answer is "
+        "factually correct in general; judge strictly against the given context.\n\n"
+        "First decide whether the answer makes any factual claim. An answer that declines "
+        "to answer (for example 'I don't know' or 'The context does not say'), refuses, or "
+        "only repeats the question makes no claim.\n\n"
+        "Choose exactly one outcome from: contradicted, unsupported, undetermined, "
+        "no_claim, supported.\n"
+        "- no_claim: the answer makes no factual claim (see above). Use this even if the "
+        "context does or does not contain the answer.\n"
+        "- supported: the context contains information that backs the answer's claims.\n"
+        "- unsupported: the context neither confirms nor denies the answer's claims "
+        "(the information simply is not present).\n"
+        "- contradicted: the context directly conflicts with a claim in the answer.\n"
+        "- undetermined: the context and the answer are too ambiguous, fragmentary, or "
+        "unrelated in scope for you to reach any of the above judgments reliably.\n\n"
+        "Respond with a single JSON object and nothing else, in exactly this form: "
+        '{"outcome": <one of the five values above>, '
+        '"reasoning": <one sentence of justification>}.'
+    ),
+)
+"""Faithfulness v2 (EXP-001 finding E1): abstentions are ``no_claim``, not ``supported``."""
+
 _UNDETERMINED_OUTCOME = "undetermined"
+# Outcomes that are genuine judge answers but not a faithfulness verdict:
+# neither a pass nor a fail (``passed = None``).
+_NO_VERDICT_OUTCOMES = frozenset({_UNDETERMINED_OUTCOME, "no_claim"})
 
 
 def render_faithfulness_prompt(
@@ -195,7 +228,7 @@ class LLMFaithfulnessEvaluator(Evaluator):
         # "undetermined" is a genuine judge answer (it could not reach a
         # confident assessment), not a negative one -- it must not be
         # folded into `passed=False` alongside a real contradiction.
-        passed = None if parsed.outcome == _UNDETERMINED_OUTCOME else parsed.outcome == best_outcome
+        passed = None if parsed.outcome in _NO_VERDICT_OUTCOMES else parsed.outcome == best_outcome
         return EvaluationResult(
             evaluator_name=self.name,
             test_case_id=test_case.id,

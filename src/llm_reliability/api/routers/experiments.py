@@ -120,7 +120,7 @@ def create_experiment(
         )
     try:
         evaluators = [
-            eval_registry.get_for_definition(name, req.judge_model_id)
+            eval_registry.get_for_definition(name, req.judge_model_id, req.judge_rubric_version)
             for name in req.evaluator_names
         ]
     except ValueError as exc:

@@ -26,6 +26,7 @@ from llm_reliability.datasets.squad import SQUAD_CHUNKING, SquadSubset, load_squ
 from llm_reliability.evaluation.adapters import ModelAdapter
 from llm_reliability.evaluation.llm_judge import (
     CORRECTNESS_RUBRIC,
+    CORRECTNESS_RUBRIC_V2,
     JudgeRubric,
     LLMJudgeEvaluator,
 )
@@ -38,7 +39,11 @@ from llm_reliability.providers.openai_provider import (
 )
 from llm_reliability.rag.documents import ChunkingConfig
 from llm_reliability.rag.embeddings import EmbeddingModel, OpenAICompatibleEmbeddingModel
-from llm_reliability.rag.faithfulness_judge import FAITHFULNESS_RUBRIC, LLMFaithfulnessEvaluator
+from llm_reliability.rag.faithfulness_judge import (
+    FAITHFULNESS_RUBRIC,
+    FAITHFULNESS_RUBRIC_V2,
+    LLMFaithfulnessEvaluator,
+)
 from llm_reliability.rag.pipeline import RagPipeline, RagPipelineConfig
 from llm_reliability.rag.retriever import Retriever
 
@@ -62,6 +67,12 @@ GENERATION_MAX_RETRIES = 2
 LIVE_JUDGE_RUBRICS: dict[str, JudgeRubric] = {
     "llm_judge": CORRECTNESS_RUBRIC,
     "llm_faithfulness_judge": FAITHFULNESS_RUBRIC,
+}
+# Every rubric version a declared judge may use; v1 prompts are kept unchanged
+# so experiments recorded with them stay reproducible.
+JUDGE_RUBRIC_VERSIONS: dict[str, dict[str, JudgeRubric]] = {
+    "llm_judge": {"v1": CORRECTNESS_RUBRIC, "v2": CORRECTNESS_RUBRIC_V2},
+    "llm_faithfulness_judge": {"v1": FAITHFULNESS_RUBRIC, "v2": FAITHFULNESS_RUBRIC_V2},
 }
 
 
@@ -247,6 +258,13 @@ def build_live_closed_book_adapter(
 # --- Judges ------------------------------------------------------------------
 
 
+class _DefinitionOnlyClient:
+    """Stands in for an OpenAI client on judges built only to record their config."""
+
+    def __getattr__(self, name: str) -> Any:
+        raise RuntimeError("This judge was built only to define an experiment; it cannot run.")
+
+
 def judge_model_config(judge_model_id: str) -> ModelConfig:
     return ModelConfig(
         model_id=judge_model_id,
@@ -269,22 +287,33 @@ def build_live_judge(
     declared: dict[str, Any] | None = None,
     client: Any | None = None,
     for_execution: bool = True,
+    rubric_version: str = "v1",
 ) -> Any:
     """Build a real LLM judge, either for a new experiment or from a declared config.
+
+    ``rubric_version`` applies to new experiments; a declared configuration is
+    rebuilt with whichever known rubric it recorded.
 
     ``for_execution=False`` builds it only to record its configuration in a new
     experiment definition; the provider still refuses requests without opt-in.
     """
-    rubric = LIVE_JUDGE_RUBRICS.get(name)
-    if rubric is None:
+    versions = JUDGE_RUBRIC_VERSIONS.get(name)
+    if versions is None:
         raise ValueError(f"'{name}' has no live judge.")
+    if rubric_version not in versions:
+        raise ValueError(f"Unknown rubric version '{rubric_version}' for '{name}'.")
+    rubric = versions[rubric_version]
     if declared is not None:
         declared_rubric = declared.get("rubric")
-        if declared_rubric != rubric.to_dict():
+        matching = [r for r in versions.values() if r.to_dict() == declared_rubric]
+        if not matching:
+            known = ", ".join(r.rubric_id for r in versions.values())
             raise ValueError(
-                f"The experiment's '{name}' rubric differs from this platform version's rubric "
-                f"'{rubric.rubric_id}', so the judge cannot be reproduced. Define a new experiment."
+                f"The experiment's '{name}' rubric is not one this platform version can "
+                f"reproduce exactly (known: {known}), so the judge cannot be reproduced. "
+                "Define a new experiment."
             )
+        rubric = matching[0]
         config = ModelConfig.from_dict(declared["judge_model_config"])
     elif judge_model_id:
         config = judge_model_config(judge_model_id)
@@ -292,6 +321,9 @@ def build_live_judge(
         raise ValueError(f"'{name}' needs a judge model id.")
     if for_execution:
         _require_opt_in(allow_external_inference, f"The '{name}' judge ({config.model_id})")
+    if not for_execution and client is None:
+        # Only the configuration is needed; no server has to be configured.
+        client = _DefinitionOnlyClient()
     adapter = openai_compatible_provider(config.model_id, allow_external_inference, client)
     if name == "llm_judge":
         return LLMJudgeEvaluator(judge_adapter=adapter, judge_model_config=config, rubric=rubric)

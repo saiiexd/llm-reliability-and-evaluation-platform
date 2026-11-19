@@ -4,7 +4,7 @@ Pydantic schemas for experiments and controlled benchmark executions.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import Field, model_validator
 
@@ -96,6 +96,7 @@ class CreateExperimentRequest(BaseApiSchema):
     retrieval_top_k: int | None = Field(default=None, ge=1, le=20)
     embedding_model_id: str | None = Field(default=None, min_length=1)
     judge_model_id: str | None = Field(default=None, min_length=1)
+    judge_rubric_version: Literal["v1", "v2"] = "v1"
     model_config_req: CreateModelConfigRequest = Field(alias="model_config")
     evaluator_names: list[str] = Field(min_length=1)
     metadata: dict[str, Any] = Field(default_factory=dict)

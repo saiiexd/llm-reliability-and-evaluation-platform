@@ -258,7 +258,9 @@ class EvaluatorRegistry:
 
     LIVE_JUDGES = frozenset(live.LIVE_JUDGE_RUBRICS)
 
-    def get_for_definition(self, name: str, judge_model_id: str | None = None) -> Any:
+    def get_for_definition(
+        self, name: str, judge_model_id: str | None = None, rubric_version: str = "v1"
+    ) -> Any:
         """Evaluator used to *define* a new experiment (its config is recorded).
 
         With ``judge_model_id``, the LLM judges are real judges on that model;
@@ -272,6 +274,7 @@ class EvaluatorRegistry:
                 allow_external_inference=False,
                 judge_model_id=judge_model_id,
                 for_execution=False,
+                rubric_version=rubric_version,
             )
         if name == "llm_judge":
             raise ValueError(
