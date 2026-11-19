@@ -60,7 +60,6 @@ exclude = [
     ".venv",
     "__pycache__",
     "*.egg-info",
-    "learning/",   # Educational code is exempt from strict linting.
 ]
 
 [tool.ruff.lint]

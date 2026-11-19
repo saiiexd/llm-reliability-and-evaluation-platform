@@ -11,22 +11,14 @@ import { useCallback, useEffect, useState } from "react";
 import { useConnection } from "../context/ConnectionContext";
 import * as fixtures from "./dataAccess";
 import type {
-  AnalyticsOverview,
   EvaluationAggregate,
   EvaluatorAgreementSummary,
   ExecutionPerformanceSummary,
   ExperimentDefinition,
   ExperimentRun,
-  FailureDistribution,
   ReliabilityDiagnostic,
   RetrievalEvaluationResult,
-  RetrievalSummary,
-  RobustnessSummary,
   RunComparison,
-  RunRobustnessBundle,
-  RunSummaryBundle,
-  TestCaseResult,
-  TrendAnalysis,
 } from "../types/domain";
 
 export interface AsyncState<T> {
@@ -143,22 +135,6 @@ export function useRun(runId: string): AsyncState<ExperimentRun> {
   );
 }
 
-export function useTestCase(runId: string, testCaseId: string): AsyncState<TestCaseResult> {
-  const { client } = useConnection();
-  return useAsyncData(
-    () =>
-      runId && testCaseId
-        ? client.getTestCase(runId, testCaseId)
-        : (Promise.resolve(null as unknown as TestCaseResult)),
-    () => {
-      if (!runId || !testCaseId) return undefined;
-      const run = fixtures.getRun(runId);
-      return run?.result?.test_case_results.find((tc) => tc.test_case_id === testCaseId);
-    },
-    [runId, testCaseId],
-  );
-}
-
 export function useDiagnostics(runId: string): AsyncState<Record<string, ReliabilityDiagnostic>> {
   const { client } = useConnection();
   return useAsyncData(
@@ -210,33 +186,6 @@ export function useRetrievalResults(
   );
 }
 
-export function useRobustness(runId: string): AsyncState<RunRobustnessBundle> {
-  const { client } = useConnection();
-  return useAsyncData(
-    () => client.getRunRobustness(runId),
-    () => fixtures.getRobustnessForRun(runId),
-    [runId],
-  );
-}
-
-export function useRunSummaries(runId: string): AsyncState<RunSummaryBundle> {
-  const { client } = useConnection();
-  return useAsyncData(
-    () => client.getRunSummaries(runId),
-    () => fixtures.getSummaryForRun(runId),
-    [runId],
-  );
-}
-
-export function useAnalyticsOverview(): AsyncState<AnalyticsOverview> {
-  const { client } = useConnection();
-  return useAsyncData(
-    () => client.getAnalyticsOverview(),
-    () => fixtures.getAnalyticsOverview(),
-    [],
-  );
-}
-
 export function useEvaluatorAnalytics(runId: string): AsyncState<{
   aggregates: Record<string, EvaluationAggregate>;
   agreements: EvaluatorAgreementSummary[];
@@ -245,36 +194,6 @@ export function useEvaluatorAnalytics(runId: string): AsyncState<{
   return useAsyncData(
     () => client.getEvaluatorAnalytics(runId),
     () => fixtures.getEvaluatorAnalytics(runId),
-    [runId],
-  );
-}
-
-export function useFailureAnalytics(runId: string): AsyncState<FailureDistribution> {
-  const { client } = useConnection();
-  return useAsyncData(
-    () =>
-      runId
-        ? client.getFailureAnalytics(runId)
-        : (Promise.resolve(null as unknown as FailureDistribution)),
-    () => (runId ? fixtures.getFailureAnalytics(runId) : undefined),
-    [runId],
-  );
-}
-
-export function useRetrievalAnalytics(runId: string): AsyncState<RetrievalSummary[]> {
-  const { client } = useConnection();
-  return useAsyncData(
-    () => (runId ? client.getRetrievalAnalytics(runId) : Promise.resolve([])),
-    () => (runId ? fixtures.getRetrievalAnalytics(runId) : []),
-    [runId],
-  );
-}
-
-export function useRobustnessAnalytics(runId: string): AsyncState<RobustnessSummary | null> {
-  const { client } = useConnection();
-  return useAsyncData(
-    () => (runId ? client.getRobustnessAnalytics(runId) : Promise.resolve(null)),
-    () => (runId ? (fixtures.getRobustnessAnalytics(runId) ?? null) : null),
     [runId],
   );
 }
@@ -290,46 +209,6 @@ export function usePerformanceAnalytics(
         : (Promise.resolve(null as unknown as ExecutionPerformanceSummary)),
     () => (runId ? fixtures.getPerformanceAnalytics(runId) : undefined),
     [runId],
-  );
-}
-
-export function useComparisons(): AsyncState<Record<string, RunComparison>> {
-  const { client } = useConnection();
-  return useAsyncData(
-    async () => {
-      // In live mode, compute standard comparison sets:
-      // identical runs: run-rag-baseline-001, run-rag-baseline-002
-      // intervention: run-rag-baseline-001, run-rag-topk2-001
-      // incompatible: run-rag-baseline-001, run-non-rag-001
-      const res: Record<string, RunComparison> = {};
-      try {
-        res["identical"] = await client.compareRuns([
-          "run-rag-baseline-001",
-          "run-rag-baseline-002",
-        ]);
-      } catch {
-        // May not be available if runs differ
-      }
-      try {
-        res["intervention"] = await client.compareRuns([
-          "run-rag-baseline-001",
-          "run-rag-topk2-001",
-        ]);
-      } catch {
-        // Optional
-      }
-      try {
-        res["incompatible"] = await client.compareRuns([
-          "run-rag-baseline-001",
-          "run-non-rag-001",
-        ]);
-      } catch {
-        // Optional
-      }
-      return res;
-    },
-    () => fixtures.listComparisons(),
-    [],
   );
 }
 
@@ -354,15 +233,6 @@ export function useComparison(
     },
     () => fixtures.getComparison(key),
     [key, runIds?.join(",")],
-  );
-}
-
-export function useTrends(experimentId: string): AsyncState<TrendAnalysis> {
-  const { client } = useConnection();
-  return useAsyncData(
-    () => client.getTrends(experimentId),
-    () => fixtures.getTrendForExperiment(experimentId),
-    [experimentId],
   );
 }
 

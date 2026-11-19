@@ -47,6 +47,17 @@ Scripts here automate clearly defined, repeatable tasks that support the researc
   cases, after persisting and reloading the experiment. Requires no network access or API
   credentials. Run with `python scripts/run_rag_example.py`.
 
+- `seed_live_experiments.py` -- seeds `./experiments` (or a given path) with the simulated
+  demo experiments and runs used by the console. `python scripts/seed_live_experiments.py [dir]`.
+- `export_frontend_fixtures.py` -- regenerates `frontend/src/data/fixtures/` (demo mode data)
+  from the same simulated scenarios through the real persistence and analytics code.
+- `build_squad_subset.py` -- builds `data/benchmarks/squad_v1_1_dev_subset_v1.json`
+  deterministically from the downloaded SQuAD v1.1 dev file (instructions in its docstring).
+- `run_reliability_study.py` -- runs EXP-001 against local Ollama models (real inference;
+  resumable; refuses to mix environments). See `research/experiments/EXP-001_local_rag_reliability/`.
+- `analyze_reliability_study.py` -- analyses EXP-001 runs (Wilson intervals, McNemar tests,
+  retrieval at the run's K, Cohen's kappa, consistency) and writes results files.
+
 ## Script Requirements
 
 Each script must:

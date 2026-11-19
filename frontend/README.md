@@ -12,26 +12,28 @@ doesn't, why?**
 | **Run** | One execution of an experiment: the model answers every question and every answer is checked. An experiment can have many runs. | Run `418fb8f6`, 2 Nov 02:14 |
 | **Question** (test case) | One input with its expected answer. | "What is the capital of France?" → "Paris" |
 | **Check** (evaluator) | One way of judging an answer. Each check runs independently. | *Exact match*: text must equal "Paris". *Faithfulness (LLM judge)*: a second model checks the answer is backed by the retrieved passages. |
-| **Verdict** | The outcome for one answer, combining all its checks (see below). | Passed / Wrong / Not scored / Crashed |
+| **Verdict** | The outcome for one answer, combining all its checks (see below). | Passed / Checks disagree / Wrong / Not scored / Crashed |
 | **Diagnosis** | The backend's best guess at *why* an answer failed. | Retrieval failure: the search step never found the passage with the answer |
 
 So the data flows: **Experiment → Run → one result per Question → one result per Check → Verdict + Diagnosis.**
 
-### The four verdicts
+### The five verdicts
 
 Defined in `src/lib/derived.ts` → `testCaseVerdict()`.
 
 | Verdict | Rule |
 | --- | --- |
 | **Passed** | Every check ran and accepted the answer. |
+| **Checks disagree** | Two checks of the same thing disagree (e.g. exact match says wrong, the LLM judge says correct). |
 | **Wrong** | At least one check ran and rejected the answer. |
 | **Not scored** | No check rejected it, but at least one check couldn't run (e.g. the LLM judge returned invalid output). |
 | **Crashed** | The model call itself failed, so there was no answer to check. |
 
-Why "Not scored" exists: the backend's `passed` flag is `false` both when an
-answer is wrong *and* when a check merely errored. Showing both as "Failed"
-made the correct answer "Paris" look wrong. The set of **Passed** answers is
-identical to the backend's; only "not passed" is split into Wrong vs Not scored.
+Why the extra states exist: the backend's `passed` flag is `false` whenever any
+check rejects the answer *or* errors. Showing all of those as "Failed" hides
+evaluator disagreement and makes correct-but-verbose answers look wrong. The set
+of **Passed** answers is identical to the backend's; only "not passed" is split
+into Checks disagree / Wrong / Not scored / Crashed.
 
 ### RAG terms (Retrieval tab)
 
@@ -57,11 +59,11 @@ From the repo root:
 
 Open http://localhost:5173. Frontend only: `cd frontend; npm run dev`.
 
-Tests (Node 26 needs the flag; Node's own `localStorage` hides jsdom's):
+Tests (any Node version; `src/test-setup.ts` handles Node 25+'s built-in `localStorage`):
 
 ```fish
 cd frontend
-env NODE_OPTIONS=--no-experimental-webstorage npm test
+npm test
 npm run build      # typecheck + production build
 npm run lint
 ```
@@ -77,7 +79,7 @@ npm run lint
    or run several models / repeats at once (*Compare models*). Past runs are listed.
    *New experiment* creates one: pick questions, a model and checks.
 4. **Analysis**: one question per tab.
-   - *Compare runs*: is the comparison fair, what changed, and did results change.
+   - *Compare runs*: pick any two runs (live mode); is the comparison fair, what changed, and did results change.
    - *Why answers fail*: all failures ranked by cause; click a cause to list them.
    - *Retrieval*, *Consistency*, *Speed & cost*: as named.
 
@@ -119,16 +121,12 @@ page (src/pages/*.tsx)
 - **Design rule.** Greys for structure; the single accent colour (`accent`) only
   for wrong answers and errors; every state also has a text label.
 
-## Known issues (backend, as of 2026-11-19)
+## Known limitations
 
-- The LLM faithfulness judge errors on every answer
-  (`Judge output 'outcome' must be one of …, got None`). Until fixed, most
-  answers are *Not scored* and the overall pass rate looks very low.
-- `tests/api/test_benchmarks.py` and `test_providers.py` write junk
-  experiments into the real `./experiments` folder (`create_app(settings)`
-  doesn't override the `get_settings` dependency). Don't run pytest against
-  data you care about until this is fixed.
 - The *Why answers fail* and *Retrieval* tabs fetch every run one by one;
   fine for tens of runs, slow for hundreds.
-- `useData.ts` still exports hooks no page uses (analytics, trends, …); they
-  map backend endpoints and can be used or removed later.
+- Runs whose answers or checks were simulated (mock model, canned judge, fake
+  embeddings) are marked **Simulated**; the list comes from the backend's
+  `simulated_components`, so never infer it from names in the UI.
+- `src/api/client.ts` maps some response fields by hand; when the backend adds a
+  field, add it to `src/types/domain.ts` and check the mapping.
