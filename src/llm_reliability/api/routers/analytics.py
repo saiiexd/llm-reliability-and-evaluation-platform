@@ -18,6 +18,8 @@ from llm_reliability.api.schemas.analytics import (
     EvaluatorAnalyticsResponse,
     ExecutionPerformanceResponse,
     FailureDistributionResponse,
+    RepeatConsistencyResponse,
+    RepeatGroupConsistencyResponse,
     RetrievalSummaryResponse,
     RobustnessSummaryResponse,
     RunComparisonResponse,
@@ -249,4 +251,30 @@ def get_experiment_trends(
         configuration_transitions=trend.configuration_transitions,
         is_repeated_run_trend=trend.is_repeated_run_trend,
         has_trend=trend.has_trend,
+    )
+
+
+@router.get("/consistency", response_model=RepeatConsistencyResponse)
+def get_repeat_consistency(
+    experiment_id: str | None = Query(None),
+    repository: ExperimentRepository = Depends(get_repository),
+    analytics: AnalyticsService = Depends(get_analytics_service),
+) -> RepeatConsistencyResponse:
+    """Repeated-run consistency (RQ4): how much identical repeat runs vary.
+
+    Groups runs sharing experiment, configuration fingerprint and adapter;
+    only groups with two or more runs with results are returned.
+    """
+    if experiment_id is not None:
+        try:
+            repository.load_experiment(experiment_id)
+        except Exception as err:
+            raise ResourceNotFoundError(
+                resource_type="Experiment", resource_id=experiment_id
+            ) from err
+
+    groups = analytics.get_repeat_consistency(experiment_id)
+    return RepeatConsistencyResponse(
+        experiment_id=experiment_id,
+        groups=[RepeatGroupConsistencyResponse(**g.to_dict()) for g in groups],
     )

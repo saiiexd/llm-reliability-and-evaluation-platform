@@ -20,6 +20,10 @@ from llm_reliability.analytics.aggregations import (
 )
 from llm_reliability.analytics.agreement import compute_all_pairwise_agreements
 from llm_reliability.analytics.comparison import compare_runs
+from llm_reliability.analytics.consistency import (
+    RepeatGroupConsistency,
+    compute_repeat_consistency,
+)
 from llm_reliability.analytics.models import (
     AnalyticsOverview,
     EvaluationAggregate,
@@ -254,3 +258,22 @@ class AnalyticsService:
             runs = [self.get_run(r_id) for r_id in all_ids]
 
         return compute_trend_analysis(runs=runs, experiment_id=experiment_id)
+
+    def get_repeat_consistency(
+        self, experiment_id: str | None = None
+    ) -> list[RepeatGroupConsistency]:
+        """Repeated-run consistency (RQ4) for every group of true repeat runs.
+
+        See ``analytics.consistency`` for grouping rules and metric definitions.
+        Experiment names are attached when the definition can be loaded; a
+        missing or unreadable definition leaves the name ``None``.
+        """
+        run_ids = self.repository.list_run_ids(experiment_id)
+        runs = [self.get_run(r_id) for r_id in run_ids]
+        names: dict[str, str] = {}
+        for exp_id in {r.experiment_id for r in runs}:
+            try:
+                names[exp_id] = self.repository.load_experiment(exp_id).name
+            except Exception:
+                continue
+        return compute_repeat_consistency(runs, experiment_names=names)

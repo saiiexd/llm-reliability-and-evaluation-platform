@@ -83,3 +83,32 @@ def test_longitudinal_trends(api_client: TestClient) -> None:
     assert data["has_trend"] is True
     assert len(data["run_ids"]) >= 2
     assert "exact_match_pass_rate" in data["metric_series"]
+
+
+def test_repeat_consistency_groups_true_repeats(api_client: TestClient) -> None:
+    res = api_client.get("/api/v1/analytics/consistency")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["experiment_id"] is None
+    groups = {g["experiment_id"]: g for g in data["groups"]}
+    # The seeded store has one 2-run repeat group; every other experiment has a single run.
+    assert list(groups) == ["exp-reliability-console-demo"]
+    g = groups["exp-reliability-console-demo"]
+    assert g["num_runs"] == 2
+    assert sorted(g["run_ids"]) == ["run-rag-baseline-001", "run-rag-baseline-002"]
+    assert g["adapter_recorded"] is True
+    assert g["identical_output_cases"] == g["compared_cases"] == 7
+    assert g["simulated_components"], "seeded mock runs must stay labelled as simulated"
+    names = {e["evaluator_name"] for e in g["evaluators"]}
+    assert "exact_match" in names
+    for e in g["evaluators"]:
+        assert e["compared_cases"] + e["excluded_cases"] == g["compared_cases"]
+
+
+def test_repeat_consistency_filters_by_experiment(api_client: TestClient) -> None:
+    res = api_client.get("/api/v1/analytics/consistency?experiment_id=exp-reliability-topk2-demo")
+    assert res.status_code == 200
+    assert res.json() == {"experiment_id": "exp-reliability-topk2-demo", "groups": []}
+
+    missing = api_client.get("/api/v1/analytics/consistency?experiment_id=does-not-exist")
+    assert missing.status_code == 404
