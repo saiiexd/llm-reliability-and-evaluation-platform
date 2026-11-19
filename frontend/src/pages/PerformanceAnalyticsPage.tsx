@@ -1,3 +1,4 @@
+import { formatTimestamp } from "../lib/derived";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FixtureNotice } from "../components/FixtureNotice";
@@ -18,26 +19,25 @@ export function PerformanceAnalyticsPage() {
   return (
     <div>
       <SectionHeading
-        eyebrow="Instrumentation & Latency"
-        title="Execution Performance & Telemetry"
-        description="Measured execution durations, latency instrumentation, and explicit reporting of telemetry boundaries. Distinguishes observed execution characteristics from uninstrumented metrics."
+                title="How long did it take, and how many tokens?"
+        description="Pick a run to see its timing and token usage. These numbers describe speed and cost only, not answer quality."
       />
       <FixtureNotice />
 
       {/* Run Selector */}
-      <div className="mb-6 flex items-center gap-3">
-        <label htmlFor="run-selector" className="font-mono text-xs text-ink-soft">
-          Select Experiment Run:
+      <div className="mb-6 flex min-w-0 items-center gap-3">
+        <label htmlFor="run-selector" className="text-sm text-ink-soft">
+          Run
         </label>
         <select
           id="run-selector"
           value={effectiveRunId}
           onChange={(e) => setSelectedRunId(e.target.value)}
-          className="border border-line bg-paper px-3 py-1.5 font-mono text-xs text-ink"
+          className="w-full min-w-0 max-w-md rounded-md border border-line bg-paper px-3 py-1.5 text-sm text-ink"
         >
           {runList.map((r) => (
             <option key={r.run_id} value={r.run_id}>
-              {r.run_id.slice(0, 12)} ({r.experiment_id})
+              {formatTimestamp(r.started_at)} · {r.experiment_id}
             </option>
           ))}
         </select>
@@ -102,9 +102,8 @@ export function PerformanceAnalyticsPage() {
             <div className="grid gap-6 lg:grid-cols-2">
               <Card>
                 <SectionHeading
-                  eyebrow="Coverage disclosure"
-                  title="Telemetry Boundaries & Data Availability"
-                  description="Honest reporting of which execution measurements were captured vs unavailable."
+                                    title="What was measured"
+                  description="Not every model reports timing or token counts. Missing values are shown as missing, never guessed."
                 />
                 <dl className="space-y-3 text-xs">
                   <div className="flex items-center justify-between border-b border-line pb-2">
@@ -140,9 +139,8 @@ export function PerformanceAnalyticsPage() {
 
               <Card>
                 <SectionHeading
-                  eyebrow="Methodological note"
-                  title="Interpretation Guidelines"
-                  description="Explicit architectural rules for analyzing execution telemetry."
+                                    title="How to read these numbers"
+                  
                 />
                 <div className="space-y-3 text-xs text-ink-soft leading-relaxed">
                   <p>
@@ -168,8 +166,8 @@ export function PerformanceAnalyticsPage() {
             {/* Telemetry Notes */}
             {perf.notes.length > 0 && (
               <Card>
-                <div className="font-mono text-xs uppercase tracking-wide text-ink-soft">
-                  Instrumentation Notes
+                <div className="text-xs text-ink-soft font-normal tracking-wide text-ink-soft">
+                  Notes
                 </div>
                 <ul className="mt-2 list-disc space-y-1 pl-4 text-xs text-ink-soft">
                   {perf.notes.map((note, idx) => (
@@ -185,7 +183,7 @@ export function PerformanceAnalyticsPage() {
                 to={`/runs/${effectiveRunId}`}
                 className="font-mono text-xs text-ink underline"
               >
-                &larr; View Full Run Detail ({effectiveRunId})
+                Open this run in Results →
               </Link>
             </div>
           </div>

@@ -146,20 +146,20 @@ export function RobustnessPage() {
 
   return (
     <div>
-      <SectionHeading eyebrow="Perturbation & stability" title="Robustness & Consistency" />
+      <SectionHeading title="Does rewording change the verdict?" description="Each pair is the same question asked two ways. A consistent model gets the same diagnosis for both." />
       <FixtureNotice />
 
       <DataStateView loading={loading} error={error} onRetry={refetch}>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Stat label="Perturbation Pairs" value={totalComparisons} />
-          <Stat label="Unchanged Outcomes" value={totalUnchanged} />
-          <Stat label="Shifted Outcomes" value={totalComparisons - totalUnchanged} />
-          <Stat label="Consistency Rate" value={formatPercent(consistencyRate)} />
+          <Stat label="Question pairs tested" value={totalComparisons} />
+          <Stat label="Same verdict" value={totalUnchanged} />
+          <Stat label="Verdict changed" value={totalComparisons - totalUnchanged} />
+          <Stat label="Consistency" value={formatPercent(consistencyRate)} />
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
           <Card>
-            <SectionHeading eyebrow="Consistency by type" title="Perturbation Resistance" />
+            <SectionHeading title="By type of change" />
             {perturbationStats.size === 0 ? (
               <EmptyState title="No perturbation comparisons recorded." />
             ) : (
@@ -189,13 +189,13 @@ export function RobustnessPage() {
           </Card>
 
           <Card>
-            <SectionHeading eyebrow="Transitions" title="Failure Category Shifts" />
+            <SectionHeading title="How verdicts changed" description="Pairs where the change flipped the diagnosis, e.g. correct → wrong." />
             <p className="mb-3 text-xs text-ink-soft">
               Transitions where a perturbation caused the model output to shift from one failure
               category to another.
             </p>
             {Object.keys(transitionCounts).length === 0 ? (
-              <EmptyState title="No category transitions recorded." />
+              <EmptyState title="No verdict changed." />
             ) : (
               <ul className="space-y-2">
                 {Object.entries(transitionCounts).map(([transition, count]) => (
@@ -211,20 +211,20 @@ export function RobustnessPage() {
 
         <div className="mt-8">
           <Card>
-            <SectionHeading eyebrow="Registry" title="Perturbation Comparison Registry" />
+            <SectionHeading title="Every pair" />
             {allComparisons.length === 0 ? (
               <EmptyState title="No perturbation test cases recorded." />
             ) : (
               <div className="overflow-x-auto border border-line">
                 <table className="w-full min-w-[760px] border-collapse text-sm">
                   <thead>
-                    <tr className="border-b border-line bg-paper-dim text-left font-mono text-xs uppercase">
-                      <th className="px-3 py-2">Baseline Case</th>
-                      <th className="px-3 py-2">Perturbed Case</th>
-                      <th className="px-3 py-2">Perturbation</th>
-                      <th className="px-3 py-2">Baseline Diagnosis</th>
-                      <th className="px-3 py-2">Perturbed Diagnosis</th>
-                      <th className="px-3 py-2">Outcome</th>
+                    <tr className="border-b border-line bg-paper-dim text-left text-xs text-ink-soft font-normal">
+                      <th className="px-3 py-2">Original question</th>
+                      <th className="px-3 py-2">Changed question</th>
+                      <th className="px-3 py-2">Change</th>
+                      <th className="px-3 py-2">Original verdict</th>
+                      <th className="px-3 py-2">New verdict</th>
+                      <th className="px-3 py-2">Result</th>
                     </tr>
                   </thead>
                   <tbody>

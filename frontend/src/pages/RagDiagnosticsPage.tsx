@@ -164,20 +164,20 @@ export function RagDiagnosticsPage() {
 
   return (
     <div>
-      <SectionHeading eyebrow="Retrieval & groundedness" title="RAG Diagnostics" />
+      <SectionHeading title="Did the search step find the right passage?" description="Only runs that look up passages before answering (RAG) appear here. Scores are averages from 0 to 1; higher is better." />
       <FixtureNotice />
 
       <DataStateView loading={loading} error={error} onRetry={refetch}>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Stat label="RAG Test Cases" value={items.length} />
-          <Stat label="Mean Hit@1" value={mean(hitScores)} />
-          <Stat label="Mean MRR" value={mean(mrrScores)} />
-          <Stat label="Mean Recall@1" value={mean(recallScores)} />
+          <Stat label="Answers from RAG runs" value={items.length} />
+          <Stat label="Right passage ranked first" value={mean(hitScores)} />
+          <Stat label="Average rank score (MRR)" value={mean(mrrScores)} />
+          <Stat label="Needed passages found (top 1)" value={mean(recallScores)} />
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
           <Card>
-            <SectionHeading eyebrow="Attribution" title="RAG Failure Attribution" />
+            <SectionHeading title="Search problem or answer problem?" />
             <p className="mb-4 text-xs text-ink-soft">
               The platform decouples retrieval quality from generation faithfulness. A retrieval
               miss and an incorrect answer indicate a <span className="font-mono">retrieval_failure</span>;
@@ -209,7 +209,7 @@ export function RagDiagnosticsPage() {
           </Card>
 
           <Card>
-            <SectionHeading eyebrow="Methodology note" title="Faithfulness Assessment Scope" />
+            <SectionHeading title="Limits of these checks" />
             <div className="space-y-3 text-xs text-ink-soft leading-relaxed">
               <p>
                 <strong className="text-ink">Lexical overlap baseline:</strong> checks literal token
@@ -231,22 +231,22 @@ export function RagDiagnosticsPage() {
 
         <div className="mt-8">
           <Card>
-            <SectionHeading eyebrow="Investigation" title="RAG Test Case Registry" />
+            <SectionHeading title="Every RAG answer" />
             {items.length === 0 ? (
               <EmptyState title="No RAG executions recorded." />
             ) : (
               <div className="overflow-x-auto border border-line">
                 <table className="w-full min-w-[800px] border-collapse text-sm">
                   <thead>
-                    <tr className="border-b border-line bg-paper-dim text-left font-mono text-xs uppercase">
-                      <th className="px-3 py-2">Test Case ID</th>
+                    <tr className="border-b border-line bg-paper-dim text-left text-xs text-ink-soft font-normal">
+                      <th className="px-3 py-2">Question ID</th>
                       <th className="px-3 py-2">Run</th>
-                      <th className="px-3 py-2">Hit@1</th>
+                      <th className="px-3 py-2">Ranked first</th>
                       <th className="px-3 py-2">MRR</th>
-                      <th className="px-3 py-2">Recall@1</th>
-                      <th className="px-3 py-2">Failure Category</th>
-                      <th className="px-3 py-2">Secondary Findings</th>
-                      <th className="px-3 py-2 text-right">Action</th>
+                      <th className="px-3 py-2">Found</th>
+                      <th className="px-3 py-2">Diagnosis</th>
+                      <th className="px-3 py-2">Extra findings</th>
+                      <th className="px-3 py-2 text-right"></th>
                     </tr>
                   </thead>
                   <tbody>
