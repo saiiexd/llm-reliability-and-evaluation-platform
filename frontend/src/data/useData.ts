@@ -17,6 +17,7 @@ import type {
   ExperimentDefinition,
   ExperimentRun,
   ReliabilityDiagnostic,
+  RepeatConsistencyReport,
   RetrievalEvaluationResult,
   RunComparison,
 } from "../types/domain";
@@ -233,6 +234,20 @@ export function useComparison(
     },
     () => fixtures.getComparison(key),
     [key, runIds?.join(",")],
+  );
+}
+
+/**
+ * Repeated-run consistency (RQ4). The bundled demo fixtures do not include
+ * this analysis, so fixture mode returns null and the view shows an empty
+ * state instead of numbers.
+ */
+export function useRepeatConsistency(experimentId?: string): AsyncState<RepeatConsistencyReport> {
+  const { client } = useConnection();
+  return useAsyncData(
+    () => client.getRepeatConsistency(experimentId),
+    () => undefined,
+    [experimentId],
   );
 }
 

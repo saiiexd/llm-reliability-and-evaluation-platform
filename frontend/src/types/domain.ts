@@ -539,3 +539,60 @@ export interface BenchmarkExecutionResponse {
   }[];
 }
 
+/**
+ * Verdict stability of one evaluator across a group of repeat runs
+ * (GET /analytics/consistency). stability_rate = stable_cases / compared_cases.
+ * Cases where the evaluator was missing, not SUCCESS, or gave no verdict in
+ * any run are excluded from compared_cases and counted in excluded_*.
+ */
+export interface EvaluatorStability {
+  evaluator_name: string;
+  stable_cases: number;
+  compared_cases: number;
+  stability_rate: number | null;
+  excluded_cases: number;
+  excluded_missing: number;
+  excluded_not_success: number;
+  excluded_no_verdict: number;
+  unstable_count: number;
+  unstable_test_case_ids: string[];
+}
+
+/**
+ * Repeated-run consistency (RQ4) for one group of true repeats: same
+ * experiment, configuration fingerprint and adapter. All rates use
+ * compared_cases (cases answered in every run) as the denominator;
+ * identical outputs means exact string equality. *_test_case_ids lists are
+ * capped; the matching *_count is the full total.
+ */
+export interface RepeatGroupConsistency {
+  experiment_id: string;
+  experiment_name: string | null;
+  config_fingerprint: string;
+  adapter_id: string | null;
+  adapter_recorded: boolean;
+  num_runs: number;
+  run_ids: string[];
+  temperature: number | null;
+  model_id: string;
+  simulated_components: string[];
+  total_test_cases: number;
+  compared_cases: number;
+  excluded_cases: number;
+  identical_output_cases: number;
+  identical_output_rate: number | null;
+  output_changed_count: number;
+  output_changed_test_case_ids: string[];
+  case_pass_stable_cases: number;
+  case_pass_compared_cases: number;
+  case_pass_stability_rate: number | null;
+  case_pass_changed_count: number;
+  case_pass_changed_test_case_ids: string[];
+  evaluators: EvaluatorStability[];
+}
+
+export interface RepeatConsistencyReport {
+  experiment_id: string | null;
+  groups: RepeatGroupConsistency[];
+}
+
