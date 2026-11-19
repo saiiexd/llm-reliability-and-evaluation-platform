@@ -4,6 +4,7 @@ Application services bridging domain models, diagnostics, and API contracts.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from typing import Any
 
 from llm_reliability.api.schemas.common import redact_sensitive_dict
@@ -46,6 +47,7 @@ from llm_reliability.diagnostics.robustness import (
     get_perturbation_info,
     summarize_robustness,
 )
+from llm_reliability.evaluation.models import ModelResponse
 from llm_reliability.experiments.models import ExperimentDefinition, ExperimentRun
 from llm_reliability.rag.evaluators import (
     HitAtKEvaluator,
@@ -59,15 +61,29 @@ from llm_reliability.reliability.findings import analyze_reliability
 from llm_reliability.reliability.summary import summarize_run
 
 
+def _run_top_k(responses: Iterable[ModelResponse]) -> int:
+    """The retrieval depth K a RAG run actually used, read from its own evidence.
+
+    Retrieval metrics are scored at the run's own K (the passages the model
+    was actually given), not a fixed K=1: with a fixed K, a top-1 vs top-2
+    comparison would show identical retrieval scores by construction.
+    Falls back to the number of retrieved chunks, then to 1.
+    """
+    ks: list[int] = []
+    for response in responses:
+        rag = response.provider_metadata.get("rag") or {}
+        top_k = (rag.get("pipeline_config") or {}).get("top_k")
+        if isinstance(top_k, int) and top_k > 0:
+            ks.append(top_k)
+        elif rag.get("retrieved_chunks"):
+            ks.append(len(rag["retrieved_chunks"]))
+    return max(ks) if ks else 1
+
+
 class DiagnosticsService:
     """Derives forensic reliability diagnostics, retrieval metrics, and robustness comparisons."""
 
     def __init__(self) -> None:
-        self._ret_evaluators = [
-            HitAtKEvaluator(k=1),
-            RecallAtKEvaluator(k=1),
-            MeanReciprocalRankEvaluator(),
-        ]
         self._diag_cache: dict[str, dict[str, ReliabilityDiagnostic]] = {}
         self._ret_cache: dict[str, dict[str, list[RetrievalEvaluationResult]]] = {}
         self._rob_cache: dict[str, list[RobustnessResult]] = {}
@@ -94,10 +110,11 @@ class DiagnosticsService:
             for tc in run.result.test_case_results
             if tc.model_response is not None
         }
+        k = _run_top_k(responses.values())
         res = evaluate_retrieval(
             run.dataset_version.dataset.test_cases,
             responses,
-            self._ret_evaluators,
+            [HitAtKEvaluator(k=k), RecallAtKEvaluator(k=k), MeanReciprocalRankEvaluator()],
         )
         self._ret_cache[run.run_id] = res
         return res

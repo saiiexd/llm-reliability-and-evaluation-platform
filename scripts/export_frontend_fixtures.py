@@ -28,6 +28,7 @@ from typing import Any
 
 from llm_reliability.analytics import AnalyticsService
 from llm_reliability.api.registry import GENERATION_RESPONSES, JUDGE_RESPONSES
+from llm_reliability.api.services import _run_top_k
 from llm_reliability.diagnostics import (
     assess_statements_lexically,
     build_reliability_diagnostic,
@@ -302,12 +303,6 @@ def main() -> int:
         robustness_map: dict[str, dict[str, Any]] = {}
         summaries_map: dict[str, dict[str, Any]] = {}
 
-        ret_evaluators = [
-            HitAtKEvaluator(k=1),
-            RecallAtKEvaluator(k=1),
-            MeanReciprocalRankEvaluator(),
-        ]
-
         for r in all_runs:
             if r.result is None:
                 continue
@@ -328,7 +323,13 @@ def main() -> int:
             )
             if has_rag:
                 r_ret_results = evaluate_retrieval(
-                    r_dataset.test_cases, r_responses_by_id, ret_evaluators
+                    r_dataset.test_cases,
+                    r_responses_by_id,
+                    [
+                        HitAtKEvaluator(k=_run_top_k(r_responses_by_id.values())),
+                        RecallAtKEvaluator(k=_run_top_k(r_responses_by_id.values())),
+                        MeanReciprocalRankEvaluator(),
+                    ],
                 )
                 retrieval_map[r.run_id] = {
                     tc_id: [res.to_dict() for res in res_list]

@@ -1,5 +1,5 @@
 {
-  "2630f7df159d4f759429e804e1db1fe4": [
+  "84624dc837b64be9993c068f2c69b7d2": [
     {
       "evaluated_cases": 6,
       "k": 1,
@@ -31,7 +31,8 @@
       "total_cases": 7
     }
   ],
-  "4e0cb1344acd406c9cd5655a6f401694": [
+  "a4643cd1c88140adb8fce946198b1bc7": [],
+  "a75a6b079c5740ba9f049df77336e33b": [
     {
       "evaluated_cases": 6,
       "k": 1,
@@ -63,15 +64,14 @@
       "total_cases": 7
     }
   ],
-  "60b187869f04415cbbc21428997fa8d9": [],
-  "b6dc822a41a44322ac81316a98062a8b": [
+  "d0d83eeada47465a9ddddda6ef2d9b2e": [
     {
       "evaluated_cases": 6,
-      "k": 1,
+      "k": 2,
       "max_score": 1.0,
-      "mean_score": 0.8333333333333334,
+      "mean_score": 1.0,
       "metric_name": "hit_at_k",
-      "min_score": 0.0,
+      "min_score": 1.0,
       "skipped_cases": 1,
       "total_cases": 7
     },
@@ -87,11 +87,11 @@
     },
     {
       "evaluated_cases": 6,
-      "k": 1,
+      "k": 2,
       "max_score": 1.0,
-      "mean_score": 0.8333333333333334,
+      "mean_score": 1.0,
       "metric_name": "recall_at_k",
-      "min_score": 0.0,
+      "min_score": 1.0,
       "skipped_cases": 1,
       "total_cases": 7
     }

@@ -1,5 +1,5 @@
 {
-  "2630f7df159d4f759429e804e1db1fe4": {
+  "84624dc837b64be9993c068f2c69b7d2": {
     "completion_tokens_total": null,
     "cost_available": false,
     "evaluator_duration_seconds_mean": null,
@@ -13,12 +13,12 @@
     "per_case_duration_seconds_mean": null,
     "prompt_tokens_total": null,
     "retrieval_duration_seconds_mean": null,
-    "run_id": "2630f7df159d4f759429e804e1db1fe4",
+    "run_id": "84624dc837b64be9993c068f2c69b7d2",
     "tokens_available": false,
     "total_tokens": null,
-    "wall_clock_duration_seconds": 0.00043
+    "wall_clock_duration_seconds": 0.000402
   },
-  "4e0cb1344acd406c9cd5655a6f401694": {
+  "a4643cd1c88140adb8fce946198b1bc7": {
     "completion_tokens_total": null,
     "cost_available": false,
     "evaluator_duration_seconds_mean": null,
@@ -32,31 +32,12 @@
     "per_case_duration_seconds_mean": null,
     "prompt_tokens_total": null,
     "retrieval_duration_seconds_mean": null,
-    "run_id": "4e0cb1344acd406c9cd5655a6f401694",
-    "tokens_available": false,
-    "total_tokens": null,
-    "wall_clock_duration_seconds": 0.000157
-  },
-  "60b187869f04415cbbc21428997fa8d9": {
-    "completion_tokens_total": null,
-    "cost_available": false,
-    "evaluator_duration_seconds_mean": null,
-    "generation_duration_seconds_mean": null,
-    "notes": [
-      "Wall-clock run duration derived from UTC lifecycle timestamps.",
-      "Per-test-case duration was not instrumented for this run.",
-      "Token usage telemetry is unavailable (adapter returned no token metrics).",
-      "Monetary cost calculation is unavailable (no cost calculation or pricing table)."
-    ],
-    "per_case_duration_seconds_mean": null,
-    "prompt_tokens_total": null,
-    "retrieval_duration_seconds_mean": null,
-    "run_id": "60b187869f04415cbbc21428997fa8d9",
+    "run_id": "a4643cd1c88140adb8fce946198b1bc7",
     "tokens_available": false,
     "total_tokens": null,
     "wall_clock_duration_seconds": 2e-05
   },
-  "b6dc822a41a44322ac81316a98062a8b": {
+  "a75a6b079c5740ba9f049df77336e33b": {
     "completion_tokens_total": null,
     "cost_available": false,
     "evaluator_duration_seconds_mean": null,
@@ -70,9 +51,28 @@
     "per_case_duration_seconds_mean": null,
     "prompt_tokens_total": null,
     "retrieval_duration_seconds_mean": null,
-    "run_id": "b6dc822a41a44322ac81316a98062a8b",
+    "run_id": "a75a6b079c5740ba9f049df77336e33b",
     "tokens_available": false,
     "total_tokens": null,
     "wall_clock_duration_seconds": 0.000139
+  },
+  "d0d83eeada47465a9ddddda6ef2d9b2e": {
+    "completion_tokens_total": null,
+    "cost_available": false,
+    "evaluator_duration_seconds_mean": null,
+    "generation_duration_seconds_mean": null,
+    "notes": [
+      "Wall-clock run duration derived from UTC lifecycle timestamps.",
+      "Per-test-case duration was not instrumented for this run.",
+      "Token usage telemetry is unavailable (adapter returned no token metrics).",
+      "Monetary cost calculation is unavailable (no cost calculation or pricing table)."
+    ],
+    "per_case_duration_seconds_mean": null,
+    "prompt_tokens_total": null,
+    "retrieval_duration_seconds_mean": null,
+    "run_id": "d0d83eeada47465a9ddddda6ef2d9b2e",
+    "tokens_available": false,
+    "total_tokens": null,
+    "wall_clock_duration_seconds": 0.000147
   }
 }

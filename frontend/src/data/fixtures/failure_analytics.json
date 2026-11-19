@@ -1,5 +1,5 @@
 {
-  "2630f7df159d4f759429e804e1db1fe4": {
+  "84624dc837b64be9993c068f2c69b7d2": {
     "num_determined": 7,
     "num_undetermined": 0,
     "primary_categories": {
@@ -41,94 +41,10 @@
       },
       "retrieval_failure": {
         "category": "retrieval_failure",
-        "count": 0,
-        "denominator": 7,
-        "proportion": 0.0
-      },
-      "undetermined": {
-        "category": "undetermined",
-        "count": 0,
-        "denominator": 7,
-        "proportion": 0.0
-      },
-      "unsupported": {
-        "category": "unsupported",
-        "count": 3,
-        "denominator": 7,
-        "proportion": 0.42857142857142855
-      }
-    },
-    "secondary_findings": {
-      "generation_failure": {
-        "count": 3,
-        "denominator": 7,
-        "finding_name": "generation_failure",
-        "frequency": 0.42857142857142855
-      },
-      "insufficient_evidence": {
-        "count": 1,
-        "denominator": 7,
-        "finding_name": "insufficient_evidence",
-        "frequency": 0.14285714285714285
-      },
-      "retrieval_failure": {
-        "count": 1,
-        "denominator": 7,
-        "finding_name": "retrieval_failure",
-        "frequency": 0.14285714285714285
-      }
-    },
-    "source_run_ids": [
-      "2630f7df159d4f759429e804e1db1fe4"
-    ],
-    "total_cases": 7
-  },
-  "4e0cb1344acd406c9cd5655a6f401694": {
-    "num_determined": 7,
-    "num_undetermined": 0,
-    "primary_categories": {
-      "contradicted": {
-        "category": "contradicted",
         "count": 1,
         "denominator": 7,
         "proportion": 0.14285714285714285
       },
-      "correct": {
-        "category": "correct",
-        "count": 3,
-        "denominator": 7,
-        "proportion": 0.42857142857142855
-      },
-      "evaluator_disagreement": {
-        "category": "evaluator_disagreement",
-        "count": 0,
-        "denominator": 7,
-        "proportion": 0.0
-      },
-      "generation_failure": {
-        "category": "generation_failure",
-        "count": 0,
-        "denominator": 7,
-        "proportion": 0.0
-      },
-      "incorrect": {
-        "category": "incorrect",
-        "count": 0,
-        "denominator": 7,
-        "proportion": 0.0
-      },
-      "insufficient_evidence": {
-        "category": "insufficient_evidence",
-        "count": 0,
-        "denominator": 7,
-        "proportion": 0.0
-      },
-      "retrieval_failure": {
-        "category": "retrieval_failure",
-        "count": 0,
-        "denominator": 7,
-        "proportion": 0.0
-      },
       "undetermined": {
         "category": "undetermined",
         "count": 0,
@@ -137,9 +53,9 @@
       },
       "unsupported": {
         "category": "unsupported",
-        "count": 3,
+        "count": 2,
         "denominator": 7,
-        "proportion": 0.42857142857142855
+        "proportion": 0.2857142857142857
       }
     },
     "secondary_findings": {
@@ -155,19 +71,19 @@
         "finding_name": "insufficient_evidence",
         "frequency": 0.14285714285714285
       },
-      "retrieval_failure": {
+      "unsupported_claims": {
         "count": 1,
         "denominator": 7,
-        "finding_name": "retrieval_failure",
+        "finding_name": "unsupported_claims",
         "frequency": 0.14285714285714285
       }
     },
     "source_run_ids": [
-      "4e0cb1344acd406c9cd5655a6f401694"
+      "84624dc837b64be9993c068f2c69b7d2"
     ],
     "total_cases": 7
   },
-  "60b187869f04415cbbc21428997fa8d9": {
+  "a4643cd1c88140adb8fce946198b1bc7": {
     "num_determined": 2,
     "num_undetermined": 0,
     "primary_categories": {
@@ -228,11 +144,95 @@
     },
     "secondary_findings": {},
     "source_run_ids": [
-      "60b187869f04415cbbc21428997fa8d9"
+      "a4643cd1c88140adb8fce946198b1bc7"
     ],
     "total_cases": 2
   },
-  "b6dc822a41a44322ac81316a98062a8b": {
+  "a75a6b079c5740ba9f049df77336e33b": {
+    "num_determined": 7,
+    "num_undetermined": 0,
+    "primary_categories": {
+      "contradicted": {
+        "category": "contradicted",
+        "count": 1,
+        "denominator": 7,
+        "proportion": 0.14285714285714285
+      },
+      "correct": {
+        "category": "correct",
+        "count": 3,
+        "denominator": 7,
+        "proportion": 0.42857142857142855
+      },
+      "evaluator_disagreement": {
+        "category": "evaluator_disagreement",
+        "count": 0,
+        "denominator": 7,
+        "proportion": 0.0
+      },
+      "generation_failure": {
+        "category": "generation_failure",
+        "count": 0,
+        "denominator": 7,
+        "proportion": 0.0
+      },
+      "incorrect": {
+        "category": "incorrect",
+        "count": 0,
+        "denominator": 7,
+        "proportion": 0.0
+      },
+      "insufficient_evidence": {
+        "category": "insufficient_evidence",
+        "count": 0,
+        "denominator": 7,
+        "proportion": 0.0
+      },
+      "retrieval_failure": {
+        "category": "retrieval_failure",
+        "count": 1,
+        "denominator": 7,
+        "proportion": 0.14285714285714285
+      },
+      "undetermined": {
+        "category": "undetermined",
+        "count": 0,
+        "denominator": 7,
+        "proportion": 0.0
+      },
+      "unsupported": {
+        "category": "unsupported",
+        "count": 2,
+        "denominator": 7,
+        "proportion": 0.2857142857142857
+      }
+    },
+    "secondary_findings": {
+      "generation_failure": {
+        "count": 3,
+        "denominator": 7,
+        "finding_name": "generation_failure",
+        "frequency": 0.42857142857142855
+      },
+      "insufficient_evidence": {
+        "count": 1,
+        "denominator": 7,
+        "finding_name": "insufficient_evidence",
+        "frequency": 0.14285714285714285
+      },
+      "unsupported_claims": {
+        "count": 1,
+        "denominator": 7,
+        "finding_name": "unsupported_claims",
+        "frequency": 0.14285714285714285
+      }
+    },
+    "source_run_ids": [
+      "a75a6b079c5740ba9f049df77336e33b"
+    ],
+    "total_cases": 7
+  },
+  "d0d83eeada47465a9ddddda6ef2d9b2e": {
     "num_determined": 7,
     "num_undetermined": 0,
     "primary_categories": {
@@ -293,10 +293,10 @@
     },
     "secondary_findings": {
       "generation_failure": {
-        "count": 3,
+        "count": 4,
         "denominator": 7,
         "finding_name": "generation_failure",
-        "frequency": 0.42857142857142855
+        "frequency": 0.5714285714285714
       },
       "insufficient_evidence": {
         "count": 1,
@@ -306,7 +306,7 @@
       }
     },
     "source_run_ids": [
-      "b6dc822a41a44322ac81316a98062a8b"
+      "d0d83eeada47465a9ddddda6ef2d9b2e"
     ],
     "total_cases": 7
   }

@@ -1,5 +1,5 @@
 {
-  "2630f7df159d4f759429e804e1db1fe4": {
+  "84624dc837b64be9993c068f2c69b7d2": {
     "correct-context-contradictory-answer": [
       {
         "error": null,
@@ -367,7 +367,7 @@
       }
     ]
   },
-  "4e0cb1344acd406c9cd5655a6f401694": {
+  "a75a6b079c5740ba9f049df77336e33b": {
     "correct-context-contradictory-answer": [
       {
         "error": null,
@@ -735,21 +735,22 @@
       }
     ]
   },
-  "b6dc822a41a44322ac81316a98062a8b": {
+  "d0d83eeada47465a9ddddda6ef2d9b2e": {
     "correct-context-contradictory-answer": [
       {
         "error": null,
         "evaluator_config": {
-          "k": 1
+          "k": 2
         },
-        "evaluator_name": "hit_at_1",
-        "explanation": "At least one relevant target was found in the top 1 retrieved chunks.",
+        "evaluator_name": "hit_at_2",
+        "explanation": "At least one relevant target was found in the top 2 retrieved chunks.",
         "metric_name": "hit_at_k",
         "relevant_targets": [
           "doc-france::chunk-0"
         ],
         "retrieved_ids": [
-          "doc-france::chunk-0"
+          "doc-france::chunk-0",
+          "doc-fruit::chunk-0"
         ],
         "score": 1.0,
         "status": "success",
@@ -758,16 +759,17 @@
       {
         "error": null,
         "evaluator_config": {
-          "k": 1
+          "k": 2
         },
-        "evaluator_name": "recall_at_1",
-        "explanation": "Retrieved 1 of 1 relevant targets in the top 1.",
+        "evaluator_name": "recall_at_2",
+        "explanation": "Retrieved 1 of 1 relevant targets in the top 2.",
         "metric_name": "recall_at_k",
         "relevant_targets": [
           "doc-france::chunk-0"
         ],
         "retrieved_ids": [
-          "doc-france::chunk-0"
+          "doc-france::chunk-0",
+          "doc-fruit::chunk-0"
         ],
         "score": 1.0,
         "status": "success",
@@ -795,16 +797,17 @@
       {
         "error": null,
         "evaluator_config": {
-          "k": 1
+          "k": 2
         },
-        "evaluator_name": "hit_at_1",
-        "explanation": "At least one relevant target was found in the top 1 retrieved chunks.",
+        "evaluator_name": "hit_at_2",
+        "explanation": "At least one relevant target was found in the top 2 retrieved chunks.",
         "metric_name": "hit_at_k",
         "relevant_targets": [
           "doc-france::chunk-0"
         ],
         "retrieved_ids": [
-          "doc-france::chunk-0"
+          "doc-france::chunk-0",
+          "doc-fruit::chunk-0"
         ],
         "score": 1.0,
         "status": "success",
@@ -813,16 +816,17 @@
       {
         "error": null,
         "evaluator_config": {
-          "k": 1
+          "k": 2
         },
-        "evaluator_name": "recall_at_1",
-        "explanation": "Retrieved 1 of 1 relevant targets in the top 1.",
+        "evaluator_name": "recall_at_2",
+        "explanation": "Retrieved 1 of 1 relevant targets in the top 2.",
         "metric_name": "recall_at_k",
         "relevant_targets": [
           "doc-france::chunk-0"
         ],
         "retrieved_ids": [
-          "doc-france::chunk-0"
+          "doc-france::chunk-0",
+          "doc-fruit::chunk-0"
         ],
         "score": 1.0,
         "status": "success",
@@ -850,16 +854,17 @@
       {
         "error": null,
         "evaluator_config": {
-          "k": 1
+          "k": 2
         },
-        "evaluator_name": "hit_at_1",
-        "explanation": "At least one relevant target was found in the top 1 retrieved chunks.",
+        "evaluator_name": "hit_at_2",
+        "explanation": "At least one relevant target was found in the top 2 retrieved chunks.",
         "metric_name": "hit_at_k",
         "relevant_targets": [
           "doc-france::chunk-0"
         ],
         "retrieved_ids": [
-          "doc-france::chunk-0"
+          "doc-france::chunk-0",
+          "doc-fruit::chunk-0"
         ],
         "score": 1.0,
         "status": "success",
@@ -868,16 +873,17 @@
       {
         "error": null,
         "evaluator_config": {
-          "k": 1
+          "k": 2
         },
-        "evaluator_name": "recall_at_1",
-        "explanation": "Retrieved 1 of 1 relevant targets in the top 1.",
+        "evaluator_name": "recall_at_2",
+        "explanation": "Retrieved 1 of 1 relevant targets in the top 2.",
         "metric_name": "recall_at_k",
         "relevant_targets": [
           "doc-france::chunk-0"
         ],
         "retrieved_ids": [
-          "doc-france::chunk-0"
+          "doc-france::chunk-0",
+          "doc-fruit::chunk-0"
         ],
         "score": 1.0,
         "status": "success",
@@ -905,16 +911,17 @@
       {
         "error": null,
         "evaluator_config": {
-          "k": 1
+          "k": 2
         },
-        "evaluator_name": "hit_at_1",
-        "explanation": "At least one relevant target was found in the top 1 retrieved chunks.",
+        "evaluator_name": "hit_at_2",
+        "explanation": "At least one relevant target was found in the top 2 retrieved chunks.",
         "metric_name": "hit_at_k",
         "relevant_targets": [
           "doc-france::chunk-0"
         ],
         "retrieved_ids": [
-          "doc-france::chunk-0"
+          "doc-france::chunk-0",
+          "doc-fruit::chunk-0"
         ],
         "score": 1.0,
         "status": "success",
@@ -923,16 +930,17 @@
       {
         "error": null,
         "evaluator_config": {
-          "k": 1
+          "k": 2
         },
-        "evaluator_name": "recall_at_1",
-        "explanation": "Retrieved 1 of 1 relevant targets in the top 1.",
+        "evaluator_name": "recall_at_2",
+        "explanation": "Retrieved 1 of 1 relevant targets in the top 2.",
         "metric_name": "recall_at_k",
         "relevant_targets": [
           "doc-france::chunk-0"
         ],
         "retrieved_ids": [
-          "doc-france::chunk-0"
+          "doc-france::chunk-0",
+          "doc-fruit::chunk-0"
         ],
         "score": 1.0,
         "status": "success",
@@ -960,36 +968,38 @@
       {
         "error": null,
         "evaluator_config": {
-          "k": 1
+          "k": 2
         },
-        "evaluator_name": "hit_at_1",
-        "explanation": "No relevant target was found in the top 1 retrieved chunks.",
+        "evaluator_name": "hit_at_2",
+        "explanation": "At least one relevant target was found in the top 2 retrieved chunks.",
         "metric_name": "hit_at_k",
         "relevant_targets": [
           "doc-france::chunk-0"
         ],
         "retrieved_ids": [
-          "doc-fruit::chunk-0"
+          "doc-fruit::chunk-0",
+          "doc-france::chunk-0"
         ],
-        "score": 0.0,
+        "score": 1.0,
         "status": "success",
         "test_case_id": "missing-context"
       },
       {
         "error": null,
         "evaluator_config": {
-          "k": 1
+          "k": 2
         },
-        "evaluator_name": "recall_at_1",
-        "explanation": "Retrieved 0 of 1 relevant targets in the top 1.",
+        "evaluator_name": "recall_at_2",
+        "explanation": "Retrieved 1 of 1 relevant targets in the top 2.",
         "metric_name": "recall_at_k",
         "relevant_targets": [
           "doc-france::chunk-0"
         ],
         "retrieved_ids": [
-          "doc-fruit::chunk-0"
+          "doc-fruit::chunk-0",
+          "doc-france::chunk-0"
         ],
-        "score": 0.0,
+        "score": 1.0,
         "status": "success",
         "test_case_id": "missing-context"
       },
@@ -1015,9 +1025,9 @@
       {
         "error": null,
         "evaluator_config": {
-          "k": 1
+          "k": 2
         },
-        "evaluator_name": "hit_at_1",
+        "evaluator_name": "hit_at_2",
         "explanation": "No retrieval ground truth was provided for this test case.",
         "metric_name": "hit_at_k",
         "relevant_targets": null,
@@ -1029,9 +1039,9 @@
       {
         "error": null,
         "evaluator_config": {
-          "k": 1
+          "k": 2
         },
-        "evaluator_name": "recall_at_1",
+        "evaluator_name": "recall_at_2",
         "explanation": "No retrieval ground truth was provided for this test case.",
         "metric_name": "recall_at_k",
         "relevant_targets": null,
@@ -1057,16 +1067,17 @@
       {
         "error": null,
         "evaluator_config": {
-          "k": 1
+          "k": 2
         },
-        "evaluator_name": "hit_at_1",
-        "explanation": "At least one relevant target was found in the top 1 retrieved chunks.",
+        "evaluator_name": "hit_at_2",
+        "explanation": "At least one relevant target was found in the top 2 retrieved chunks.",
         "metric_name": "hit_at_k",
         "relevant_targets": [
           "doc-france::chunk-0"
         ],
         "retrieved_ids": [
-          "doc-france::chunk-0"
+          "doc-france::chunk-0",
+          "doc-fruit::chunk-0"
         ],
         "score": 1.0,
         "status": "success",
@@ -1075,16 +1086,17 @@
       {
         "error": null,
         "evaluator_config": {
-          "k": 1
+          "k": 2
         },
-        "evaluator_name": "recall_at_1",
-        "explanation": "Retrieved 1 of 1 relevant targets in the top 1.",
+        "evaluator_name": "recall_at_2",
+        "explanation": "Retrieved 1 of 1 relevant targets in the top 2.",
         "metric_name": "recall_at_k",
         "relevant_targets": [
           "doc-france::chunk-0"
         ],
         "retrieved_ids": [
-          "doc-france::chunk-0"
+          "doc-france::chunk-0",
+          "doc-fruit::chunk-0"
         ],
         "score": 1.0,
         "status": "success",

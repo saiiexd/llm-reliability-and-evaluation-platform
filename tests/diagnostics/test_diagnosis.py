@@ -225,9 +225,20 @@ class TestBuildReliabilityDiagnostic:
         diagnosis = build_reliability_diagnostic(
             _test_case(relevant_chunk_ids=["c1"]), tc_result, [_hit(0.0)]
         )
-        # Step 5: unsupported takes precedence as primary, retrieval miss is preserved as secondary
+        # Earliest failing stage wins: the retrieval miss is primary, and the
+        # downstream "unsupported" verdict is preserved as a secondary finding.
+        assert diagnosis.failure_category == FailureCategory.RETRIEVAL_FAILURE
+        assert any("unsupported" in f for f in diagnosis.secondary_findings)
+
+    def test_unsupported_stays_primary_when_retrieval_hit(self):
+        tc_result = _tc_result(
+            [_correctness(False), _faithfulness("unsupported")],
+            response=_response("Paris has 30 million people", with_rag=True),
+        )
+        diagnosis = build_reliability_diagnostic(
+            _test_case(relevant_chunk_ids=["c1"]), tc_result, [_hit(1.0)]
+        )
         assert diagnosis.failure_category == FailureCategory.UNSUPPORTED
-        assert any("retrieval" in f for f in diagnosis.secondary_findings)
 
     def test_preserves_insufficient_evidence_as_secondary_finding_when_correct(self):
         # Case where correctness is True, but an evaluator was skipped

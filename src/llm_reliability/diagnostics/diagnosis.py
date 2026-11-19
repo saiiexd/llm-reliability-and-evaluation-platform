@@ -21,22 +21,30 @@ specific evidence wins):
 1. Generation itself failed (``TestCaseResult.execution_error``) -> ``ERROR``.
 2. No relevant evaluation evidence at all -> ``INSUFFICIENT_EVIDENCE``.
 3. Correctness evaluators disagree with each other -> ``EVALUATOR_DISAGREEMENT``.
-4. A faithfulness evaluator reports contradiction -> ``CONTRADICTED``.
-5. A faithfulness evaluator reports the answer unsupported -> ``UNSUPPORTED``.
-6. Ground-truth retrieval evidence shows a miss and the answer is
+4. Ground-truth retrieval evidence shows a miss and the answer is
    incorrect -> ``RETRIEVAL_FAILURE``.
+5. A faithfulness evaluator reports contradiction -> ``CONTRADICTED``.
+6. A faithfulness evaluator reports the answer unsupported -> ``UNSUPPORTED``.
 7. Ground-truth retrieval evidence shows a hit and the answer is
    incorrect -> ``GENERATION_FAILURE``.
 8. The answer is judged correct -> ``CORRECT``.
 9. The answer is judged incorrect (no retrieval evidence to attribute it further) -> ``INCORRECT``.
 10. None of the above resolves cleanly -> ``UNDETERMINED``.
 
-Faithfulness evidence (steps 4-5) is checked before the coarser
-retrieval-hit-based categories (steps 6-7) because, when a faithfulness
-evaluator has actually examined the answer against the context, its
-verdict is more specific and more actionable than "generation failed
-somehow despite relevant context": knowing an answer is unsupported or
-contradicted says more than knowing it merely failed exact match.
+Attribution follows the pipeline order: a failure is attributed to the
+earliest stage with evidence of failure. When retrieval demonstrably missed
+the relevant evidence and the answer is wrong (step 4), an "unsupported" or
+"contradicted" faithfulness verdict is a downstream *consequence* -- the
+answer cannot be supported by context that never contained the answer -- so
+retrieval failure is primary and the faithfulness verdict is kept as a
+secondary finding. When retrieval did not miss (or was not evaluated),
+faithfulness evidence (steps 5-6) is checked before the coarser
+"generation failure" category (step 7), because a faithfulness evaluator
+that examined the answer against the context gives a more specific,
+actionable verdict than "generation failed despite relevant context".
+
+These are rule-based labels over observed evidence, not causal proof of
+what happened inside the model.
 
 Every step above is evidence a caller can inspect independently; nothing
 here invents evidence that was not already produced by an evaluator or a
@@ -231,6 +239,12 @@ def build_reliability_diagnostic(
             "Correctness evaluators disagreed on whether this answer passed; no single "
             "evaluator's verdict is treated as authoritative."
         )
+    elif retrieval_hit is False and correctness is False:
+        primary_category = FailureCategory.RETRIEVAL_FAILURE
+        explanation = (
+            "Ground-truth-relevant evidence was not retrieved, and the answer was judged "
+            "incorrect: consistent with a retrieval failure (the earliest failing stage)."
+        )
     elif faithfulness == "contradicted":
         primary_category = FailureCategory.CONTRADICTED
         explanation = "A faithfulness evaluator found the answer contradicted by retrieved context."
@@ -239,12 +253,6 @@ def build_reliability_diagnostic(
         explanation = (
             "A faithfulness evaluator found the answer contains claims the retrieved "
             "context does not address."
-        )
-    elif retrieval_hit is False and correctness is False:
-        primary_category = FailureCategory.RETRIEVAL_FAILURE
-        explanation = (
-            "Ground-truth-relevant evidence was not retrieved, and the answer was judged "
-            "incorrect: consistent with a retrieval failure."
         )
     elif retrieval_hit is True and correctness is False:
         primary_category = FailureCategory.GENERATION_FAILURE
