@@ -4,12 +4,17 @@ Experiment management and controlled benchmark execution endpoints.
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from fastapi import APIRouter, Depends, Query, status
 
+from llm_reliability.api import live
 from llm_reliability.api.dependencies import (
     get_adapter_registry,
+    get_dataset_registry,
     get_evaluator_registry,
     get_experiment_manager,
+    get_job_manager,
     get_repository,
 )
 from llm_reliability.api.errors import (
@@ -18,7 +23,9 @@ from llm_reliability.api.errors import (
     ExecutionError,
     ResourceNotFoundError,
 )
-from llm_reliability.api.registry import AdapterRegistry, EvaluatorRegistry
+from llm_reliability.api.execution import prepare_execution, warm_up_local_models
+from llm_reliability.api.jobs import JobManager, ProgressAdapter
+from llm_reliability.api.registry import AdapterRegistry, DatasetRegistry, EvaluatorRegistry
 from llm_reliability.api.schemas.common import (
     PaginatedResponse,
     PaginationMeta,
@@ -29,6 +36,7 @@ from llm_reliability.api.schemas.experiments import (
     ExecuteExperimentRequest,
     ExperimentDetailResponse,
     ExperimentSummaryResponse,
+    JobResponse,
     RunExecutionResponse,
 )
 from llm_reliability.api.schemas.runs import RunSummaryResponse
@@ -39,6 +47,7 @@ from llm_reliability.api.services import (
 )
 from llm_reliability.evaluation.models import Dataset, ModelConfig, TestCase
 from llm_reliability.experiments.manager import ExperimentManager
+from llm_reliability.experiments.models import ExperimentRun
 from llm_reliability.experiments.repository import (
     ExperimentAlreadyExistsError,
     ExperimentNotFoundError,
@@ -92,6 +101,7 @@ def create_experiment(
     req: CreateExperimentRequest,
     manager: ExperimentManager = Depends(get_experiment_manager),
     eval_registry: EvaluatorRegistry = Depends(get_evaluator_registry),
+    dataset_registry: DatasetRegistry = Depends(get_dataset_registry),
 ) -> ExperimentDetailResponse:
     """Safely creates a new experiment definition with allowlisted evaluators."""
     credential_keys = find_credential_keys(
@@ -99,7 +109,7 @@ def create_experiment(
             "model_config.extra_params": req.model_config_req.extra_params or {},
             "model_config.metadata": req.model_config_req.metadata or {},
             "metadata": req.metadata or {},
-            "test_cases": [tc.metadata for tc in req.test_cases],
+            "test_cases": [tc.metadata for tc in (req.test_cases or [])],
         }
     )
     if credential_keys:
@@ -109,28 +119,44 @@ def create_experiment(
             details={"credential_keys": credential_keys},
         )
     try:
-        evaluators = [eval_registry.get(name) for name in req.evaluator_names]
+        evaluators = [
+            eval_registry.get_for_definition(name, req.judge_model_id)
+            for name in req.evaluator_names
+        ]
     except ValueError as exc:
         raise ExecutionError(str(exc)) from exc
 
-    dataset = Dataset(
-        name=req.dataset_name,
-        test_cases=[
-            TestCase(
-                id=tc.id,
-                input=tc.input,
-                reference_answer=tc.reference_answer,
-                metadata=tc.metadata,
-            )
-            for tc in req.test_cases
-        ],
-    )
+    extra_params = dict(req.model_config_req.extra_params or req.model_config_req.metadata)
+    if req.dataset_preset is not None:
+        try:
+            dataset = dataset_registry.build(req.dataset_preset, req.dataset_limit)
+            if req.retrieval_top_k is not None:
+                extra_params["rag"] = live.squad_rag_config(
+                    req.retrieval_top_k, req.embedding_model_id or live.DEFAULT_EMBEDDING_MODEL
+                )
+            else:
+                extra_params["prompt_template_id"] = live.CLOSED_BOOK_TEMPLATE
+        except ValueError as exc:
+            raise ExecutionError(str(exc)) from exc
+    else:
+        dataset = Dataset(
+            name=req.dataset_name or "",
+            test_cases=[
+                TestCase(
+                    id=tc.id,
+                    input=tc.input,
+                    reference_answer=tc.reference_answer,
+                    metadata=tc.metadata,
+                )
+                for tc in req.test_cases or []
+            ],
+        )
 
     model_config = ModelConfig(
         model_id=req.model_config_req.model_id,
         temperature=req.model_config_req.temperature,
         max_tokens=req.model_config_req.max_tokens,
-        extra_params=req.model_config_req.extra_params or req.model_config_req.metadata,
+        extra_params=extra_params,
     )
 
     try:
@@ -217,29 +243,16 @@ def execute_experiment(
     except ExperimentNotFoundError as err:
         raise ResourceNotFoundError(resource_type="Experiment", resource_id=experiment_id) from err
 
-    if adapter_registry.is_external_provider(req.adapter_id) and not req.allow_external_inference:
-        raise ExecutionError(
-            f"Adapter '{req.adapter_id}' requires external inference. "
-            "Explicit opt-in is required via 'allow_external_inference=True' "
-            "to permit outbound network requests."
-        )
+    adapter, evaluators = prepare_execution(
+        defn,
+        req.adapter_id,
+        req.allow_external_inference,
+        manager,
+        adapter_registry,
+        eval_registry,
+    )
 
-    try:
-        adapter = adapter_registry.get(
-            req.adapter_id,
-            config={"allow_external_inference": req.allow_external_inference},
-        )
-    except ValueError as exc:
-        raise ExecutionError(str(exc)) from exc
-
-    # Reconstruct the declared evaluators from registry
-    try:
-        evaluators = [eval_registry.get(ec.evaluator_name) for ec in defn.evaluator_configs]
-    except ValueError as exc:
-        raise ExecutionError(
-            f"Configured evaluator could not be resolved from allowlisted registry: {exc}"
-        ) from exc
-
+    warm_up_local_models(defn, req.adapter_id, req.allow_external_inference, eval_registry)
     try:
         run = manager.execute_experiment(
             definition=defn,
@@ -275,3 +288,50 @@ def execute_experiment(
         pass_rate=run.result.pass_rate if run.result else 0.0,
         error=run.error,
     )
+
+
+@router.post(
+    "/{experiment_id}/jobs",
+    response_model=JobResponse,
+    status_code=status.HTTP_202_ACCEPTED,
+)
+def start_experiment_job(
+    experiment_id: str,
+    req: ExecuteExperimentRequest,
+    manager: ExperimentManager = Depends(get_experiment_manager),
+    adapter_registry: AdapterRegistry = Depends(get_adapter_registry),
+    eval_registry: EvaluatorRegistry = Depends(get_evaluator_registry),
+    jobs: JobManager = Depends(get_job_manager),
+) -> JobResponse:
+    """Validates like /execute, then runs in the background; poll GET /jobs/{job_id}."""
+    try:
+        defn = manager.load_experiment(experiment_id)
+    except ExperimentNotFoundError as err:
+        raise ResourceNotFoundError(resource_type="Experiment", resource_id=experiment_id) from err
+
+    adapter, evaluators = prepare_execution(
+        defn,
+        req.adapter_id,
+        req.allow_external_inference,
+        manager,
+        adapter_registry,
+        eval_registry,
+    )
+
+    def execute(progress: Callable[[], None]) -> ExperimentRun:
+        warm_up_local_models(defn, req.adapter_id, req.allow_external_inference, eval_registry)
+        return manager.execute_experiment(
+            definition=defn,
+            adapter=ProgressAdapter(adapter, progress),
+            evaluators=evaluators,
+            run_id=req.run_id,
+            adapter_id=req.adapter_id,
+        )
+
+    job = jobs.submit(
+        experiment_id=experiment_id,
+        adapter_id=req.adapter_id,
+        total=len(defn.dataset_version.dataset.test_cases),
+        execute=execute,
+    )
+    return JobResponse(**jobs.snapshot(job))

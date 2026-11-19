@@ -19,9 +19,11 @@ from llm_reliability.api.middleware import RequestCorrelationMiddleware
 from llm_reliability.api.routers import (
     analytics,
     benchmarks,
+    datasets,
     diagnostics,
     experiments,
     health,
+    jobs,
     providers,
     rag,
     robustness,
@@ -139,6 +141,8 @@ def create_app(settings: ApiSettings | None = None) -> FastAPI:
     app.include_router(providers.router, prefix=prefix)
     app.include_router(benchmarks.router, prefix=prefix)
     app.include_router(experiments.router, prefix=prefix)
+    app.include_router(jobs.router, prefix=prefix)
+    app.include_router(datasets.router, prefix=prefix)
     app.include_router(runs.router, prefix=prefix)
     app.include_router(diagnostics.router, prefix=prefix)
     app.include_router(rag.router, prefix=prefix)

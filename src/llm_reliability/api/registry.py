@@ -12,9 +12,12 @@ import os
 from collections.abc import Callable
 from typing import Any
 
+from llm_reliability.api import live
+from llm_reliability.datasets.squad import SQUAD_CHUNKING, SQUAD_SUBSET_ID, load_squad_subset
 from llm_reliability.evaluation.adapters import MockAdapter, ModelAdapter
 from llm_reliability.evaluation.evaluators import ExactMatchEvaluator
-from llm_reliability.evaluation.models import ModelConfig
+from llm_reliability.evaluation.models import Dataset, ModelConfig
+from llm_reliability.evaluation.prompting import PromptTemplateAdapter
 from llm_reliability.evaluation.semantic_similarity import (
     FakeSimilarityBackend,
     SemanticSimilarityEvaluator,
@@ -107,6 +110,43 @@ def _build_mock_rag_pipeline(top_k: int = 1) -> ModelAdapter:
     )
 
 
+def _build_openai_custom(cfg: dict[str, Any] | None) -> ModelAdapter:
+    cfg = cfg or {}
+    model_config: ModelConfig | None = cfg.get("model_config")
+    provider = OpenAIProviderAdapter(
+        use_request_model=True,
+        config=ProviderConfig(
+            provider_id="openai-compatible",
+            model_id=model_config.model_id
+            if model_config
+            else str(cfg.get("model_id", "custom-model")),
+            base_url=cfg.get("base_url"),
+            timeout_seconds=float(cfg.get("timeout_seconds", live.GENERATION_TIMEOUT_SECONDS)),
+            max_retries=int(cfg.get("max_retries", live.GENERATION_MAX_RETRIES)),
+            allow_external_inference=bool(cfg.get("allow_external_inference", False)),
+        ),
+        client=cfg.get("client"),
+        sleeper=cfg.get("sleeper"),
+    )
+    template_id = model_config.extra_params.get("prompt_template_id") if model_config else None
+    if template_id:
+        return PromptTemplateAdapter(provider, str(template_id))
+    return provider
+
+
+def _build_openai_custom_rag(cfg: dict[str, Any] | None) -> ModelAdapter:
+    cfg = cfg or {}
+    model_config = cfg.get("model_config")
+    if model_config is None:
+        raise ValueError("'openai-custom-rag' is rebuilt from an experiment's model configuration.")
+    return live.build_live_rag_pipeline(
+        model_config,
+        bool(cfg.get("allow_external_inference", False)),
+        generation_client=cfg.get("client"),
+        embedding_client=cfg.get("embedding_client"),
+    )
+
+
 class AdapterRegistry:
     """Registry of allowlisted, controlled model and pipeline adapters."""
 
@@ -152,21 +192,12 @@ class AdapterRegistry:
             # Generic OpenAI-compatible endpoint (Ollama, vLLM, LM Studio). The
             # served model name comes from the experiment's model_config.model_id
             # and the URL from LLM_RELIABILITY_OPENAI_BASE_URL / OPENAI_BASE_URL.
-            "openai-custom": lambda cfg: OpenAIProviderAdapter(
-                use_request_model=True,
-                config=ProviderConfig(
-                    provider_id="openai-compatible",
-                    model_id=str(cfg.get("model_id", "custom-model")) if cfg else "custom-model",
-                    base_url=(cfg.get("base_url") if cfg else None),
-                    timeout_seconds=float(cfg.get("timeout_seconds", 30.0)) if cfg else 30.0,
-                    max_retries=int(cfg.get("max_retries", 3)) if cfg else 3,
-                    allow_external_inference=bool(cfg.get("allow_external_inference", False))
-                    if cfg
-                    else False,
-                ),
-                client=cfg.get("client") if cfg else None,
-                sleeper=cfg.get("sleeper") if cfg else None,
-            ),
+            # Honours a declared closed-book prompt template.
+            "openai-custom": _build_openai_custom,
+            # Real RAG: retrieval over the bundled SQuAD corpus with a real
+            # embedding model, generation by the experiment's model. Rebuilt
+            # from the experiment's declared extra_params["rag"].
+            "openai-custom-rag": _build_openai_custom_rag,
         }
 
     def list_available(self) -> list[str]:
@@ -224,6 +255,74 @@ class EvaluatorRegistry:
             available = ", ".join(self.list_available())
             raise ValueError(f"Unknown evaluator '{name}'. Allowlisted evaluators: {available}")
         return self._factories[name]()
+
+    LIVE_JUDGES = frozenset(live.LIVE_JUDGE_RUBRICS)
+
+    def get_for_definition(self, name: str, judge_model_id: str | None = None) -> Any:
+        """Evaluator used to *define* a new experiment (its config is recorded).
+
+        With ``judge_model_id``, the LLM judges are real judges on that model;
+        building one makes no request (requests are refused until a run opts
+        in). Without it, ``llm_faithfulness_judge`` is the canned simulated
+        judge and ``llm_judge`` (which has no simulated variant) is refused.
+        """
+        if name in self.LIVE_JUDGES and judge_model_id:
+            return live.build_live_judge(
+                name,
+                allow_external_inference=False,
+                judge_model_id=judge_model_id,
+                for_execution=False,
+            )
+        if name == "llm_judge":
+            raise ValueError(
+                "'llm_judge' (correctness vs reference) needs a judge model: set judge_model_id "
+                "to a model served by the OpenAI-compatible server (e.g. qwen3:4b-instruct)."
+            )
+        return self.get(name)
+
+    def requires_external_inference(self, declared: Any) -> bool:
+        return declared.evaluator_name in self.LIVE_JUDGES and live.is_live_judge_config(
+            declared.parameters
+        )
+
+    def get_for_execution(
+        self, declared: Any, allow_external_inference: bool = False, client: Any | None = None
+    ) -> Any:
+        """Rebuild the evaluator an experiment declared (an ``EvaluatorConfig``)."""
+        if self.requires_external_inference(declared):
+            return live.build_live_judge(
+                declared.evaluator_name,
+                allow_external_inference=allow_external_inference,
+                declared=declared.parameters,
+                client=client,
+            )
+        return self.get(declared.evaluator_name)
+
+
+class DatasetRegistry:
+    """Bundled, versioned benchmark datasets that experiments can be built from."""
+
+    def list_presets(self) -> list[dict[str, Any]]:
+        subset = load_squad_subset()
+        return [
+            {
+                "preset_id": SQUAD_SUBSET_ID,
+                "name": subset.name,
+                "description": subset.description,
+                "test_case_count": len(subset.raw["test_cases"]),
+                "document_count": len(subset.raw["documents"]),
+                "has_retrieval_labels": True,
+                "license": subset.source.get("license"),
+                "citation": subset.source.get("citation"),
+                "corpus_fingerprint": subset.corpus_fingerprint(),
+            }
+        ]
+
+    def build(self, preset_id: str, limit: int | None = None) -> Dataset:
+        if preset_id != SQUAD_SUBSET_ID:
+            available = ", ".join(p["preset_id"] for p in self.list_presets())
+            raise ValueError(f"Unknown dataset preset '{preset_id}'. Available: {available}")
+        return load_squad_subset().dataset(SQUAD_CHUNKING, limit)
 
 
 def get_providers_metadata() -> list[dict[str, Any]]:

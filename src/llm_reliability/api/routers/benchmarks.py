@@ -16,6 +16,7 @@ from llm_reliability.api.dependencies import (
     get_repository,
 )
 from llm_reliability.api.errors import ExecutionError, ResourceNotFoundError
+from llm_reliability.api.execution import prepare_execution, warm_up_local_models
 from llm_reliability.api.registry import AdapterRegistry, EvaluatorRegistry
 from llm_reliability.api.schemas.benchmarks import (
     BenchmarkExecutionResponse,
@@ -52,57 +53,40 @@ def execute_benchmark(
             resource_type="Experiment", resource_id=req.experiment_id
         ) from err
 
-    # Validate all adapter IDs exist
-    for adapter_id in req.adapter_ids:
-        if adapter_id not in adapter_registry.list_available():
-            available = ", ".join(adapter_registry.list_available())
-            raise ExecutionError(
-                f"Unknown adapter '{adapter_id}'. Allowlisted adapters: {available}"
-            )
-        # Check safety opt-in for external providers
-        if adapter_registry.is_external_provider(adapter_id) and not req.allow_external_inference:
-            raise ExecutionError(
-                f"Adapter '{adapter_id}' requires external inference. "
-                "Explicit opt-in is required via 'allow_external_inference=True' "
-                "to permit outbound network requests."
-            )
-
-    # Reconstruct evaluators
-    try:
-        evaluators = [eval_registry.get(ec.evaluator_name) for ec in defn.evaluator_configs]
-    except ValueError as exc:
-        raise ExecutionError(
-            f"Configured evaluator could not be resolved from allowlisted registry: {exc}"
-        ) from exc
-
     # Validate every adapter against the definition before executing any, so a
     # mismatch (e.g. a top-1 pipeline on a top-2 experiment) is a clean 400
     # instead of a benchmark whose first adapters' runs were already saved.
-    for adapter_id in req.adapter_ids:
-        try:
-            manager.validate_execution(
-                defn,
-                adapter_registry.get(
-                    adapter_id,
-                    config={"allow_external_inference": req.allow_external_inference},
-                ),
-                evaluators,
-            )
-        except ValueError as exc:
-            raise ExecutionError(
-                f"Adapter '{adapter_id}' cannot run this experiment: {exc}"
-            ) from exc
+    prepared = {
+        adapter_id: prepare_execution(
+            defn,
+            adapter_id,
+            req.allow_external_inference,
+            manager,
+            adapter_registry,
+            eval_registry,
+        )
+        for adapter_id in req.adapter_ids
+    }
 
     benchmark_id = f"bench-{uuid.uuid4().hex[:8]}"
     run_responses: list[RunExecutionResponse] = []
 
     for adapter_id in req.adapter_ids:
+        warm_up_local_models(defn, adapter_id, req.allow_external_inference, eval_registry)
         for rep in range(1, req.repetitions + 1):
             run_id = f"{benchmark_id}-{adapter_id}-rep{rep}-{uuid.uuid4().hex[:4]}"
             try:
-                adapter = adapter_registry.get(
-                    adapter_id,
-                    config={"allow_external_inference": req.allow_external_inference},
+                adapter, evaluators = (
+                    prepared[adapter_id]
+                    if rep == 1
+                    else prepare_execution(
+                        defn,
+                        adapter_id,
+                        req.allow_external_inference,
+                        manager,
+                        adapter_registry,
+                        eval_registry,
+                    )
                 )
                 run = manager.execute_experiment(
                     definition=defn,

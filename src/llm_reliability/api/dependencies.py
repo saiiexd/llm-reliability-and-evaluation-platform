@@ -10,7 +10,8 @@ from fastapi import Depends
 
 from llm_reliability.analytics.service import AnalyticsService
 from llm_reliability.api.config import ApiSettings
-from llm_reliability.api.registry import AdapterRegistry, EvaluatorRegistry
+from llm_reliability.api.jobs import JobManager
+from llm_reliability.api.registry import AdapterRegistry, DatasetRegistry, EvaluatorRegistry
 from llm_reliability.api.services import DiagnosticsService
 from llm_reliability.experiments.local_repository import LocalFileExperimentRepository
 from llm_reliability.experiments.manager import ExperimentManager
@@ -33,6 +34,18 @@ def get_adapter_registry() -> AdapterRegistry:
 def get_evaluator_registry() -> EvaluatorRegistry:
     """Cached singleton allowlisted evaluator registry."""
     return EvaluatorRegistry()
+
+
+@lru_cache
+def get_dataset_registry() -> DatasetRegistry:
+    """Cached singleton bundled-dataset registry."""
+    return DatasetRegistry()
+
+
+@lru_cache
+def get_job_manager() -> JobManager:
+    """Cached singleton background job runner (one worker thread)."""
+    return JobManager()
 
 
 @lru_cache

@@ -66,7 +66,14 @@ def _check_rag_config_matches(definition: ExperimentDefinition, adapter: ModelAd
     """
     declared = definition.model_config.extra_params.get("rag")
     adapter_config = getattr(adapter, "config", None)
-    if not isinstance(declared, dict) or not hasattr(adapter_config, "corpus_fingerprint"):
+    is_rag_adapter = hasattr(adapter_config, "corpus_fingerprint")
+    if isinstance(declared, dict) and not is_rag_adapter:
+        raise ValueError(
+            f"Experiment '{definition.experiment_id}' declares a RAG configuration, but the "
+            "supplied adapter performs no retrieval. Its answers would be recorded as RAG "
+            "answers without any retrieved context. Choose a RAG adapter."
+        )
+    if not isinstance(declared, dict) or not is_rag_adapter:
         return
     actual = adapter_config.to_dict()  # type: ignore[union-attr]
     differing = sorted(k for k in set(declared) | set(actual) if declared.get(k) != actual.get(k))
@@ -78,6 +85,26 @@ def _check_rag_config_matches(definition: ExperimentDefinition, adapter: ModelAd
             f"RAG pipeline configuration does not match experiment "
             f"'{definition.experiment_id}' ({details}). Choose the adapter that matches the "
             "experiment, or define a new experiment for this configuration."
+        )
+
+
+def _check_prompt_template_matches(definition: ExperimentDefinition, adapter: ModelAdapter) -> None:
+    """Refuse to run a closed-book experiment without the prompt template it declares.
+
+    ``model_config.extra_params["prompt_template_id"]`` is part of the
+    fingerprint; the adapter must actually apply it (``PromptTemplateAdapter``
+    exposes ``template_id``). RAG pipelines carry their template in the RAG
+    configuration instead, which ``_check_rag_config_matches`` verifies.
+    """
+    declared = definition.model_config.extra_params.get("prompt_template_id")
+    if declared is None or hasattr(getattr(adapter, "config", None), "corpus_fingerprint"):
+        return
+    actual = getattr(adapter, "template_id", None)
+    if actual != declared:
+        raise ValueError(
+            f"Experiment '{definition.experiment_id}' declares prompt template {declared!r}, but "
+            f"the supplied adapter applies {actual!r}. Choose an adapter that applies the "
+            "declared template."
         )
 
 
@@ -166,6 +193,7 @@ class ExperimentManager:
                     f"{supplied_config!r}. Define a new experiment for the new configuration."
                 )
         _check_rag_config_matches(definition, adapter)
+        _check_prompt_template_matches(definition, adapter)
 
     def execute_experiment(
         self,

@@ -46,29 +46,27 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from llm_reliability.datasets.squad import SQUAD_CHUNKING, SQUAD_SUBSET_PATH, load_squad_subset
 from llm_reliability.evaluation.adapters import ModelAdapter
 from llm_reliability.evaluation.evaluators import Evaluator, ExactMatchEvaluator
 from llm_reliability.evaluation.llm_judge import LLMJudgeEvaluator
 from llm_reliability.evaluation.models import (
-    Dataset,
     ExecutionRequest,
     ModelConfig,
     ModelResponse,
-    TestCase,
 )
 from llm_reliability.evaluation.prompting import PromptTemplateAdapter
 from llm_reliability.evaluation.squad_match import SquadNormalizedMatchEvaluator
 from llm_reliability.experiments import ExperimentManager, LocalFileExperimentRepository
 from llm_reliability.providers.base import ProviderConfig
 from llm_reliability.providers.openai_provider import OpenAIProviderAdapter
-from llm_reliability.rag.documents import Chunk, ChunkingConfig, Document, FixedSizeChunker
 from llm_reliability.rag.embeddings import EmbeddingModel, OpenAICompatibleEmbeddingModel
 from llm_reliability.rag.faithfulness_judge import LLMFaithfulnessEvaluator
-from llm_reliability.rag.pipeline import RagPipeline, RagPipelineConfig, compute_corpus_fingerprint
+from llm_reliability.rag.pipeline import RagPipeline, RagPipelineConfig
 from llm_reliability.rag.retriever import Retriever
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DATA_PATH = REPO_ROOT / "data" / "benchmarks" / "squad_v1_1_dev_subset_v1.json"
+DATA_PATH = SQUAD_SUBSET_PATH
 OLLAMA = "http://localhost:11434"
 BASE_URL = f"{OLLAMA}/v1"
 
@@ -76,7 +74,7 @@ QWEN = "qwen3:4b-instruct"
 GEMMA = "gemma3:1b"
 JUDGE = QWEN
 EMBEDDING = "nomic-embed-text"
-CHUNKING = ChunkingConfig(chunk_size=800, chunk_overlap=100)
+CHUNKING = SQUAD_CHUNKING
 SEED = 42
 MAX_TOKENS = 64
 CLOSED_BOOK_TEMPLATE = "closed_book_concise_v1"
@@ -186,44 +184,6 @@ def environment_record() -> dict[str, Any]:
     }
 
 
-def chunk_span(chunk: Chunk) -> tuple[int, int]:
-    step = CHUNKING.chunk_size - CHUNKING.chunk_overlap
-    start = chunk.position * step
-    return start, start + len(chunk.text)
-
-
-def build_dataset(raw: dict[str, Any], chunks: list[Chunk], limit: int | None) -> Dataset:
-    """Attach relevant_chunk_ids derived from where each answer lands after chunking."""
-    by_doc: dict[str, list[Chunk]] = {}
-    for chunk in chunks:
-        by_doc.setdefault(chunk.document_id, []).append(chunk)
-    cases = raw["test_cases"][:limit] if limit else raw["test_cases"]
-    test_cases = []
-    for tc in cases:
-        meta = dict(tc["metadata"])
-        a_start = meta["answer_start"]
-        a_end = a_start + len(tc["reference_answer"])
-        doc_chunks = by_doc[meta["source_document_id"]]
-        containing = [
-            c.id for c in doc_chunks if chunk_span(c)[0] <= a_start and a_end <= chunk_span(c)[1]
-        ]
-        overlapping = [
-            c.id for c in doc_chunks if chunk_span(c)[0] < a_end and a_start < chunk_span(c)[1]
-        ]
-        meta["relevant_chunk_ids"] = containing or overlapping
-        meta["relevance_rule"] = "chunks fully containing the first gold answer span"
-        test_cases.append(
-            TestCase(
-                id=tc["id"],
-                input=tc["input"],
-                reference_answer=tc["reference_answer"],
-                metadata=meta,
-            )
-        )
-    suffix = f"-first{limit}" if limit else ""
-    return Dataset(name=f"{raw['name']}{suffix}", test_cases=test_cases)
-
-
 def provider(model_id: str) -> OpenAIProviderAdapter:
     return OpenAIProviderAdapter(
         config=ProviderConfig(
@@ -266,11 +226,11 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    raw = json.loads(DATA_PATH.read_text(encoding="utf-8"))
-    documents = [Document(id=d["id"], content=d["content"]) for d in raw["documents"]]
-    chunks = FixedSizeChunker(CHUNKING).chunk_documents(documents)
-    dataset = build_dataset(raw, chunks, args.limit)
-    corpus_fingerprint = compute_corpus_fingerprint(documents)
+    subset = load_squad_subset(DATA_PATH)
+    documents = subset.documents()
+    chunks = subset.chunks(CHUNKING)
+    dataset = subset.dataset(CHUNKING, args.limit)
+    corpus_fingerprint = subset.corpus_fingerprint()
     env = environment_record()
     print(f"{len(dataset.test_cases)} questions, {len(documents)} documents, {len(chunks)} chunks")
     print(json.dumps(env, indent=1))
