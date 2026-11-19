@@ -190,6 +190,7 @@ class TestBertScoreBackendWithoutTheRealModel:
         [
             (OSError("couldn't connect to the model hub"), "Could not load BERTScore model"),
             (KeyError("some-other-model"), "pass num_layers explicitly"),
+            (AssertionError("Invalid num_layers"), "Invalid BERTScore configuration"),
         ],
     )
     def test_model_load_failure_is_an_invalid_configuration(self, monkeypatch, load_error, message):
@@ -206,3 +207,13 @@ class TestBertScoreBackendWithoutTheRealModel:
         assert result.status == EvaluationStatus.INVALID_CONFIGURATION
         assert result.passed is None
         assert message in (result.error or "")
+
+
+@pytest.mark.parametrize("reference", ["", "   "])
+def test_blank_reference_is_skipped_not_scored(reference):
+    evaluator = SemanticSimilarityEvaluator(backend=FakeSimilarityBackend())
+    result = evaluator.evaluate(
+        TestCase(id="t", input="q", reference_answer=reference), _response("")
+    )
+    assert result.status == EvaluationStatus.SKIPPED
+    assert result.passed is None

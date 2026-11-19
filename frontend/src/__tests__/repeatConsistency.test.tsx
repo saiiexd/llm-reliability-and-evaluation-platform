@@ -108,7 +108,7 @@ describe("RepeatConsistency panel", () => {
     expect(screen.getByText("57 of 57 (100%)")).toBeTruthy();
     expect(screen.getByText(/2 runs · temperature 0/)).toBeTruthy();
     expect(screen.getByText(/1 of 61 questions left out/)).toBeTruthy();
-    expect(screen.getByText(/3 not comparable, left out: 1 errored in a run, 2 gave no verdict/)).toBeTruthy();
+    expect(screen.getByText(/3 not comparable, left out: 1 skipped or errored in a run, 2 gave no verdict/)).toBeTruthy();
     // A real group carries no simulated label.
     expect(screen.queryByText("Simulated")).toBeNull();
   });

@@ -4,7 +4,7 @@
  * Runs only count as repeats when the backend grouped them: same experiment,
  * same configuration fingerprint and same model adapter. Every rate is shown
  * as "x of y" so the denominator is always visible, and questions that could
- * not be compared (not answered in every run, or a check that errored) are
+ * not be compared (not answered in every run, or a check that was skipped or errored) are
  * reported as left out, never as agreeing.
  */
 import { useConnection } from "../context/ConnectionContext";
@@ -44,7 +44,7 @@ function IdList({ label, ids, total }: { label: string; ids: string[]; total: nu
 function EvaluatorBar({ e }: { e: EvaluatorStability }) {
   const width = e.compared_cases > 0 ? (e.stable_cases / e.compared_cases) * 100 : 0;
   const reasons = [
-    e.excluded_not_success > 0 && `${e.excluded_not_success} errored in a run`,
+    e.excluded_not_success > 0 && `${e.excluded_not_success} skipped or errored in a run`,
     e.excluded_no_verdict > 0 && `${e.excluded_no_verdict} gave no verdict in a run`,
     e.excluded_missing > 0 && `${e.excluded_missing} not checked in a run`,
   ].filter(Boolean);

@@ -170,6 +170,12 @@ class BertScoreBackend(SimilarityBackend):
                 raise SimilarityBackendError(
                     f"Could not load BERTScore model '{self._model_type}': {exc}"
                 ) from exc
+            except AssertionError as exc:
+                # bert-score validates num_layers against the model's depth with
+                # an assert (e.g. 99 for a 6-layer model).
+                raise SimilarityBackendError(
+                    f"Invalid BERTScore configuration for '{self._model_type}': {exc}"
+                ) from exc
         _, _, f1 = self._scorer.score([candidate], [reference], verbose=False)
         # Clamp to the [0, 1] contract. In practice this only removes float32
         # rounding (identical texts can come out as 1.0000001); raw F1 is an
@@ -233,7 +239,10 @@ class SemanticSimilarityEvaluator(Evaluator):
         return {"threshold": self._threshold, **self._backend.get_config()}
 
     def evaluate(self, test_case: TestCase, response: ModelResponse) -> EvaluationResult:
-        if test_case.reference_answer is None:
+        # A blank reference is treated as no reference: scoring against "" would
+        # give a confident verdict about nothing (and the fake and BERTScore
+        # backends disagree on "" vs "").
+        if test_case.reference_answer is None or not test_case.reference_answer.strip():
             return EvaluationResult(
                 evaluator_name=self.name,
                 test_case_id=test_case.id,
