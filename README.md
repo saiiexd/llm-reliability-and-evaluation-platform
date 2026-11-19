@@ -51,14 +51,17 @@ The project follows a research-first, incremental development approach:
 
 ## Current Status
 
-The repository is in the **research and foundation stage**. The first production component, the Core Evaluation Engine, now exists (see "Current Implementation" below). The current priorities are:
+The platform runs end to end: experiment definition, execution against mock, RAG and real
+(OpenAI-compatible) models, evaluation, diagnosis, comparison, an API and a research console.
 
-- Understanding the evaluation literature.
-- Identifying the smallest experiments that produce meaningful results.
-- Establishing ground truth datasets and baselines.
-- Building the foundational evaluation framework one measurable capability at a time.
+- **Technical understanding report** (architecture, metric semantics, reproducibility model,
+  verified vs unverified capabilities, risks, roadmap): [`docs/TECHNICAL_REPORT.md`](docs/TECHNICAL_REPORT.md)
+- **First real experiment** (EXP-001: retrieval, model size and evaluator agreement on a SQuAD
+  subset with local models): [`research/experiments/EXP-001_local_rag_reliability/`](research/experiments/EXP-001_local_rag_reliability/)
 
-Further production platform components will be introduced only when a clear research or engineering requirement justifies them.
+The demo experiments that ship with the repository use a mock model, fake embeddings and a canned
+judge. They exist to exercise the platform and are marked **Simulated** in the console; do not read
+their numbers as model behaviour.
 
 ## Current Implementation: Core Evaluation Engine
 
@@ -353,7 +356,8 @@ React Console (Live API / Fixture Mode)
 ### Prerequisites
 
 - **Python**: 3.13 is required. See `pyproject.toml` for authoritative dependencies.
-- **Node.js**: v20+ with npm (Node v24 tested) is required for the frontend console.
+- **Node.js**: v20+ with npm (verified on Node 26) is required for the frontend console.
+- **Optional, for real local models**: [Ollama](https://ollama.com) (verified with 0.40) — see EXP-001.
 
 ---
 
@@ -362,8 +366,8 @@ React Console (Live API / Fixture Mode)
 Clone the repository and install the package in editable mode with development dependencies:
 
 ```bash
-# Core framework, FastAPI, Uvicorn, and test dependencies
-pip install -e ".[dev]"
+# Core framework, FastAPI, Uvicorn, OpenAI SDK, and dev tools (pytest, ruff, mypy)
+pip install -e ".[dev]"        # or: uv pip install -e ".[dev]"
 
 # Optional: semantic similarity (BERTScore) and sentence transformers support
 pip install -e ".[semantic]"
@@ -376,17 +380,13 @@ pip install -e ".[semantic]"
 Run the complete test suite and code quality checks across the backend:
 
 ```bash
-# Run the complete Python test suite (421 unit, integration, and API tests; ~5 seconds execution)
+# Full Python test suite: 468 passed, 3 skipped (opt-in integration tests), ~2 seconds.
+# Tests never touch ./experiments (each API test uses a temporary store).
 pytest
 
-# Run linter
-ruff check .
-
-# Check code formatting
-ruff format --check .
-
-# Run static type checker
-mypy src
+# Lint and type-check (both clean on this branch)
+ruff check src tests scripts
+mypy
 
 # Optional: run neural model integration tests (requires network on first run to download models)
 LLM_RELIABILITY_RUN_INTEGRATION_TESTS=1 pytest tests/evaluation/test_semantic_similarity_integration.py
@@ -400,7 +400,8 @@ LLM_RELIABILITY_RUN_INTEGRATION_TESTS=1 pytest tests/rag/test_embeddings_integra
 Before starting the server for the first time, seed the local repository `./experiments` with reproducible baseline experiments, executed runs, and RAG traces:
 
 ```bash
-# Seeds experiments/ with exp-baseline-rag-v1, exp-intervention-rag-topk2, and exp-baseline-non-rag-demo
+# Seeds experiments/ with three simulated demo experiments and four runs:
+# exp-reliability-console-demo (2 runs), exp-reliability-topk2-demo, exp-baseline-non-rag-demo
 python scripts/seed_live_experiments.py
 ```
 
@@ -481,8 +482,8 @@ cd frontend
 # Install dependencies
 npm install
 
-# Run frontend test suite (30 Vitest tests: API client, connection banner, derived helpers)
-npm run test
+# Frontend test suite: 50 Vitest tests (works on any Node version; no extra flags)
+npm test
 
 # Run frontend linter (ESLint 9)
 npm run lint
@@ -513,11 +514,31 @@ To run an experiment directly from the research console:
 1. Ensure the FastAPI server is running on `http://127.0.0.1:8000`.
 2. Open the frontend console at `http://localhost:5173/`.
 3. Navigate to **Experiments** (`/experiments`).
-4. Select **Baseline RAG Retrieval & Generation Study** (`/experiments/exp-baseline-rag-v1`).
-5. Under the **Execute Experiment** card, select an allowlisted adapter (`rag-pipeline-v1` or `rag-pipeline-topk-2`).
-6. Click **Execute Run**.
-7. Once execution finishes, a success banner displays the new `run_id`, elapsed duration, and a direct link to **Inspect Run Detail**.
-8. The new run immediately appears in the run history and contributes live data to the analytics overview.
+4. Open an experiment, e.g. **Reliability console demonstration** (`/experiments/exp-reliability-console-demo`).
+5. Under **Run it**, the model list defaults to the adapter that matches the experiment. A RAG
+   pipeline whose settings (top-k, chunking, corpus) differ from the experiment's is refused by the
+   server, so a run is never recorded under a configuration that did not produce it.
+6. Click **Run**. A link to the new results appears; the run is listed under **Past runs** with the
+   adapter that executed it.
+
+### 7. Running against real models (local, no API key)
+
+```bash
+ollama pull qwen3:4b-instruct && ollama pull gemma3:1b && ollama pull nomic-embed-text
+python scripts/run_reliability_study.py        # EXP-001, ~25 min on an RTX 3050 6 GB
+python scripts/analyze_reliability_study.py    # writes results.json and results_tables.md
+```
+
+The runs land in `./experiments` and appear in the console like any other run, without the
+Simulated label. From the console, the `openai-custom` adapter can also call any
+OpenAI-compatible server: set `LLM_RELIABILITY_OPENAI_BASE_URL=http://localhost:11434/v1`, use the
+served model name as the experiment's model id, and tick the external-inference opt-in.
+
+### Data and secrets rules
+
+- Experiment definitions are written to disk; requests containing credential-like keys
+  (`api_key`, `token`, `password`, ...) are rejected. Keys belong in server environment variables.
+- `./experiments/runs/` is git-ignored; findings belong in `research/experiments/` as documents.
 
 ---
 
