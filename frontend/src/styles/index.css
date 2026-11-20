@@ -1,46 +1,62 @@
 @import "tailwindcss";
 
 /*
- * Editorial research-instrument design tokens.
+ * Design tokens (dark, monochrome).
  *
- * Palette: off-white/light-gray surfaces, near-black ink and section
- * backgrounds, one restrained coral accent used only for the few things
- * that must draw the eye (a live selection, a contradiction/failure
- * marker). No gradients, no glassmorphism, no glow. Corners are mostly
- * square (rounded-sm at most); shadows are avoided in favor of 1px
- * dividers, which is what actually reads as "research report" rather
- * than "SaaS dashboard."
+ * Rule: greys carry structure; ONE accent marks what needs attention
+ * (wrong answers, errors). "Passed" is plain ink, "not scored" is muted
+ * and dashed. Colour is never the only signal - every state also has a
+ * text label.
+ *
+ * Change colours here, not in components.
  */
 @theme {
-  --font-serif: "Source Serif 4", Georgia, serif;
   --font-sans: "Inter", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
-  --color-paper: #faf9f6;
-  --color-paper-dim: #f1efe9;
-  --color-ink: #14130f;
-  --color-ink-soft: #4a4740;
-  --color-line: #ddd8cd;
-  --color-accent: #d8552c;
-  --color-accent-soft: #f6ded3;
+  --color-paper: #0b0b0c;
+  --color-paper-dim: #151517;
+  --color-paper-raised: #1c1c1f;
+  --color-ink: #ededed;
+  --color-ink-soft: #9b9ba1;
+  --color-line: #26262a;
+  --color-accent: #f26b5b;
+  --color-accent-soft: #3a1714;
 }
 
 html {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: -0.01em;
 }
 
 /* Focus visibility: never rely on color alone. */
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-ink);
   outline-offset: 2px;
 }
 
 ::selection {
   background-color: var(--color-accent-soft);
+  color: var(--color-ink);
+}
+
+/* Long unbroken strings (hashes, JSON) must wrap instead of widening the page. */
+pre,
+code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }

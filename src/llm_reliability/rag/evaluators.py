@@ -35,6 +35,14 @@ Metrics implemented, precisely defined:
   many test cases, which is the responsibility of
   ``llm_reliability.rag.summary.summarize_retrieval``, not of this
   evaluator itself.
+- **Precision@K**: the fraction of the top K retrieved chunks that are
+  ground-truth relevant (``|relevant intersect top_k| / |top_k|``). The
+  denominator is the number of chunks actually retrieved in the top K, which
+  equals K unless the corpus holds fewer than K chunks. Answers "how much of
+  what retrieval put in front of the generator was relevant?" (the
+  label-based form of *context relevance*). Its ceiling is
+  ``min(|relevant|, K) / K``: with one labelled chunk per question,
+  Precision@3 can be at most 1/3, so it must be read together with Recall@K.
 """
 
 from __future__ import annotations
@@ -230,6 +238,47 @@ class RecallAtKEvaluator(RetrievalEvaluator):
             evaluator_config=self.get_config(),
             explanation=(
                 f"Retrieved {len(found)} of {len(relevant)} relevant targets in the top {self._k}."
+            ),
+        )
+
+
+class PrecisionAtKEvaluator(RetrievalEvaluator):
+    """Precision@K: fraction of the top K retrieved chunks that are relevant."""
+
+    def __init__(self, k: int) -> None:
+        if k <= 0:
+            raise ValueError("PrecisionAtKEvaluator.k must be a positive integer.")
+        self._k = k
+        self.name = f"precision_at_{k}"
+        self.metric_name = "precision_at_k"
+
+    def get_config(self) -> dict[str, Any]:
+        return {"k": self._k}
+
+    def evaluate(self, test_case: TestCase, response: ModelResponse) -> RetrievalEvaluationResult:
+        prepared = self._prepare(test_case, response)
+        if isinstance(prepared, RetrievalEvaluationResult):
+            return prepared
+        relevant, retrieved_ids = prepared
+        top_k = retrieved_ids[: self._k]
+        if not top_k:
+            return self._unavailable(
+                test_case.id, "Retrieval returned no chunks, so precision is undefined."
+            )
+        relevant_set = set(relevant)
+        num_relevant = sum(1 for rid in top_k if rid in relevant_set)
+        return RetrievalEvaluationResult(
+            evaluator_name=self.name,
+            test_case_id=test_case.id,
+            metric_name=self.metric_name,
+            status=RetrievalEvaluationStatus.SUCCESS,
+            score=num_relevant / len(top_k),
+            relevant_targets=relevant,
+            retrieved_ids=top_k,
+            evaluator_config=self.get_config(),
+            explanation=(
+                f"{num_relevant} of the {len(top_k)} retrieved chunks in the top {self._k} "
+                "are relevant."
             ),
         )
 

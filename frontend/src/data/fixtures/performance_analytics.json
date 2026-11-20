@@ -1,0 +1,78 @@
+{
+  "97043daa30194ab19b4883cd64798f74": {
+    "completion_tokens_total": null,
+    "cost_available": false,
+    "evaluator_duration_seconds_mean": null,
+    "generation_duration_seconds_mean": null,
+    "notes": [
+      "Wall-clock run duration derived from UTC lifecycle timestamps.",
+      "Per-test-case duration was not instrumented for this run.",
+      "Token usage telemetry is unavailable (adapter returned no token metrics).",
+      "Monetary cost calculation is unavailable (no cost calculation or pricing table)."
+    ],
+    "per_case_duration_seconds_mean": null,
+    "prompt_tokens_total": null,
+    "retrieval_duration_seconds_mean": null,
+    "run_id": "97043daa30194ab19b4883cd64798f74",
+    "tokens_available": false,
+    "total_tokens": null,
+    "wall_clock_duration_seconds": 0.000248
+  },
+  "ab8678e2efac46ce9f539e7ea18cd509": {
+    "completion_tokens_total": null,
+    "cost_available": false,
+    "evaluator_duration_seconds_mean": null,
+    "generation_duration_seconds_mean": null,
+    "notes": [
+      "Wall-clock run duration derived from UTC lifecycle timestamps.",
+      "Per-test-case duration was not instrumented for this run.",
+      "Token usage telemetry is unavailable (adapter returned no token metrics).",
+      "Monetary cost calculation is unavailable (no cost calculation or pricing table)."
+    ],
+    "per_case_duration_seconds_mean": null,
+    "prompt_tokens_total": null,
+    "retrieval_duration_seconds_mean": null,
+    "run_id": "ab8678e2efac46ce9f539e7ea18cd509",
+    "tokens_available": false,
+    "total_tokens": null,
+    "wall_clock_duration_seconds": 2.3e-05
+  },
+  "afc62dd02e824b7189cfe5f3cfd40982": {
+    "completion_tokens_total": null,
+    "cost_available": false,
+    "evaluator_duration_seconds_mean": null,
+    "generation_duration_seconds_mean": null,
+    "notes": [
+      "Wall-clock run duration derived from UTC lifecycle timestamps.",
+      "Per-test-case duration was not instrumented for this run.",
+      "Token usage telemetry is unavailable (adapter returned no token metrics).",
+      "Monetary cost calculation is unavailable (no cost calculation or pricing table)."
+    ],
+    "per_case_duration_seconds_mean": null,
+    "prompt_tokens_total": null,
+    "retrieval_duration_seconds_mean": null,
+    "run_id": "afc62dd02e824b7189cfe5f3cfd40982",
+    "tokens_available": false,
+    "total_tokens": null,
+    "wall_clock_duration_seconds": 0.000157
+  },
+  "b80e4606f53d46b3acdbeb4757cc5544": {
+    "completion_tokens_total": null,
+    "cost_available": false,
+    "evaluator_duration_seconds_mean": null,
+    "generation_duration_seconds_mean": null,
+    "notes": [
+      "Wall-clock run duration derived from UTC lifecycle timestamps.",
+      "Per-test-case duration was not instrumented for this run.",
+      "Token usage telemetry is unavailable (adapter returned no token metrics).",
+      "Monetary cost calculation is unavailable (no cost calculation or pricing table)."
+    ],
+    "per_case_duration_seconds_mean": null,
+    "prompt_tokens_total": null,
+    "retrieval_duration_seconds_mean": null,
+    "run_id": "b80e4606f53d46b3acdbeb4757cc5544",
+    "tokens_available": false,
+    "total_tokens": null,
+    "wall_clock_duration_seconds": 0.000172
+  }
+}

@@ -246,6 +246,7 @@ class EvaluationResult:
     details: dict[str, Any] = field(default_factory=dict)
     evaluator_config: dict[str, Any] = field(default_factory=dict)
     error: str | None = None
+    duration_seconds: float | None = None
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> EvaluationResult:
@@ -261,6 +262,7 @@ class EvaluationResult:
             details=dict(data.get("details", {})),
             evaluator_config=dict(data.get("evaluator_config", {})),
             error=data.get("error"),
+            duration_seconds=data.get("duration_seconds"),
         )
 
 
@@ -298,11 +300,36 @@ class TestCaseResult:
     model_response: ModelResponse | None
     evaluation_results: list[EvaluationResult]
     execution_error: str | None = None
+    duration_seconds: float | None = None
 
     @property
     def succeeded(self) -> bool:
         """True if generation completed without error and produced a response."""
         return self.execution_error is None and self.model_response is not None
+
+    @property
+    def passed(self) -> bool:
+        """True if generation succeeded, at least one evaluator passed, and no evaluator failed.
+
+        Evaluation correctness is strictly distinguished from execution success (``succeeded``):
+        a test case that executed without runtime exception may still fail evaluation
+        if model output fails to meet evaluator criteria.
+        """
+        if not self.succeeded or not self.evaluation_results:
+            return False
+        if any(r.passed is False for r in self.evaluation_results):
+            return False
+        if any(
+            r.status
+            in (
+                EvaluationStatus.EXECUTION_ERROR,
+                EvaluationStatus.OUTPUT_VALIDATION_ERROR,
+                EvaluationStatus.INVALID_CONFIGURATION,
+            )
+            for r in self.evaluation_results
+        ):
+            return False
+        return any(r.passed is True for r in self.evaluation_results)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> TestCaseResult:
@@ -320,6 +347,7 @@ class TestCaseResult:
                 EvaluationResult.from_dict(result) for result in data.get("evaluation_results", [])
             ],
             execution_error=data.get("execution_error"),
+            duration_seconds=data.get("duration_seconds"),
         )
 
 
@@ -331,6 +359,7 @@ class RunResult:
     model_id: str
     evaluator_names: list[str]
     test_case_results: list[TestCaseResult]
+    duration_seconds: float | None = None
 
     @property
     def num_test_cases(self) -> int:
@@ -338,11 +367,30 @@ class RunResult:
 
     @property
     def num_succeeded(self) -> int:
+        """Number of test cases whose execution succeeded (generation completed)."""
         return sum(1 for result in self.test_case_results if result.succeeded)
 
     @property
     def num_failed(self) -> int:
+        """Number of test cases whose execution failed (generation errored)."""
         return self.num_test_cases - self.num_succeeded
+
+    @property
+    def num_passed(self) -> int:
+        """Number of test cases that passed evaluation."""
+        return sum(1 for result in self.test_case_results if result.passed)
+
+    @property
+    def num_eval_failed(self) -> int:
+        """Number of test cases that failed evaluation."""
+        return self.num_test_cases - self.num_passed
+
+    @property
+    def pass_rate(self) -> float:
+        """Evaluation pass rate as a float between 0.0 and 1.0 (0.0 if empty)."""
+        if not self.test_case_results:
+            return 0.0
+        return self.num_passed / self.num_test_cases
 
     def to_dict(self) -> dict[str, Any]:
         """Convert the run result to plain, JSON-serializable Python types."""
@@ -366,6 +414,7 @@ class RunResult:
             test_case_results=[
                 TestCaseResult.from_dict(result) for result in data["test_case_results"]
             ],
+            duration_seconds=data.get("duration_seconds"),
         )
 
     @classmethod

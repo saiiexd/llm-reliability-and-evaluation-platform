@@ -269,6 +269,19 @@ class ExperimentRun:
     config_fingerprint: str
     result: RunResult | None
     error: str | None = None
+    benchmark_id: str | None = None
+    repetition_index: int = 0
+    # Execution provenance: which allowlisted adapter actually produced the
+    # responses. Deliberately NOT part of ``config_fingerprint``: the
+    # fingerprint identifies the experiment configuration, while the adapter is
+    # an execution condition (the same experiment may be benchmarked against
+    # several adapters). ``None`` for runs persisted before this field existed.
+    adapter_id: str | None = None
+    # Software that executed the run (platform version, git commit, Python,
+    # key dependency versions); see ``experiments.environment``. Like
+    # ``adapter_id`` it is an execution condition, not part of the
+    # fingerprint. ``None`` for runs persisted before this field existed.
+    environment: dict[str, Any] | None = None
 
     def __post_init__(self) -> None:
         if not self.run_id or not self.run_id.strip():
@@ -279,6 +292,66 @@ class ExperimentRun:
     @property
     def succeeded(self) -> bool:
         return self.status == RunStatus.SUCCEEDED
+
+    @property
+    def simulated_components(self) -> list[str]:
+        """Parts of this run that were simulated rather than real, in plain words.
+
+        Empty means nothing simulated was detected. Detection uses explicit
+        markers the fakes write about themselves, never heuristics on outputs:
+
+        - ``MockAdapter`` responses carry ``provider_metadata["adapter"] == "mock"``
+          (preserved through ``RagPipeline``).
+        - ``FakeSimilarityBackend`` reports ``{"backend": "fake"}`` in its config.
+        - Canned/fake judges and fake embedding models use model ids starting
+          with ``fake-`` (the platform's naming convention for fakes).
+
+        A run with any simulated component must not be used to draw
+        conclusions about real model behaviour.
+        """
+        found: list[str] = []
+        responses = (
+            [tc.model_response for tc in self.result.test_case_results if tc.model_response]
+            if self.result is not None
+            else []
+        )
+        if any(r.provider_metadata.get("adapter") == "mock" for r in responses):
+            found.append("generation: deterministic mock adapter (canned answers)")
+        embedding_ids = {
+            ((r.provider_metadata.get("rag") or {}).get("pipeline_config") or {}).get(
+                "embedding_model_id"
+            )
+            for r in responses
+        }
+        if any(isinstance(e, str) and e.startswith("fake-") for e in embedding_ids):
+            found.append("retrieval: fake embedding model (hand-set vectors)")
+        for ec in self.evaluator_configs:
+            params = ec.parameters
+            if params.get("backend") == "fake":
+                found.append(
+                    f"{ec.evaluator_name}: fake similarity backend "
+                    "(exact string equality, not embeddings)"
+                )
+            judge = params.get("judge_model_id")
+            if isinstance(judge, str) and judge.startswith("fake-"):
+                found.append(f"{ec.evaluator_name}: canned judge replies, not a real judge model")
+        return found
+
+    @property
+    def executed_model_ids(self) -> list[str]:
+        """Distinct model ids reported by the responses actually produced in this run.
+
+        This is what really answered, as reported by the adapter/provider, and
+        can differ from ``model_config.model_id`` (the experiment's declared
+        model) -- for example when an experiment is benchmarked against a mock.
+        """
+        if self.result is None:
+            return []
+        seen: dict[str, None] = {}
+        for tc in self.result.test_case_results:
+            if tc.model_response is not None:
+                seen.setdefault(tc.model_response.model_id, None)
+        return list(seen)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -294,6 +367,10 @@ class ExperimentRun:
             "config_fingerprint": self.config_fingerprint,
             "result": self.result.to_dict() if self.result is not None else None,
             "error": self.error,
+            "benchmark_id": self.benchmark_id,
+            "repetition_index": self.repetition_index,
+            "adapter_id": self.adapter_id,
+            "environment": self.environment,
         }
 
     def to_json(self) -> str:
@@ -320,6 +397,10 @@ class ExperimentRun:
             config_fingerprint=data["config_fingerprint"],
             result=RunResult.from_dict(result_data) if result_data is not None else None,
             error=data.get("error"),
+            benchmark_id=data.get("benchmark_id"),
+            repetition_index=int(data.get("repetition_index", 0)),
+            adapter_id=data.get("adapter_id"),
+            environment=data.get("environment"),
         )
         expected_fingerprint = compute_experiment_fingerprint(
             dataset_version.version_id,

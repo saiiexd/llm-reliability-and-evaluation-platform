@@ -13,7 +13,7 @@ This directory contains learning notes and technical understanding documents pro
 
 - Random or stream-of-consciousness notes with no lasting value.
 - Generated output from LLMs that has not been critically reviewed.
-- Implementation code (use `src/` or `learning/` for that).
+- Implementation code (use `src/` for that).
 - Experiment configurations or results (use `research/experiments/` for that).
 
 ## Naming Convention

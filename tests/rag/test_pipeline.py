@@ -164,3 +164,71 @@ class TestRagPipeline:
         response = pipeline.generate(_request())
         assert response.provider_metadata["adapter"] == "mock"
         assert "rag" in response.provider_metadata
+
+
+def test_concise_template_asks_for_short_answer_and_unknown_template_fails() -> None:
+    from llm_reliability.rag.pipeline import build_rag_prompt as _build
+
+    prompt = _build("Who?", [], template_id="concise_v1")
+    assert "short phrase" in prompt and prompt.endswith("Answer:")
+    with pytest.raises(ValueError):
+        _build("Who?", [], template_id="missing")
+
+
+class TestContextPerturbations:
+    """RQ5 perturbations change only the prompt, never the recorded retrieval."""
+
+    def _pipeline(self, **config_overrides):
+        chunks = [
+            Chunk(id="c-a", document_id="d-a", text="Paris is the capital of France.", position=0),
+            Chunk(id="c-b", document_id="d-b", text="France is in Europe.", position=0),
+            Chunk(id="c-z", document_id="d-z", text="Bananas are yellow.", position=0),
+        ]
+        embedding_model = FakeEmbeddingModel(
+            vectors={
+                "What is the capital of France?": [1.0, 0.2, 0.0],
+                "Paris is the capital of France.": [1.0, 0.0, 0.0],
+                "France is in Europe.": [0.6, 0.8, 0.0],
+                "Bananas are yellow.": [0.0, 0.0, 1.0],
+            },
+            dimensions=3,
+        )
+        retriever = Retriever(chunks=chunks, embedding_model=embedding_model, top_k=2)
+        echo = MockAdapter(model_id="echo")  # echoes the prompt back as output
+        return RagPipeline(
+            retriever=retriever,
+            generation_adapter=echo,
+            config=_config(top_k=2, **config_overrides),
+        )
+
+    def test_default_ranked_order_numbers_passages_by_position(self):
+        prompt = self._pipeline().generate(_request()).output_text
+        assert prompt.index("[1] (source: d-a)") < prompt.index("[2] (source: d-b)")
+
+    def test_reversed_order_puts_best_passage_last_without_revealing_rank(self):
+        response = self._pipeline(context_order="reversed").generate(_request())
+        prompt = response.output_text
+        assert "[1] (source: d-b)" in prompt and "[2] (source: d-a)" in prompt
+        # Recorded retrieval is unchanged: the retriever still ranked c-a first.
+        assert [c.chunk_id for c in extract_retrieved_chunks(response)] == ["c-a", "c-b"]
+
+    def test_distractor_is_least_similar_chunk_placed_first_and_recorded_separately(self):
+        response = self._pipeline(distractor_chunks=1).generate(_request())
+        prompt = response.output_text
+        assert prompt.index("(source: d-z)") < prompt.index("(source: d-a)")
+        assert [c.chunk_id for c in extract_retrieved_chunks(response)] == ["c-a", "c-b"]
+        injected = extract_rag_metadata(response)["injected_chunks"]
+        assert [c["chunk_id"] for c in injected] == ["c-z"]
+        assert injected[0]["rank"] == 3
+
+    def test_default_settings_keep_the_pre_existing_config_dict(self):
+        keys = set(_config().to_dict())
+        assert "context_order" not in keys and "distractor_chunks" not in keys
+        perturbed = _config(context_order="reversed", distractor_chunks=1)
+        assert RagPipelineConfig.from_dict(perturbed.to_dict()) == perturbed
+
+    def test_invalid_settings_are_rejected(self):
+        with pytest.raises(ValueError, match="context_order"):
+            _config(context_order="shuffled")
+        with pytest.raises(ValueError, match="distractor_chunks"):
+            _config(distractor_chunks=-1)

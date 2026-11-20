@@ -5,7 +5,7 @@ This document establishes the engineering rules for this project. These rules ex
 ## Commit Discipline
 
 - **Small, focused commits.** Each commit should represent a single, coherent change. Do not bundle unrelated changes in one commit.
-- **Reproducible changes.** Every commit to `src/`, `tests/`, `configs/`, `scripts/`, or `research/experiments/` must leave the repository in a state where the relevant functionality or experiment can be reproduced from scratch.
+- **Reproducible changes.** Every commit to `src/`, `tests/`, `scripts/`, `data/`, or `research/experiments/` must leave the repository in a state where the relevant functionality or experiment can be reproduced from scratch.
 - **Meaningful commit messages.** Use the conventional commit format: `type(scope): description`. Valid types: `feat`, `fix`, `chore`, `docs`, `test`, `refactor`, `experiment`, `research`. The description must be specific enough that a reader can understand the change without reading the diff. Do not use vague messages such as "update", "fix stuff", or "changes".
 
 ## Code Quality

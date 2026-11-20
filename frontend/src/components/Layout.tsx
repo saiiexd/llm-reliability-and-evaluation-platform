@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import { ConnectionBanner, ConnectionIndicator } from "./ConnectionBanner";
 
+// Four sections, in the order people use them:
+// see the state -> define a test -> read one run -> compare across runs.
 const NAV_ITEMS = [
   { to: "/", label: "Overview", end: true },
   { to: "/experiments", label: "Experiments" },
-  { to: "/reliability", label: "Reliability" },
-  { to: "/rag", label: "RAG Diagnostics" },
-  { to: "/evaluators", label: "Evaluators" },
-  { to: "/robustness", label: "Robustness" },
+  { to: "/results", label: "Results" },
+  { to: "/analysis", label: "Analysis" },
 ];
 
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
@@ -20,10 +21,8 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
           end={item.end}
           onClick={onNavigate}
           className={({ isActive }) =>
-            `block border-b px-1 py-2 text-sm tracking-tight sm:inline-block sm:border-b-0 sm:py-0 ${
-              isActive
-                ? "border-ink font-medium text-ink sm:border-b-2"
-                : "border-transparent text-ink-soft hover:text-ink"
+            `block rounded-md px-3 py-1.5 text-sm transition-colors ${
+              isActive ? "bg-paper-raised font-medium text-ink" : "text-ink-soft hover:text-ink"
             }`
           }
         >
@@ -38,39 +37,49 @@ export function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-paper text-ink">
-      <header className="border-b border-line bg-paper">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
+    <div className="flex min-h-screen flex-col bg-paper text-ink">
+      <header className="sticky top-0 z-20 border-b border-line bg-paper/85 backdrop-blur">
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
           <NavLink to="/" className="flex items-baseline gap-2">
-            <span className="font-serif text-lg font-medium">LLM Reliability Console</span>
-            <span className="hidden font-mono text-xs text-ink-soft sm:inline">research instrument</span>
+            <span className="font-semibold tracking-tight">LLM Reliability</span>
+            <span className="hidden text-xs text-ink-soft md:inline">Research Platform</span>
           </NavLink>
-          <nav className="hidden items-center gap-6 sm:flex">
-            <NavLinks />
-          </nav>
-          <button
-            type="button"
-            className="border border-line px-3 py-1 text-sm sm:hidden"
-            aria-expanded={menuOpen}
-            aria-controls="mobile-nav"
-            onClick={() => setMenuOpen((open) => !open)}
-          >
-            Menu
-          </button>
+          <div className="hidden items-center gap-4 sm:flex">
+            <nav className="flex items-center gap-1">
+              <NavLinks />
+            </nav>
+            <div className="h-5 w-px bg-line" />
+            <ConnectionIndicator />
+          </div>
+          <div className="flex items-center gap-2 sm:hidden">
+            <button
+              type="button"
+              className="rounded-md border border-line px-3 py-1 text-sm"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-nav"
+              onClick={() => setMenuOpen((open) => !open)}
+            >
+              Menu
+            </button>
+          </div>
         </div>
         {menuOpen && (
-          <nav id="mobile-nav" className="border-t border-line px-4 py-2 sm:hidden">
+          <nav id="mobile-nav" className="space-y-1 border-t border-line px-4 py-3 sm:hidden">
             <NavLinks onNavigate={() => setMenuOpen(false)} />
+            <div className="border-t border-line pt-3">
+              <ConnectionIndicator />
+            </div>
           </nav>
         )}
       </header>
-      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6">
+        <ConnectionBanner />
         <Outlet />
       </main>
-      <footer className="border-t border-line px-4 py-6 text-xs text-ink-soft sm:px-6">
-        <div className="mx-auto max-w-6xl">
-          A research and engineering instrument for measuring, comparing, and diagnosing LLM
-          behavior. Not a chatbot, not a generic dashboard.
+      <footer className="border-t border-line">
+        <div className="mx-auto max-w-6xl px-4 py-5 text-xs text-ink-soft sm:px-6">
+          University capstone project · measures how often a language model answers correctly, and why
+          it fails when it doesn't.
         </div>
       </footer>
     </div>

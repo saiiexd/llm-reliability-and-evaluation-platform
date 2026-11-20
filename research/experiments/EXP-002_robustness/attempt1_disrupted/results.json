@@ -1,0 +1,1000 @@
+{
+  "study": "EXP-002",
+  "reference_run": "f114f3c80f88473487c2543dd3fa7f4e",
+  "environment": {
+    "git_commit": "166e7c1694369bc682d6a09625f9b2dae55f86e2",
+    "git_dirty_src_or_scripts": true,
+    "model_digests": {
+      "gemma3:1b": "97558784bdc9175075a72655bf360b15da17df6b3b9e5182af9f8c0c8e58ba7c",
+      "nomic-embed-text": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+      "qwen3:4b-instruct": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0"
+    },
+    "ollama_version": "0.40.16",
+    "platform": "Linux-7.3.4-1-cachyos-x86_64-with-glibc2.44",
+    "python": "3.13.18",
+    "study_id": "EXP-002"
+  },
+  "runs": {
+    "base": [
+      {
+        "run_id": "f114f3c80f88473487c2543dd3fa7f4e",
+        "repetition_index": 1,
+        "n": 60,
+        "pass_rates": {
+          "exact_match": [
+            0.3,
+            0.19898010252726892,
+            0.42508946966390415
+          ],
+          "squad_match": [
+            0.43333333333333335,
+            0.31572200394400635,
+            0.5589678534530513
+          ],
+          "llm_judge": [
+            0.5833333333333334,
+            0.45727854313239624,
+            0.6993591351212818
+          ],
+          "llm_faithfulness_judge": [
+            0.9827586206896551,
+            0.9085892732270167,
+            0.9969500401154581
+          ]
+        },
+        "retrieval_means": {
+          "hit_at_k": 0.8666666666666667,
+          "mrr": 0.7194444444444444,
+          "precision_at_k": 0.2944444444444444,
+          "recall_at_k": 0.8666666666666667
+        },
+        "latency_ms_median": 356.434311999692,
+        "prompt_tokens_mean": 490.9,
+        "completion_tokens_mean": 10.183333333333334
+      },
+      {
+        "run_id": "df3336896c59479f80964670ebfbb3d2",
+        "repetition_index": 2,
+        "n": 60,
+        "pass_rates": {
+          "exact_match": [
+            0.3,
+            0.19898010252726892,
+            0.42508946966390415
+          ],
+          "squad_match": [
+            0.43333333333333335,
+            0.31572200394400635,
+            0.5589678534530513
+          ],
+          "llm_judge": [
+            0.6,
+            0.47365824394206846,
+            0.714306969962345
+          ],
+          "llm_faithfulness_judge": [
+            0.9824561403508771,
+            0.9070903306173727,
+            0.9968964152933198
+          ]
+        },
+        "retrieval_means": {
+          "hit_at_k": 0.8666666666666667,
+          "mrr": 0.7194444444444444,
+          "precision_at_k": 0.2944444444444444,
+          "recall_at_k": 0.8666666666666667
+        },
+        "latency_ms_median": 177.55747299997893,
+        "prompt_tokens_mean": 490.9,
+        "completion_tokens_mean": 10.516666666666667
+      }
+    ],
+    "distractor": [
+      {
+        "run_id": "823a6bf5a5a34cf5b029602cad1387ad",
+        "repetition_index": 1,
+        "n": 60,
+        "pass_rates": {
+          "exact_match": [
+            0.23333333333333334,
+            0.1443943161843107,
+            0.3543651134039202
+          ],
+          "squad_match": [
+            0.4166666666666667,
+            0.30064086487871833,
+            0.5427214568676039
+          ],
+          "llm_judge": [
+            0.55,
+            0.42491714548981496,
+            0.6690654614623918
+          ],
+          "llm_faithfulness_judge": [
+            0.9824561403508771,
+            0.9070903306173727,
+            0.9968964152933198
+          ]
+        },
+        "retrieval_means": {
+          "hit_at_k": 0.8666666666666667,
+          "mrr": 0.7194444444444444,
+          "precision_at_k": 0.2944444444444444,
+          "recall_at_k": 0.8666666666666667
+        },
+        "latency_ms_median": 395.2730305009027,
+        "prompt_tokens_mean": 607.4333333333333,
+        "completion_tokens_mean": 9.9
+      }
+    ],
+    "freeform": [
+      {
+        "run_id": "222213eb0ace47cfb40fcf2cb7d80b59",
+        "repetition_index": 1,
+        "n": 60,
+        "pass_rates": {
+          "exact_match": [
+            0.016666666666666666,
+            0.002948083860873682,
+            0.08855338226779477
+          ],
+          "squad_match": [
+            0.016666666666666666,
+            0.002948083860873682,
+            0.08855338226779477
+          ],
+          "llm_judge": [
+            0.6271186440677966,
+            0.49953356682142136,
+            0.7391618196741485
+          ],
+          "llm_faithfulness_judge": [
+            0.9818181818181818,
+            0.9039399953951678,
+            0.9967833024077472
+          ]
+        },
+        "retrieval_means": {
+          "hit_at_k": 0.8666666666666667,
+          "mrr": 0.7194444444444444,
+          "precision_at_k": 0.2944444444444444,
+          "recall_at_k": 0.8666666666666667
+        },
+        "latency_ms_median": 599.5395119989553,
+        "prompt_tokens_mean": 465.9,
+        "completion_tokens_mean": 25.633333333333333
+      }
+    ],
+    "paraphrase": [
+      {
+        "run_id": "b02b6906585849d49b14e9b4d1fa1c66",
+        "repetition_index": 1,
+        "n": 60,
+        "pass_rates": {
+          "exact_match": [
+            0.25862068965517243,
+            0.16345403519517457,
+            0.383776308133588
+          ],
+          "squad_match": [
+            0.3620689655172414,
+            0.25054734348500335,
+            0.4907271384171466
+          ],
+          "llm_judge": [
+            0.5517241379310345,
+            0.4245185822161052,
+            0.6725034870705885
+          ],
+          "llm_faithfulness_judge": [
+            1.0,
+            0.9358038555118846,
+            1.0
+          ]
+        },
+        "retrieval_means": {
+          "hit_at_k": 0.8275862068965517,
+          "mrr": 0.6954022988505748,
+          "precision_at_k": 0.27586206896551724,
+          "recall_at_k": 0.8189655172413793
+        },
+        "latency_ms_median": 352.558903501631,
+        "prompt_tokens_mean": 497.87931034482756,
+        "completion_tokens_mean": 8.706896551724139
+      }
+    ],
+    "reversed": [
+      {
+        "run_id": "052008fb2ffc4889bd3c2428bca80ae3",
+        "repetition_index": 1,
+        "n": 60,
+        "pass_rates": {
+          "exact_match": [
+            0.3333333333333333,
+            0.2272909421592783,
+            0.459433701333366
+          ],
+          "squad_match": [
+            0.5333333333333333,
+            0.40893208671135106,
+            0.65372298459012
+          ],
+          "llm_judge": [
+            0.6333333333333333,
+            0.5068276736679673,
+            0.7437926115379172
+          ],
+          "llm_faithfulness_judge": [
+            0.9821428571428571,
+            0.9055414182080672,
+            0.9968408710355361
+          ]
+        },
+        "retrieval_means": {
+          "hit_at_k": 0.8666666666666667,
+          "mrr": 0.7194444444444444,
+          "precision_at_k": 0.2944444444444444,
+          "recall_at_k": 0.8666666666666667
+        },
+        "latency_ms_median": 348.1409194992011,
+        "prompt_tokens_mean": 490.8833333333333,
+        "completion_tokens_mean": 9.733333333333333
+      }
+    ]
+  },
+  "contrasts": {
+    "noise_floor (base run 2)": {
+      "n_questions": 60,
+      "evaluators": {
+        "exact_match": {
+          "n_paired": 60,
+          "excluded_not_scored": 0,
+          "ref_pass": 18,
+          "arm_pass": 18,
+          "ref_pass_rate": [
+            0.3,
+            0.19898010252726892,
+            0.42508946966390415
+          ],
+          "arm_pass_rate": [
+            0.3,
+            0.19898010252726892,
+            0.42508946966390415
+          ],
+          "flips_pass_to_fail": 1,
+          "flips_fail_to_pass": 1,
+          "flip_rate": [
+            0.03333333333333333,
+            0.009189126490150246,
+            0.11363987528925378
+          ],
+          "mcnemar_exact_p": 1.0
+        },
+        "squad_match": {
+          "n_paired": 60,
+          "excluded_not_scored": 0,
+          "ref_pass": 26,
+          "arm_pass": 26,
+          "ref_pass_rate": [
+            0.43333333333333335,
+            0.31572200394400635,
+            0.5589678534530513
+          ],
+          "arm_pass_rate": [
+            0.43333333333333335,
+            0.31572200394400635,
+            0.5589678534530513
+          ],
+          "flips_pass_to_fail": 1,
+          "flips_fail_to_pass": 1,
+          "flip_rate": [
+            0.03333333333333333,
+            0.009189126490150246,
+            0.11363987528925378
+          ],
+          "mcnemar_exact_p": 1.0
+        },
+        "llm_judge": {
+          "n_paired": 60,
+          "excluded_not_scored": 0,
+          "ref_pass": 35,
+          "arm_pass": 36,
+          "ref_pass_rate": [
+            0.5833333333333334,
+            0.45727854313239624,
+            0.6993591351212818
+          ],
+          "arm_pass_rate": [
+            0.6,
+            0.47365824394206846,
+            0.714306969962345
+          ],
+          "flips_pass_to_fail": 0,
+          "flips_fail_to_pass": 1,
+          "flip_rate": [
+            0.016666666666666666,
+            0.002948083860873682,
+            0.08855338226779477
+          ],
+          "mcnemar_exact_p": 1.0
+        },
+        "llm_faithfulness_judge": {
+          "n_paired": 57,
+          "excluded_not_scored": 3,
+          "ref_pass": 56,
+          "arm_pass": 56,
+          "ref_pass_rate": [
+            0.9824561403508771,
+            0.9070903306173727,
+            0.9968964152933198
+          ],
+          "arm_pass_rate": [
+            0.9824561403508771,
+            0.9070903306173727,
+            0.9968964152933198
+          ],
+          "flips_pass_to_fail": 0,
+          "flips_fail_to_pass": 0,
+          "flip_rate": [
+            0.0,
+            0.0,
+            0.06314100878346394
+          ],
+          "mcnemar_exact_p": 1.0
+        }
+      },
+      "identical_outputs": 56,
+      "abstentions_ref": 6,
+      "abstentions_arm": 6,
+      "identical_retrieval": 60,
+      "diagnosis_consistency": {
+        "num_comparisons": 60,
+        "num_unchanged": 58,
+        "outcome_consistency_rate": 0.9666666666666667,
+        "transition_counts": {
+          "correct -> evaluator_disagreement": 1,
+          "generation_failure -> correct": 1
+        }
+      },
+      "changed_judge_ids": [
+        "squad-56e75a9037bdd419002c3ec7"
+      ]
+    },
+    "reversed": {
+      "n_questions": 60,
+      "evaluators": {
+        "exact_match": {
+          "n_paired": 60,
+          "excluded_not_scored": 0,
+          "ref_pass": 18,
+          "arm_pass": 20,
+          "ref_pass_rate": [
+            0.3,
+            0.19898010252726892,
+            0.42508946966390415
+          ],
+          "arm_pass_rate": [
+            0.3333333333333333,
+            0.2272909421592783,
+            0.459433701333366
+          ],
+          "flips_pass_to_fail": 4,
+          "flips_fail_to_pass": 6,
+          "flip_rate": [
+            0.16666666666666666,
+            0.09313077201321032,
+            0.28031851497207827
+          ],
+          "mcnemar_exact_p": 0.75390625
+        },
+        "squad_match": {
+          "n_paired": 60,
+          "excluded_not_scored": 0,
+          "ref_pass": 26,
+          "arm_pass": 32,
+          "ref_pass_rate": [
+            0.43333333333333335,
+            0.31572200394400635,
+            0.5589678534530513
+          ],
+          "arm_pass_rate": [
+            0.5333333333333333,
+            0.40893208671135106,
+            0.65372298459012
+          ],
+          "flips_pass_to_fail": 1,
+          "flips_fail_to_pass": 7,
+          "flip_rate": [
+            0.13333333333333333,
+            0.06914026978309641,
+            0.24165394590072103
+          ],
+          "mcnemar_exact_p": 0.0703125
+        },
+        "llm_judge": {
+          "n_paired": 60,
+          "excluded_not_scored": 0,
+          "ref_pass": 35,
+          "arm_pass": 38,
+          "ref_pass_rate": [
+            0.5833333333333334,
+            0.45727854313239624,
+            0.6993591351212818
+          ],
+          "arm_pass_rate": [
+            0.6333333333333333,
+            0.5068276736679673,
+            0.7437926115379172
+          ],
+          "flips_pass_to_fail": 0,
+          "flips_fail_to_pass": 3,
+          "flip_rate": [
+            0.05,
+            0.01714919117914121,
+            0.13700734625099836
+          ],
+          "mcnemar_exact_p": 0.25
+        },
+        "llm_faithfulness_judge": {
+          "n_paired": 56,
+          "excluded_not_scored": 4,
+          "ref_pass": 55,
+          "arm_pass": 55,
+          "ref_pass_rate": [
+            0.9821428571428571,
+            0.9055414182080672,
+            0.9968408710355361
+          ],
+          "arm_pass_rate": [
+            0.9821428571428571,
+            0.9055414182080672,
+            0.9968408710355361
+          ],
+          "flips_pass_to_fail": 0,
+          "flips_fail_to_pass": 0,
+          "flip_rate": [
+            0.0,
+            0.0,
+            0.06419614448811528
+          ],
+          "mcnemar_exact_p": 1.0
+        }
+      },
+      "identical_outputs": 46,
+      "abstentions_ref": 6,
+      "abstentions_arm": 5,
+      "identical_retrieval": 60,
+      "diagnosis_consistency": {
+        "num_comparisons": 60,
+        "num_unchanged": 48,
+        "outcome_consistency_rate": 0.8,
+        "transition_counts": {
+          "evaluator_disagreement -> correct": 3,
+          "correct -> evaluator_disagreement": 4,
+          "generation_failure -> evaluator_disagreement": 2,
+          "generation_failure -> correct": 3
+        }
+      },
+      "changed_judge_ids": [
+        "squad-56e75a9037bdd419002c3ec7",
+        "squad-5728fd3c3f37b31900477f2f",
+        "squad-5728fb6a1d04691400778ef5"
+      ]
+    },
+    "distractor": {
+      "n_questions": 60,
+      "evaluators": {
+        "exact_match": {
+          "n_paired": 60,
+          "excluded_not_scored": 0,
+          "ref_pass": 18,
+          "arm_pass": 14,
+          "ref_pass_rate": [
+            0.3,
+            0.19898010252726892,
+            0.42508946966390415
+          ],
+          "arm_pass_rate": [
+            0.23333333333333334,
+            0.1443943161843107,
+            0.3543651134039202
+          ],
+          "flips_pass_to_fail": 5,
+          "flips_fail_to_pass": 1,
+          "flip_rate": [
+            0.1,
+            0.04664219945723587,
+            0.20149694492511044
+          ],
+          "mcnemar_exact_p": 0.21875
+        },
+        "squad_match": {
+          "n_paired": 60,
+          "excluded_not_scored": 0,
+          "ref_pass": 26,
+          "arm_pass": 25,
+          "ref_pass_rate": [
+            0.43333333333333335,
+            0.31572200394400635,
+            0.5589678534530513
+          ],
+          "arm_pass_rate": [
+            0.4166666666666667,
+            0.30064086487871833,
+            0.5427214568676039
+          ],
+          "flips_pass_to_fail": 3,
+          "flips_fail_to_pass": 2,
+          "flip_rate": [
+            0.08333333333333333,
+            0.03611992405048589,
+            0.18069168468112481
+          ],
+          "mcnemar_exact_p": 1.0
+        },
+        "llm_judge": {
+          "n_paired": 60,
+          "excluded_not_scored": 0,
+          "ref_pass": 35,
+          "arm_pass": 33,
+          "ref_pass_rate": [
+            0.5833333333333334,
+            0.45727854313239624,
+            0.6993591351212818
+          ],
+          "arm_pass_rate": [
+            0.55,
+            0.42491714548981496,
+            0.6690654614623918
+          ],
+          "flips_pass_to_fail": 3,
+          "flips_fail_to_pass": 1,
+          "flip_rate": [
+            0.06666666666666667,
+            0.02622827414319792,
+            0.15925579893767722
+          ],
+          "mcnemar_exact_p": 0.625
+        },
+        "llm_faithfulness_judge": {
+          "n_paired": 57,
+          "excluded_not_scored": 3,
+          "ref_pass": 56,
+          "arm_pass": 56,
+          "ref_pass_rate": [
+            0.9824561403508771,
+            0.9070903306173727,
+            0.9968964152933198
+          ],
+          "arm_pass_rate": [
+            0.9824561403508771,
+            0.9070903306173727,
+            0.9968964152933198
+          ],
+          "flips_pass_to_fail": 0,
+          "flips_fail_to_pass": 0,
+          "flip_rate": [
+            0.0,
+            0.0,
+            0.06314100878346394
+          ],
+          "mcnemar_exact_p": 1.0
+        }
+      },
+      "identical_outputs": 44,
+      "abstentions_ref": 6,
+      "abstentions_arm": 8,
+      "identical_retrieval": 60,
+      "diagnosis_consistency": {
+        "num_comparisons": 60,
+        "num_unchanged": 50,
+        "outcome_consistency_rate": 0.8333333333333334,
+        "transition_counts": {
+          "evaluator_disagreement -> generation_failure": 3,
+          "correct -> evaluator_disagreement": 5,
+          "generation_failure -> evaluator_disagreement": 1,
+          "generation_failure -> correct": 1
+        }
+      },
+      "changed_judge_ids": [
+        "squad-56e1ee4de3433e1400423210",
+        "squad-5729f12e3f37b319004785e3",
+        "squad-5726fe95dd62a815002e9736",
+        "squad-56e75a9037bdd419002c3ec7"
+      ]
+    },
+    "paraphrase (primary: meaning preserved)": {
+      "n_questions": 57,
+      "evaluators": {
+        "exact_match": {
+          "n_paired": 56,
+          "excluded_not_scored": 1,
+          "ref_pass": 17,
+          "arm_pass": 15,
+          "ref_pass_rate": [
+            0.30357142857142855,
+            0.19900164620775923,
+            0.43336112484114314
+          ],
+          "arm_pass_rate": [
+            0.26785714285714285,
+            0.1695715866189496,
+            0.3959480518933896
+          ],
+          "flips_pass_to_fail": 5,
+          "flips_fail_to_pass": 3,
+          "flip_rate": [
+            0.14285714285714285,
+            0.0742070004258528,
+            0.25736167420851525
+          ],
+          "mcnemar_exact_p": 0.7265625
+        },
+        "squad_match": {
+          "n_paired": 56,
+          "excluded_not_scored": 1,
+          "ref_pass": 22,
+          "arm_pass": 20,
+          "ref_pass_rate": [
+            0.39285714285714285,
+            0.27580225617512844,
+            0.523668346215182
+          ],
+          "arm_pass_rate": [
+            0.35714285714285715,
+            0.2445639270270599,
+            0.4880635428266874
+          ],
+          "flips_pass_to_fail": 4,
+          "flips_fail_to_pass": 2,
+          "flip_rate": [
+            0.10714285714285714,
+            0.050038674581190865,
+            0.21468686751661398
+          ],
+          "mcnemar_exact_p": 0.6875
+        },
+        "llm_judge": {
+          "n_paired": 56,
+          "excluded_not_scored": 1,
+          "ref_pass": 33,
+          "arm_pass": 31,
+          "ref_pass_rate": [
+            0.5892857142857143,
+            0.45877362113703657,
+            0.7083342102043715
+          ],
+          "arm_pass_rate": [
+            0.5535714285714286,
+            0.42412986131783886,
+            0.676134837487006
+          ],
+          "flips_pass_to_fail": 6,
+          "flips_fail_to_pass": 4,
+          "flip_rate": [
+            0.17857142857142858,
+            0.09999749741344179,
+            0.2984143097574895
+          ],
+          "mcnemar_exact_p": 0.75390625
+        },
+        "llm_faithfulness_judge": {
+          "n_paired": 52,
+          "excluded_not_scored": 5,
+          "ref_pass": 51,
+          "arm_pass": 52,
+          "ref_pass_rate": [
+            0.9807692307692307,
+            0.8987925373197556,
+            0.9965972795909344
+          ],
+          "arm_pass_rate": [
+            1.0,
+            0.9312054095871178,
+            1.0
+          ],
+          "flips_pass_to_fail": 0,
+          "flips_fail_to_pass": 1,
+          "flip_rate": [
+            0.019230769230769232,
+            0.0034027204090655225,
+            0.10120746268024422
+          ],
+          "mcnemar_exact_p": 1.0
+        }
+      },
+      "identical_outputs": 37,
+      "abstentions_ref": 6,
+      "abstentions_arm": 8,
+      "identical_retrieval": 15,
+      "diagnosis_consistency": {
+        "num_comparisons": 57,
+        "num_unchanged": 41,
+        "outcome_consistency_rate": 0.7192982456140351,
+        "transition_counts": {
+          "evaluator_disagreement -> generation_failure": 3,
+          "evaluator_disagreement -> None": 1,
+          "correct -> generation_failure": 3,
+          "evaluator_disagreement -> correct": 2,
+          "correct -> evaluator_disagreement": 2,
+          "generation_failure -> evaluator_disagreement": 2,
+          "generation_failure -> correct": 1,
+          "generation_failure -> retrieval_failure": 2
+        }
+      },
+      "changed_judge_ids": [
+        "squad-56e1ee4de3433e1400423210",
+        "squad-5729f12e3f37b319004785e3",
+        "squad-572a0a686aef0514001551f0",
+        "squad-5726d8bd708984140094d35b",
+        "squad-5726f7715951b619008f8391",
+        "squad-5726ed6cf1498d1400e8f010",
+        "squad-57270ab9708984140094d8fa",
+        "squad-56e76abf37bdd419002c3f76",
+        "squad-56e75a9037bdd419002c3ec7",
+        "squad-572822233acd2414000df559"
+      ]
+    },
+    "paraphrase (sensitivity, all 60)": {
+      "n_questions": 60,
+      "evaluators": {
+        "exact_match": {
+          "n_paired": 58,
+          "excluded_not_scored": 2,
+          "ref_pass": 18,
+          "arm_pass": 15,
+          "ref_pass_rate": [
+            0.3103448275862069,
+            0.20621934414805676,
+            0.4380330684673994
+          ],
+          "arm_pass_rate": [
+            0.25862068965517243,
+            0.16345403519517457,
+            0.383776308133588
+          ],
+          "flips_pass_to_fail": 6,
+          "flips_fail_to_pass": 3,
+          "flip_rate": [
+            0.15517241379310345,
+            0.08384397416750201,
+            0.26934223058787304
+          ],
+          "mcnemar_exact_p": 0.5078125
+        },
+        "squad_match": {
+          "n_paired": 58,
+          "excluded_not_scored": 2,
+          "ref_pass": 24,
+          "arm_pass": 21,
+          "ref_pass_rate": [
+            0.41379310344827586,
+            0.29627832678138283,
+            0.5420182244074607
+          ],
+          "arm_pass_rate": [
+            0.3620689655172414,
+            0.25054734348500335,
+            0.4907271384171466
+          ],
+          "flips_pass_to_fail": 5,
+          "flips_fail_to_pass": 2,
+          "flip_rate": [
+            0.1206896551724138,
+            0.059708902448596696,
+            0.22879592278231584
+          ],
+          "mcnemar_exact_p": 0.453125
+        },
+        "llm_judge": {
+          "n_paired": 58,
+          "excluded_not_scored": 2,
+          "ref_pass": 34,
+          "arm_pass": 32,
+          "ref_pass_rate": [
+            0.5862068965517241,
+            0.4579817755925391,
+            0.7037216732186171
+          ],
+          "arm_pass_rate": [
+            0.5517241379310345,
+            0.4245185822161052,
+            0.6725034870705885
+          ],
+          "flips_pass_to_fail": 6,
+          "flips_fail_to_pass": 4,
+          "flip_rate": [
+            0.1724137931034483,
+            0.09644189395085108,
+            0.2890850005667552
+          ],
+          "mcnemar_exact_p": 0.75390625
+        },
+        "llm_faithfulness_judge": {
+          "n_paired": 54,
+          "excluded_not_scored": 6,
+          "ref_pass": 53,
+          "arm_pass": 54,
+          "ref_pass_rate": [
+            0.9814814814814815,
+            0.902283346415128,
+            0.996723596684648
+          ],
+          "arm_pass_rate": [
+            1.0,
+            0.9335841332189981,
+            1.0
+          ],
+          "flips_pass_to_fail": 0,
+          "flips_fail_to_pass": 1,
+          "flip_rate": [
+            0.018518518518518517,
+            0.0032764033153519848,
+            0.09771665358487208
+          ],
+          "mcnemar_exact_p": 1.0
+        }
+      },
+      "identical_outputs": 38,
+      "abstentions_ref": 6,
+      "abstentions_arm": 9,
+      "identical_retrieval": 15,
+      "diagnosis_consistency": {
+        "num_comparisons": 60,
+        "num_unchanged": 41,
+        "outcome_consistency_rate": 0.6833333333333333,
+        "transition_counts": {
+          "evaluator_disagreement -> generation_failure": 4,
+          "evaluator_disagreement -> None": 2,
+          "correct -> generation_failure": 3,
+          "evaluator_disagreement -> correct": 2,
+          "correct -> evaluator_disagreement": 3,
+          "generation_failure -> evaluator_disagreement": 2,
+          "generation_failure -> correct": 1,
+          "generation_failure -> retrieval_failure": 2
+        }
+      },
+      "changed_judge_ids": [
+        "squad-56e1ee4de3433e1400423210",
+        "squad-5729f12e3f37b319004785e3",
+        "squad-572a0a686aef0514001551f0",
+        "squad-5726d8bd708984140094d35b",
+        "squad-5726f7715951b619008f8391",
+        "squad-5726ed6cf1498d1400e8f010",
+        "squad-57270ab9708984140094d8fa",
+        "squad-56e76abf37bdd419002c3f76",
+        "squad-56e75a9037bdd419002c3ec7",
+        "squad-572822233acd2414000df559"
+      ]
+    },
+    "freeform": {
+      "n_questions": 60,
+      "evaluators": {
+        "exact_match": {
+          "n_paired": 60,
+          "excluded_not_scored": 0,
+          "ref_pass": 18,
+          "arm_pass": 1,
+          "ref_pass_rate": [
+            0.3,
+            0.19898010252726892,
+            0.42508946966390415
+          ],
+          "arm_pass_rate": [
+            0.016666666666666666,
+            0.002948083860873682,
+            0.08855338226779477
+          ],
+          "flips_pass_to_fail": 17,
+          "flips_fail_to_pass": 0,
+          "flip_rate": [
+            0.2833333333333333,
+            0.1850667860430859,
+            0.40767525049735165
+          ],
+          "mcnemar_exact_p": 1.52587890625e-05
+        },
+        "squad_match": {
+          "n_paired": 60,
+          "excluded_not_scored": 0,
+          "ref_pass": 26,
+          "arm_pass": 1,
+          "ref_pass_rate": [
+            0.43333333333333335,
+            0.31572200394400635,
+            0.5589678534530513
+          ],
+          "arm_pass_rate": [
+            0.016666666666666666,
+            0.002948083860873682,
+            0.08855338226779477
+          ],
+          "flips_pass_to_fail": 25,
+          "flips_fail_to_pass": 0,
+          "flip_rate": [
+            0.4166666666666667,
+            0.30064086487871833,
+            0.5427214568676039
+          ],
+          "mcnemar_exact_p": 5.960464477539063e-08
+        },
+        "llm_judge": {
+          "n_paired": 59,
+          "excluded_not_scored": 1,
+          "ref_pass": 34,
+          "arm_pass": 37,
+          "ref_pass_rate": [
+            0.576271186440678,
+            0.4493425547283663,
+            0.6938746771689757
+          ],
+          "arm_pass_rate": [
+            0.6271186440677966,
+            0.49953356682142136,
+            0.7391618196741485
+          ],
+          "flips_pass_to_fail": 4,
+          "flips_fail_to_pass": 7,
+          "flip_rate": [
+            0.1864406779661017,
+            0.10742612239043585,
+            0.30379192425382523
+          ],
+          "mcnemar_exact_p": 0.548828125
+        },
+        "llm_faithfulness_judge": {
+          "n_paired": 53,
+          "excluded_not_scored": 7,
+          "ref_pass": 52,
+          "arm_pass": 52,
+          "ref_pass_rate": [
+            0.9811320754716981,
+            0.9005685649885059,
+            0.9966616326132506
+          ],
+          "arm_pass_rate": [
+            0.9811320754716981,
+            0.9005685649885059,
+            0.9966616326132506
+          ],
+          "flips_pass_to_fail": 1,
+          "flips_fail_to_pass": 1,
+          "flip_rate": [
+            0.03773584905660377,
+            0.010410068833819265,
+            0.12754523150959116
+          ],
+          "mcnemar_exact_p": 1.0
+        }
+      },
+      "identical_outputs": 2,
+      "abstentions_ref": 6,
+      "abstentions_arm": 0,
+      "identical_retrieval": 60,
+      "diagnosis_consistency": {
+        "num_comparisons": 60,
+        "num_unchanged": 33,
+        "outcome_consistency_rate": 0.55,
+        "transition_counts": {
+          "correct -> evaluator_disagreement": 15,
+          "evaluator_disagreement -> generation_failure": 5,
+          "correct -> generation_failure": 2,
+          "generation_failure -> evaluator_disagreement": 5
+        }
+      },
+      "changed_judge_ids": [
+        "squad-56e202e9e3433e1400423243",
+        "squad-56e1ec83cd28a01900c67c0e",
+        "squad-572a0a686aef0514001551f0",
+        "squad-5726d8bd708984140094d35b",
+        "squad-5726f7715951b619008f8391",
+        "squad-5726f868dd62a815002e9687",
+        "squad-5726f0e35951b619008f82fa",
+        "squad-5726fe95dd62a815002e9736",
+        "squad-5726e1fcdd62a815002e93c7",
+        "squad-57270ab9708984140094d8fa",
+        "squad-56e75a9037bdd419002c3ec7"
+      ]
+    }
+  }
+}

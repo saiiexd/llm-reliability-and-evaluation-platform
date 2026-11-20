@@ -40,7 +40,7 @@ coerced into a score.
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from typing import Any
 
 from llm_reliability.evaluation.adapters import ModelAdapter
@@ -140,6 +140,36 @@ CORRECTNESS_RUBRIC = JudgeRubric(
 )
 """The initial judge rubric: correctness against an available reference answer."""
 
+CORRECTNESS_RUBRIC_V2 = JudgeRubric(
+    rubric_id="correctness_vs_reference_v2",
+    criterion=CORRECTNESS,
+    scale=("incorrect", "partially_correct", "correct"),
+    instructions=(
+        "You are evaluating whether a generated answer to a question is correct, given "
+        "one or more accepted reference answers. Any one accepted answer is enough: the "
+        "candidate is correct if it gives the same answer as at least one of them. Judge "
+        "the factual content, not fluency or length.\n\n"
+        "Choose exactly one outcome from: incorrect, partially_correct, correct.\n"
+        "- correct: the candidate gives the same answer as an accepted reference. Surface "
+        "differences do not matter: a leading article, an extra or missing descriptive "
+        "word that does not change what is referred to (for example 'the Henry Cole wing' "
+        "vs 'Henry Cole wing'), a full sentence that contains the answer, or a different "
+        "but equivalent wording.\n"
+        "- partially_correct: the candidate contains only part of a required answer (for "
+        "example one of two required items) or is materially less precise.\n"
+        "- incorrect: the candidate gives a different answer, contradicts the references, "
+        "or declines to answer (for example 'I don't know').\n\n"
+        "Respond with a single JSON object and nothing else, in exactly this form: "
+        '{"outcome": <one of the three values above>, '
+        '"reasoning": <one sentence of justification>}.'
+    ),
+)
+"""Correctness v2 (EXP-001 findings E2, E3): every accepted answer; surface variants."""
+
+# Rubrics whose prompt lists every accepted answer (``metadata["gold_answers"]``)
+# instead of the single ``reference_answer``. v1 keeps its exact original prompt.
+MULTI_REFERENCE_RUBRICS = frozenset({CORRECTNESS_RUBRIC_V2.rubric_id})
+
 
 @dataclass
 class ParsedJudgeOutput:
@@ -211,8 +241,12 @@ class LLMJudgeEvaluator(Evaluator):
         self._rubric = rubric
 
     def get_config(self) -> dict[str, Any]:
+        # The judge's full generation settings (temperature, max_tokens,
+        # response_format, ...) change its verdicts, so they belong in the
+        # reproducibility record, not just the judge's model id.
         return {
             "judge_model_id": self._judge_model_config.model_id,
+            "judge_model_config": asdict(self._judge_model_config),
             "rubric": self._rubric.to_dict(),
         }
 
@@ -232,10 +266,15 @@ class LLMJudgeEvaluator(Evaluator):
                 ),
             )
 
+        reference = test_case.reference_answer
+        if self._rubric.rubric_id in MULTI_REFERENCE_RUBRICS:
+            golds = test_case.metadata.get("gold_answers") or [reference]
+            accepted = list(dict.fromkeys(str(g) for g in golds if str(g).strip()))
+            reference = " | ".join(accepted) if len(accepted) > 1 else accepted[0]
         prompt = render_judge_prompt(
             rubric=self._rubric,
             question=test_case.input,
-            reference_answer=test_case.reference_answer,
+            reference_answer=reference,
             candidate_answer=response.output_text,
         )
         request = ExecutionRequest(

@@ -38,6 +38,7 @@ from llm_reliability.rag.embeddings import (
 from llm_reliability.rag.evaluators import (
     HitAtKEvaluator,
     MeanReciprocalRankEvaluator,
+    PrecisionAtKEvaluator,
     RecallAtKEvaluator,
     RetrievalEvaluationResult,
     RetrievalEvaluationStatus,
@@ -80,6 +81,7 @@ __all__ = [
     "HitAtKEvaluator",
     "LLMFaithfulnessEvaluator",
     "MeanReciprocalRankEvaluator",
+    "PrecisionAtKEvaluator",
     "RagDiagnosis",
     "RagDiagnosisCategory",
     "RagPipeline",

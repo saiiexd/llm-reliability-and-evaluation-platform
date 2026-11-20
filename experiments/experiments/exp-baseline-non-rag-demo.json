@@ -1,0 +1,42 @@
+{
+  "config_fingerprint": "042023b17a261703cd58b5ddde29800b7e605486ee2cd57b7c6857c44022b33d",
+  "created_at": "2026-11-19T12:49:57.216575+00:00",
+  "dataset_version": {
+    "dataset_name": "baseline-non-rag-demo",
+    "test_cases": [
+      {
+        "id": "plain-1",
+        "input": "What is 2+2?",
+        "metadata": {},
+        "reference_answer": "4"
+      },
+      {
+        "id": "plain-2",
+        "input": "What is 3+3?",
+        "metadata": {},
+        "reference_answer": "6"
+      }
+    ],
+    "version_id": "f3ea327bd852f20006803beb8666a2ad8ffe9cd72fdf09a8f8e09b4ea4b19335"
+  },
+  "description": "A plain (non-RAG) experiment, for contrast with the RAG demonstration.",
+  "evaluator_configs": [
+    {
+      "evaluator_name": "exact_match",
+      "parameters": {
+        "case_sensitive": false,
+        "collapse_whitespace": true
+      }
+    }
+  ],
+  "experiment_id": "exp-baseline-non-rag-demo",
+  "metadata": {},
+  "model_config": {
+    "extra_params": {},
+    "max_tokens": null,
+    "model_id": "mock-adapter-v1",
+    "temperature": null
+  },
+  "name": "Baseline non-RAG demonstration",
+  "schema_version": 1
+}

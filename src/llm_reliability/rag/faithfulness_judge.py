@@ -13,9 +13,11 @@ class and prompt renderer rather than being force-fit into
 ``LLMJudgeEvaluator``.
 
 As with the correctness judge, this is an evaluation *method*, not ground
-truth: its output reflects the judge model's own behavior and biases, and
-its agreement with human judgment must be established separately before
-its verdicts can be trusted as a substitute for human review.
+truth: its output reflects the judge model's own behavior and biases (including
+position bias, verbosity bias, and judge hallucination), and its agreement with
+human judgment must be established separately before its verdicts can be trusted
+as a substitute for human review. It is explicitly NOT a universal hallucination
+detector, but an evidence-gathering evaluator that reports a structured verdict.
 
 Distinguishes four outcomes, precisely:
 
@@ -37,6 +39,7 @@ it rather than replacing it.
 
 from __future__ import annotations
 
+from dataclasses import asdict
 from typing import Any
 
 from llm_reliability.evaluation.criteria import FAITHFULNESS
@@ -81,7 +84,40 @@ FAITHFULNESS_RUBRIC = JudgeRubric(
 )
 """The faithfulness rubric: supported / unsupported / contradicted / undetermined."""
 
+FAITHFULNESS_RUBRIC_V2 = JudgeRubric(
+    rubric_id="faithfulness_vs_context_v2",
+    criterion=FAITHFULNESS,
+    scale=("contradicted", "unsupported", "undetermined", "no_claim", "supported"),
+    instructions=(
+        "You are evaluating whether a generated answer is faithful to a provided set "
+        "of retrieved context passages -- not whether the answer is fluent, complete, "
+        "or externally true. Judge only whether the context supports the answer's "
+        "claims. Do not use outside knowledge to decide whether the answer is "
+        "factually correct in general; judge strictly against the given context.\n\n"
+        "First decide whether the answer makes any factual claim. An answer that declines "
+        "to answer (for example 'I don't know' or 'The context does not say'), refuses, or "
+        "only repeats the question makes no claim.\n\n"
+        "Choose exactly one outcome from: contradicted, unsupported, undetermined, "
+        "no_claim, supported.\n"
+        "- no_claim: the answer makes no factual claim (see above). Use this even if the "
+        "context does or does not contain the answer.\n"
+        "- supported: the context contains information that backs the answer's claims.\n"
+        "- unsupported: the context neither confirms nor denies the answer's claims "
+        "(the information simply is not present).\n"
+        "- contradicted: the context directly conflicts with a claim in the answer.\n"
+        "- undetermined: the context and the answer are too ambiguous, fragmentary, or "
+        "unrelated in scope for you to reach any of the above judgments reliably.\n\n"
+        "Respond with a single JSON object and nothing else, in exactly this form: "
+        '{"outcome": <one of the five values above>, '
+        '"reasoning": <one sentence of justification>}.'
+    ),
+)
+"""Faithfulness v2 (EXP-001 finding E1): abstentions are ``no_claim``, not ``supported``."""
+
 _UNDETERMINED_OUTCOME = "undetermined"
+# Outcomes that are genuine judge answers but not a faithfulness verdict:
+# neither a pass nor a fail (``passed = None``).
+_NO_VERDICT_OUTCOMES = frozenset({_UNDETERMINED_OUTCOME, "no_claim"})
 
 
 def render_faithfulness_prompt(
@@ -119,8 +155,12 @@ class LLMFaithfulnessEvaluator(Evaluator):
         self._rubric = rubric
 
     def get_config(self) -> dict[str, Any]:
+        # The judge's full generation settings (temperature, max_tokens,
+        # response_format, ...) change its verdicts, so they belong in the
+        # reproducibility record, not just the judge's model id.
         return {
             "judge_model_id": self._judge_model_config.model_id,
+            "judge_model_config": asdict(self._judge_model_config),
             "rubric": self._rubric.to_dict(),
         }
 
@@ -188,7 +228,7 @@ class LLMFaithfulnessEvaluator(Evaluator):
         # "undetermined" is a genuine judge answer (it could not reach a
         # confident assessment), not a negative one -- it must not be
         # folded into `passed=False` alongside a real contradiction.
-        passed = None if parsed.outcome == _UNDETERMINED_OUTCOME else parsed.outcome == best_outcome
+        passed = None if parsed.outcome in _NO_VERDICT_OUTCOMES else parsed.outcome == best_outcome
         return EvaluationResult(
             evaluator_name=self.name,
             test_case_id=test_case.id,

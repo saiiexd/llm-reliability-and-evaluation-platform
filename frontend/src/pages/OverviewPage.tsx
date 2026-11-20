@@ -1,153 +1,193 @@
 import { Link } from "react-router-dom";
 import { FixtureNotice } from "../components/FixtureNotice";
-import { Card, SectionHeading, Stat } from "../components/Card";
+import { SimulatedTag } from "../components/SimulatedNotice";
+import { PageHeader } from "../components/Card";
+import { DataStateView } from "../components/DataStateView";
 import { EmptyState } from "../components/EmptyState";
-import { Tag } from "../components/Tag";
-import { toneForFailureCategory, toneForRunStatus } from "../lib/tone";
-import { formatTimestamp, isRagExecution, runCounts } from "../lib/derived";
-import {
-  getDiagnosticsForRun,
-  getSummaryForRun,
-  listAllRuns,
-  listExperiments,
-} from "../data/dataAccess";
-import type { FailureCategory } from "../types/domain";
+import { PassBar, VerdictBar, verdictSentence } from "../components/Verdict";
+import { formatTimestamp, runPassCounts, verdictCounts } from "../lib/derived";
+import { useExperiments, useRun, useRuns } from "../data/useData";
+import type { ExperimentRun } from "../types/domain";
+
+const STEPS = [
+  {
+    n: "1",
+    title: "Define an experiment",
+    body: "A set of questions with expected answers, the model to test, and the checks to run.",
+  },
+  {
+    n: "2",
+    title: "Run it",
+    body: "The model answers every question. Each answer is checked automatically.",
+  },
+  {
+    n: "3",
+    title: "Read the results",
+    body: "See which answers passed, which were wrong, and the likely reason.",
+  },
+];
+
+function newestFirst(runs: ExperimentRun[]): ExperimentRun[] {
+  return [...runs].sort((a, b) => b.started_at.localeCompare(a.started_at));
+}
 
 export function OverviewPage() {
-  const experiments = listExperiments();
-  const runs = listAllRuns();
+  const experiments = useExperiments();
+  const runs = useRuns();
 
-  let numTestCases = 0;
-  let numEvaluations = 0;
-  let numRagRuns = 0;
-  let numFailures = 0;
-  let disagreementCount = 0;
-  const evaluatorCoverage = new Map<string, number>();
-  const categoryDistribution = new Map<FailureCategory, number>();
+  const loading = experiments.loading || runs.loading;
+  const error = experiments.error || runs.error;
+  const retry = () => {
+    void experiments.refetch();
+    void runs.refetch();
+  };
 
-  for (const run of runs) {
-    if (!run.result) continue;
-    const counts = runCounts(run.result);
-    numTestCases += counts.numTestCases;
-    numFailures += counts.numFailed;
-    if (run.result.test_case_results.some(isRagExecution)) numRagRuns += 1;
+  const expList = experiments.data ?? [];
+  const runList = newestFirst((runs.data ?? []).filter((r) => runPassCounts(r).total > 0));
+  const nameOf = new Map(expList.map((e) => [e.experiment_id, e.name]));
 
-    for (const tcResult of run.result.test_case_results) {
-      for (const evalResult of tcResult.evaluation_results) {
-        numEvaluations += 1;
-        evaluatorCoverage.set(
-          evalResult.evaluator_name,
-          (evaluatorCoverage.get(evalResult.evaluator_name) ?? 0) + 1,
-        );
-      }
-    }
+  const overall = runList.reduce(
+    (acc, r) => {
+      const c = runPassCounts(r);
+      return { passed: acc.passed + c.passed, total: acc.total + c.total };
+    },
+    { passed: 0, total: 0 },
+  );
 
-    const summary = getSummaryForRun(run.run_id);
-    if (summary) disagreementCount += summary.evaluation_summary.disagreement_count;
-
-    for (const diagnostic of Object.values(getDiagnosticsForRun(run.run_id))) {
-      if (diagnostic.failure_category) {
-        categoryDistribution.set(
-          diagnostic.failure_category,
-          (categoryDistribution.get(diagnostic.failure_category) ?? 0) + 1,
-        );
-      }
-    }
-  }
-
-  const recentRuns = [...runs].sort((a, b) => (a.started_at < b.started_at ? 1 : -1)).slice(0, 5);
+  // List endpoints only return summaries; fetch the latest run in full so
+  // its result can be split into passed / wrong / not scored / crashed.
+  const latestId = runList[0]?.run_id ?? "";
+  const { data: latest } = useRun(latestId);
+  const latestCounts = latest?.result ? verdictCounts(latest.result.test_case_results) : null;
 
   return (
     <div>
-      <SectionHeading eyebrow="Research console" title="Platform overview" />
+      <PageHeader
+        title="Is the model answering correctly?"
+        description="This platform asks a language model a fixed set of questions, checks every answer automatically, and explains why the wrong ones went wrong."
+        action={
+          <>
+            <Link
+              to="/experiments?new=true"
+              className="rounded-md bg-ink px-4 py-2 text-sm font-medium text-paper hover:opacity-90"
+            >
+              Start an Experiment
+            </Link>
+            <Link
+              to="/results"
+              className="rounded-md border border-line px-4 py-2 text-sm text-ink hover:bg-paper-dim"
+            >
+              View results
+            </Link>
+          </>
+        }
+      />
+
+      <ol className="mb-10 grid gap-3 sm:grid-cols-3">
+        {STEPS.map((s) => (
+          <li key={s.n} className="rounded-xl border border-line p-4">
+            <p className="text-xs text-ink-soft">Step {s.n}</p>
+            <p className="mt-1 font-medium">{s.title}</p>
+            <p className="mt-1 text-sm leading-relaxed text-ink-soft">{s.body}</p>
+          </li>
+        ))}
+      </ol>
+
       <FixtureNotice />
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Stat label="Experiments" value={experiments.length} />
-        <Stat label="Runs" value={runs.length} />
-        <Stat label="Test cases" value={numTestCases} />
-        <Stat label="Evaluations" value={numEvaluations} />
-        <Stat label="RAG runs" value={numRagRuns} />
-        <Stat label="Execution failures" value={numFailures} />
-        <Stat label="Evaluator disagreements" value={disagreementCount} />
-        <Stat label="Evaluation methods" value={evaluatorCoverage.size} />
-      </div>
+      <DataStateView loading={loading} error={error} onRetry={retry}>
+        {runList.length === 0 ? (
+          <EmptyState
+            title="No results yet"
+            detail="Create an experiment and run it. Its results will show up here."
+          />
+        ) : (
+          <div className="space-y-10">
+            <section className="grid gap-6 lg:grid-cols-2">
+              <div className="rounded-xl border border-line bg-paper-dim p-6">
+                <p className="text-sm text-ink-soft">All runs so far</p>
+                <p className="mt-1 text-4xl font-semibold tabular-nums">
+                  {overall.total > 0 ? Math.round((overall.passed / overall.total) * 100) : 0}%
+                  <span className="ml-2 text-base font-normal text-ink-soft">passed</span>
+                </p>
+                <p className="mt-2 text-sm text-ink-soft">
+                  {overall.total} answers checked across {runList.length} runs of{" "}
+                  {expList.length} experiments.
+                </p>
+                <div className="mt-5">
+                  <PassBar passed={overall.passed} total={overall.total} />
+                </div>
+                <p className="mt-3 text-xs leading-relaxed text-ink-soft">
+                  "Not passed" includes wrong answers and answers a check couldn't score. Open a run
+                  to see which is which.
+                </p>
+              </div>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-2">
-        <Card>
-          <SectionHeading eyebrow="Recent" title="Recent runs" />
-          {recentRuns.length === 0 ? (
-            <EmptyState title="No runs recorded yet." />
-          ) : (
-            <ul className="divide-y divide-line">
-              {recentRuns.map((run) => (
-                <li key={run.run_id} className="flex items-center justify-between py-2 text-sm">
-                  <Link to={`/runs/${run.run_id}`} className="font-mono underline">
-                    {run.run_id.slice(0, 12)}
-                  </Link>
-                  <div className="flex items-center gap-2">
-                    <span className="text-ink-soft">{formatTimestamp(run.started_at)}</span>
-                    <Tag tone={toneForRunStatus(run.status)}>{run.status}</Tag>
+              {latest && latestCounts && (
+                <div className="flex flex-col rounded-xl border border-line p-6">
+                  <p className="text-sm text-ink-soft">Latest run · {formatTimestamp(latest.started_at)}</p>
+                  <p className="mt-1 text-lg font-semibold">
+                    {nameOf.get(latest.experiment_id) ?? latest.experiment_id}
+                  </p>
+                  <p className="flex flex-wrap items-center gap-2 text-sm text-ink-soft">
+                    <span>
+                      Model <span className="font-mono text-ink">{latest.model_config?.model_id}</span>
+                    </span>
+                    <SimulatedTag run={latest} />
+                  </p>
+                  <p className="mt-4 text-sm">{verdictSentence(latestCounts)}</p>
+                  <div className="mt-3">
+                    <VerdictBar counts={latestCounts} showLegend={false} />
                   </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Card>
+                  <Link
+                    to={`/results/${latest.run_id}`}
+                    className="mt-auto self-start pt-5 text-sm font-medium underline-offset-4 hover:underline"
+                  >
+                    Open this run →
+                  </Link>
+                </div>
+              )}
+            </section>
 
-        <Card>
-          <SectionHeading eyebrow="Coverage" title="Evaluation method coverage" />
-          {evaluatorCoverage.size === 0 ? (
-            <EmptyState title="No evaluations recorded yet." />
-          ) : (
-            <ul className="divide-y divide-line">
-              {[...evaluatorCoverage.entries()].map(([name, count]) => (
-                <li key={name} className="flex items-center justify-between py-2 text-sm">
-                  <span className="font-mono">{name}</span>
-                  <span className="text-ink-soft">{count} evaluations</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Card>
-      </div>
-
-      <div className="mt-6">
-        <Card>
-          <SectionHeading eyebrow="Diagnosis" title="Failure category distribution" />
-          <p className="mb-3 text-xs text-ink-soft">
-            Computed only from test cases where a reliability diagnosis exists; see the
-            Reliability view for the full breakdown per run. Categories are never collapsed into
-            a single reliability score.
-          </p>
-          {categoryDistribution.size === 0 ? (
-            <EmptyState
-              title="No consolidated reliability diagnoses available yet."
-              detail="See the Reliability Diagnostics view for per-run detail."
-            />
-          ) : (
-            <ul className="space-y-2">
-              {[...categoryDistribution.entries()]
-                .sort((a, b) => b[1] - a[1])
-                .map(([category, count]) => {
-                  const maxCount = Math.max(...categoryDistribution.values());
+            <section>
+              <div className="mb-3 flex items-baseline justify-between">
+                <h2 className="text-lg font-semibold">Recent runs</h2>
+                <Link to="/results" className="text-sm text-ink-soft hover:text-ink">
+                  All results →
+                </Link>
+              </div>
+              <ul className="divide-y divide-line rounded-xl border border-line">
+                {runList.slice(0, 6).map((run) => {
+                  const counts = runPassCounts(run);
                   return (
-                    <li key={category} className="flex items-center gap-3 text-sm">
-                      <span className="w-44 shrink-0 font-mono text-xs">{category}</span>
-                      <span className="h-3 flex-1 bg-paper-dim">
-                        <span
-                          className="block h-3 bg-ink"
-                          style={{ width: `${(count / maxCount) * 100}%` }}
-                        />
-                      </span>
-                      <span className="w-6 text-right text-ink-soft">{count}</span>
+                    <li key={run.run_id}>
+                      <Link
+                        to={`/results/${run.run_id}`}
+                        className="grid grid-cols-1 items-center gap-2 px-5 py-4 hover:bg-paper-dim sm:grid-cols-12 sm:gap-4"
+                      >
+                        <div className="min-w-0 sm:col-span-5">
+                          <p className="truncate font-medium">
+                            {nameOf.get(run.experiment_id) ?? run.experiment_id}
+                          </p>
+                          <p className="text-xs text-ink-soft">
+                            {formatTimestamp(run.started_at)} · <span className="font-mono">{run.run_id.slice(0, 8)}</span>
+                          </p>
+                        </div>
+                        <div className="sm:col-span-5">
+                          <PassBar passed={counts.passed} total={counts.total} />
+                        </div>
+                        <p className="text-sm tabular-nums text-ink-soft sm:col-span-2 sm:text-right">
+                          <span className="text-ink">{counts.passed}</span>/{counts.total} passed
+                        </p>
+                      </Link>
                     </li>
                   );
                 })}
-            </ul>
-          )}
-        </Card>
-      </div>
+              </ul>
+            </section>
+          </div>
+        )}
+      </DataStateView>
     </div>
   );
 }

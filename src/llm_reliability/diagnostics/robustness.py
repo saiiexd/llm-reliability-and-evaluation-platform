@@ -58,6 +58,9 @@ class PerturbationType(StrEnum):
     REPEATED_INPUT = "repeated_input"
     """The identical input executed again, to observe non-determinism."""
 
+    PROMPT_TEMPLATE_CHANGE = "prompt_template_change"
+    """The same question and context rendered with a different prompt template."""
+
 
 def get_perturbation_info(metadata: dict[str, Any]) -> tuple[str, PerturbationType] | None:
     """Read a perturbed test case's baseline id and perturbation type from its metadata.

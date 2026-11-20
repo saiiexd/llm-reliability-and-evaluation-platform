@@ -12,9 +12,15 @@ See test_semantic_similarity_integration.py for the real BERTScore
 backend, which is opt-in and skipped unless the dependency is installed.
 """
 
+import sys
+import types
+
+import pytest
+
 from llm_reliability.evaluation import EvaluationStatus, ModelResponse, TestCase
 from llm_reliability.evaluation.criteria import CORRECTNESS
 from llm_reliability.evaluation.semantic_similarity import (
+    BertScoreBackend,
     FakeSimilarityBackend,
     SemanticSimilarityEvaluator,
     SimilarityBackendError,
@@ -130,3 +136,84 @@ class TestSemanticSimilarityEvaluator:
         evaluator = SemanticSimilarityEvaluator(backend=backend, threshold=0.7)
         result = evaluator.evaluate(_test_case(), _response(REFERENCE))
         assert result.evaluator_config == evaluator.get_config()
+
+
+class TestBertScoreBackendWithoutTheRealModel:
+    """Configuration and guard paths of the real backend; no model is loaded."""
+
+    def test_default_config_records_every_scoring_setting(self):
+        assert BertScoreBackend().get_config() == {
+            "backend": "bert_score",
+            "model_type": "distilbert-base-uncased",
+            "lang": "en",
+            "num_layers": 5,
+            "idf": False,
+            "rescale_with_baseline": False,
+            "score": "f1",
+        }
+
+    def test_explicit_num_layers_is_recorded(self):
+        config = BertScoreBackend(model_type="roberta-large", num_layers=17).get_config()
+        assert config["model_type"] == "roberta-large"
+        assert config["num_layers"] == 17
+
+    def test_unknown_model_without_num_layers_records_none(self):
+        assert BertScoreBackend(model_type="some-other-model").get_config()["num_layers"] is None
+
+    def test_non_positive_num_layers_is_rejected(self):
+        with pytest.raises(ValueError):
+            BertScoreBackend(num_layers=0)
+
+    def test_missing_package_is_an_invalid_configuration_not_a_crash(self, monkeypatch):
+        monkeypatch.setitem(sys.modules, "bert_score", None)  # makes the import fail
+        evaluator = SemanticSimilarityEvaluator(backend=BertScoreBackend())
+        result = evaluator.evaluate(_test_case(), _response(PARAPHRASE))
+        assert result.status == EvaluationStatus.INVALID_CONFIGURATION
+        assert result.passed is None
+        assert "bert-score" in (result.error or "")
+
+    @pytest.mark.parametrize("candidate", ["", "   ", "\n"])
+    def test_empty_candidate_scores_zero_without_loading_a_model(self, monkeypatch, candidate):
+        def _must_not_be_called(*args, **kwargs):
+            raise AssertionError("an empty candidate must not reach the scorer")
+
+        fake_module = types.SimpleNamespace(BERTScorer=_must_not_be_called)
+        monkeypatch.setitem(sys.modules, "bert_score", fake_module)
+        evaluator = SemanticSimilarityEvaluator(backend=BertScoreBackend())
+        result = evaluator.evaluate(_test_case(), _response(candidate))
+        assert result.status == EvaluationStatus.SUCCESS
+        assert result.score == 0.0
+        assert result.passed is False
+
+    @pytest.mark.parametrize(
+        ("load_error", "message"),
+        [
+            (OSError("couldn't connect to the model hub"), "Could not load BERTScore model"),
+            (KeyError("some-other-model"), "pass num_layers explicitly"),
+            (AssertionError("Invalid num_layers"), "Invalid BERTScore configuration"),
+        ],
+    )
+    def test_model_load_failure_is_an_invalid_configuration(self, monkeypatch, load_error, message):
+        def _failing_scorer(*args, **kwargs):
+            raise load_error
+
+        monkeypatch.setitem(
+            sys.modules, "bert_score", types.SimpleNamespace(BERTScorer=_failing_scorer)
+        )
+        evaluator = SemanticSimilarityEvaluator(
+            backend=BertScoreBackend(model_type="some-other-model")
+        )
+        result = evaluator.evaluate(_test_case(), _response(PARAPHRASE))
+        assert result.status == EvaluationStatus.INVALID_CONFIGURATION
+        assert result.passed is None
+        assert message in (result.error or "")
+
+
+@pytest.mark.parametrize("reference", ["", "   "])
+def test_blank_reference_is_skipped_not_scored(reference):
+    evaluator = SemanticSimilarityEvaluator(backend=FakeSimilarityBackend())
+    result = evaluator.evaluate(
+        TestCase(id="t", input="q", reference_answer=reference), _response("")
+    )
+    assert result.status == EvaluationStatus.SKIPPED
+    assert result.passed is None

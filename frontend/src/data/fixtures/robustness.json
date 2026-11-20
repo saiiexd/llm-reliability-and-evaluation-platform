@@ -1,5 +1,43 @@
 {
-  "4522d237b3ff4768b11e2decc62c9f76": {
+  "97043daa30194ab19b4883cd64798f74": {
+    "comparisons": [
+      {
+        "baseline_category": "correct",
+        "baseline_test_case_id": "correct-context-correct-answer",
+        "failure_category_transition": null,
+        "outcome_changed": false,
+        "perturbation_type": "question_rewording",
+        "perturbed_category": "correct",
+        "perturbed_test_case_id": "correct-context-correct-answer-reworded"
+      }
+    ],
+    "consistency": {
+      "num_comparisons": 1,
+      "num_unchanged": 1,
+      "outcome_consistency_rate": 1.0,
+      "transition_counts": {}
+    }
+  },
+  "afc62dd02e824b7189cfe5f3cfd40982": {
+    "comparisons": [
+      {
+        "baseline_category": "correct",
+        "baseline_test_case_id": "correct-context-correct-answer",
+        "failure_category_transition": null,
+        "outcome_changed": false,
+        "perturbation_type": "question_rewording",
+        "perturbed_category": "correct",
+        "perturbed_test_case_id": "correct-context-correct-answer-reworded"
+      }
+    ],
+    "consistency": {
+      "num_comparisons": 1,
+      "num_unchanged": 1,
+      "outcome_consistency_rate": 1.0,
+      "transition_counts": {}
+    }
+  },
+  "b80e4606f53d46b3acdbeb4757cc5544": {
     "comparisons": [
       {
         "baseline_category": "correct",

@@ -1,324 +1,173 @@
 # LLM Reliability & Evaluation Platform
 
-This repository contains the LLM Reliability & Evaluation Platform: a system for systematically testing, evaluating, comparing, and diagnosing LLM applications.
+A research platform for measuring **how and why LLM and RAG applications fail**. It runs a
+versioned set of questions through a model or RAG pipeline, scores every answer with several
+independent evaluators, keeps all the evidence (prompt, retrieved passages, output, each
+evaluator's verdict and reasoning, configuration, provenance), attributes failures to a pipeline
+stage, and compares runs only when the comparison is valid.
 
-## What This Project Is
-
-This is not a chatbot, a generic RAG application, or an autonomous agent framework. It is a research and engineering platform with three distinct roles:
-
-1. **LLM Testing Framework** - Structured, repeatable evaluation of LLM and LLM-based system outputs against defined quality dimensions, using controlled datasets and measurable metrics.
-
-2. **LLM Observability and Diagnostics Platform** - Tooling to trace, inspect, and diagnose LLM application behavior: where it fails, how it fails, and why. Observability is treated as a first-class engineering concern, not an afterthought.
-
-3. **Research Experimentation Environment** - A controlled environment for running scientific experiments on LLM reliability, faithfulness, hallucination, retrieval quality, and consistency. Experiments are reproducible, hypothesis-driven, and documented with failure analysis.
-
-## Central Project Principle
-
-This system exists to scientifically investigate whether AI applications can be trusted, where they fail, and why they fail. Trust in LLM systems must be earned through measurement, not assumed.
-
-## Evaluation Dimensions
-
-The platform evaluates LLM systems across the following dimensions:
-
-- **Answer Quality** - Correctness, completeness, relevance, and fluency of generated answers.
-- **Reliability and Hallucination** - Frequency and pattern of factual errors and unsupported claims.
-- **Faithfulness and Groundedness** - Whether answers are grounded in retrieved or provided context.
-- **RAG and Retrieval Quality** - Precision, recall, and relevance of retrieval in RAG pipelines.
-- **Consistency and Robustness** - Stability of outputs across paraphrase variations and repeated runs.
-- **Performance and Observability** - Latency, cost, token usage, and system-level behavior under load.
-- **Experiment Comparison** - Systematic A/B comparison of models, prompts, retrievers, and configurations.
-
-## RAG Execution Model
-
-The platform treats the following pipeline as its core unit of analysis:
+It is not a chatbot. The pipeline it studies is:
 
 ```
-Question -> Retrieval -> Retrieved Context -> Generation -> Answer
+Question -> Retrieval -> Retrieved context -> Generation -> Answer -> Evaluation -> Diagnosis
 ```
 
-Each step in this pipeline is independently measurable and diagnosable.
+## Documentation
 
-## Development Philosophy
+| Document | What it is |
+|---|---|
+| [`docs/PROJECT_TECHNICAL_UNDERSTANDING.md`](docs/PROJECT_TECHNICAL_UNDERSTANDING.md) ([PDF](docs/PROJECT_TECHNICAL_UNDERSTANDING.pdf)) | Full technical report: research foundations, architecture and lifecycle diagrams, metric definitions, failure taxonomy, experimental design, data model, implementation audit, related work, risks, roadmap |
+| [`research/experiments/EXP-001_local_rag_reliability/`](research/experiments/EXP-001_local_rag_reliability/) | First real experiment: definition (written before running), results, failure analysis, per-case data, archived runs |
+| [`frontend/README.md`](frontend/README.md) | Console concepts, 5-minute tour, frontend code structure |
+| [`research/project_definition.md`](research/project_definition.md), [`research/notes/`](research/notes/) | Project definition and design notes per component |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | Engineering rules |
 
-The project follows a research-first, incremental development approach:
+## Status (verified 2026-11-19)
 
-- Research first: understand the problem domain before building solutions.
-- Reproduce small experiments: start with published benchmarks and known results.
-- Establish baselines: no metric is meaningful without a reference point.
-- Build incrementally: add components only when justified by research or engineering needs.
-- Maintain reproducibility: every experiment must be repeatable from its definition.
-- Avoid unnecessary technologies: do not introduce tools without a clear, specific reason.
+- Backend: 473 tests passed, 3 skipped (opt-in integration tests); ruff and mypy clean.
+- Frontend: 52 tests passed; ESLint clean; production build succeeds.
+- Real local models (Ollama) verified end to end; EXP-001 ran 540 real generations.
+- The demo experiments that ship with the repository use a mock model, fake embeddings and a
+  canned judge. They exercise the platform and are marked **Simulated** in the console; do not
+  read their numbers as model behaviour.
 
-## Current Status
+## Quick start
 
-The repository is in the **research and foundation stage**. The first production component, the Core Evaluation Engine, now exists (see "Current Implementation" below). The current priorities are:
+Prerequisites: Python 3.13, Node.js 20+ (verified on 26). Optional: [Ollama](https://ollama.com)
+for real local models.
 
-- Understanding the evaluation literature.
-- Identifying the smallest experiments that produce meaningful results.
-- Establishing ground truth datasets and baselines.
-- Building the foundational evaluation framework one measurable capability at a time.
+```bash
+# Backend
+python -m venv .venv && . .venv/bin/activate     # or: uv venv
+pip install -e ".[dev]"                           # or: uv pip install -e ".[dev]"
+pytest                                            # 473 passed, 3 skipped
+ruff check src tests scripts && mypy
 
-Further production platform components will be introduced only when a clear research or engineering requirement justifies them.
+# Demo data (simulated) for the console
+python scripts/seed_live_experiments.py
 
-## Current Implementation: Core Evaluation Engine
+# Frontend
+cd frontend && npm ci && npm test && npm run build && cd ..
 
-`src/llm_reliability/evaluation/` implements the first controlled execution path: running a
-deterministic dataset of test cases against a model or application, then scoring the
-results with one or more evaluators. The execution flow is:
-
-```
-Dataset -> TestCase -> ExecutionRequest -> ModelAdapter -> ModelResponse
-    -> Evaluator(s) -> EvaluationResult -> RunResult
-```
-
-**What it currently supports:**
-
-- `TestCase` / `Dataset`: validated, deterministic evaluation inputs with stable ids.
-  Reference answers are optional, since reference-free and model-based evaluation are
-  explicitly in scope for later milestones.
-- `ModelAdapter`: a provider-agnostic interface between the engine and any model or
-  application. `MockAdapter` is a deterministic, network-free fake used for tests and
-  local development; it never calls an external service and its output must not be
-  interpreted as representing real model behavior.
-- `Evaluator`: a provider-agnostic interface for scoring a response against a test case.
-  `ExactMatchEvaluator` is the initial baseline (case-insensitive exact string match) used
-  to validate the execution infrastructure -- it is not a general-purpose answer-quality
-  metric, and it reports "not applicable" rather than a failure when no reference answer
-  exists.
-- `EvaluationRunner`: executes a dataset against an adapter and a set of evaluators,
-  preserving test-case order and ids, and isolating generation or evaluation failures to
-  the affected test case (recorded explicitly, never silently discarded).
-- `RunResult`: an in-memory, structured record of the full run, with deterministic JSON
-  serialization (`RunResult.to_json()`) for later inspection or persistence.
-
-**What it deliberately does not support yet:**
-
-- No RAG execution, retrieval, or retrieved-context handling.
-- No LLM-as-a-judge, hallucination detection, faithfulness, or semantic-similarity
-  evaluators -- `ExactMatchEvaluator` is a baseline only.
-- No observability, tracing, or reliability/statistical analysis.
-- No frontend, API server, authentication, or deployment infrastructure.
-- No real LLM provider adapter (only the deterministic mock adapter exists at this stage).
-
-See `research/notes/core_evaluation_engine_execution_model.md` for the conceptual model
-behind this design, and `scripts/run_core_engine_example.py` for a runnable example.
-
-## Current Implementation: Experiment System
-
-`src/llm_reliability/experiments/` builds a reproducible experiment on top of the Core
-Evaluation Engine, without duplicating it:
-
-```
-ExperimentDefinition (DatasetVersion + ModelConfig + EvaluatorConfig(s), fingerprinted)
-    -> ExperimentManager.execute_experiment (delegates to EvaluationRunner)
-    -> ExperimentRun (status, timestamps, a full configuration snapshot, and RunResult)
-    -> ExperimentRepository (local JSON persistence in this milestone)
+# Run both servers (backend :8000, console :5173)
+python run.py
 ```
 
-**What it currently supports:**
+- Console: http://localhost:5173 · API docs: http://127.0.0.1:8000/api/v1/docs
+- Run separately: `python -m uvicorn llm_reliability.api.app:app --port 8000` and
+  `cd frontend && npm run dev`.
+- Tests never touch `./experiments`; each API test uses a temporary store.
 
-- `DatasetVersion`: a content-addressed wrapper around the existing `Dataset`; its
-  `version_id` is a SHA-256 fingerprint of test case content, independent of the dataset's
-  human-readable name.
-- `EvaluatorConfig`: a stable, serializable record of an evaluator's name and parameters,
-  built from a live evaluator via a new `Evaluator.get_config()` hook -- never the
-  evaluator object itself.
-- `ExperimentDefinition`: combines a `DatasetVersion`, the existing `ModelConfig`, and one
-  or more `EvaluatorConfig` records, with a deterministic `config_fingerprint` derived only
-  from those three (never from identifiers, names, metadata, or timestamps).
-- `ExperimentManager`: creates and persists experiment definitions, and executes them by
-  delegating to the unmodified `EvaluationRunner`, then packages the result into an
-  `ExperimentRun`. Contains no evaluation logic of its own.
-- `ExperimentRun`: one execution of a definition, with its own `run_id`, timestamps,
-  explicit `RunStatus` (`succeeded` / `partially_succeeded` / `failed`), and a full
-  snapshot of the configuration used, so a persisted run is completely inspectable without
-  re-executing anything.
-- `LocalFileExperimentRepository`: an `ExperimentRepository` implementation storing one
-  human-readable JSON file per experiment and per run, with atomic writes and no silent
-  overwriting of an existing id. Loading validates persisted data (including a fingerprint
-  integrity check) back into real domain objects rather than returning raw dictionaries.
+## Running real models (local, no API key)
 
-**What it deliberately does not support yet:**
-
-- No database-backed persistence (PostgreSQL or otherwise) -- only local JSON files.
-- No multi-model orchestration (one model/application configuration per experiment).
-- No reliability, consistency, or statistical analysis across repeated runs.
-- No dashboard, frontend, or API layer.
-- No registry for reconstructing evaluator/adapter instances from persisted
-  configuration -- live instances are always supplied by the caller at execution time.
-
-See `research/notes/experiment_reproducibility_model.md` for the full reproducibility
-model, and `scripts/run_experiment_example.py` for a runnable example.
-
-## Current Implementation: Evaluation and Reliability Layer
-
-`src/llm_reliability/evaluation/` now supports multiple, complementary evaluation
-methods for the same generated answer, and `src/llm_reliability/reliability/` aggregates
-and classifies their results without collapsing them into a single score:
-
-```
-ModelResponse -> Evaluator(s): ExactMatchEvaluator, SemanticSimilarityEvaluator, LLMJudgeEvaluator
-    -> EvaluationResult(s) (status, criterion, score/label where applicable, own configuration)
-    -> summarize_run() -> EvaluationSummary (per-evaluator statistics, no overall score)
-    -> analyze_reliability() -> ReliabilityFinding(s) (disagreement, missing evidence,
-                                 evaluator failure, incorrect-per-evaluator)
+```bash
+ollama pull qwen3:4b-instruct && ollama pull gemma3:1b && ollama pull nomic-embed-text
+python scripts/run_reliability_study.py        # EXP-001 (~25 min on an RTX 3050 6 GB)
+python scripts/analyze_reliability_study.py    # results.json, results_tables.md, per_case.csv
 ```
 
-**What it currently supports:**
+To see the archived EXP-001 runs without re-running:
+`tar xzf research/experiments/EXP-001_local_rag_reliability/runs.tar.gz -C experiments`.
 
-- `EvaluationStatus`: an explicit, five-way status on every `EvaluationResult`
-  (`success`, `skipped`, `invalid_configuration`, `execution_error`,
-  `output_validation_error`), so "no judgment was possible" is never confused with "the
-  answer failed."
-- Evaluation criteria (`llm_reliability.evaluation.criteria`): stable identifiers for
-  *what* is assessed (currently `correctness`), separate from evaluators, which describe
-  *how*. The same criterion can be assessed by several evaluators.
-- `ExactMatchEvaluator`: unchanged baseline, now with explicit, configurable
-  normalization (`case_sensitive`, `collapse_whitespace`; see
-  `llm_reliability.evaluation.normalization`) instead of fixed behavior.
-- `SemanticSimilarityEvaluator`: a BERTScore-following complementary evaluator (Zhang et
-  al., 2020) behind a pluggable `SimilarityBackend`. The real backend
-  (`BertScoreBackend`) requires the optional `semantic` dependency group and is never
-  exercised by the standard test suite (no model download in unit tests); a deterministic
-  `FakeSimilarityBackend` validates the evaluator's contract instead.
-- `LLMJudgeEvaluator`: asks a judge model to apply an explicit, versioned `JudgeRubric`
-  (correctness against a reference, following Zheng et al., 2023), reusing the existing
-  `ModelAdapter` interface as the judge-model abstraction -- no parallel adapter
-  interface was introduced. Judge output is strictly parsed and validated; an invalid or
-  unparseable response produces an explicit error, never a fabricated score. Any
-  `ModelAdapter` (including `MockAdapter`) can serve as a deterministic fake judge in
-  tests.
-- `llm_reliability.reliability.summarize_run` / `analyze_reliability`: read-only
-  aggregation and per-test-case flagging over an existing `RunResult`, identifying
-  evaluator disagreement, missing evaluation evidence, evaluator failures, and
-  per-evaluator incorrect results -- never a hallucination determination.
-- A small, hand-curated benchmark (`data/eval_sets/evaluation_methodology_baseline_v1.json`,
-  24 test cases) for validating this evaluation methodology, not for measuring real model
-  capability.
-- Evaluator configuration (normalization settings, similarity threshold/backend, judge
-  model/rubric) is automatically part of the experiment configuration fingerprint from
-  Prompt 2, with no change to `llm_reliability.experiments` required.
+### Real models from the console
 
-**What it deliberately does not support yet:**
+1. Start the backend with the server URL set:
+   `LLM_RELIABILITY_OPENAI_BASE_URL=http://localhost:11434/v1 python run.py`.
+2. **Experiments → New experiment.** Choose:
+   - **SQuAD v1.1 subset**, with the first N questions, and closed book or top-K retrieval;
+   - **Local or self-hosted model**, with its served name (e.g. `qwen3:4b-instruct`);
+   - the checks. Give a judge model name to make the LLM judges real, and pick rubric v1 or v2.
+3. **Run.** The matching adapter is pre-selected:
+   - `openai-custom` for closed book;
+   - `openai-custom-rag` for real retrieval over the SQuAD passages with `nomic-embed-text`.
 
-- No hallucination detection, faithfulness, or groundedness evaluation (these require
-  context-grounded evaluation, not yet implemented).
-- No validation of LLM-as-a-judge's reliability against human annotation.
-- No reliability/statistical analysis across multiple runs of the same experiment (only
-  within a single run, so far).
-- No real LLM provider or judge-model integration (only deterministic fakes).
+   Tick the opt-in: every part that calls a model server is listed, including judges, and without
+   the opt-in the server returns 400. The run executes in the background and shows its progress.
+4. The run is **not** labelled Simulated. Its reproducibility record shows the git commit and
+   library versions.
 
-See `research/notes/evaluation_and_reliability_layer.md` for the full conceptual model,
-and `scripts/run_evaluation_layer_example.py` for a runnable example.
+Hosted OpenAI adapters need `OPENAI_API_KEY` in the server environment (not tested: no key was
+used). The same flow is available over the API: `POST /experiments` with `dataset_preset`,
+`retrieval_top_k`, `judge_model_id` and `judge_rubric_version`, then `POST /experiments/{id}/jobs`
+and poll `GET /jobs/{job_id}`.
 
-## Current Implementation: RAG Execution and Retrieval Evaluation
+Optional real BERTScore and SentenceTransformer embeddings, CPU only:
 
-`src/llm_reliability/rag/` implements a controlled RAG pipeline as an explicit,
-inspectable sequence of stages, and evaluates retrieval quality independently from
-answer quality:
-
-```
-Question -> Retriever (embed + rank chunks) -> Retrieved Context
-    -> Generation (existing ModelAdapter) -> Answer
-        -> RetrievalEvaluator(s): Hit@K, Recall@K, MRR (against explicit ground truth)
-        -> ContextSupportBaseline (answer-quality family; literal overlap, not faithfulness)
-        -> diagnose_rag_execution -> retrieval_failure / generation_failure_despite_relevant_context
-                                      / successful_grounded_execution / retrieval_evidence_unavailable
-                                      / undetermined
+```bash
+uv pip install torch --index-url https://download.pytorch.org/whl/cpu
+uv pip install -e ".[semantic,embeddings]"
+LLM_RELIABILITY_RUN_INTEGRATION_TESTS=1 pytest tests/evaluation/test_semantic_similarity_integration.py tests/rag/test_embeddings_integration.py
 ```
 
-**What it currently supports:**
+## How it works (one paragraph)
 
-- `Document` / `Chunk` / `FixedSizeChunker`: a deterministic, character-window chunking
-  baseline with explicit, validated `chunk_size`/`chunk_overlap` configuration.
-- `EmbeddingModel`: separates retrieval from any specific embedding provider.
-  `FakeEmbeddingModel` is deterministic and dependency-free for tests;
-  `SentenceTransformerEmbeddingModel` is the one real backend (Sentence Transformers was
-  already available in this environment), loaded lazily so importing/configuring it never
-  requires a model download.
-- `Retriever`: embeds a fixed chunk corpus once, ranks it against each query by cosine
-  similarity (`llm_reliability.rag.similarity`, no vector database), and returns the top-k
-  in ranked order with stable chunk/document identifiers and real similarity scores.
-- `RagPipeline`: composes retrieval with generation. It implements the existing
-  `ModelAdapter` interface, so it runs through the unmodified `EvaluationRunner` and
-  `ExperimentManager` with no changes to either. Retrieval evidence travels through
-  `ModelResponse.provider_metadata["rag"]`; retrieval ground truth travels through the
-  existing `TestCase.metadata["relevant_chunk_ids"]`. No persisted schema changed.
-- `RetrievalEvaluator` / `RetrievalEvaluationResult`: a type entirely separate from
-  answer-quality `EvaluationResult`, so retrieval and answer scores are never mixed.
-  `HitAtKEvaluator`, `RecallAtKEvaluator`, and `MeanReciprocalRankEvaluator` are scored
-  only when ground truth and retrieval evidence are both available; otherwise `SKIPPED`.
-- `ContextSupportBaseline`: a narrow, literal word-overlap check between an answer and its
-  retrieved context (answer-quality family, reusing the existing `Evaluator` interface
-  unchanged) -- explicitly not a faithfulness or hallucination determination.
-- `diagnose_rag_execution`: an evidence-based decision table combining a retrieval
-  hit/miss signal with an answer-correctness signal into one of five categories, reporting
-  `undetermined` rather than guessing when the evidence does not clearly support one.
-- RAG configuration (embedding model, chunk size/overlap, top-k, corpus content
-  fingerprint) is embedded in the experiment's `ModelConfig.extra_params`, which already
-  participates in the Prompt 2 configuration fingerprint -- no fingerprinting changes
-  were needed.
+An **experiment definition** pins a dataset version, model configuration and evaluator
+configurations under a SHA-256 fingerprint. **Executing** it through an allowlisted **adapter**
+(mock, RAG pipeline, OpenAI or OpenAI-compatible, replay) is refused if the evaluators, RAG
+settings or prompt template differ from the definition. Each test case is generated, then scored by every evaluator in
+isolation; execution success and evaluation verdicts are kept separate. A run is persisted as one
+JSON file with a full configuration snapshot and provenance (`adapter_id`,
+`executed_model_ids`, `simulated_components`, and an `environment` record: git commit, Python and
+library versions). Retrieval metrics, diagnoses and analytics are
+computed when results are read. Details and diagrams: the technical report, sections 4–9.
 
-**What it deliberately does not support yet:**
+## Evaluators and metrics
 
-- No semantic, hierarchical, or recursive chunking -- fixed-size only.
-- No vector database or approximate nearest-neighbor index.
-- No NLI-based faithfulness verification, claim extraction, or LLM-as-a-judge
-  faithfulness rubric.
-- No hallucination detection as a generic classifier.
-- No document ingestion system, multiple embedding providers, or plugin architecture.
+| Name | Measures | Notes |
+|---|---|---|
+| `exact_match` | Text equals the reference (case/whitespace normalized) | Strict; rejects paraphrases |
+| `squad_match` | SQuAD-normalized match against any gold answer; score = token F1 | Lexical |
+| `semantic_similarity` | BERTScore F1 ≥ threshold | The API registry uses a fake backend (labelled simulated). Real BERTScore (`.[semantic]`) is verified by opt-in integration tests |
+| `llm_judge` | Correctness vs reference by an LLM rubric | Real judge when `judge_model_id` is set. Rubric v1, or v2 (all accepted answers) |
+| `llm_faithfulness_judge` | Support by retrieved context | Real judge when `judge_model_id` is set; otherwise a canned demo judge (labelled simulated). v2 adds `no_claim` for abstentions |
+| Hit@K, Recall@K, Precision@K, MRR | Retrieval vs `relevant_chunk_ids` | Computed automatically for RAG runs at the run's own K |
+| Repeat consistency | Identical outputs and stable verdicts across repeats of one configuration and adapter | `/analytics/consistency`; Analysis → Reliability |
 
-See `research/notes/rag_execution_model.md` for the full conceptual model, and
-`tests/rag/test_end_to_end.py` for a runnable, fully controlled RAG experiment covering
-every diagnosis category.
+## API (all under `/api/v1`)
 
-**Setup:**
+| Method | Path | Purpose |
+|---|---|---|
+| GET | `/health`, `/providers` | Service status; provider readiness (no secrets) |
+| GET, POST | `/experiments` | List / create experiment definitions |
+| GET | `/experiments/{id}`, `/experiments/{id}/runs` | Definition; its runs |
+| POST | `/experiments/{id}/execute` | Run once with an allowlisted adapter (waits for the result) |
+| POST | `/experiments/{id}/jobs`; GET `/jobs`, `/jobs/{job_id}` | Run in the background, with progress |
+| GET | `/datasets` | Bundled dataset presets (SQuAD v1.1 subset) |
+| POST | `/benchmarks/execute`; GET `/benchmarks/{id}/runs` | Several adapters × repetitions |
+| GET | `/runs`, `/runs/{id}`, `/runs/{id}/test-cases[/{tc}]`, `/runs/{id}/summaries` | Runs, per-question results, summaries |
+| GET | `/diagnostics[/{run}/{tc}]` | Failure diagnoses with evidence |
+| GET | `/rag/retrieval-results[/{run}/{tc}]` | Retrieved passages and retrieval metrics |
+| GET | `/robustness[/{run}]` | Baseline/perturbation comparisons |
+| GET | `/analytics/overview`, `/evaluators`, `/failures`, `/retrieval`, `/robustness`, `/performance`, `/comparisons`, `/consistency`, `/trends/{experiment}` | Aggregates, agreement (Cohen's κ), comparisons, repeat consistency |
+
+## Repository layout
 
 ```
-pip install -e ".[dev]"
-pytest
-python scripts/run_core_engine_example.py
-python scripts/run_experiment_example.py
-python scripts/run_evaluation_layer_example.py
-
-# Optional: real BERTScore backend and its integration test (not required for the
-# standard test suite; downloads a pretrained model on first use).
-pip install -e ".[semantic]"
-LLM_RELIABILITY_RUN_INTEGRATION_TESTS=1 pytest tests/evaluation/test_semantic_similarity_integration.py
-
-# Optional: real Sentence Transformers embedding integration test (requires network
-# access on first use to download a pretrained model; not part of the standard suite).
-LLM_RELIABILITY_RUN_INTEGRATION_TESTS=1 pytest tests/rag/test_embeddings_integration.py
+src/llm_reliability/
+  evaluation/    domain models, EvaluationRunner, evaluators, adapters, closed-book prompting, replay
+  datasets/      loaders for bundled benchmark datasets (SQuAD subset, frozen paraphrases)
+  rag/           chunking, embeddings, retriever, RagPipeline, retrieval evaluators, faithfulness judge
+  experiments/   definitions, runs, fingerprints, ExperimentManager, JSON repository
+  providers/     OpenAI / OpenAI-compatible adapters with retries and token provenance
+  diagnostics/   failure taxonomy, diagnosis rules, sentence evidence, robustness pairs
+  reliability/   per-evaluator summaries, reliability findings
+  analytics/     aggregations, comparison + compatibility, agreement (kappa), repeat consistency,
+                 human-annotation export and agreement, proportions (Wilson, McNemar)
+  api/           FastAPI app, routers, schemas, allowlisted registries, live models, jobs
+frontend/        React + TypeScript console (Overview, Experiments, Results, Analysis)
+tests/           backend tests (pytest)
+scripts/         demo seeding, fixture export, examples, dataset builders, study runners + analyses
+data/            small versioned datasets (SQuAD v1.1 subset, methodology eval set)
+experiments/     experiment store: definitions are versioned; runs/ is git-ignored
+research/        project definition, design notes, experiments (EXP-001..003), annotation kit
+docs/            technical report (Markdown + PDF)
 ```
 
-## Repository Structure
+## Data and secrets
 
-```
-research/           Research notes, paper references, and reproducible experiments.
-  notes/            Learning notes and technical understanding documents.
-  papers/           Paper references and legally available summaries or links.
-  experiments/      Experiment definitions, configurations, results, and failure analysis.
-learning/           Temporary educational implementations for concept understanding.
-  neural_network_from_scratch/
-  transformer_from_scratch/
-src/                Platform source code.
-  llm_reliability/evaluation/   Core Evaluation Engine and evaluation methods
-                                 (see "Current Implementation" above).
-  llm_reliability/experiments/  Experiment System (see "Current Implementation" above).
-  llm_reliability/reliability/  Reliability analysis layer (see "Current Implementation" above).
-  llm_reliability/rag/          RAG execution and retrieval evaluation
-                                 (see "Current Implementation" above).
-tests/              Test suite.
-  evaluation/       Tests for the Core Evaluation Engine and evaluators.
-  experiments/      Tests for the Experiment System.
-  reliability/      Tests for the reliability analysis layer.
-  rag/              Tests for RAG execution and retrieval evaluation.
-configs/            Reproducible experiment and system configuration.
-data/               Benchmark metadata (small, curated, version-controlled).
-  eval_sets/        Small, hand-curated evaluation sets (see data/README.md).
-scripts/            Reproducible utility scripts.
-```
-
-## Python Version
-
-Python 3.13 is required. See `pyproject.toml` for the authoritative version constraint.
+- Experiment definitions are written to disk; requests containing credential-like keys
+  (`api_key`, `secret_key`, `token`, `password`, ...) are rejected. Keys belong in server
+  environment variables.
+- `experiments/runs/` is git-ignored. Findings belong in `research/experiments/` as documents;
+  EXP-001's raw runs are archived there as `runs.tar.gz`.
+- SQuAD-derived data is CC BY-SA 4.0 (Rajpurkar et al., 2016).

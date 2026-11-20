@@ -7,13 +7,12 @@ interface, never on a concrete library. ``FakeEmbeddingModel`` is
 deterministic and requires no dependency, so the standard test suite can
 exercise the full retrieval pipeline without network access or model
 downloads. ``SentenceTransformerEmbeddingModel`` is the one real
-implementation for this milestone (per the project's research plan);
-Sentence Transformers was already available in this environment, so no
-new dependency was required to enable it, but it imports the library
-lazily -- only inside ``embed()``, never at module import or construction
-time -- because the first real call downloads and caches a pretrained
-model, which requires network access this project's standard tests must
-never depend on.
+local implementation (per the project's research plan). It needs the
+optional ``embeddings`` dependency group (``sentence-transformers``, which
+pulls in ``torch``) and imports the library lazily -- only inside
+``embed()``, never at module import or construction time -- because the
+first real call downloads and caches a pretrained model, which requires
+network access this project's standard tests must never depend on.
 """
 
 from __future__ import annotations
@@ -95,7 +94,8 @@ class SentenceTransformerEmbeddingModel(EmbeddingModel):
     reading its configuration never requires the library or a model
     download. This is why it is never exercised by the standard, offline
     test suite (see ``tests/rag/test_embeddings_integration.py``, which
-    skips itself unless ``sentence-transformers`` is importable).
+    skips itself unless ``sentence-transformers`` is importable and
+    ``LLM_RELIABILITY_RUN_INTEGRATION_TESTS=1`` is set).
     """
 
     def __init__(self, model_id: str = "sentence-transformers/all-MiniLM-L6-v2") -> None:
@@ -112,8 +112,83 @@ class SentenceTransformerEmbeddingModel(EmbeddingModel):
             except ImportError as exc:
                 raise EmbeddingBackendError(
                     "The 'sentence-transformers' package is required to compute real "
-                    "embeddings but is not installed in this environment."
+                    "embeddings but is not installed in this environment. Install the "
+                    "'embeddings' optional dependency group to enable it."
                 ) from exc
             self._model = SentenceTransformer(self.model_id)
         vectors = self._model.encode(list(texts), convert_to_numpy=True)
         return [vector.tolist() for vector in vectors]
+
+
+class OpenAICompatibleEmbeddingModel(EmbeddingModel):
+    """Real embeddings from an OpenAI-compatible ``/v1/embeddings`` endpoint.
+
+    Works with a local Ollama server (for example ``nomic-embed-text``) or
+    any other OpenAI-compatible server, without adding a heavy local ML
+    dependency. Every call is an outbound network request, so this model is
+    only constructed by code that has explicitly opted in to real inference
+    (experiment scripts), never by the offline test suite, which injects a
+    fake ``client``.
+
+    ``document_prefix`` / ``query_prefix`` support embedding models that are
+    trained with task prefixes (``nomic-embed-text`` expects
+    ``"search_document: "`` and ``"search_query: "``). They are part of
+    ``get_config`` because they change the vectors.
+    """
+
+    def __init__(
+        self,
+        model_id: str,
+        base_url: str | None = None,
+        client: Any | None = None,
+        batch_size: int = 64,
+        document_prefix: str = "",
+        query_prefix: str = "",
+    ) -> None:
+        if batch_size <= 0:
+            raise ValueError("OpenAICompatibleEmbeddingModel.batch_size must be positive.")
+        self.model_id = model_id
+        self._base_url = base_url
+        self._batch_size = batch_size
+        self.document_prefix = document_prefix
+        self.query_prefix = query_prefix
+        if client is None:
+            from openai import OpenAI
+
+            client = OpenAI(api_key="local-dummy-key", base_url=base_url)
+        self._client = client
+
+    def get_config(self) -> dict[str, Any]:
+        return {
+            "model_id": self.model_id,
+            "backend": "openai_compatible_embeddings",
+            "document_prefix": self.document_prefix,
+            "query_prefix": self.query_prefix,
+        }
+
+    def embed(self, texts: Sequence[str]) -> list[list[float]]:
+        """Embed corpus passages (``Retriever`` uses ``embed`` for chunks)."""
+        return self._embed_raw([self.document_prefix + t for t in texts])
+
+    def embed_one(self, text: str) -> list[float]:
+        """Embed a query (``Retriever`` uses ``embed_one`` for the question)."""
+        return self._embed_raw([self.query_prefix + text])[0]
+
+    def _embed_raw(self, texts: Sequence[str]) -> list[list[float]]:
+        vectors: list[list[float]] = []
+        items = list(texts)
+        for start in range(0, len(items), self._batch_size):
+            batch = items[start : start + self._batch_size]
+            try:
+                response = self._client.embeddings.create(model=self.model_id, input=batch)
+            except Exception as exc:
+                raise EmbeddingBackendError(
+                    f"Embedding request to model '{self.model_id}' failed: {exc}"
+                ) from exc
+            data = sorted(response.data, key=lambda d: d.index)
+            if len(data) != len(batch):
+                raise EmbeddingBackendError(
+                    f"Embedding endpoint returned {len(data)} vectors for {len(batch)} inputs."
+                )
+            vectors.extend(list(d.embedding) for d in data)
+        return vectors

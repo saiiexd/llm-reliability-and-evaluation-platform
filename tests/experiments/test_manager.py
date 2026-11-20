@@ -120,6 +120,22 @@ class TestExecuteExperiment:
         with pytest.raises(ValueError, match="Evaluator mismatch"):
             manager.execute_experiment(definition, adapter, [OtherEvaluator()])
 
+    def test_evaluator_config_mismatch_is_rejected(self, manager):
+        """Same evaluator name but different configuration must not be recorded as declared."""
+        definition = manager.create_experiment(
+            experiment_id="exp-1",
+            name="exp",
+            dataset=_dataset("t1"),
+            model_config=ModelConfig(model_id="mock-adapter-v1"),
+            evaluators=[ExactMatchEvaluator(case_sensitive=False)],
+        )
+        adapter = MockAdapter(responses={"t1": "t1"})
+        with pytest.raises(ValueError, match="configuration mismatch"):
+            manager.execute_experiment(
+                definition, adapter, [ExactMatchEvaluator(case_sensitive=True)]
+            )
+        assert manager._repository.list_run_ids("exp-1") == []
+
     def test_two_runs_of_same_experiment_have_distinct_run_ids(self, manager):
         definition = manager.create_experiment(
             experiment_id="exp-1",
@@ -164,3 +180,31 @@ class TestExecuteExperiment:
         reloaded = manager.load_run(run.run_id)
         assert reloaded.status == run.status
         assert reloaded.result.num_succeeded == run.result.num_succeeded
+
+
+def test_legacy_judge_config_without_later_added_key_still_executes(tmp_path):
+    """Definitions saved before judge_model_config existed must stay executable."""
+    from llm_reliability.evaluation.models import ModelConfig as MC
+    from llm_reliability.experiments.models import EvaluatorConfig
+    from llm_reliability.rag.faithfulness_judge import LLMFaithfulnessEvaluator
+
+    mgr = ExperimentManager(LocalFileExperimentRepository(tmp_path))
+    judge = LLMFaithfulnessEvaluator(MockAdapter(), MC(model_id="fake-judge-v1"))
+    definition = mgr.create_experiment(
+        experiment_id="exp-legacy",
+        name="legacy",
+        dataset=_dataset("t1"),
+        model_config=MC(model_id="m"),
+        evaluators=[judge],
+    )
+    legacy_params = {k: v for k, v in judge.get_config().items() if k != "judge_model_config"}
+    definition.evaluator_configs = [EvaluatorConfig("llm_faithfulness_judge", legacy_params)]
+    run = mgr.execute_experiment(definition, MockAdapter(), [judge])
+    assert run.result is not None
+
+    # A key the old record DOES declare must still match exactly.
+    definition.evaluator_configs = [
+        EvaluatorConfig("llm_faithfulness_judge", {**legacy_params, "judge_model_id": "other"})
+    ]
+    with pytest.raises(ValueError, match="configuration mismatch"):
+        mgr.execute_experiment(definition, MockAdapter(), [judge])

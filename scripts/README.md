@@ -47,6 +47,39 @@ Scripts here automate clearly defined, repeatable tasks that support the researc
   cases, after persisting and reloading the experiment. Requires no network access or API
   credentials. Run with `python scripts/run_rag_example.py`.
 
+- `seed_live_experiments.py` -- seeds `./experiments` (or a given path) with the simulated
+  demo experiments and runs used by the console. `python scripts/seed_live_experiments.py [dir]`.
+- `export_frontend_fixtures.py` -- regenerates `frontend/src/data/fixtures/` (demo mode data)
+  from the same simulated scenarios through the real persistence and analytics code.
+- `build_squad_subset.py` -- builds `data/benchmarks/squad_v1_1_dev_subset_v1.json`
+  deterministically from the downloaded SQuAD v1.1 dev file (instructions in its docstring).
+- `run_reliability_study.py` -- runs EXP-001 against local Ollama models (real inference;
+  resumable; refuses to mix environments). See `research/experiments/EXP-001_local_rag_reliability/`.
+- `analyze_reliability_study.py` -- analyses EXP-001 runs (Wilson intervals, McNemar tests,
+  retrieval at the run's K, Cohen's kappa, consistency) and writes results files.
+- `export_annotation_sheet.py` -- writes a blind human-annotation sheet for answer correctness
+  (one row per distinct answer to a question, shuffled with a fixed seed), a key mapping each row
+  to every run and test case it represents (with a `guideline_example` flag for the 15 rows quoted
+  as worked examples in the guideline), and an overlap sheet (>= 20%, examples excluded) for a
+  second annotator. Creates no labels. See `research/annotation/`.
+- `analyze_human_agreement.py` -- reads filled sheets, the key and the store; reports
+  inter-annotator Cohen's kappa and, per correctness evaluator and arm, accuracy, precision,
+  recall and specificity (Wilson 95% intervals) and kappa against the human labels, with every
+  exclusion counted. Guideline-example rows are excluded from the primary result and the
+  inter-annotator kappa, and included in a sensitivity result. Refuses to run while no label is
+  filled in.
+- `build_paraphrase_set.py` -- generates, once, the frozen question-paraphrase set used by
+  EXP-002 (`data/benchmarks/squad_v1_1_dev_subset_v1_paraphrases_v1.json`) with a local model,
+  recording the prompt, model digest and automatic checks. Needs Ollama.
+- `run_robustness_study.py` -- runs EXP-002 (RQ5: reversed passage order, an irrelevant passage,
+  reworded questions, a free-form prompt, plus a repeated baseline as the noise floor) against
+  Ollama. Resumable; `--limit N --store DIR` for a pilot.
+- `analyze_robustness_study.py` -- the pre-registered EXP-002 analysis: verdict flips against the
+  baseline and the noise floor, McNemar tests, diagnosis consistency, retrieval identity checks.
+- `run_rejudge_study.py` -- EXP-003: replays the recorded answers of four runs (no new
+  generation) and judges them with rubric v1 and v2, then writes the analysis. `--analyze-only`
+  rewrites the tables from existing runs.
+
 ## Script Requirements
 
 Each script must:

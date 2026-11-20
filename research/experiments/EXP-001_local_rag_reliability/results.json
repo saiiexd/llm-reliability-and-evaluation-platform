@@ -1,0 +1,1510 @@
+{
+ "arms": {
+  "gemma-closed": [
+   {
+    "run_id": "966c6d32f8094650952e95695ea2df36",
+    "arm": "gemma-closed",
+    "repetition_index": 1,
+    "adapter_id": "ollama-closed-book",
+    "executed_model_ids": [
+     "gemma3:1b"
+    ],
+    "simulated_components": [],
+    "n_cases": 60,
+    "n_execution_errors": 0,
+    "evaluators": {
+     "exact_match": {
+      "passed": 2,
+      "scored": 60,
+      "pass_rate": 0.03333333333333333,
+      "ci95": [
+       0.009189126490150246,
+       0.11363987528925378
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "mismatch": 58,
+       "match": 2
+      },
+      "score_mean": 0.03333333333333333
+     },
+     "squad_match": {
+      "passed": 4,
+      "scored": 60,
+      "pass_rate": 0.06666666666666667,
+      "ci95": [
+       0.02622827414319792,
+       0.15925579893767722
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "mismatch": 56,
+       "match": 4
+      },
+      "score_mean": 0.12715127465127465
+     },
+     "llm_judge": {
+      "passed": 4,
+      "scored": 60,
+      "pass_rate": 0.06666666666666667,
+      "ci95": [
+       0.02622827414319792,
+       0.15925579893767722
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "incorrect": 24,
+       "partially_correct": 32,
+       "correct": 4
+      },
+      "score_mean": null
+     },
+     "llm_faithfulness_judge": {
+      "passed": 0,
+      "scored": 0,
+      "pass_rate": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "status_counts": {
+       "skipped": 60
+      },
+      "label_counts": {
+       "no_context": 60
+      },
+      "score_mean": null
+     }
+    },
+    "abstention_rate": 0.016666666666666666,
+    "latency_ms": {
+     "median": 54.87051750014871,
+     "p90": 94.88701250011218,
+     "max": 2209.184775999802
+    },
+    "total_tokens_mean": 65.7,
+    "failure_categories": {
+     "incorrect": 55,
+     "evaluator_disagreement": 3,
+     "correct": 2
+    },
+    "agreement": [
+     {
+      "pair": "exact_match vs llm_judge",
+      "cases": 60,
+      "agreement_rate": 0.9666666666666667,
+      "cohens_kappa": 0.6511627906976744,
+      "table_both_pass_a_only_b_only_both_fail": [
+       2,
+       0,
+       2,
+       56
+      ]
+     },
+     {
+      "pair": "exact_match vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.9666666666666667,
+      "cohens_kappa": 0.6511627906976744,
+      "table_both_pass_a_only_b_only_both_fail": [
+       2,
+       0,
+       2,
+       56
+      ]
+     },
+     {
+      "pair": "llm_judge vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.9666666666666667,
+      "cohens_kappa": 0.732142857142857,
+      "table_both_pass_a_only_b_only_both_fail": [
+       3,
+       1,
+       1,
+       55
+      ]
+     }
+    ]
+   }
+  ],
+  "gemma-rag-k3": [
+   {
+    "run_id": "eaa542685e1c4ae3854895e245c203b0",
+    "arm": "gemma-rag-k3",
+    "repetition_index": 1,
+    "adapter_id": "ollama-rag-k3",
+    "executed_model_ids": [
+     "gemma3:1b"
+    ],
+    "simulated_components": [],
+    "n_cases": 60,
+    "n_execution_errors": 0,
+    "evaluators": {
+     "exact_match": {
+      "passed": 15,
+      "scored": 60,
+      "pass_rate": 0.25,
+      "ci95": [
+       0.1577638557841185,
+       0.372323109454848
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "match": 15,
+       "mismatch": 45
+      },
+      "score_mean": 0.25
+     },
+     "squad_match": {
+      "passed": 26,
+      "scored": 60,
+      "pass_rate": 0.43333333333333335,
+      "ci95": [
+       0.31572200394400635,
+       0.5589678534530513
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "match": 26,
+       "mismatch": 34
+      },
+      "score_mean": 0.5792175984872063
+     },
+     "llm_judge": {
+      "passed": 30,
+      "scored": 60,
+      "pass_rate": 0.5,
+      "ci95": [
+       0.37734812427246284,
+       0.6226518757275372
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "correct": 30,
+       "incorrect": 15,
+       "partially_correct": 15
+      },
+      "score_mean": null
+     },
+     "llm_faithfulness_judge": {
+      "passed": 44,
+      "scored": 54,
+      "pass_rate": 0.8148148148148148,
+      "ci95": [
+       0.6916379770862061,
+       0.8961742549405703
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "supported": 44,
+       "contradicted": 7,
+       "unsupported": 3,
+       "undetermined": 6
+      },
+      "score_mean": null
+     }
+    },
+    "abstention_rate": 0.03333333333333333,
+    "latency_ms": {
+     "median": 114.68604600008803,
+     "p90": 182.76965999998538,
+     "max": 400.7293290001144
+    },
+    "total_tokens_mean": 494.01666666666665,
+    "retrieval": {
+     "k": 3,
+     "strict_mean": {
+      "hit_at_k": 0.8666666666666667,
+      "recall_at_k": 0.8666666666666667,
+      "mrr": 0.7194444444444444
+     },
+     "lenient_answer_containment_hit_rate": 0.9166666666666666,
+     "judge_correct_given_hit": [
+      0.5576923076923077,
+      0.42339524991516386,
+      0.6840515281141191
+     ],
+     "judge_correct_given_miss": [
+      0.125,
+      0.02241690886329617,
+      0.4708948057698615
+     ],
+     "n_hit": 52,
+     "n_miss": 8
+    },
+    "failure_categories": {
+     "correct": 14,
+     "contradicted": 5,
+     "generation_failure": 13,
+     "evaluator_disagreement": 19,
+     "retrieval_failure": 7,
+     "unsupported": 2
+    },
+    "agreement": [
+     {
+      "pair": "exact_match vs llm_judge",
+      "cases": 60,
+      "agreement_rate": 0.75,
+      "cohens_kappa": 0.5,
+      "table_both_pass_a_only_b_only_both_fail": [
+       15,
+       0,
+       15,
+       30
+      ]
+     },
+     {
+      "pair": "exact_match vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.8166666666666667,
+      "cohens_kappa": 0.6071428571428571,
+      "table_both_pass_a_only_b_only_both_fail": [
+       15,
+       0,
+       11,
+       34
+      ]
+     },
+     {
+      "pair": "llm_judge vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.8,
+      "cohens_kappa": 0.6000000000000001,
+      "table_both_pass_a_only_b_only_both_fail": [
+       22,
+       8,
+       4,
+       26
+      ]
+     }
+    ]
+   }
+  ],
+  "qwen-closed": [
+   {
+    "run_id": "5641557249174e219ccaf5115f4fd0c0",
+    "arm": "qwen-closed",
+    "repetition_index": 1,
+    "adapter_id": "ollama-closed-book",
+    "executed_model_ids": [
+     "qwen3:4b-instruct"
+    ],
+    "simulated_components": [],
+    "n_cases": 60,
+    "n_execution_errors": 0,
+    "evaluators": {
+     "exact_match": {
+      "passed": 3,
+      "scored": 60,
+      "pass_rate": 0.05,
+      "ci95": [
+       0.01714919117914121,
+       0.13700734625099836
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "mismatch": 57,
+       "match": 3
+      },
+      "score_mean": 0.05
+     },
+     "squad_match": {
+      "passed": 4,
+      "scored": 60,
+      "pass_rate": 0.06666666666666667,
+      "ci95": [
+       0.02622827414319792,
+       0.15925579893767722
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "mismatch": 56,
+       "match": 4
+      },
+      "score_mean": 0.18945399670257357
+     },
+     "llm_judge": {
+      "passed": 8,
+      "scored": 60,
+      "pass_rate": 0.13333333333333333,
+      "ci95": [
+       0.06914026978309641,
+       0.24165394590072103
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "partially_correct": 32,
+       "incorrect": 20,
+       "correct": 8
+      },
+      "score_mean": null
+     },
+     "llm_faithfulness_judge": {
+      "passed": 0,
+      "scored": 0,
+      "pass_rate": null,
+      "ci95": [
+       null,
+       null
+      ],
+      "status_counts": {
+       "skipped": 60
+      },
+      "label_counts": {
+       "no_context": 60
+      },
+      "score_mean": null
+     }
+    },
+    "abstention_rate": 0.25,
+    "latency_ms": {
+     "median": 119.22649699977228,
+     "p90": 402.130359900093,
+     "max": 1191.2017710001237
+    },
+    "total_tokens_mean": 67.78333333333333,
+    "failure_categories": {
+     "incorrect": 52,
+     "evaluator_disagreement": 5,
+     "correct": 3
+    },
+    "agreement": [
+     {
+      "pair": "exact_match vs llm_judge",
+      "cases": 60,
+      "agreement_rate": 0.9166666666666666,
+      "cohens_kappa": 0.5098039215686271,
+      "table_both_pass_a_only_b_only_both_fail": [
+       3,
+       0,
+       5,
+       52
+      ]
+     },
+     {
+      "pair": "exact_match vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.9833333333333333,
+      "cohens_kappa": 0.8484848484848482,
+      "table_both_pass_a_only_b_only_both_fail": [
+       3,
+       0,
+       1,
+       56
+      ]
+     },
+     {
+      "pair": "llm_judge vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.9333333333333333,
+      "cohens_kappa": 0.6341463414634149,
+      "table_both_pass_a_only_b_only_both_fail": [
+       4,
+       4,
+       0,
+       52
+      ]
+     }
+    ]
+   }
+  ],
+  "qwen-rag-k1": [
+   {
+    "run_id": "cb26774d080748058610dc75d085e8ce",
+    "arm": "qwen-rag-k1",
+    "repetition_index": 1,
+    "adapter_id": "ollama-rag-k1",
+    "executed_model_ids": [
+     "qwen3:4b-instruct"
+    ],
+    "simulated_components": [],
+    "n_cases": 60,
+    "n_execution_errors": 0,
+    "evaluators": {
+     "exact_match": {
+      "passed": 14,
+      "scored": 60,
+      "pass_rate": 0.23333333333333334,
+      "ci95": [
+       0.1443943161843107,
+       0.3543651134039202
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "mismatch": 46,
+       "match": 14
+      },
+      "score_mean": 0.23333333333333334
+     },
+     "squad_match": {
+      "passed": 22,
+      "scored": 60,
+      "pass_rate": 0.36666666666666664,
+      "ci95": [
+       0.2562073884620827,
+       0.4931723263320327
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "mismatch": 38,
+       "match": 22
+      },
+      "score_mean": 0.5143938663728785
+     },
+     "llm_judge": {
+      "passed": 30,
+      "scored": 60,
+      "pass_rate": 0.5,
+      "ci95": [
+       0.37734812427246284,
+       0.6226518757275372
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "partially_correct": 15,
+       "correct": 30,
+       "incorrect": 15
+      },
+      "score_mean": null
+     },
+     "llm_faithfulness_judge": {
+      "passed": 55,
+      "scored": 56,
+      "pass_rate": 0.9821428571428571,
+      "ci95": [
+       0.9055414182080672,
+       0.9968408710355361
+      ],
+      "status_counts": {
+       "success": 59,
+       "output_validation_error": 1
+      },
+      "label_counts": {
+       "supported": 55,
+       "undetermined": 3,
+       "contradicted": 1
+      },
+      "score_mean": null
+     }
+    },
+    "abstention_rate": 0.23333333333333334,
+    "latency_ms": {
+     "median": 218.7956985001165,
+     "p90": 374.2523139998866,
+     "max": 844.8942060003901
+    },
+    "total_tokens_mean": 223.21666666666667,
+    "retrieval": {
+     "k": 1,
+     "strict_mean": {
+      "hit_at_k": 0.6,
+      "recall_at_k": 0.6,
+      "mrr": 0.6
+     },
+     "lenient_answer_containment_hit_rate": 0.6333333333333333,
+     "judge_correct_given_hit": [
+      0.8055555555555556,
+      0.6497163793648479,
+      0.9024702798054665
+     ],
+     "judge_correct_given_miss": [
+      0.041666666666666664,
+      0.007393265354805126,
+      0.20242226248842232
+     ],
+     "n_hit": 36,
+     "n_miss": 24
+    },
+    "failure_categories": {
+     "retrieval_failure": 23,
+     "correct": 14,
+     "evaluator_disagreement": 18,
+     "generation_failure": 5
+    },
+    "agreement": [
+     {
+      "pair": "exact_match vs llm_judge",
+      "cases": 60,
+      "agreement_rate": 0.7333333333333333,
+      "cohens_kappa": 0.46666666666666656,
+      "table_both_pass_a_only_b_only_both_fail": [
+       14,
+       0,
+       16,
+       30
+      ]
+     },
+     {
+      "pair": "exact_match vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.8666666666666667,
+      "cohens_kappa": 0.689119170984456,
+      "table_both_pass_a_only_b_only_both_fail": [
+       14,
+       0,
+       8,
+       38
+      ]
+     },
+     {
+      "pair": "llm_judge vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.8,
+      "cohens_kappa": 0.6000000000000001,
+      "table_both_pass_a_only_b_only_both_fail": [
+       20,
+       10,
+       2,
+       28
+      ]
+     }
+    ]
+   }
+  ],
+  "qwen-rag-k3": [
+   {
+    "run_id": "ed81e245a23947e694503e8146c90383",
+    "arm": "qwen-rag-k3",
+    "repetition_index": 1,
+    "adapter_id": "ollama-rag-k3",
+    "executed_model_ids": [
+     "qwen3:4b-instruct"
+    ],
+    "simulated_components": [],
+    "n_cases": 60,
+    "n_execution_errors": 0,
+    "evaluators": {
+     "exact_match": {
+      "passed": 18,
+      "scored": 60,
+      "pass_rate": 0.3,
+      "ci95": [
+       0.19898010252726892,
+       0.42508946966390415
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "match": 18,
+       "mismatch": 42
+      },
+      "score_mean": 0.3
+     },
+     "squad_match": {
+      "passed": 26,
+      "scored": 60,
+      "pass_rate": 0.43333333333333335,
+      "ci95": [
+       0.31572200394400635,
+       0.5589678534530513
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "match": 26,
+       "mismatch": 34
+      },
+      "score_mean": 0.6472722887856147
+     },
+     "llm_judge": {
+      "passed": 35,
+      "scored": 60,
+      "pass_rate": 0.5833333333333334,
+      "ci95": [
+       0.45727854313239624,
+       0.6993591351212818
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "correct": 35,
+       "incorrect": 9,
+       "partially_correct": 16
+      },
+      "score_mean": null
+     },
+     "llm_faithfulness_judge": {
+      "passed": 57,
+      "scored": 58,
+      "pass_rate": 0.9827586206896551,
+      "ci95": [
+       0.9085892732270167,
+       0.9969500401154581
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "supported": 57,
+       "contradicted": 1,
+       "undetermined": 2
+      },
+      "score_mean": null
+     }
+    },
+    "abstention_rate": 0.1,
+    "latency_ms": {
+     "median": 350.4777789999025,
+     "p90": 608.6269698002525,
+     "max": 1352.4969109998892
+    },
+    "total_tokens_mean": 501.0833333333333,
+    "retrieval": {
+     "k": 3,
+     "strict_mean": {
+      "hit_at_k": 0.8666666666666667,
+      "recall_at_k": 0.8666666666666667,
+      "mrr": 0.7194444444444444
+     },
+     "lenient_answer_containment_hit_rate": 0.9166666666666666,
+     "judge_correct_given_hit": [
+      0.6538461538461539,
+      0.5180330221508072,
+      0.7684917192606138
+     ],
+     "judge_correct_given_miss": [
+      0.125,
+      0.02241690886329617,
+      0.4708948057698615
+     ],
+     "n_hit": 52,
+     "n_miss": 8
+    },
+    "failure_categories": {
+     "correct": 18,
+     "evaluator_disagreement": 21,
+     "generation_failure": 14,
+     "retrieval_failure": 7
+    },
+    "agreement": [
+     {
+      "pair": "exact_match vs llm_judge",
+      "cases": 60,
+      "agreement_rate": 0.7166666666666667,
+      "cohens_kappa": 0.46875,
+      "table_both_pass_a_only_b_only_both_fail": [
+       18,
+       0,
+       17,
+       25
+      ]
+     },
+     {
+      "pair": "exact_match vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.8666666666666667,
+      "cohens_kappa": 0.7183098591549296,
+      "table_both_pass_a_only_b_only_both_fail": [
+       18,
+       0,
+       8,
+       34
+      ]
+     },
+     {
+      "pair": "llm_judge vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.7166666666666667,
+      "cohens_kappa": 0.44565217391304346,
+      "table_both_pass_a_only_b_only_both_fail": [
+       22,
+       13,
+       4,
+       21
+      ]
+     }
+    ]
+   },
+   {
+    "run_id": "08415f8558ed49bc8837f80f7c220039",
+    "arm": "qwen-rag-k3",
+    "repetition_index": 2,
+    "adapter_id": "ollama-rag-k3",
+    "executed_model_ids": [
+     "qwen3:4b-instruct"
+    ],
+    "simulated_components": [],
+    "n_cases": 60,
+    "n_execution_errors": 0,
+    "evaluators": {
+     "exact_match": {
+      "passed": 18,
+      "scored": 60,
+      "pass_rate": 0.3,
+      "ci95": [
+       0.19898010252726892,
+       0.42508946966390415
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "match": 18,
+       "mismatch": 42
+      },
+      "score_mean": 0.3
+     },
+     "squad_match": {
+      "passed": 26,
+      "scored": 60,
+      "pass_rate": 0.43333333333333335,
+      "ci95": [
+       0.31572200394400635,
+       0.5589678534530513
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "match": 26,
+       "mismatch": 34
+      },
+      "score_mean": 0.6616170181303441
+     },
+     "llm_judge": {
+      "passed": 36,
+      "scored": 60,
+      "pass_rate": 0.6,
+      "ci95": [
+       0.47365824394206846,
+       0.714306969962345
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "correct": 36,
+       "incorrect": 9,
+       "partially_correct": 15
+      },
+      "score_mean": null
+     },
+     "llm_faithfulness_judge": {
+      "passed": 56,
+      "scored": 57,
+      "pass_rate": 0.9824561403508771,
+      "ci95": [
+       0.9070903306173727,
+       0.9968964152933198
+      ],
+      "status_counts": {
+       "success": 59,
+       "output_validation_error": 1
+      },
+      "label_counts": {
+       "supported": 56,
+       "contradicted": 1,
+       "undetermined": 2
+      },
+      "score_mean": null
+     }
+    },
+    "abstention_rate": 0.1,
+    "latency_ms": {
+     "median": 185.18554549996225,
+     "p90": 490.253163800071,
+     "max": 1184.6863470000244
+    },
+    "total_tokens_mean": 501.4166666666667,
+    "retrieval": {
+     "k": 3,
+     "strict_mean": {
+      "hit_at_k": 0.8666666666666667,
+      "recall_at_k": 0.8666666666666667,
+      "mrr": 0.7194444444444444
+     },
+     "lenient_answer_containment_hit_rate": 0.9166666666666666,
+     "judge_correct_given_hit": [
+      0.6730769230769231,
+      0.5375593513988892,
+      0.7847809826889593
+     ],
+     "judge_correct_given_miss": [
+      0.125,
+      0.02241690886329617,
+      0.4708948057698615
+     ],
+     "n_hit": 52,
+     "n_miss": 8
+    },
+    "failure_categories": {
+     "correct": 18,
+     "evaluator_disagreement": 22,
+     "generation_failure": 13,
+     "retrieval_failure": 7
+    },
+    "agreement": [
+     {
+      "pair": "exact_match vs llm_judge",
+      "cases": 60,
+      "agreement_rate": 0.7,
+      "cohens_kappa": 0.4444444444444444,
+      "table_both_pass_a_only_b_only_both_fail": [
+       18,
+       0,
+       18,
+       24
+      ]
+     },
+     {
+      "pair": "exact_match vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.8666666666666667,
+      "cohens_kappa": 0.7183098591549296,
+      "table_both_pass_a_only_b_only_both_fail": [
+       18,
+       0,
+       8,
+       34
+      ]
+     },
+     {
+      "pair": "llm_judge vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.7,
+      "cohens_kappa": 0.41558441558441545,
+      "table_both_pass_a_only_b_only_both_fail": [
+       22,
+       14,
+       4,
+       20
+      ]
+     }
+    ]
+   }
+  ],
+  "qwen-rag-k3-t08": [
+   {
+    "run_id": "fd56d9902936458a8a8f8a0a5dc2b648",
+    "arm": "qwen-rag-k3-t08",
+    "repetition_index": 1,
+    "adapter_id": "ollama-rag-k3",
+    "executed_model_ids": [
+     "qwen3:4b-instruct"
+    ],
+    "simulated_components": [],
+    "n_cases": 60,
+    "n_execution_errors": 0,
+    "evaluators": {
+     "exact_match": {
+      "passed": 18,
+      "scored": 60,
+      "pass_rate": 0.3,
+      "ci95": [
+       0.19898010252726892,
+       0.42508946966390415
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "match": 18,
+       "mismatch": 42
+      },
+      "score_mean": 0.3
+     },
+     "squad_match": {
+      "passed": 26,
+      "scored": 60,
+      "pass_rate": 0.43333333333333335,
+      "ci95": [
+       0.31572200394400635,
+       0.5589678534530513
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "match": 26,
+       "mismatch": 34
+      },
+      "score_mean": 0.6666497504044556
+     },
+     "llm_judge": {
+      "passed": 36,
+      "scored": 60,
+      "pass_rate": 0.6,
+      "ci95": [
+       0.47365824394206846,
+       0.714306969962345
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "correct": 36,
+       "incorrect": 9,
+       "partially_correct": 15
+      },
+      "score_mean": null
+     },
+     "llm_faithfulness_judge": {
+      "passed": 57,
+      "scored": 58,
+      "pass_rate": 0.9827586206896551,
+      "ci95": [
+       0.9085892732270167,
+       0.9969500401154581
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "supported": 57,
+       "contradicted": 1,
+       "undetermined": 2
+      },
+      "score_mean": null
+     }
+    },
+    "abstention_rate": 0.1,
+    "latency_ms": {
+     "median": 187.4389175000033,
+     "p90": 445.38795320017925,
+     "max": 821.5139399999316
+    },
+    "total_tokens_mean": 500.3666666666667,
+    "retrieval": {
+     "k": 3,
+     "strict_mean": {
+      "hit_at_k": 0.8666666666666667,
+      "recall_at_k": 0.8666666666666667,
+      "mrr": 0.7194444444444444
+     },
+     "lenient_answer_containment_hit_rate": 0.9166666666666666,
+     "judge_correct_given_hit": [
+      0.6730769230769231,
+      0.5375593513988892,
+      0.7847809826889593
+     ],
+     "judge_correct_given_miss": [
+      0.125,
+      0.02241690886329617,
+      0.4708948057698615
+     ],
+     "n_hit": 52,
+     "n_miss": 8
+    },
+    "failure_categories": {
+     "correct": 18,
+     "evaluator_disagreement": 22,
+     "generation_failure": 13,
+     "retrieval_failure": 7
+    },
+    "agreement": [
+     {
+      "pair": "exact_match vs llm_judge",
+      "cases": 60,
+      "agreement_rate": 0.7,
+      "cohens_kappa": 0.4444444444444444,
+      "table_both_pass_a_only_b_only_both_fail": [
+       18,
+       0,
+       18,
+       24
+      ]
+     },
+     {
+      "pair": "exact_match vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.8666666666666667,
+      "cohens_kappa": 0.7183098591549296,
+      "table_both_pass_a_only_b_only_both_fail": [
+       18,
+       0,
+       8,
+       34
+      ]
+     },
+     {
+      "pair": "llm_judge vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.7,
+      "cohens_kappa": 0.41558441558441545,
+      "table_both_pass_a_only_b_only_both_fail": [
+       22,
+       14,
+       4,
+       20
+      ]
+     }
+    ]
+   },
+   {
+    "run_id": "3b4a8c918b1a45ffa6fae1fa1eb83f69",
+    "arm": "qwen-rag-k3-t08",
+    "repetition_index": 2,
+    "adapter_id": "ollama-rag-k3",
+    "executed_model_ids": [
+     "qwen3:4b-instruct"
+    ],
+    "simulated_components": [],
+    "n_cases": 60,
+    "n_execution_errors": 0,
+    "evaluators": {
+     "exact_match": {
+      "passed": 17,
+      "scored": 60,
+      "pass_rate": 0.2833333333333333,
+      "ci95": [
+       0.1850667860430859,
+       0.40767525049735165
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "match": 17,
+       "mismatch": 43
+      },
+      "score_mean": 0.2833333333333333
+     },
+     "squad_match": {
+      "passed": 26,
+      "scored": 60,
+      "pass_rate": 0.43333333333333335,
+      "ci95": [
+       0.31572200394400635,
+       0.5589678534530513
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "match": 26,
+       "mismatch": 34
+      },
+      "score_mean": 0.6673163188296447
+     },
+     "llm_judge": {
+      "passed": 35,
+      "scored": 60,
+      "pass_rate": 0.5833333333333334,
+      "ci95": [
+       0.45727854313239624,
+       0.6993591351212818
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "correct": 35,
+       "incorrect": 8,
+       "partially_correct": 17
+      },
+      "score_mean": null
+     },
+     "llm_faithfulness_judge": {
+      "passed": 56,
+      "scored": 57,
+      "pass_rate": 0.9824561403508771,
+      "ci95": [
+       0.9070903306173727,
+       0.9968964152933198
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "supported": 56,
+       "undetermined": 3,
+       "contradicted": 1
+      },
+      "score_mean": null
+     }
+    },
+    "abstention_rate": 0.08333333333333333,
+    "latency_ms": {
+     "median": 183.00669799964453,
+     "p90": 448.02771400018173,
+     "max": 804.0279529996042
+    },
+    "total_tokens_mean": 500.8666666666667,
+    "retrieval": {
+     "k": 3,
+     "strict_mean": {
+      "hit_at_k": 0.8666666666666667,
+      "recall_at_k": 0.8666666666666667,
+      "mrr": 0.7194444444444444
+     },
+     "lenient_answer_containment_hit_rate": 0.9166666666666666,
+     "judge_correct_given_hit": [
+      0.6538461538461539,
+      0.5180330221508072,
+      0.7684917192606138
+     ],
+     "judge_correct_given_miss": [
+      0.125,
+      0.02241690886329617,
+      0.4708948057698615
+     ],
+     "n_hit": 52,
+     "n_miss": 8
+    },
+    "failure_categories": {
+     "correct": 17,
+     "evaluator_disagreement": 23,
+     "generation_failure": 13,
+     "retrieval_failure": 7
+    },
+    "agreement": [
+     {
+      "pair": "exact_match vs llm_judge",
+      "cases": 60,
+      "agreement_rate": 0.7,
+      "cohens_kappa": 0.4404145077720206,
+      "table_both_pass_a_only_b_only_both_fail": [
+       17,
+       0,
+       18,
+       25
+      ]
+     },
+     {
+      "pair": "exact_match vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.85,
+      "cohens_kappa": 0.6816037735849056,
+      "table_both_pass_a_only_b_only_both_fail": [
+       17,
+       0,
+       9,
+       34
+      ]
+     },
+     {
+      "pair": "llm_judge vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.6833333333333333,
+      "cohens_kappa": 0.3804347826086956,
+      "table_both_pass_a_only_b_only_both_fail": [
+       21,
+       14,
+       5,
+       20
+      ]
+     }
+    ]
+   },
+   {
+    "run_id": "e725d4d891bb43e7b7943a0a6beccd3d",
+    "arm": "qwen-rag-k3-t08",
+    "repetition_index": 3,
+    "adapter_id": "ollama-rag-k3",
+    "executed_model_ids": [
+     "qwen3:4b-instruct"
+    ],
+    "simulated_components": [],
+    "n_cases": 60,
+    "n_execution_errors": 0,
+    "evaluators": {
+     "exact_match": {
+      "passed": 19,
+      "scored": 60,
+      "pass_rate": 0.31666666666666665,
+      "ci95": [
+       0.21305705841174333,
+       0.4423400494301654
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "match": 19,
+       "mismatch": 41
+      },
+      "score_mean": 0.31666666666666665
+     },
+     "squad_match": {
+      "passed": 27,
+      "scored": 60,
+      "pass_rate": 0.45,
+      "ci95": [
+       0.33093453853760824,
+       0.575082854510185
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "match": 27,
+       "mismatch": 33
+      },
+      "score_mean": 0.6497418727071042
+     },
+     "llm_judge": {
+      "passed": 35,
+      "scored": 60,
+      "pass_rate": 0.5833333333333334,
+      "ci95": [
+       0.45727854313239624,
+       0.6993591351212818
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "correct": 35,
+       "incorrect": 8,
+       "partially_correct": 17
+      },
+      "score_mean": null
+     },
+     "llm_faithfulness_judge": {
+      "passed": 58,
+      "scored": 59,
+      "pass_rate": 0.9830508474576272,
+      "ci95": [
+       0.9100406253761469,
+       0.9970018433070186
+      ],
+      "status_counts": {
+       "success": 60
+      },
+      "label_counts": {
+       "supported": 58,
+       "contradicted": 1,
+       "undetermined": 1
+      },
+      "score_mean": null
+     }
+    },
+    "abstention_rate": 0.1,
+    "latency_ms": {
+     "median": 182.8473689997736,
+     "p90": 452.09056150015385,
+     "max": 1168.094089999613
+    },
+    "total_tokens_mean": 501.31666666666666,
+    "retrieval": {
+     "k": 3,
+     "strict_mean": {
+      "hit_at_k": 0.8666666666666667,
+      "recall_at_k": 0.8666666666666667,
+      "mrr": 0.7194444444444444
+     },
+     "lenient_answer_containment_hit_rate": 0.9166666666666666,
+     "judge_correct_given_hit": [
+      0.6538461538461539,
+      0.5180330221508072,
+      0.7684917192606138
+     ],
+     "judge_correct_given_miss": [
+      0.125,
+      0.02241690886329617,
+      0.4708948057698615
+     ],
+     "n_hit": 52,
+     "n_miss": 8
+    },
+    "failure_categories": {
+     "correct": 19,
+     "evaluator_disagreement": 20,
+     "generation_failure": 14,
+     "retrieval_failure": 7
+    },
+    "agreement": [
+     {
+      "pair": "exact_match vs llm_judge",
+      "cases": 60,
+      "agreement_rate": 0.7333333333333333,
+      "cohens_kappa": 0.4973821989528795,
+      "table_both_pass_a_only_b_only_both_fail": [
+       19,
+       0,
+       16,
+       25
+      ]
+     },
+     {
+      "pair": "exact_match vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.8666666666666667,
+      "cohens_kappa": 0.7231833910034603,
+      "table_both_pass_a_only_b_only_both_fail": [
+       19,
+       0,
+       8,
+       33
+      ]
+     },
+     {
+      "pair": "llm_judge vs squad_match",
+      "cases": 60,
+      "agreement_rate": 0.7333333333333333,
+      "cohens_kappa": 0.47540983606557363,
+      "table_both_pass_a_only_b_only_both_fail": [
+       23,
+       12,
+       4,
+       21
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "contrasts": [
+  {
+   "label": "Retrieval effect, qwen3:4b (closed book vs top-3)",
+   "a": "qwen-closed",
+   "b": "qwen-rag-k3",
+   "results": [
+    {
+     "evaluator": "llm_judge",
+     "n_paired": 60,
+     "a_pass": 8,
+     "b_pass": 35,
+     "a_only": 2,
+     "b_only": 29,
+     "mcnemar_exact_p": 4.628673195838928e-07
+    },
+    {
+     "evaluator": "squad_match",
+     "n_paired": 60,
+     "a_pass": 4,
+     "b_pass": 26,
+     "a_only": 1,
+     "b_only": 23,
+     "mcnemar_exact_p": 2.9802322387695312e-06
+    }
+   ]
+  },
+  {
+   "label": "Retrieval depth, qwen3:4b (top-1 vs top-3)",
+   "a": "qwen-rag-k1",
+   "b": "qwen-rag-k3",
+   "results": [
+    {
+     "evaluator": "llm_judge",
+     "n_paired": 60,
+     "a_pass": 30,
+     "b_pass": 35,
+     "a_only": 3,
+     "b_only": 8,
+     "mcnemar_exact_p": 0.2265625
+    },
+    {
+     "evaluator": "squad_match",
+     "n_paired": 60,
+     "a_pass": 22,
+     "b_pass": 26,
+     "a_only": 4,
+     "b_only": 8,
+     "mcnemar_exact_p": 0.3876953125
+    }
+   ]
+  },
+  {
+   "label": "Retrieval effect, gemma3:1b (closed book vs top-3)",
+   "a": "gemma-closed",
+   "b": "gemma-rag-k3",
+   "results": [
+    {
+     "evaluator": "llm_judge",
+     "n_paired": 60,
+     "a_pass": 4,
+     "b_pass": 30,
+     "a_only": 1,
+     "b_only": 27,
+     "mcnemar_exact_p": 2.1606683731079102e-07
+    },
+    {
+     "evaluator": "squad_match",
+     "n_paired": 60,
+     "a_pass": 4,
+     "b_pass": 26,
+     "a_only": 1,
+     "b_only": 23,
+     "mcnemar_exact_p": 2.9802322387695312e-06
+    }
+   ]
+  },
+  {
+   "label": "Model effect with top-3 retrieval (gemma3:1b vs qwen3:4b)",
+   "a": "gemma-rag-k3",
+   "b": "qwen-rag-k3",
+   "results": [
+    {
+     "evaluator": "llm_judge",
+     "n_paired": 60,
+     "a_pass": 30,
+     "b_pass": 35,
+     "a_only": 4,
+     "b_only": 9,
+     "mcnemar_exact_p": 0.266845703125
+    },
+    {
+     "evaluator": "squad_match",
+     "n_paired": 60,
+     "a_pass": 26,
+     "b_pass": 26,
+     "a_only": 9,
+     "b_only": 9,
+     "mcnemar_exact_p": 1.0
+    }
+   ]
+  }
+ ],
+ "determinism": {
+  "arm": "qwen-rag-k3",
+  "identical_outputs": 57,
+  "n": 60
+ },
+ "consistency": {
+  "arm": "qwen-rag-k3-t08",
+  "repetitions": 3,
+  "questions": 60,
+  "all_outputs_identical": 50,
+  "judge_verdict_unanimous": 59,
+  "judge_verdict_flipped": 1,
+  "judge_pass_rate_per_run": [
+   0.6,
+   0.5833333333333334,
+   0.5833333333333334
+  ]
+ },
+ "environment": {
+  "git_commit": "c9f5cdf9fdea175a769a7a09191ff5a4c5b00143",
+  "git_dirty_src_or_scripts": false,
+  "model_digests": {
+   "gemma3:1b": "97558784bdc9175075a72655bf360b15da17df6b3b9e5182af9f8c0c8e58ba7c",
+   "nomic-embed-text": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+   "qwen3:4b-instruct": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0"
+  },
+  "ollama_version": "0.40.16",
+  "platform": "Linux-7.3.4-1-cachyos-x86_64-with-glibc2.44",
+  "python": "3.13.18",
+  "study_id": "EXP-001"
+ }
+}

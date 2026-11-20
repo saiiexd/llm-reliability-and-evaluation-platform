@@ -1,0 +1,555 @@
+row_id,overlap,guideline_example,experiment_id,run_id,repetition_index,test_case_id,normalized_answer,raw_answer
+R001,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e1e9dfe3433e14004231fc,problem is determining whether two graphs have same structure which involves checking if theres bijection between their vertices that preserves adjacency answer graph isomorphism problem,"The problem is determining whether two graphs have the same structure, which involves checking if there's a bijection between their vertices that preserves adjacency. 
+
+Answer: Graph isomorphism problem"
+R002,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5726e5c95951b619008f81ce,pain management psychiatry anticoagulation clinics herbal medicine neurologyepilepsy management pediatrics neonatal pharmacists,"pain management, psychiatry, anti-coagulation clinics, herbal medicine, neurology/epilepsy management, pediatrics, neonatal pharmacists"
+R003,0,1,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5726dd71f1498d1400e8edd8,bernard leach josiah wedgwood and william de morgan,"Bernard Leach, Josiah Wedgwood, and William De Morgan"
+R004,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5728dafe3acd2414000e005d,individual is final judge of right and wrong,The individual is the final judge of right and wrong.
+R004,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5728dafe3acd2414000e005d,individual is final judge of right and wrong,The individual is the final judge of right and wrong.
+R004,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5728dafe3acd2414000e005d,individual is final judge of right and wrong,The individual is the final judge of right and wrong.
+R004,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5728dafe3acd2414000e005d,individual is final judge of right and wrong,The individual is the final judge of right and wrong.
+R004,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5728dafe3acd2414000e005d,individual is final judge of right and wrong,The individual is the final judge of right and wrong.
+R005,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e1ce08e3433e14004231a4,human intelligence,Human intelligence
+R006,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5726fe95dd62a815002e9736,statue of st john baptist,the statue of St John the Baptist
+R006,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5726fe95dd62a815002e9736,statue of st john baptist,The statue of St John the Baptist
+R006,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5726fe95dd62a815002e9736,statue of st john baptist,The statue of St John the Baptist
+R006,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5726fe95dd62a815002e9736,statue of st john baptist,The statue of St John the Baptist
+R006,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5726fe95dd62a815002e9736,statue of st john baptist,The statue of St John the Baptist
+R006,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5726fe95dd62a815002e9736,statue of st john baptist,The statue of St John the Baptist
+R007,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5729f9953f37b31900478622,testosterone seems to be immunosuppressive,Testosterone seems to be immunosuppressive.
+R007,1,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5729f9953f37b31900478622,testosterone seems to be immunosuppressive,Testosterone seems to be immunosuppressive.
+R007,1,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5729f9953f37b31900478622,testosterone seems to be immunosuppressive,Testosterone seems to be immunosuppressive.
+R007,1,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5729f9953f37b31900478622,testosterone seems to be immunosuppressive,Testosterone seems to be immunosuppressive.
+R008,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-57269c06708984140094cba2,neobyzantine,Neo-Byzantine
+R009,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e1ee4de3433e1400423210,complexity is sufficient,Complexity is sufficient.
+R010,1,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e7683d00c9c71400d770ce,national longitudinal study of adolescent health,The National Longitudinal Study of Adolescent Health
+R011,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e1ded7cd28a01900c67bd4,ladner did,Ladner did
+R012,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5729f12e3f37b319004785e3,specific pathogens or pathogeninfected cells,specific pathogens or pathogen-infected cells
+R012,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5729f12e3f37b319004785e3,specific pathogens or pathogeninfected cells,specific pathogens or pathogen-infected cells
+R012,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5729f12e3f37b319004785e3,specific pathogens or pathogeninfected cells,specific pathogens or pathogen-infected cells
+R012,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5729f12e3f37b319004785e3,specific pathogens or pathogeninfected cells,specific pathogens or pathogen-infected cells
+R012,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5729f12e3f37b319004785e3,specific pathogens or pathogeninfected cells,specific pathogens or pathogen-infected cells
+R012,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5729f12e3f37b319004785e3,specific pathogens or pathogeninfected cells,specific pathogens or pathogen-infected cells
+R013,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e1c7e2cd28a01900c67b76,l is strictly contained in pspace,L is strictly contained in PSPACE.
+R014,1,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e76abf37bdd419002c3f76,organizational change relationships with students fellow teachers and administrative personnel working environment expectations to substitute long hours with heavy workload and inspections,"Organizational change, relationships with students, fellow teachers, and administrative personnel, working environment, expectations to substitute, long hours with a heavy workload, and inspections."
+R014,1,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e76abf37bdd419002c3f76,organizational change relationships with students fellow teachers and administrative personnel working environment expectations to substitute long hours with heavy workload and inspections,"Organizational change, relationships with students, fellow teachers, and administrative personnel, working environment, expectations to substitute, long hours with a heavy workload, and inspections."
+R015,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5726f0e35951b619008f82fa,no known case of any us citizens buying canadian drugs for personal use with prescription who has ever been charged by authorities,"No known case of any U.S. citizens buying Canadian drugs for personal use with a prescription, who has ever been charged by authorities."
+R015,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5726f0e35951b619008f82fa,no known case of any us citizens buying canadian drugs for personal use with prescription who has ever been charged by authorities,"No known case of any U.S. citizens buying Canadian drugs for personal use with a prescription, who has ever been charged by authorities."
+R015,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5726f0e35951b619008f82fa,no known case of any us citizens buying canadian drugs for personal use with prescription who has ever been charged by authorities,"No known case of any U.S. citizens buying Canadian drugs for personal use with a prescription, who has ever been charged by authorities."
+R015,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5726f0e35951b619008f82fa,no known case of any us citizens buying canadian drugs for personal use with prescription who has ever been charged by authorities,"No known case of any U.S. citizens buying Canadian drugs for personal use with a prescription, who has ever been charged by authorities."
+R015,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5726f0e35951b619008f82fa,no known case of any us citizens buying canadian drugs for personal use with prescription who has ever been charged by authorities,"No known case of any U.S. citizens buying Canadian drugs for personal use with a prescription, who has ever been charged by authorities."
+R016,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5726eb4b5951b619008f826f,online pharmacies offer remote access and convenience while community pharmacies are physical locations providing inperson service,"Online pharmacies offer remote access and convenience, while community pharmacies are physical locations providing in-person service."
+R017,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-572a0e4b6aef051400155216,malaria parasite plasmodium falciparum,Malaria parasite (Plasmodium falciparum)
+R018,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5728fd3c3f37b31900477f2f,justice compassion and rehabilitation,"Justice, compassion, and rehabilitation."
+R019,1,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e75a9037bdd419002c3ec7,death sentence for certain serious crimes,Death sentence for certain serious crimes
+R020,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5728eb1a3acd2414000e01c9,because they dont believe in legitimacy of any government,because they don't believe in the legitimacy of any government
+R020,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5728eb1a3acd2414000e01c9,because they dont believe in legitimacy of any government,because they don't believe in the legitimacy of any government
+R020,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5728eb1a3acd2414000e01c9,because they dont believe in legitimacy of any government,because they don't believe in the legitimacy of any government
+R020,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5728eb1a3acd2414000e01c9,because they dont believe in legitimacy of any government,because they don't believe in the legitimacy of any government
+R020,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5728eb1a3acd2414000e01c9,because they dont believe in legitimacy of any government,because they don't believe in the legitimacy of any government
+R020,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5728eb1a3acd2414000e01c9,because they dont believe in legitimacy of any government,because they don't believe in the legitimacy of any government
+R021,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e1ded7cd28a01900c67bd4,i dont know,I don't know
+R021,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e1ded7cd28a01900c67bd4,i dont know,I don't know
+R021,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e1ded7cd28a01900c67bd4,i dont know,I don't know
+R021,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e1ded7cd28a01900c67bd4,i dont know,I don't know
+R021,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e1ded7cd28a01900c67bd4,i dont know,I don't know
+R021,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e1ded7cd28a01900c67bd4,i dont know,I don't know
+R021,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e1ded7cd28a01900c67bd4,i dont know,I don't know
+R022,1,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-572a0a686aef0514001551f0,soluble components,soluble components
+R023,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-57270ab9708984140094d8fa,british,"British
+"
+R024,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5726e1fcdd62a815002e93c7,rembrandt van rijn,Rembrandt van Rijn
+R025,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5729f5a03f37b31900478607,cd4 t cells # 4,CD4+ T cells
+R026,1,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-57268294708984140094c87a,europe north america asia and north africa,"Europe, North America, Asia and North Africa"
+R026,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-57268294708984140094c87a,europe north america asia and north africa,"Europe, North America, Asia and North Africa"
+R026,1,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-57268294708984140094c87a,europe north america asia and north africa,"Europe, North America, Asia and North Africa"
+R026,1,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-57268294708984140094c87a,europe north america asia and north africa,"Europe, North America, Asia and North Africa"
+R026,1,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-57268294708984140094c87a,europe north america asia and north africa,"Europe, North America, Asia and North Africa"
+R026,1,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-57268294708984140094c87a,europe north america asia and north africa,"Europe, North America, Asia and North Africa"
+R026,1,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-57268294708984140094c87a,europe north america asia and north africa,"Europe, North America, Asia and North Africa"
+R027,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5726f7715951b619008f8391,i dont know,I don't know
+R028,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5726f7715951b619008f8391,exaggerating their seriousness,exaggerating their seriousness
+R028,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5726f7715951b619008f8391,exaggerating their seriousness,exaggerating their seriousness
+R028,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5726f7715951b619008f8391,exaggerating their seriousness,exaggerating their seriousness
+R028,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5726f7715951b619008f8391,exaggerating their seriousness,exaggerating their seriousness
+R028,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5726f7715951b619008f8391,exaggerating their seriousness,exaggerating their seriousness
+R029,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e7586d37bdd419002c3eb6,us supreme court,US Supreme Court
+R029,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e7586d37bdd419002c3eb6,us supreme court,US Supreme Court
+R029,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e7586d37bdd419002c3eb6,us supreme court,US Supreme Court
+R029,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e7586d37bdd419002c3eb6,us supreme court,US Supreme Court
+R029,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e7586d37bdd419002c3eb6,us supreme court,US Supreme Court
+R029,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e7586d37bdd419002c3eb6,us supreme court,US Supreme Court
+R029,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e7586d37bdd419002c3eb6,us supreme court,US Supreme Court
+R030,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e1b00ce3433e140042309e,turing machine is mathematical model of general computing machine,A Turing machine is a mathematical model of a general computing machine.
+R031,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5726f7715951b619008f8391,sell more medications to patient,Sell more medications to the patient
+R032,1,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e202e9e3433e1400423243,np nphard npcomplete,"NP, NP-hard, NP-complete"
+R033,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5728ed94ff5b5019007da97e,moral principle,Moral principle
+R034,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-572908c13f37b31900477fbd,leukocytes,Leukocytes
+R034,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-572908c13f37b31900477fbd,leukocytes,Leukocytes
+R034,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-572908c13f37b31900477fbd,leukocytes,Leukocytes
+R034,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-572908c13f37b31900477fbd,leukocytes,Leukocytes
+R034,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-572908c13f37b31900477fbd,leukocytes,Leukocytes
+R034,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-572908c13f37b31900477fbd,leukocytes,Leukocytes
+R034,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-572908c13f37b31900477fbd,leukocytes,Leukocytes
+R034,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-572908c13f37b31900477fbd,leukocytes,Leukocytes
+R035,1,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e1c7e2cd28a01900c67b76,space,"Space
+"
+R035,1,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e1c7e2cd28a01900c67b76,space,Space
+R036,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-57268d02f1498d1400e8e378,sir joshua temple,Sir Joshua Temple
+R037,1,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e75a9037bdd419002c3ec7,detention is one of most common punishments in schools in singapore,Detention is one of the most common punishments in schools in Singapore.
+R037,1,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e75a9037bdd419002c3ec7,detention is one of most common punishments in schools in singapore,Detention is one of the most common punishments in schools in Singapore.
+R037,1,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e75a9037bdd419002c3ec7,detention is one of most common punishments in schools in singapore,Detention is one of the most common punishments in schools in Singapore.
+R038,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5726dd71f1498d1400e8edd8,josiah wedgwood william de morgan and bernard leach,"Josiah Wedgwood, William De Morgan and Bernard Leach"
+R038,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5726dd71f1498d1400e8edd8,josiah wedgwood william de morgan and bernard leach,"Josiah Wedgwood, William De Morgan and Bernard Leach"
+R039,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5728e715ff5b5019007da917,rebelling against what they deem to be unfair laws,Rebelling against what they deem to be unfair laws.
+R040,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e7683d00c9c71400d770ce,"study covered subjects in 80000 schools # 80,000","The study covered subjects in 80,000 schools."
+R041,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5726e985dd62a815002e94de,patients providers and healthcare services,"Patients, providers, and healthcare services"
+R042,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e773fa00c9c71400d7714d,bachelors degree,Bachelor's degree
+R042,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e773fa00c9c71400d7714d,bachelors degree,Bachelor's Degree
+R042,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e773fa00c9c71400d7714d,bachelors degree,Bachelor's degree
+R042,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e773fa00c9c71400d7714d,bachelors degree,a bachelor's degree
+R042,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e773fa00c9c71400d7714d,bachelors degree,a bachelor's degree
+R042,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e773fa00c9c71400d7714d,bachelors degree,a bachelor's degree
+R042,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e773fa00c9c71400d7714d,bachelors degree,a bachelor's degree
+R042,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e773fa00c9c71400d7714d,bachelors degree,a bachelor's degree
+R042,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e773fa00c9c71400d7714d,bachelors degree,a bachelor's degree
+R043,1,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5726ed6cf1498d1400e8f010,prescribe medications online,Prescribe medications online
+R044,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5726f8aef1498d1400e8f170,vertebrates possess second layer of protection adaptive immune system,"Vertebrates possess a second layer of protection, the adaptive immune system."
+R045,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5728e8212ca10214002daa6c,i dont know,I don't know
+R045,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5728e8212ca10214002daa6c,i dont know,I don't know
+R045,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5728e8212ca10214002daa6c,i dont know,I don't know
+R045,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5728e8212ca10214002daa6c,i dont know,I don't know
+R045,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5728e8212ca10214002daa6c,i dont know,I don't know
+R045,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5728e8212ca10214002daa6c,i dont know,I don't know
+R045,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5728e8212ca10214002daa6c,i dont know,I don't know
+R046,1,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5729fa40af94a219006aa711,nutritional deprivation,Nutritional deprivation
+R047,1,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e1efa0e3433e140042321a,npcomplete,NP-complete
+R048,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5726dd71f1498d1400e8edd8,josiah wedgwood bernard leach and william de morgan,"Josiah Wedgwood, Bernard Leach and William De Morgan"
+R048,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5726dd71f1498d1400e8edd8,josiah wedgwood bernard leach and william de morgan,"Josiah Wedgwood, Bernard Leach and William De Morgan"
+R049,1,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e7586d37bdd419002c3eb6,supreme court,Supreme Court
+R049,1,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e7586d37bdd419002c3eb6,supreme court,Supreme Court
+R050,1,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5726d8bd708984140094d35b,pharmacy,Pharmacy
+R051,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5729f9953f37b31900478622,immunosuppressive,Immunosuppressive
+R052,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-572a0e4b6aef051400155216,trypanosoma brucei,Trypanosoma brucei
+R052,1,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-572a0e4b6aef051400155216,trypanosoma brucei,Trypanosoma brucei
+R052,1,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-572a0e4b6aef051400155216,trypanosoma brucei,Trypanosoma brucei
+R052,1,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-572a0e4b6aef051400155216,trypanosoma brucei,Trypanosoma brucei
+R052,1,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-572a0e4b6aef051400155216,trypanosoma brucei,Trypanosoma brucei
+R052,1,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-572a0e4b6aef051400155216,trypanosoma brucei,Trypanosoma brucei
+R053,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e1ce08e3433e14004231a4,number of variables and interactions involved,The number of variables and interactions involved.
+R054,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e76f7000c9c71400d7712d,teachers are recruited from education graduates and certified professionals,Teachers are recruited from education graduates and certified professionals.
+R055,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5728fb6a1d04691400778ef5,use of force and violence,use of force and violence
+R056,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5728dddc2ca10214002da9d4,i dont know,I don't know
+R057,1,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e75a9037bdd419002c3ec7,street confinement,Street confinement
+R058,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e7714a00c9c71400d77139,significant income,Significant income.
+R059,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5728dafe3acd2414000e005d,individual,The individual
+R059,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5728dafe3acd2414000e005d,individual,the individual
+R060,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e7683d00c9c71400d770ce,"sample was drawn from list of 80000 schools # 80,000","The sample was drawn from a list of 80,000 schools."
+R060,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e7683d00c9c71400d770ce,"sample was drawn from list of 80000 schools # 80,000","The sample was drawn from a list of 80,000 schools."
+R061,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5726f8aef1498d1400e8f170,adaptive immune system,adaptive immune system
+R061,1,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5726f8aef1498d1400e8f170,adaptive immune system,The adaptive immune system
+R061,1,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5726f8aef1498d1400e8f170,adaptive immune system,The adaptive immune system
+R061,1,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5726f8aef1498d1400e8f170,adaptive immune system,The adaptive immune system
+R061,1,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5726f8aef1498d1400e8f170,adaptive immune system,The adaptive immune system
+R061,1,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5726f8aef1498d1400e8f170,adaptive immune system,The adaptive immune system
+R062,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-572822233acd2414000df559,1854 # 1854,1854
+R063,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e75a9037bdd419002c3ec7,detention,Detention
+R063,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e75a9037bdd419002c3ec7,detention,Detention
+R063,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e75a9037bdd419002c3ec7,detention,detention
+R064,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5726dd71f1498d1400e8edd8,wedgwood william morris and josiah wedgwood,"Wedgwood, William Morris, and Josiah Wedgwood."
+R065,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-57270ab9708984140094d8fa,va museum of childhood,The V&A Museum of Childhood.
+R065,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-57270ab9708984140094d8fa,va museum of childhood,The V&A Museum of Childhood.
+R066,0,1,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5726ed6cf1498d1400e8f010,sell prescription drugs without prescription,Sell prescription drugs without a prescription.
+R067,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e761d037bdd419002c3f15,i dont know,I don't know
+R067,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e761d037bdd419002c3f15,i dont know,I don't know
+R067,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e761d037bdd419002c3f15,i dont know,I don't know
+R067,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e761d037bdd419002c3f15,i dont know,I don't know
+R067,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e761d037bdd419002c3f15,i dont know,I don't know
+R067,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e761d037bdd419002c3f15,i dont know,I don't know
+R067,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e761d037bdd419002c3f15,i dont know,I don't know
+R068,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5726ace8dd62a815002e8c9f,collection of scientific manuscripts,A collection of scientific manuscripts.
+R069,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e1c4fce3433e1400423150,quantum turing machine,Quantum Turing machine
+R070,1,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e1ce08e3433e14004231a4,size of input in bits,The size of the input in bits.
+R070,1,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e1ce08e3433e14004231a4,size of input in bits,The size of the input in bits.
+R070,1,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e1ce08e3433e14004231a4,size of input in bits,The size of the input in bits.
+R070,1,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e1ce08e3433e14004231a4,size of input in bits,The size of the input in bits.
+R070,1,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e1ce08e3433e14004231a4,size of input in bits,The size of the input in bits.
+R071,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5728ed94ff5b5019007da97e,commitment,Commitment
+R072,1,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5729f12e3f37b319004785e3,antigen specificity allows responses that are specific to certain types of pathogens,Antigen specificity allows responses that are specific to certain types of pathogens.
+R073,1,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e1c7e2cd28a01900c67b76,variable is constrained within space complexity of hierarchy theorem specifically logarithmic space or polynomial space depending on formulation however precise variable is not standardly named in theorem i dont know,"The variable is constrained within the space complexity of the hierarchy theorem, specifically the logarithmic space or polynomial space, depending on the formulation. However, the precise variable is not standardly named in the theorem.
+
+I don't know"
+R074,0,1,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e7714a00c9c71400d77139,"over €90000 # 90,000","Over €90,000"
+R075,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5728eb1a3acd2414000e01c9,they believe punishment is inherently unjust and violates individual freedom,They believe punishment is inherently unjust and violates individual freedom.
+R076,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5728e715ff5b5019007da917,to oust their communist governments,To oust their communist governments
+R076,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5728e715ff5b5019007da917,to oust their communist governments,To oust their communist governments
+R076,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5728e715ff5b5019007da917,to oust their communist governments,To oust their communist governments
+R076,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5728e715ff5b5019007da917,to oust their communist governments,To oust their communist governments
+R077,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5729f5a03f37b31900478607,i dont know,I don't know
+R078,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e1ce08e3433e14004231a4,amount of resources needed to solve problem,The amount of resources needed to solve the problem
+R079,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e1b00ce3433e140042309e,computable functions,Computable functions
+R080,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5726da89dd62a815002e92b5,health care professional,Health care professional
+R080,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5726da89dd62a815002e92b5,health care professional,A health care professional
+R080,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5726da89dd62a815002e92b5,health care professional,A health care professional
+R080,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5726da89dd62a815002e92b5,health care professional,A health care professional
+R080,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5726da89dd62a815002e92b5,health care professional,A health care professional
+R080,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5726da89dd62a815002e92b5,health care professional,A health care professional
+R080,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5726da89dd62a815002e92b5,health care professional,A health care professional
+R081,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e1ded7cd28a01900c67bd4,milner and swaps,Milner and Swaps
+R082,1,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e7683d00c9c71400d770ce,"study youre referring to is likely study of math and science or more specifically national assessment of educational progress naep which assesses student performance in various subjects across thousands of schools nationwide however exact study involving 80000 schools is not widely recognized # 80,000","The study you're referring to is likely the ""Study of Math and Science"" or more specifically, the ""National Assessment of Educational Progress"" (NAEP), which assesses student performance in various subjects across thousands of schools nationwide. However, the exact study involving 80,000 schools is not widely recognized"
+R083,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e1ec83cd28a01900c67c0e,greatest common divisor gcd,"Greatest Common Divisor (GCD)
+"
+R084,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-572822233acd2414000df559,not published until after end of mexican war,not published until after the end of the Mexican War.
+R084,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-572822233acd2414000df559,not published until after end of mexican war,not published until after the end of the Mexican War.
+R085,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e761d037bdd419002c3f15,they don’t use technology,They don’t use technology.
+R086,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-572a019f3f37b31900478644,i dont know,I don't know
+R087,1,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e202e9e3433e1400423243,i dont know,I don't know
+R087,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e202e9e3433e1400423243,i dont know,I don't know
+R088,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5728fb6a1d04691400778ef5,great amount of disobedience,great amount of disobedience
+R088,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5728fb6a1d04691400778ef5,great amount of disobedience,great amount of disobedience
+R088,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5728fb6a1d04691400778ef5,great amount of disobedience,great amount of disobedience
+R088,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5728fb6a1d04691400778ef5,great amount of disobedience,great amount of disobedience
+R088,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5728fb6a1d04691400778ef5,great amount of disobedience,great amount of disobedience
+R089,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5728dddc2ca10214002da9d4,covert lawbreaking,covert lawbreaking
+R089,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5728dddc2ca10214002da9d4,covert lawbreaking,covert lawbreaking
+R089,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5728dddc2ca10214002da9d4,covert lawbreaking,covert lawbreaking
+R089,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5728dddc2ca10214002da9d4,covert lawbreaking,covert lawbreaking
+R089,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5728dddc2ca10214002da9d4,covert lawbreaking,covert lawbreaking
+R090,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5729f5a03f37b31900478607,natural killer t cells,Natural Killer T cells
+R091,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e769dc00c9c71400d770eb,i dont know,I don't know
+R092,1,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5728dddc2ca10214002da9d4,political pressure,Political pressure
+R093,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5726fe95dd62a815002e9736,i dont know,I don't know
+R094,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5726ea985951b619008f8263,cardinal health,Cardinal Health
+R095,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5726fe95dd62a815002e9736,thinker,The Thinker
+R096,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5728fb6a1d04691400778ef5,violent retaliation,Violent retaliation
+R097,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5726e985dd62a815002e94de,va indian health service and nih,"the VA, the Indian Health Service, and NIH"
+R097,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5726e985dd62a815002e94de,va indian health service and nih,"the VA, the Indian Health Service, and NIH"
+R097,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5726e985dd62a815002e94de,va indian health service and nih,"the VA, the Indian Health Service, and NIH"
+R097,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5726e985dd62a815002e94de,va indian health service and nih,"the VA, the Indian Health Service, and NIH"
+R097,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5726e985dd62a815002e94de,va indian health service and nih,"the VA, the Indian Health Service, and NIH"
+R097,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5726e985dd62a815002e94de,va indian health service and nih,"the VA, the Indian Health Service, and NIH"
+R098,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e769dc00c9c71400d770eb,shortage of male teachers,Shortage of male teachers
+R098,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e769dc00c9c71400d770eb,shortage of male teachers,A shortage of male teachers.
+R098,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e769dc00c9c71400d770eb,shortage of male teachers,a shortage of male teachers
+R098,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e769dc00c9c71400d770eb,shortage of male teachers,a shortage of male teachers
+R098,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e769dc00c9c71400d770eb,shortage of male teachers,A shortage of male teachers.
+R098,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e769dc00c9c71400d770eb,shortage of male teachers,a shortage of male teachers
+R098,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e769dc00c9c71400d770eb,shortage of male teachers,a shortage of male teachers
+R099,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5729f799af94a219006aa709,active and passive immunity,Active and passive immunity
+R100,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5726eb4b5951b619008f826f,primary difference is method by which medications are requested and received,The primary difference is the method by which the medications are requested and received.
+R100,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5726eb4b5951b619008f826f,primary difference is method by which medications are requested and received,The primary difference is the method by which the medications are requested and received.
+R100,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5726eb4b5951b619008f826f,primary difference is method by which medications are requested and received,The primary difference is the method by which the medications are requested and received.
+R100,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5726eb4b5951b619008f826f,primary difference is method by which medications are requested and received,The primary difference is the method by which the medications are requested and received.
+R100,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5726eb4b5951b619008f826f,primary difference is method by which medications are requested and received,The primary difference is the method by which the medications are requested and received.
+R100,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5726eb4b5951b619008f826f,primary difference is method by which medications are requested and received,The primary difference is the method by which the medications are requested and received.
+R101,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e75a9037bdd419002c3ec7,caning,Caning
+R102,1,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e202e9e3433e1400423243,time and space complexity,time and space complexity
+R102,1,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e202e9e3433e1400423243,time and space complexity,time and space complexity
+R102,1,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e202e9e3433e1400423243,time and space complexity,time and space complexity
+R102,1,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e202e9e3433e1400423243,time and space complexity,time and space complexity
+R102,1,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e202e9e3433e1400423243,time and space complexity,time and space complexity
+R103,1,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e1c4fce3433e1400423150,automata,"Automata
+"
+R104,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-57269c06708984140094cba2,italian renaissance,Italian Renaissance
+R104,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-57269c06708984140094cba2,italian renaissance,Italian Renaissance
+R104,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-57269c06708984140094cba2,italian renaissance,Italian Renaissance
+R104,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-57269c06708984140094cba2,italian renaissance,Italian Renaissance
+R104,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-57269c06708984140094cba2,italian renaissance,Italian Renaissance
+R104,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-57269c06708984140094cba2,italian renaissance,Italian Renaissance
+R105,0,1,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e7714a00c9c71400d77139,"€53423 # 53,423","€53,423"
+R105,0,1,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e7714a00c9c71400d77139,"€53423 # 53,423","€53,423"
+R105,0,1,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e7714a00c9c71400d77139,"€53423 # 53,423","€53,423"
+R105,0,1,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e7714a00c9c71400d77139,"€53423 # 53,423","€53,423"
+R105,0,1,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e7714a00c9c71400d77139,"€53423 # 53,423","€53,423"
+R105,0,1,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e7714a00c9c71400d77139,"€53423 # 53,423","€53,423"
+R106,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e769dc00c9c71400d770eb,increased female participation,Increased female participation
+R107,1,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5726e1fcdd62a815002e93c7,rembrandt,Rembrandt
+R108,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e76f7000c9c71400d7712d,i dont know,I don't know
+R109,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5726e5c95951b619008f81ce,drug interactions patient allergies dosage accuracy storage conditions and medication adherence,"Drug interactions, patient allergies, dosage accuracy, storage conditions, and medication adherence."
+R110,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5726dd71f1498d1400e8edd8,josiah wedgwood bernard leach william de morgan,"Josiah Wedgwood, Bernard Leach, William De Morgan"
+R110,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5726dd71f1498d1400e8edd8,josiah wedgwood bernard leach william de morgan,"Josiah Wedgwood, Bernard Leach, William De Morgan"
+R111,0,1,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e76f7000c9c71400d7712d,special university classes,Special university classes
+R112,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e76abf37bdd419002c3f76,long hours with heavy workload and inspections,"Long hours with a heavy workload, and inspections."
+R112,1,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e76abf37bdd419002c3f76,long hours with heavy workload and inspections,"long hours with a heavy workload, and inspections"
+R113,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5728eb1a3acd2414000e01c9,because it undermines their principles,Because it undermines their principles.
+R114,1,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5726ace8dd62a815002e8c9f,i dont know,I don't know
+R114,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5726ace8dd62a815002e8c9f,i dont know,I don't know
+R115,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5726fb18dd62a815002e96d1,i dont know,I don't know
+R116,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5729f12e3f37b319004785e3,pathogens,Pathogens
+R117,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e761d037bdd419002c3f15,provide instruction in literacy and numeracy,Provide instruction in literacy and numeracy
+R118,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e76abf37bdd419002c3f76,working environment expectations to substitute long hours with heavy workload and inspections,"Working environment, expectations to substitute, long hours with a heavy workload, and inspections."
+R118,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e76abf37bdd419002c3f76,working environment expectations to substitute long hours with heavy workload and inspections,"Working environment, expectations to substitute, long hours with a heavy workload, and inspections."
+R119,1,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5728e715ff5b5019007da917,i dont know,I don't know
+R120,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-57270ab9708984140094d8fa,"va’s collection spans 5000 years of art from ancient times to present day from cultures of europe north america asia and north africa # 5,000","The V&A’s collection spans 5,000 years of art, from ancient times to the present day, from the cultures of Europe, North America, Asia and North Africa."
+R121,1,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5728dddc2ca10214002da9d4,lawbreaking if it is not done publicly,"Lawbreaking, if it is not done publicly"
+R122,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5726f868dd62a815002e9687,optimizes use of medication and promotes health wellness and disease prevention,"Optimizes the use of medication and promotes health, wellness, and disease prevention."
+R123,0,1,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-572822233acd2414000df559,1850 # 1850,1850
+R124,0,1,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-57268294708984140094c87a,diverse,"Diverse
+"
+R125,1,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5729f5a03f37b31900478607,γδ t cells,γδ T cells
+R126,1,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-57269c06708984140094cba2,i dont know,I don't know
+R126,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-57269c06708984140094cba2,i dont know,I don't know
+R127,1,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5728fb6a1d04691400778ef5,undermining law,Undermining the law
+R128,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e1c7e2cd28a01900c67b76,logarithmic space,logarithmic space
+R128,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e1c7e2cd28a01900c67b76,logarithmic space,logarithmic space
+R128,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e1c7e2cd28a01900c67b76,logarithmic space,logarithmic space
+R128,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e1c7e2cd28a01900c67b76,logarithmic space,logarithmic space
+R128,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e1c7e2cd28a01900c67b76,logarithmic space,logarithmic space
+R129,0,1,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-572908c13f37b31900477fbd,white blood cells,White blood cells
+R130,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e7714a00c9c71400d77139,i dont know,I don't know
+R131,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e77c6737bdd419002c401d,lds church,LDS Church
+R131,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e77c6737bdd419002c401d,lds church,LDS Church
+R131,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e77c6737bdd419002c401d,lds church,LDS Church
+R131,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e77c6737bdd419002c401d,lds church,LDS Church
+R131,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e77c6737bdd419002c401d,lds church,LDS Church
+R131,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e77c6737bdd419002c401d,lds church,LDS Church
+R132,1,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e7683d00c9c71400d770ce,"study that covered subjects in 80000 schools is one that drew its sample from list of 80000 schools to create stratified twostage sample design of 2065 8th to 11th grade students # 80,000 80,000 2,065 8 11","The study that covered subjects in 80,000 schools is the one that drew its sample from a list of 80,000 schools to create a stratified two-stage sample design of 2,065 8th to 11th grade students."
+R132,1,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e7683d00c9c71400d770ce,"study that covered subjects in 80000 schools is one that drew its sample from list of 80000 schools to create stratified twostage sample design of 2065 8th to 11th grade students # 80,000 80,000 2,065 8 11","The study that covered subjects in 80,000 schools is the one that drew its sample from a list of 80,000 schools to create a stratified two-stage sample design of 2,065 8th to 11th grade students."
+R132,1,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e7683d00c9c71400d770ce,"study that covered subjects in 80000 schools is one that drew its sample from list of 80000 schools to create stratified twostage sample design of 2065 8th to 11th grade students # 80,000 80,000 2,065 8 11","The study that covered subjects in 80,000 schools is the one that drew its sample from a list of 80,000 schools to create a stratified two-stage sample design of 2,065 8th to 11th grade students."
+R133,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5726e985dd62a815002e94de,healthcare agencies programs and services funded or operated by us federal government,"Healthcare agencies, programs, and services funded or operated by the U.S. federal government."
+R134,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5728ed94ff5b5019007da97e,preserving societys tolerance,Preserving society's tolerance
+R135,0,1,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5729f5a03f37b31900478607,gamma delta t cells,Gamma delta T cells
+R135,0,1,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5729f5a03f37b31900478607,gamma delta t cells,Gamma delta T cells
+R135,0,1,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5729f5a03f37b31900478607,gamma delta t cells,Gamma delta T cells
+R135,0,1,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5729f5a03f37b31900478607,gamma delta t cells,Gamma delta T cells
+R135,0,1,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5729f5a03f37b31900478607,gamma delta t cells,Gamma delta T cells
+R136,0,1,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-572a0e4b6aef051400155216,hiv,HIV
+R136,0,1,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-572a0e4b6aef051400155216,hiv,HIV
+R137,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-57268294708984140094c87a,global cultures from ancient to modern times,"Global cultures, from ancient to modern times."
+R138,1,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5728dddc2ca10214002da9d4,legal compliance and dialogue,Legal compliance and dialogue
+R139,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5729f9953f37b31900478622,testosterone seem to be immunosuppressive,testosterone seem to be immunosuppressive.
+R139,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5729f9953f37b31900478622,testosterone seem to be immunosuppressive,testosterone seem to be immunosuppressive
+R140,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5726f7715951b619008f8391,to benefit personally,To benefit personally.
+R141,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5729fa40af94a219006aa711,immunosuppression,Immunosuppression
+R142,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5726ea985951b619008f8263,omnicare kindred healthcare and pharmerica,"Omnicare, Kindred Healthcare, and PharMerica"
+R142,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5726ea985951b619008f8263,omnicare kindred healthcare and pharmerica,"Omnicare, Kindred Healthcare and PharMerica"
+R142,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5726ea985951b619008f8263,omnicare kindred healthcare and pharmerica,"Omnicare, Kindred Healthcare and PharMerica"
+R142,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5726ea985951b619008f8263,omnicare kindred healthcare and pharmerica,"Omnicare, Kindred Healthcare and PharMerica"
+R142,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5726ea985951b619008f8263,omnicare kindred healthcare and pharmerica,"Omnicare, Kindred Healthcare and PharMerica"
+R142,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5726ea985951b619008f8263,omnicare kindred healthcare and pharmerica,"Omnicare, Kindred Healthcare and PharMerica"
+R143,1,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e1efa0e3433e140042321a,conp,co-NP
+R143,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e1efa0e3433e140042321a,conp,co-NP
+R143,1,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e1efa0e3433e140042321a,conp,co-NP
+R143,1,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e1efa0e3433e140042321a,conp,co-NP
+R143,1,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e1efa0e3433e140042321a,conp,co-NP
+R143,1,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e1efa0e3433e140042321a,conp,co-NP
+R143,1,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e1efa0e3433e140042321a,conp,co-NP
+R144,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e76abf37bdd419002c3f76,long hours with heavy workload,long hours with a heavy workload
+R145,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5726ed6cf1498d1400e8f010,most online pharmacies serve consumers online and those that walk in their door,Most online pharmacies serve consumers online and those that walk in their door.
+R146,1,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5728e8212ca10214002daa6c,political questions,Political questions
+R147,1,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5726eb4b5951b619008f826f,online pharmacies offer wider selection while community pharmacies have inperson consultations,"Online pharmacies offer wider selection, while community pharmacies have in-person consultations."
+R148,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5726e5c95951b619008f81ce,specific indications effectiveness of treatment regimens safety of medications ie drug interactions and patient compliance issues,"specific indications, effectiveness of treatment regimens, safety of medications (i.e., drug interactions) and patient compliance issues"
+R148,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5726e5c95951b619008f81ce,specific indications effectiveness of treatment regimens safety of medications ie drug interactions and patient compliance issues,"specific indications, effectiveness of treatment regimens, safety of medications (i.e., drug interactions) and patient compliance issues"
+R148,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5726e5c95951b619008f81ce,specific indications effectiveness of treatment regimens safety of medications ie drug interactions and patient compliance issues,"specific indications, effectiveness of treatment regimens, safety of medications (i.e., drug interactions) and patient compliance issues"
+R148,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5726e5c95951b619008f81ce,specific indications effectiveness of treatment regimens safety of medications ie drug interactions and patient compliance issues,"specific indications, effectiveness of treatment regimens, safety of medications (i.e., drug interactions) and patient compliance issues"
+R148,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5726e5c95951b619008f81ce,specific indications effectiveness of treatment regimens safety of medications ie drug interactions and patient compliance issues,"specific indications, effectiveness of treatment regimens, safety of medications (i.e., drug interactions) and patient compliance issues"
+R149,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-572a0a686aef0514001551f0,humors blood phlegm black bile yellow bile,"Humors: blood, phlegm, black bile, yellow bile"
+R150,1,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5726f2bcf1498d1400e8f0bf,i dont know,I don't know
+R151,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e1ce08e3433e14004231a4,amount of resources needed to solve them such as time and storage,"The amount of resources needed to solve them, such as time and storage."
+R152,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e1efa0e3433e140042321a,nphard,NP-hard
+R153,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-572a019f3f37b31900478644,viral infection system,Viral infection system
+R154,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5728e8212ca10214002daa6c,constitutional,"Constitutional
+"
+R155,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5728e715ff5b5019007da917,social change,Social change
+R156,0,1,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5726f2bcf1498d1400e8f0bf,her majesty queen elizabeth ii,Her Majesty the Queen Elizabeth II
+R156,0,1,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5726f2bcf1498d1400e8f0bf,her majesty queen elizabeth ii,Her Majesty the Queen Elizabeth II
+R156,0,1,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5726f2bcf1498d1400e8f0bf,her majesty queen elizabeth ii,Her Majesty the Queen Elizabeth II
+R156,0,1,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5726f2bcf1498d1400e8f0bf,her majesty queen elizabeth ii,Her Majesty the Queen Elizabeth II
+R156,0,1,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5726f2bcf1498d1400e8f0bf,her majesty queen elizabeth ii,Her Majesty the Queen Elizabeth II
+R156,0,1,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5726f2bcf1498d1400e8f0bf,her majesty queen elizabeth ii,Her Majesty the Queen Elizabeth II
+R156,0,1,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5726f2bcf1498d1400e8f0bf,her majesty queen elizabeth ii,Her Majesty the Queen Elizabeth II
+R157,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5729f799af94a219006aa709,memory cells and longterm immunity,Memory cells and long-term immunity
+R158,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5726ed6cf1498d1400e8f010,most internet pharmacies sell prescription drugs and require valid prescription,Most Internet pharmacies sell prescription drugs and require a valid prescription.
+R158,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5726ed6cf1498d1400e8f010,most internet pharmacies sell prescription drugs and require valid prescription,Most Internet pharmacies sell prescription drugs and require a valid prescription.
+R158,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5726ed6cf1498d1400e8f010,most internet pharmacies sell prescription drugs and require valid prescription,Most Internet pharmacies sell prescription drugs and require a valid prescription.
+R158,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5726ed6cf1498d1400e8f010,most internet pharmacies sell prescription drugs and require valid prescription,Most Internet pharmacies sell prescription drugs and require a valid prescription.
+R158,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5726ed6cf1498d1400e8f010,most internet pharmacies sell prescription drugs and require valid prescription,Most Internet pharmacies sell prescription drugs and require a valid prescription.
+R159,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5726f868dd62a815002e9687,thorough analysis of medication reconciliation of medication and patient education and patient compliance issues,"Thorough analysis of medication, reconciliation of medication and patient education, and patient compliance issues."
+R160,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5729fa40af94a219006aa711,sleep deprivation,Sleep deprivation
+R160,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5729fa40af94a219006aa711,sleep deprivation,Sleep deprivation
+R160,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5729fa40af94a219006aa711,sleep deprivation,sleep deprivation
+R160,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5729fa40af94a219006aa711,sleep deprivation,sleep deprivation
+R160,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5729fa40af94a219006aa711,sleep deprivation,sleep deprivation
+R160,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5729fa40af94a219006aa711,sleep deprivation,sleep deprivation
+R160,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5729fa40af94a219006aa711,sleep deprivation,sleep deprivation
+R161,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e76f7000c9c71400d7712d,special university classes called lehramtstudien,"special university classes, called Lehramtstudien"
+R161,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e76f7000c9c71400d7712d,special university classes called lehramtstudien,"special university classes, called Lehramtstudien"
+R161,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e76f7000c9c71400d7712d,special university classes called lehramtstudien,"special university classes, called Lehramtstudien"
+R161,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e76f7000c9c71400d7712d,special university classes called lehramtstudien,"special university classes, called Lehramtstudien"
+R161,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e76f7000c9c71400d7712d,special university classes called lehramtstudien,"special university classes, called Lehramtstudien"
+R162,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5726f2bcf1498d1400e8f0bf,leonardo da vinci,Leonardo da Vinci
+R163,0,1,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5729f9953f37b31900478622,suppresses immune function,Suppresses immune function.
+R164,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5728fd3c3f37b31900477f2f,utilitarian grounds,utilitarian grounds
+R164,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5728fd3c3f37b31900477f2f,utilitarian grounds,utilitarian grounds
+R164,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5728fd3c3f37b31900477f2f,utilitarian grounds,utilitarian grounds
+R164,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5728fd3c3f37b31900477f2f,utilitarian grounds,utilitarian grounds
+R164,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5728fd3c3f37b31900477f2f,utilitarian grounds,utilitarian grounds
+R165,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-572a019f3f37b31900478644,type iii secretion system,Type III secretion system
+R165,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-572a019f3f37b31900478644,type iii secretion system,type III secretion system
+R165,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-572a019f3f37b31900478644,type iii secretion system,type III secretion system
+R165,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-572a019f3f37b31900478644,type iii secretion system,type III secretion system
+R165,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-572a019f3f37b31900478644,type iii secretion system,type III secretion system
+R165,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-572a019f3f37b31900478644,type iii secretion system,type III secretion system
+R166,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5726f0e35951b619008f82fa,no known case,No known case.
+R167,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5728fd3c3f37b31900477f2f,punishment should focus on moral reasons to follow law,Punishment should focus on moral reasons to follow the law.
+R168,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e1ee4de3433e1400423210,p np,P = NP
+R169,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5726f0e35951b619008f82fa,i dont know,I don't know
+R170,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5726f868dd62a815002e9687,medication therapy management drug dosage adjustments patient education drug interaction checks immunization administration and medication adherence support,"Medication therapy management, drug dosage adjustments, patient education, drug interaction checks, immunization administration, and medication adherence support."
+R171,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5726fb18dd62a815002e96d1,ancient greek and roman,Ancient Greek and Roman.
+R172,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5726e1fcdd62a815002e93c7,i dont know,I don't know
+R172,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5726e1fcdd62a815002e93c7,i dont know,I don't know
+R172,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5726e1fcdd62a815002e93c7,i dont know,I don't know
+R172,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5726e1fcdd62a815002e93c7,i dont know,I don't know
+R172,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5726e1fcdd62a815002e93c7,i dont know,I don't know
+R172,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5726e1fcdd62a815002e93c7,i dont know,I don't know
+R173,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e1ec83cd28a01900c67c0e,general number field sieve,General number field sieve
+R174,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5726e5c95951b619008f81ce,patient history medication interactions and drug effects,"Patient history, medication interactions, and drug effects"
+R175,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5726eb4b5951b619008f826f,convenient and private method,Convenient and private method
+R176,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5726da89dd62a815002e92b5,healthcare professional,Healthcare professional
+R177,1,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5726da89dd62a815002e92b5,healthcare support professional,Healthcare support professional
+R178,1,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e1c4fce3433e1400423150,quantum turing machines,Quantum Turing machines
+R178,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e1c4fce3433e1400423150,quantum turing machines,quantum Turing machines
+R178,1,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e1c4fce3433e1400423150,quantum turing machines,quantum Turing machines
+R178,1,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e1c4fce3433e1400423150,quantum turing machines,quantum Turing machines
+R178,1,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e1c4fce3433e1400423150,quantum turing machines,quantum Turing machines
+R178,1,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e1c4fce3433e1400423150,quantum turing machines,quantum Turing machines
+R178,1,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e1c4fce3433e1400423150,quantum turing machines,quantum Turing machines
+R179,1,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-57268d02f1498d1400e8e378,cole,Cole
+R180,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5726f8aef1498d1400e8f170,learned response,Learned response
+R181,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-572a0a686aef0514001551f0,soluble components molecules,soluble components (molecules)
+R181,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-572a0a686aef0514001551f0,soluble components molecules,soluble components (molecules)
+R181,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-572a0a686aef0514001551f0,soluble components molecules,soluble components (molecules)
+R181,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-572a0a686aef0514001551f0,soluble components molecules,soluble components (molecules)
+R182,1,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e202e9e3433e1400423243,on computational complexity of algorithms,On the Computational Complexity of Algorithms
+R183,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5726ea985951b619008f8263,walgreens cvs rite aid mckesson amerisourcebergen,"Walgreens, CVS, Rite Aid, McKesson, AmerisourceBergen"
+R184,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5729f12e3f37b319004785e3,pathogens or pathogeninfected cells,pathogens or pathogen-infected cells.
+R185,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e77c6737bdd419002c401d,lds,LDS
+R185,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e77c6737bdd419002c401d,lds,LDS
+R186,1,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5726f7715951b619008f8391,sell more medications,Sell more medications
+R187,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-572a0a686aef0514001551f0,blood lymph and saliva,"Blood, lymph, and saliva"
+R188,0,1,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e1ec83cd28a01900c67c0e,best known algorithm for integer factorization is general number field sieve,The best known algorithm for integer factorization is the general number field sieve.
+R188,0,1,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e1ec83cd28a01900c67c0e,best known algorithm for integer factorization is general number field sieve,The best known algorithm for integer factorization is the general number field sieve.
+R188,0,1,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e1ec83cd28a01900c67c0e,best known algorithm for integer factorization is general number field sieve,The best known algorithm for integer factorization is the general number field sieve.
+R188,0,1,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e1ec83cd28a01900c67c0e,best known algorithm for integer factorization is general number field sieve,The best known algorithm for integer factorization is the general number field sieve.
+R188,0,1,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e1ec83cd28a01900c67c0e,best known algorithm for integer factorization is general number field sieve,The best known algorithm for integer factorization is the general number field sieve.
+R188,0,1,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e1ec83cd28a01900c67c0e,best known algorithm for integer factorization is general number field sieve,The best known algorithm for integer factorization is the general number field sieve.
+R189,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5726ace8dd62a815002e8c9f,henry cole wing,Henry Cole wing
+R189,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5726ace8dd62a815002e8c9f,henry cole wing,the Henry Cole wing
+R189,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5726ace8dd62a815002e8c9f,henry cole wing,the Henry Cole wing
+R189,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5726ace8dd62a815002e8c9f,henry cole wing,the Henry Cole wing
+R189,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5726ace8dd62a815002e8c9f,henry cole wing,the Henry Cole wing
+R189,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5726ace8dd62a815002e8c9f,henry cole wing,the Henry Cole wing
+R190,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5728eb1a3acd2414000e01c9,to preserve societys tolerance of civil disobedience,To preserve society's tolerance of civil disobedience.
+R191,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e1e9dfe3433e14004231fc,graph isomorphism problem,Graph isomorphism problem
+R191,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e1e9dfe3433e14004231fc,graph isomorphism problem,The graph isomorphism problem
+R191,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e1e9dfe3433e14004231fc,graph isomorphism problem,The graph isomorphism problem.
+R191,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e1e9dfe3433e14004231fc,graph isomorphism problem,The graph isomorphism problem.
+R191,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e1e9dfe3433e14004231fc,graph isomorphism problem,The graph isomorphism problem
+R191,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e1e9dfe3433e14004231fc,graph isomorphism problem,The graph isomorphism problem.
+R191,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e1e9dfe3433e14004231fc,graph isomorphism problem,The graph isomorphism problem.
+R192,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-572822233acd2414000df559,after end of mexican war,After the end of the Mexican War
+R192,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-572822233acd2414000df559,after end of mexican war,after the end of the Mexican War
+R192,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-572822233acd2414000df559,after end of mexican war,after the end of the Mexican War
+R192,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-572822233acd2414000df559,after end of mexican war,after the end of the Mexican War
+R192,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-572822233acd2414000df559,after end of mexican war,after the end of the Mexican War
+R193,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-572a0a686aef0514001551f0,soluble components molecules found in organism’s “humors”,soluble components (molecules) found in the organism’s “humors”
+R193,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-572a0a686aef0514001551f0,soluble components molecules found in organism’s “humors”,soluble components (molecules) found in the organism’s “humors”
+R194,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5728ed94ff5b5019007da97e,publicly announced,publicly announced
+R194,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5728ed94ff5b5019007da97e,publicly announced,publicly announced
+R194,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5728ed94ff5b5019007da97e,publicly announced,publicly announced
+R194,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5728ed94ff5b5019007da97e,publicly announced,publicly announced
+R194,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5728ed94ff5b5019007da97e,publicly announced,publicly announced
+R195,0,1,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5726dd71f1498d1400e8edd8,john clare josiah wedgwood peter firton,"John Clare, Josiah Wedgwood, Peter Firton"
+R196,1,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5726d8bd708984140094d35b,pharmakeia,pharmakeia
+R197,1,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5726d8bd708984140094d35b,pharma,Pharma
+R197,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5726d8bd708984140094d35b,pharma,pharma
+R197,1,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5726d8bd708984140094d35b,pharma,pharma
+R197,1,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5726d8bd708984140094d35b,pharma,pharma
+R197,1,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5726d8bd708984140094d35b,pharma,pharma
+R197,1,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5726d8bd708984140094d35b,pharma,pharma
+R197,1,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5726d8bd708984140094d35b,pharma,pharma
+R198,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e76f7000c9c71400d7712d,schools,Schools
+R199,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5726e1fcdd62a815002e93c7,bernardo buontalenti,Bernardo Buontalenti
+R200,1,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e7683d00c9c71400d770ce,teacherp032 # 032,Teacher::p032
+R201,0,1,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-57268d02f1498d1400e8e378,i dont know,I don't know
+R201,0,1,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-57268d02f1498d1400e8e378,i dont know,I don't know
+R201,0,1,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-57268d02f1498d1400e8e378,i dont know,I don't know
+R201,0,1,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-57268d02f1498d1400e8e378,i dont know,I don't know
+R201,0,1,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-57268d02f1498d1400e8e378,i dont know,I don't know
+R201,0,1,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-57268d02f1498d1400e8e378,i dont know,I don't know
+R202,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5728e715ff5b5019007da917,goal is to oppose what they deem to be unfair laws,The goal is to oppose what they deem to be unfair laws.
+R203,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5729f799af94a219006aa709,passive shortterm memory or active longterm memory,passive short-term memory or active long-term memory
+R203,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5729f799af94a219006aa709,passive shortterm memory or active longterm memory,passive short-term memory or active long-term memory
+R203,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5729f799af94a219006aa709,passive shortterm memory or active longterm memory,passive short-term memory or active long-term memory
+R203,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5729f799af94a219006aa709,passive shortterm memory or active longterm memory,passive short-term memory or active long-term memory
+R203,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5729f799af94a219006aa709,passive shortterm memory or active longterm memory,passive short-term memory or active long-term memory
+R203,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5729f799af94a219006aa709,passive shortterm memory or active longterm memory,passive short-term memory or active long-term memory
+R204,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5728e715ff5b5019007da917,maintain spirit of protest,Maintain the spirit of protest
+R205,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e1b00ce3433e140042309e,computers,"Computers
+"
+R206,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5726ea985951b619008f8263,i dont know,I don't know
+R207,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e1ec83cd28a01900c67c0e,most wellknown algorithm associated with integer factorization problem is general number field sieve,The most well-known algorithm associated with the integer factorization problem is the General Number Field Sieve.
+R208,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e77c6737bdd419002c401d,i dont know,I don't know
+R209,1,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e1ee4de3433e1400423210,many known complexity classes are suspected to be unequal but this has not been proved,"Many known complexity classes are suspected to be unequal, but this has not been proved."
+R209,1,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e1ee4de3433e1400423210,many known complexity classes are suspected to be unequal but this has not been proved,"Many known complexity classes are suspected to be unequal, but this has not been proved."
+R209,1,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e1ee4de3433e1400423210,many known complexity classes are suspected to be unequal but this has not been proved,"Many known complexity classes are suspected to be unequal, but this has not been proved."
+R209,1,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e1ee4de3433e1400423210,many known complexity classes are suspected to be unequal but this has not been proved,"Many known complexity classes are suspected to be unequal, but this has not been proved."
+R209,1,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e1ee4de3433e1400423210,many known complexity classes are suspected to be unequal but this has not been proved,"Many known complexity classes are suspected to be unequal, but this has not been proved."
+R210,1,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e1e9dfe3433e14004231fc,isomorphic graphs are similar,Isomorphic graphs are similar.
+R211,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-57270ab9708984140094d8fa,i dont know,I don't know
+R211,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-57270ab9708984140094d8fa,i dont know,I don't know
+R211,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-57270ab9708984140094d8fa,i dont know,I don't know
+R211,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-57270ab9708984140094d8fa,i dont know,I don't know
+R212,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e1b00ce3433e140042309e,complexity classes,Complexity classes
+R212,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-56e1b00ce3433e140042309e,complexity classes,complexity classes
+R212,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-56e1b00ce3433e140042309e,complexity classes,complexity classes
+R212,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-56e1b00ce3433e140042309e,complexity classes,complexity classes
+R212,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-56e1b00ce3433e140042309e,complexity classes,complexity classes
+R212,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-56e1b00ce3433e140042309e,complexity classes,complexity classes
+R213,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-56e76abf37bdd419002c3f76,overload,Overload
+R214,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5726e985dd62a815002e94de,pharmacy,Pharmacy
+R215,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5726fb18dd62a815002e96d1,from tomb and memorial to portrait allegorical religious mythical statues for gardens including fountains as well as architectural decorations,"From tomb and memorial, to portrait, allegorical, religious, mythical, statues for gardens including fountains, as well as architectural decorations."
+R215,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5726fb18dd62a815002e96d1,from tomb and memorial to portrait allegorical religious mythical statues for gardens including fountains as well as architectural decorations,"from tomb and memorial, to portrait, allegorical, religious, mythical, statues for gardens including fountains, as well as architectural decorations."
+R215,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5726fb18dd62a815002e96d1,from tomb and memorial to portrait allegorical religious mythical statues for gardens including fountains as well as architectural decorations,"from tomb and memorial, to portrait, allegorical, religious, mythical, statues for gardens including fountains, as well as architectural decorations."
+R215,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5726fb18dd62a815002e96d1,from tomb and memorial to portrait allegorical religious mythical statues for gardens including fountains as well as architectural decorations,"from tomb and memorial, to portrait, allegorical, religious, mythical, statues for gardens including fountains, as well as architectural decorations."
+R215,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5726fb18dd62a815002e96d1,from tomb and memorial to portrait allegorical religious mythical statues for gardens including fountains as well as architectural decorations,"from tomb and memorial, to portrait, allegorical, religious, mythical, statues for gardens including fountains, as well as architectural decorations."
+R215,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5726fb18dd62a815002e96d1,from tomb and memorial to portrait allegorical religious mythical statues for gardens including fountains as well as architectural decorations,"from tomb and memorial, to portrait, allegorical, religious, mythical, statues for gardens including fountains, as well as architectural decorations."
+R215,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5726fb18dd62a815002e96d1,from tomb and memorial to portrait allegorical religious mythical statues for gardens including fountains as well as architectural decorations,"from tomb and memorial, to portrait, allegorical, religious, mythical, statues for gardens including fountains, as well as architectural decorations."
+R216,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5728fc9e1d04691400778f15,prosecutors have reasoned correctly that if they arrest fully informed jury leafleters leaflets will have to be given to leafleters own jury as evidence,"prosecutors have reasoned (correctly) that if they arrest fully informed jury leafleters, the leaflets will have to be given to the leafleter's own jury as evidence."
+R216,0,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5728fc9e1d04691400778f15,prosecutors have reasoned correctly that if they arrest fully informed jury leafleters leaflets will have to be given to leafleters own jury as evidence,"prosecutors have reasoned (correctly) that if they arrest fully informed jury leafleters, the leaflets will have to be given to the leafleter's own jury as evidence."
+R216,0,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5728fc9e1d04691400778f15,prosecutors have reasoned correctly that if they arrest fully informed jury leafleters leaflets will have to be given to leafleters own jury as evidence,"prosecutors have reasoned (correctly) that if they arrest fully informed jury leafleters, the leaflets will have to be given to the leafleter's own jury as evidence."
+R216,0,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5728fc9e1d04691400778f15,prosecutors have reasoned correctly that if they arrest fully informed jury leafleters leaflets will have to be given to leafleters own jury as evidence,"prosecutors have reasoned (correctly) that if they arrest fully informed jury leafleters, the leaflets will have to be given to the leafleter's own jury as evidence."
+R216,0,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5728fc9e1d04691400778f15,prosecutors have reasoned correctly that if they arrest fully informed jury leafleters leaflets will have to be given to leafleters own jury as evidence,"prosecutors have reasoned (correctly) that if they arrest fully informed jury leafleters, the leaflets will have to be given to the leafleter's own jury as evidence."
+R216,0,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5728fc9e1d04691400778f15,prosecutors have reasoned correctly that if they arrest fully informed jury leafleters leaflets will have to be given to leafleters own jury as evidence,"prosecutors have reasoned (correctly) that if they arrest fully informed jury leafleters, the leaflets will have to be given to the leafleter's own jury as evidence."
+R217,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5728fb6a1d04691400778ef5,potential harm to others,Potential harm to others
+R218,1,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5726ed6cf1498d1400e8f010,sell medications online,Sell medications online
+R219,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5728fc9e1d04691400778f15,i dont know,I don't know
+R219,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5728fc9e1d04691400778f15,i dont know,I don't know
+R219,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5728fc9e1d04691400778f15,i dont know,I don't know
+R220,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5728fd3c3f37b31900477f2f,justice and fairness,Justice and fairness
+R221,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5728ed94ff5b5019007da97e,i dont know,I don't know
+R222,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5729f799af94a219006aa709,active longterm memory and passive shortterm memory,Active long-term memory and passive short-term memory
+R223,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5726f868dd62a815002e9687,medication review compounding dispensing patient counseling drug information,"Medication review, compounding, dispensing, patient counseling, drug information"
+R224,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5726f8aef1498d1400e8f170,adaptive immunity,Adaptive immunity
+R225,1,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-5728fd3c3f37b31900477f2f,moral reasons to follow this law,moral reasons to follow this law
+R226,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5726e5c95951b619008f81ce,patient compliance issues,Patient compliance issues
+R227,1,0,exp001-qwen-rag-k3,ed81e245a23947e694503e8146c90383,1,squad-5726f868dd62a815002e9687,medication therapy management mtm includes clinical services that pharmacists can provide for their patients,Medication Therapy Management (MTM) includes the clinical services that pharmacists can provide for their patients.
+R227,1,0,exp001-qwen-rag-k3,08415f8558ed49bc8837f80f7c220039,2,squad-5726f868dd62a815002e9687,medication therapy management mtm includes clinical services that pharmacists can provide for their patients,Medication Therapy Management (MTM) includes the clinical services that pharmacists can provide for their patients.
+R227,1,0,exp001-qwen-rag-k3-t08,fd56d9902936458a8a8f8a0a5dc2b648,1,squad-5726f868dd62a815002e9687,medication therapy management mtm includes clinical services that pharmacists can provide for their patients,Medication Therapy Management (MTM) includes the clinical services that pharmacists can provide for their patients.
+R227,1,0,exp001-qwen-rag-k3-t08,3b4a8c918b1a45ffa6fae1fa1eb83f69,2,squad-5726f868dd62a815002e9687,medication therapy management mtm includes clinical services that pharmacists can provide for their patients,Medication Therapy Management (MTM) includes the clinical services that pharmacists can provide for their patients.
+R227,1,0,exp001-qwen-rag-k3-t08,e725d4d891bb43e7b7943a0a6beccd3d,3,squad-5726f868dd62a815002e9687,medication therapy management mtm includes clinical services that pharmacists can provide for their patients,Medication Therapy Management (MTM) includes the clinical services that pharmacists can provide for their patients.
+R228,1,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-57270ab9708984140094d8fa,vas collections are primarily under responsibility of conservators at va with no other institutions collections being directly managed by them answer i dont know,"The V&A's collections are primarily under the responsibility of conservators at the V&A, with no other institutions' collections being directly managed by them. 
+
+Answer: I don't know"
+R229,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5726fe95dd62a815002e9736,st john baptist,St John the Baptist
+R230,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-56e76abf37bdd419002c3f76,lack of control,Lack of control
+R231,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-572a019f3f37b31900478644,bacteriophage infection,Bacteriophage infection
+R232,0,0,exp001-qwen-rag-k1,cb26774d080748058610dc75d085e8ce,1,squad-56e1ee4de3433e1400423210,cobham–edmonds thesis,Cobham–Edmonds thesis
+R233,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5729f9953f37b31900478622,testosterone can suppress certain aspects of male immune system,Testosterone can suppress certain aspects of the male immune system.
+R234,0,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5728dafe3acd2414000e005d,god,God
+R234,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-5728dafe3acd2414000e005d,god,God
+R235,1,0,exp001-gemma-closed,966c6d32f8094650952e95695ea2df36,1,squad-5726f0e35951b619008f82fa,yes,Yes
+R236,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-5726f0e35951b619008f82fa,no,"No
+"
+R237,0,0,exp001-qwen-closed,5641557249174e219ccaf5115f4fd0c0,1,squad-57268d02f1498d1400e8e378,queen victoria,Queen Victoria
+R238,0,0,exp001-gemma-rag-k3,eaa542685e1c4ae3854895e245c203b0,1,squad-56e1ee4de3433e1400423210,p pspace,P = PSPACE

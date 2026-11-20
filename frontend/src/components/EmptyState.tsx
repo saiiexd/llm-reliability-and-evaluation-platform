@@ -4,9 +4,9 @@
  */
 export function EmptyState({ title, detail }: { title: string; detail?: string }) {
   return (
-    <div className="border border-dashed border-line px-4 py-6 text-sm text-ink-soft">
+    <div className="rounded-xl border border-dashed border-line px-5 py-8 text-center text-sm">
       <p className="font-medium text-ink">{title}</p>
-      {detail && <p className="mt-1">{detail}</p>}
+      {detail && <p className="mt-1 text-ink-soft">{detail}</p>}
     </div>
   );
 }
